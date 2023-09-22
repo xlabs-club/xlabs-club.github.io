@@ -1,0 +1,37 @@
+name: deploy github pages
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: 
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    
+    - name: Setup node
+      uses: actions/setup-node@v3
+      with:
+        node-version: [20.x]
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run linters
+      run: npm run lint --if-present
+
+    - name: Build site
+      run: npm run build
+
+    - name: Deploy github pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./public
