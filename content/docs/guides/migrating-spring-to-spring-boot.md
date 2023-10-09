@@ -4,32 +4,32 @@ description: ""
 summary: ""
 date: 2023-01-07T10:54:37+08:00
 draft: false
-weight: 50
+weight: 100
 images: []
-categories: []
-tags: []
+categories: [Spring Boot,Java]
+tags: [Spring Boot,Java]
 contributors: []
 pinned: false
 homepage: false
 ---
 
-从 Spring 到 Spring Boot，迁移升级使用过程，以及各种踩坑记录。
+从 Spring 到 Spring Boot，迁移升级快速入门以及各种踩坑记录。
 
 ## 概述
 
 从 Spring 到 Spring Boot，整体开发、运行方式主要变化。
 
-| -           | 当前模式             | 新模式（本地）              | 新模式（线上）                |
-| ----------- | -------------------- | --------------------------- | ----------------------------- |
-| 开发习惯    | Spring + 外置 Tomcat | Spring Boot（embed tomcat） | Spring Boot War + 外置 Tomcat |
-| Java 版本   | 8、11、16、17        | 11、17（推荐）                | 11、17（推荐）                  |
-| Tomcat 版本 | 8.x、9.x             | 9.x                         | 9.x                           |
+| -           | 当前（老）模式       | 新模式（本地）              | 新模式（线上）                |
+|-------------|----------------------|-----------------------------|-------------------------------|
+| 开发习惯     | Spring + 外置 Tomcat | Spring Boot（embed tomcat）   | Spring Boot War or Jar |
+| Java 版本   | 8、11、16、17        | 11、17（推荐）、21              | 11、17（推荐）、21              |
+| Tomcat 版本 | 8.x、9.x             | 9.x                          | 9.x（推荐）、10.x               |
 
 说明：
 
-1. 理论上支持 Java11，但是要求业务方尽量使用 Java17。
-2. 线上运行支持 Spring Boot jar 直接运行，但只开放给部分业务组，主要业务仍以 war + tomcat 为主。如果希望以 `java -jar` 方式运行，参考下面的章节“jar 方式运行”描述。
-3. 目前 Spring Boot 主要推行版本是 2.7。 3.x 版本逐渐适配中。
+1. 理论上支持 Java11，但是要求业务方尽量使用 Java17。其他版本都是实验性质尽量兼容。
+2. 线上运行支持 Spring Boot jar 直接运行，但主要业务仍推荐以 war + tomcat 为主。如果希望以 `java -jar` 方式运行，参考下面的章节“jar 方式运行”描述。
+3. 目前 Spring Boot 主要推行版本是 2.7.x。 3.x 版本逐渐适配中。
 
 ## 快速开始
 
@@ -49,13 +49,12 @@ homepage: false
 
 目前有两个公司级父 pom：
 
-1. 新：com.fxiaoke.cloud.fxiaoke-spring-cloud-parent 用于 Spring Boot/Cloud 方式开发。
-2. 旧：com.fxiaoke.common.fxiaoke-parent-pom 用于原纯 Spring + Tomcat 方式开发。
+1. 旧：com.fxiaoke.common.fxiaoke-parent-pom 用于原 Spring + Tomcat 方式开发。
+2. 新：com.fxiaoke.cloud.fxiaoke-spring-cloud-parent 用于 Spring Boot/Cloud 方式开发。
 
 注意：
 
 1. fxiaoke-spring-cloud-parent 导入了 fxiaoke-parent-pom，所以纷享包版本都是一致的，但是三方包比如 spring/netty/okhttp 会随 Spring Boot 版本。
-2. 旧 pom 区分线上和线下版本，新 pom 目前只有一份并不区分。
 
 Maven 项目 parent 统一使用公司新 parent pom，这里定义了 Spring Boot、Spring Cloud 以及内部定制的各种 support 和 starter 版本号。
 
@@ -64,7 +63,7 @@ Maven 项目 parent 统一使用公司新 parent pom，这里定义了 Spring Bo
   <groupId>com.fxiaoke.cloud</groupId>
   <artifactId>fxiaoke-spring-cloud-parent</artifactId>
   <!-- 注意使用最新版本，可以从脚手架里获取最新版本 -->
-  <version>1.2.0-SNAPSHOT</version>
+  <version>2.7.0-SNAPSHOT</version>
  <relativePath/>
 </parent>
 ```
@@ -73,12 +72,6 @@ Maven 项目 parent 统一使用公司新 parent pom，这里定义了 Spring Bo
 
 - 老项目切换到 Spring Boot 先分析实际生效的 maven dependency，关注下核心包版本是否有大的升级，是否可能对业务造成影响。
 - Spock and Groovy：Spock 由原来的 1.x 升级到 2.x 版本，同时 Groovy 升级到 4.x 版本，Junit4 升级到 Junit5。
-
-已知废弃依赖：
-
-| 废弃项               | 替代项                 | 说明                                    |
-| -------------------- | ---------------------- | --------------------------------------- |
-| javax.annotation-api | jakarta.annotation-api | 随 spring boot 版本走，且两个包不能共存 |
 
 ## spring-boot-starter-actuator
 
@@ -169,17 +162,23 @@ actuator 的引入会带来一些额外收益，之前我们健康检测只检�
 1. jar 模式一个 pod 内只能部署一个模块，不支持多模块合并部署。
 2. jar 模式不会自动把 jar 解压成文件夹（war 模式会），所以关于文件资源的读写要特别注意，参考下面的问题描述章节。
 
-## 老项目迁移升级
+## 老项目迁移升级步骤
 
-1. POM 迁移，依赖项可能被开源软件主动提升版本，要注意版本变化。已知的组件会通过 fxiaoke parent 控制。
+1. 改 pom.xml：修改 parent，引入必须的 starter，删除所有关于 Spring/logback/junit 的依赖项（由 Spring Boot Starter 自动引入）。
 2. 原有的 xml 配置，可以改为注解形式，也可以不改直接 `@ImportResource` 使用。
 3. 注意配置扫描范围，原来 xml 中可能是配置是某几个包，Spring Boot 默认扫描 Application.java 所在包，范围可能扩大。
-4. 原来 tomcat web.xml 相关配置，尤其是各种 filter、servlet，需要迁移。包括我们自定义的一些工具。
-5. Unit Test 更换注解，目前默认 junit 版本是 junit5，原 junit4 注解位置变更。
+4. 删除原来 web.xml 相关配置，如果有额外的 filter、servlet，需要额外定义 Bean 注入。
+5. Unit Test 更换注解，目前默认 junit 版本是 junit5，原 junit4 注解有较大变更，详细请参考下面的参考资料。
 
-### 迁移辅助
+### 迁移辅助工具
 
-辅助工具： 使用 [EMT4J](https://github.com/adoptium/emt4j) 提前扫描，通过静态检测指导从 Java 8 升级到 Java 17 需要注意的变更项。
+- [EMT4J](https://github.com/adoptium/emt4j)
+
+   通过静态扫描指导从 Java 8 升级到 Java 17 需要注意的变更项。
+
+- [spring-boot-migrator](https://github.com/spring-projects-experimental/spring-boot-migrator)
+
+   Spring Boot 迁移工具，通过扫描输出 从 Spring 到 Spring Boot，以及 Spring Boot 3 迁移指导意见。
 
 ### War 配置转移
 
@@ -189,21 +188,18 @@ the web.xml file](https://github.com/spring-projects/spring-boot/issues/2175) wh
 webapp web.xml 配置如何转移到 spring boot war 形式。
 参考：<https://www.baeldung.com/spring-boot-dispatcherservlet-web-xml>
 
-## 已知限制
-
-目前发现几个体验不太好的地方，正在想办法优化。
-
-- 引入我们的 support，常常触发 Spring Auto Config（尤其是 ConditionOnClass 类型的），而我们的 support 有些未适配成 starter，需要开发人员主动排除默认的实现。
-
 ## 遇见问题及解决方案
+
+下面记录一些比较常见的问题，更多问题请参考下面章节中的参考资料，里面的问题很有参考价值。
 
 - com.google.common.io.Resources#getResource 无法获取到 jar 包内资源
 
-   如果是 `java -jar` 模式运行，这种方式是无法获取 jar 包内资源的，请切换到 `Spring way`，使用 Spring 提供的工具类。
+   如果是 `java -jar` 模式运行， `Thread.currentThread().getContextClassLoader().getResource(resourceName)` 形式的调用都无法获取 jar 包内资源，可考虑使用 `InputStream resourceFile = getClass().getResourceAsStream(resourceName);` 方式代替。
 
 - PostConstruct 和 PreDestroy 注解不生效
 
-   原因：PostConstruct、PreDestroy 等注解可能存在多个实现或者过个版本，比如以下 jar 包都可能包含：
+   参考链接 <https://stackoverflow.com/questions/18161682/why-is-postconstruct-not-called> 先逐个排除。  
+   我所遇到的原因：PostConstruct、PreDestroy 等注解可能存在多个实现或者过个版本，比如以下 jar 包都可能包含：
 
    ```console
          javax.annotation-api-1.3.2.jar
@@ -268,6 +264,7 @@ webapp web.xml 配置如何转移到 spring boot war 形式。
 - 如下报错 `class xxx is not visible from class loader`，常见于 dubbo 服务。
 
    解决办法：不要用 spring-boot-devtools。 参考链接：<https://blog.csdn.net/zhailuxu/article/details/79305661>
+
 - dubbo 服务 `java.io.IOException: invalid constant type: 18`，日志类似如下：
 
    ```console
@@ -287,13 +284,77 @@ webapp web.xml 配置如何转移到 spring boot war 形式。
 
 - Spring Auto Configuration 常见排除：
 
-   Spring 默认增加很多 Auto Configuration，使用 support 时可能触发 Auto Configuration 但又缺少配置，可主动排除掉。  
+   ```console
+      An attempt was made to call a method that does not exist. The attempt was made from the following location:
+      org.springframework.boot.autoconfigure.mongo.MongoPropertiesClientSettingsBuilderCustomizer.applyUuidRepresentation(MongoPropertiesClientSettingsBuilderCustomizer.java:58)
+      The following method did not exist:
+         'com.mongodb.MongoClientSettings$Builder com.mongodb.MongoClientSettings$Builder.uuidRepresentation(org.bson.UuidRepresentation)'
+      The calling method's class, org.springframework.boot.autoconfigure.mongo.MongoPropertiesClientSettingsBuilderCustomizer, was loaded from the following location:
+   ```
+
+   Spring 默认增加很多 Auto Configuration，使用 support 时可能触发 Auto Configuration 但又缺少配置，或者依赖版本与 Spring Boot 不匹配，可主动排除掉。  
 
    ```java
    @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, MongoDataAutoConfiguration.class})
    ```
 
+- 关注 Spring Boot 默认 Path 解析器变更，Spring Boot 2.6 版本以后默认由 ANT_PATH_MATCHER 变为 PATH_PATTERN_PARSER。
+
+   双斜线 `//` 以前是可以匹配成功，目前版本会返回 404，比如 <http://localhost:8080//actuator/health>。
+
+   默认禁用了后缀匹配，比如 `GET /projects/spring-boot.json` 将不能匹配到 `@GetMapping("/projects/spring-boot")`。
+
+   据说，中文不主动进行 URLEncode 也会受影响，比如原来 `http://localhost/卫星实验室` 是能成功，目前也会 404。
+
+   PATH_PATTERN_PARSER 只支持末尾 `**` 匹配，不支持中间路径 `**` 正则匹配，比如：`/api/**/query` 不支持。
+  
+   功能说明和切换方式请参考官方文档：<https://docs.spring.io/spring-boot/docs/current/reference/html/web.html#web.servlet.spring-mvc.content-negotiation>.
+
 ## 参考资料
 
-- 我服了！SpringBoot 升级后这服务我一个星期都没跑起来：
-  <https://www.toutiao.com/article/7163602391366074916/?app=news_article&timestamp=1667992250&use_new_style=1&req_id=20221109191050010158031044021CE00D&group_id=7163602391366074916&share_token=A8B008C4-29B7-4ADD-8636-3A17BA91A3BA&tt_from=weixin&utm_source=weixin&utm_medium=toutiao_ios&utm_campaign=client_share&wxshare_count=1&source=m_redirect&wid=1668061929517>
+- 辅助迁移扫描工具
+
+   从 Java 8 到 Java 17：<https://github.com/adoptium/emt4j>  
+   Spring Boot 迁移工具： <https://github.com/spring-projects-experimental/spring-boot-migrator>
+
+- 从 SpringMVC 迁移到 SpringBoot 的经验总结
+
+   <https://juejin.cn/post/6844903640361074696>
+
+   <https://juejin.cn/post/6844903573453537294>
+
+   <https://juejin.cn/post/7129751916002672654>
+
+- 从 Java8 升级到 jdk17 的全过程记录
+
+   <https://juejin.cn/post/7258170075198259257>
+
+- 从 JUnit 4 迁移到 JUnit 5
+
+   <https://zhuanlan.zhihu.com/p/144763642>
+
+- 我服了！SpringBoot 升级后这服务我一个星期都没跑起来
+
+  <https://www.toutiao.com/article/7163602391366074916>
+
+  <https://www.toutiao.com/article/7168780833636106760>
+
+- Spring Boot 2 到 Spring Boot 3 官方迁移指南
+
+   <https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.0-Migration-Guide>
+
+   <https://www.baeldung.com/spring-boot-3-migration>
+
+- Spring Boot 2.7.6 升级 3.1.0 爬坑指北
+
+   <https://juejin.cn/post/7237029359135408165>
+
+- Spring Boot 3.1 的新特性、升级说明以及核心功能的改进
+
+   <https://juejin.cn/post/7280787657013002301>
+
+   <https://juejin.cn/post/7170907270631718920>
+
+- Why is PostConstruct not called
+
+  <https://stackoverflow.com/questions/18161682/why-is-postconstruct-not-called>

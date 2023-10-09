@@ -17,7 +17,7 @@ defaultContentLanguage = "zh"
 disableLanguages = ["en"]
 defaultContentLanguageInSubdir = false
 
-copyRight = "Copyright (c) 2020-2023 Henk Verlinde"
+copyRight = "Copyright (c) 2020-2023 XLabs Club"
 
 [social]
   twitter = "getdoks"

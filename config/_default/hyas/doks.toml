@@ -53,7 +53,7 @@ backgroundDots = true # true (default)  or false
 sectionFooter = false # false (default) or true
 
 # Blog
-relatedPosts = false # false (default) or true
+relatedPosts = true # false (default) or true
 
 # Footer
 footer = "Brought to you by <a class=\"text-muted\" href=\"https://gethyas.com/\">Hyas</a>"
@@ -62,10 +62,10 @@ footer = "Brought to you by <a class=\"text-muted\" href=\"https://gethyas.com/\
 katex = false
 
 # Repository
-editPage = false # false (default) or true
+editPage = true # false (default) or true
 lastMod = false # false (default) or true
 repoHost = "GitHub" # GitHub (default), Gitea, GitLab, Bitbucket, or BitbucketServer
-docsRepo = "https://github.com/h-enk/doks"
+docsRepo = "https://github.com/xlabs-club/xlabs-club.github.io"
 docsRepoBranch = "main" # main (default), master, or <branch name>
 docsRepoSubPath = "" # "" (none, default) or <sub path>
 

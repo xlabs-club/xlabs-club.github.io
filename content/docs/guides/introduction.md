@@ -1,4 +1,18 @@
-# xlabs-club.github.io
+---
+title: "Introduction"
+description: ""
+summary: ""
+date: 2023-09-07T16:04:48+02:00
+lastmod: 2023-09-07T16:04:48+02:00
+draft: false
+images: []
+menu:
+  docs:
+    parent: ""
+    identifier: "introduction-6a1a6be4373e933280d78ea53de6158e"
+weight: 10
+toc: true
+---
 
 卫星实验室，一个专注于研究卫星以及 CRM 的开源组织。
 
