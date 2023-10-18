@@ -164,7 +164,7 @@ actuator 的引入会带来一些额外收益，之前我们健康检测只检�
 
 ## 老项目迁移升级步骤
 
-1. 改 pom.xml：修改 parent，引入必须的 starter，删除所有关于 Spring/logback/junit 的依赖项（由 Spring Boot Starter 自动引入）。
+1. 改 pom.xml：修改 parent，引入必须的 starter，删除所有关于 Spring/logback/junit 的依赖项（由 Spring Boot Starter 自动引入），插件切换到 spring-boot-maven-plugin。
 2. 原有的 xml 配置，可以改为注解形式，也可以不改直接 `@ImportResource` 使用。
 3. 注意配置扫描范围，原来 xml 中可能是配置是某几个包，Spring Boot 默认扫描 Application.java 所在包，范围可能扩大。
 4. 删除原来 web.xml 相关配置，如果有额外的 filter、servlet，需要额外定义 Bean 注入。
