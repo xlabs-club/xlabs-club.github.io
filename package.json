@@ -29,6 +29,7 @@
     "postinstall": "shx rm -rf node_modules/.bin/hugo && shx mkdir node_modules/.bin/hugo && shx cp node_modules/gethyas/node_modules/.bin/hugo/* node_modules/.bin/hugo"
   },
   "dependencies": {
+    "mermaid": "^10.5.0",
     "@hyas/doks-core": "^1.0.7"
   },
   "engines": {
