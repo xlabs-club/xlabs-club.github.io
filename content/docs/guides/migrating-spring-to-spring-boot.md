@@ -176,6 +176,10 @@ actuator 的引入会带来一些额外收益，之前我们健康检测只检�
 
    通过静态扫描指导从 Java 8 升级到 Java 17 需要注意的变更项。
 
+- [tomcat-jakartaee-migration](https://github.com/apache/tomcat-jakartaee-migration)
+
+   Tomcat 9 到 10 迁移辅助工具。
+
 - [spring-boot-migrator](https://github.com/spring-projects-experimental/spring-boot-migrator)
 
    Spring Boot 迁移工具，通过扫描输出 从 Spring 到 Spring Boot，以及 Spring Boot 3 迁移指导意见。
