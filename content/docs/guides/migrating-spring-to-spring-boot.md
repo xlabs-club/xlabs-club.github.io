@@ -249,7 +249,7 @@ webapp web.xml 配置如何转移到 spring boot war 形式。
          at com.alibaba.dubbo.common.compiler.support.AdaptiveCompiler.compile(AdaptiveCompiler.java:46)
    ```
 
-   本地命令行中启动参数里主动追加以下参数（这些参数在发布系统的镜像里默认已经加了），IDEA 启动是设置到`VM options`里：
+   本地命令行中启动参数里主动追加以下参数（这些参数在发布系统的镜像里默认已经加了），IDEA 启动时设置到`VM options`里：
 
    ```bash
    --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.math=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
