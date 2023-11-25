@@ -8,7 +8,7 @@ draft: false
 weight: 50
 images: []
 categories: []
-tags: [k8s]
+tags: [k8s,Java]
 contributors: []
 pinned: false
 homepage: false
@@ -64,5 +64,4 @@ PID USER      PR  NI    VIRT    RES    SHR S %CPU %MEM     TIME+ COMMAND
   99 root      20   0 8622220   5.1g  15640 S  0.0  8.1   0:00.32 java
 ```
 
-为什么要限制 POD PID 数。
-按照 K8S 官方说法，进程 ID（PID）是节点上的一种基础资源，很容易就会在尚未超出其它资源约束的时候就已经触及任务个数上限， 进而导致宿主机器不稳定。某日某个不起眼的服务创建了 N 多线程，把整个宿主机打挂了，谁痛谁知道啊。
+为什么要限制 POD PID 数。类似 CPU 和内存，进程 ID（PID）也是节点上的一种基础资源，很容易就会在尚未超出其它资源约束的时候就已经触及任务个数上限，进而导致宿主机不稳定。某日某个不起眼的服务因为无节制创建了 N 多线程，把整个宿主机打挂了，谁痛谁知道啊。

@@ -6,7 +6,9 @@
 
 ## 本地开发
 
-本项目使用 [Hugo](https://gohugo.io/) 开发，使用 [Doks](<(https://github.com/gethyas/doks)>) 作为主题，本地开发时先安装 Nodejs，然后使用 npm（或 pnpm） 安装 Hugo。
+本项目使用 [Hugo](https://gohugo.io/) 开发，使用 [Doks](<(https://github.com/gethyas/doks)>) 作为主题。
+
+本地开发时先安装 Nodejs，然后使用 npm（或 pnpm） 安装 Hugo。
 
 ```bash
 

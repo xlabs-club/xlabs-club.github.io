@@ -10,7 +10,7 @@ enableRobotsTXT = true
 languageCode = "zh-CN"
 paginate = 10
 rssLimit = 10
-summarylength = 20 # 70 (default)
+summarylength = 70 # 70 (default)
 
 # Multilingual
 defaultContentLanguage = "zh"
@@ -20,7 +20,7 @@ defaultContentLanguageInSubdir = false
 copyRight = "Copyright (c) 2020-2023 XLabs Club"
 
 [social]
-  twitter = "getdoks"
+  twitter = "XLabs Club"
 
 [outputs]
   home = ["HTML", "RSS", "searchIndex"]
