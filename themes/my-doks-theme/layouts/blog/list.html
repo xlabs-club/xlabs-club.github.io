@@ -1,0 +1,51 @@
+{{ define "main" }}
+<div class="row justify-content-center">
+  <div class="col-md-12 col-lg-10">
+    {{ if .Params.avatar -}}
+      {{ $image := .Resources.GetMatch (printf "**%s" .Params.avatar) -}}
+      {{ $imageLq := $image.Resize "15x15 webp q95" -}}
+      {{ $image = $image.Resize "300x300 webp q95" -}}
+      <div class="contributor-image">
+        <img class="img-fluid lazyload blur-up rounded-circle" src="{{ $imageLq.RelPermalink }}" data-src="{{ $image.RelPermalink }}" alt="{{ .Title }}" width="150" height="150">
+      </div>
+    {{ end -}}
+    {{ with .Params.headline -}}
+      <h1 class="text-center">{{ . }}</h1>
+    {{ else -}}
+      <h1 class="text-center">{{ .Title }}</h1>
+    {{ end -}}
+    {{ with .Params.summary -}}<p class="lead text-center">{{ . }}</p>{{ end -}}
+    {{ with .Content -}}<div class="text-center">{{ . }}</div>{{ end -}}
+  </div>
+</div>
+<div class="row justify-content-center">
+  <div class="col-lg-10">
+    {{ $paginator := .Paginate (.Data.Pages) -}}
+    {{ range $paginator.Pages -}}
+      <div class="card">
+        {{ $image := .Resources.GetMatch (printf "**%s" (index .Params.images 0)) -}}
+        {{ if $image -}}
+          {{ partial "picture" (dict
+          "ctx" .
+          "src" $image
+          "alt" .Title
+          "class" "img-fluid blur-up w-100 h-auto rounded-0"
+          )}}
+        {{ end -}}
+        <div class="card-body">
+          <article>
+            <h2 class="h3"><a class="stretched-link text-body" href="{{ .RelPermalink }}">{{ .Params.title }}</a></h2>
+            <p>{{ .Params.summary | safeHTML }}</p>
+            {{ partial "main/blog-meta.html" . -}}
+          </article>
+        </div>
+      </div>
+    {{ end -}}
+  </div>
+</div>
+<div class="row justify-content-center">
+  <div class="col-md-12 col-lg-10">
+    {{ template "_internal/pagination.html" . }}    
+  </div>
+</div>
+{{ end }}
