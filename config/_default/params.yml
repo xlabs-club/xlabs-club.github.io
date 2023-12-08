@@ -40,7 +40,7 @@ image:
 
 # SEO (@hyas/seo)
 seo:
-  description: ""
+  description: "卫星实验室，一个专注于研究卫星以及 CRM 的开源组织"
   generate:
     title: true
     meta: true
@@ -56,7 +56,7 @@ seo:
   jsonld_article_types: [article, articles]
   jsonld_news_article_types: [news, updates]
   jsonld_blog_posting_types: [post, posts, blog]
-  image: "/images/hyas-schema-image.png" 
+  image: "/images/logo-large.png" 
   private: false
 
 # Inline SVG (@hyas/inline-svg)
