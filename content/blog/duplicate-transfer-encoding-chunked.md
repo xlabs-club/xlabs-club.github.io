@@ -14,11 +14,11 @@ pinned: false
 homepage: false
 ---
 
-一个 Spring Boot 应用服务，提供了一个简单的查询接口，本身运行很正常，通过 curl 或任何其他 http client 请求都没有问题。
+我有一个 Spring Boot 应用服务，提供了一些简单的查询接口，本身运行很正常，通过 curl 或其他 http 客户端 localhost 请求都没有问题。
 
 某天通过 Traefik 代理了此服务，经过代理后再访问，某个接口一直都是 `500 internal server error`，其他接口都没有问题。通过 tcpdump 抓包发现，应用服务并没有返回任何 500 错误，而且 Traefik 本身也没有错误日志。
 
-根据网上经验排查了 SSL 证书问题、路径问题、消息体太大问题，都一一否定。最后无意间看了一眼 Response Header，发现 Spring Boot 应用返回了两个 `Transfer-Encoding: chunked` Header。
+根据网上经验排查了 Traefik SSL 证书问题、路径问题、消息体太大问题、请求 Header 不合规问题，都一一否定。最后无意间看了一眼 Response Header，发现 Spring Boot 应用返回了两个 `Transfer-Encoding: chunked` Header。
 
 再根据此 Header 搜索，发现果然有人遇到过类似问题，请参考这几个链接。
 
