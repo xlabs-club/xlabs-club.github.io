@@ -120,7 +120,7 @@ images = ["cover.png"]
   [seo.favicons]
     sizes = []
     icon = "favicon.png" # favicon.png (default)
-    svgIcon = "favicon.svg" # favicon.svg (default)
+    svgIcon = "favicon.ico" # favicon.svg (default)
     maskIcon = "" # mask-icon.svg (default)
     maskIconColor = "white" # white (default)
   [seo.schemas]
