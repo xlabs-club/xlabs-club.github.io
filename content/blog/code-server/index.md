@@ -38,7 +38,7 @@ homepage: false
 
 架构图如下。
 
-![code-server-auth-proxy](code-server-auth-proxy.svg)
+![code-server-auth-proxy](code-server-auth-proxy.png)
 
 ## 核心逻辑
 

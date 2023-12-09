@@ -1,6 +1,6 @@
 {
   "name": "xlabs-club",
-  "version": "1.0.3",
+  "version": "1.1.2",
   "description": "This is the source of xlabs.club",
   "author": "xlabs-club",
   "license": "CC BY-NC 4.0",
@@ -29,8 +29,8 @@
     "postinstall": "shx rm -rf node_modules/.bin/hugo && shx mkdir node_modules/.bin/hugo && shx cp node_modules/gethyas/node_modules/.bin/hugo/* node_modules/.bin/hugo"
   },
   "dependencies": {
-    "mermaid": "^10.5.0",
-    "@hyas/doks-core": "^1.0.7"
+    "@hyas/doks-core": "^1.1.2",
+    "mermaid": "^10.6.1"
   },
   "engines": {
     "node": ">=16.12.0",
