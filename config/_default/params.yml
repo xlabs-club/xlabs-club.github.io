@@ -28,7 +28,8 @@ image:
   attr_link_rel: "noopener, noreferrer" # noopener, noreferrer (default)
 
   ## Render hook
-  render_hook: true # false (default) or true
+  # I have to disabled render_hook for run npm build error in markdown pages
+  render_hook: false # false (default) or true
   render_hook_wrapper_class: img-wrapper # img-wrapper (default)
 
   ## Shortcode
