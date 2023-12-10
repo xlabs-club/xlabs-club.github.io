@@ -7,9 +7,9 @@ lastmod: 2023-01-07T10:54:37+08:00
 draft: false
 weight: 50
 images: []
-categories: []
+categories: [Java]
 tags: [k8s,Java]
-contributors: []
+contributors: [l10178]
 pinned: false
 homepage: false
 ---
