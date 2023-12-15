@@ -9,7 +9,7 @@ weight: 50
 images: []
 categories: []
 tags: [Java]
-contributors: []
+contributors: [l10178]
 pinned: false
 homepage: false
 ---
@@ -86,4 +86,4 @@ public class StatusController {
 
 另外根据 GitHub Issue 反馈，不仅 RestTemplate，使用 OpenFeign 也会触发以上问题。
 
-所以到底是谁的问题，Spring Boot Or Tomcat，目前还没有结论，请关注 GitHub 以上链接获取最新消息。
+同理，如果大家遇到服务经过 Nginx、Traefik 代理后出现的疑难问题，可关注下 Response Header 是否有异常。
