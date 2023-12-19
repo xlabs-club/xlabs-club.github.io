@@ -26,6 +26,7 @@ pnpm run build
 
 # 创建新页面
 pnpm run create docs/guides/faq.md
+pnpm run create docs/platform/backstage.md
 pnpm run create blog/k8s.md
 
 ```
