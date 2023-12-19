@@ -1,7 +1,7 @@
 ---
-title: "概述"
+title: "总体架构"
 description: ""
-summary: ""
+summary: "我们的平台工程总体架构"
 date: 2023-09-07T16:04:48+02:00
 lastmod: 2023-09-07T16:04:48+02:00
 draft: false
