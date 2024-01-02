@@ -16,7 +16,7 @@ homepage: false
 
 我有一个 Spring Boot 应用服务，提供了一些简单的查询接口，本身运行很正常，通过 curl 或其他 http 客户端 localhost 请求都没有问题。
 
-某天通过 Traefik 代理了此服务，经过代理后再访问，某个接口一直都是 `500 internal server error`，其他接口都没有问题。通过 tcpdump 抓包发现，应用服务并没有返回任何 500 错误，而且 Traefik 本身也没有错误日志。
+某天通过 Traefik 代理了此服务，经过代理后再访问，某个接口一直都是 `500 internal server error`，其他接口都没有问题。通过 tcpdump 抓包发现，应用服务并没有返回任何 500 错误，而且响应时间和 Body 体大小都很正常。
 
 根据网上经验排查了 Traefik SSL 证书问题、路径问题、消息体太大问题、请求 Header 不合规问题，都一一否定。最后无意间看了一眼 Response Header，发现 Spring Boot 应用返回了两个 `Transfer-Encoding: chunked` Header。
 
@@ -27,9 +27,9 @@ homepage: false
 - <https://github.com/spring-projects/spring-boot/issues/37646>
 - <https://stackoverflow.com/questions/77042701/nginx-upstream-sent-duplicate-header-line-transfer-encoding-chunked-previo>
 
-从上面链接描述中可知，不仅 Traefik 会出现此问题，nginx 包含以 nginx 为基础的 ingress 也会出现同样问题，不过 nginx 返回错误码是 502。
+从上面链接描述中可知，不仅 Traefik 会出现此问题，nginx 包含以 nginx 为基础的 ingress 也会出现同样问题，不过 nginx 返回错误信息类似 `Nginx: upstream sent duplicate header line: "Transfer-Encoding: chunked", previous value: "Transfer-Encoding: chunked”` ，返回错误码一般是 502 Bad Gateway。
 
-我所使用的 Traefik(2.10.x) 和 Spring Boot(2.7.x) 都是当前日期最新版本，目前仍然有问题。
+我所使用的 Traefik(2.10.6) 和 Spring Boot(2.7.17) 都是当前日期最新版本，目前仍然有问题。
 
 出现此问题的代码类似如下。
 
