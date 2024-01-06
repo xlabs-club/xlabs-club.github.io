@@ -76,34 +76,56 @@ seo:
 1. 以 keycloak + ldap 管理用户、角色、权限，用户原始数据存于 ldap 中。
 2. 以 oatuh2-proxy + keycloak oidc 作为认证代理中间件，为那些不具备认证授权机制的应用提供统一的认证授权访问控制。
 
-```mermaid
+一个简单的应用统一身份认证总架构示例如下。
 
+```mermaid
 C4Context
 
-  
     Person(admin, "超级管理员")
-    Person(developer, "开发人员")
-           
-    Container(keycloak, "keycloak", "Admin 控制台<br> 用户、组织、角色、权限管理")
-   
-    Container(proxy, "oauth2-proxy", "认证代理<br>认证通过后透传用户、角色等信息")
+    Person_Ext(extUser, "自助注册")
+    Person_Ext(socialUser, "社交登录")
+    Person(developer, "内部人员")
 
-    System(backstage, "Backstage", "开发者门户")
-    
-    System(login, "自研应用", "登录可访问，自身无权限管理功能")
+    Boundary(iam, "IAM", "iam") {
+        Container(keycloak, "keycloak", "Quarkus", "Admin 控制台<br> 用户、组织、角色、权限管理")
+        Container(ldap, "LDAP/AD","ldap", "LDAP 或 Windows AD 作为用户源")
+        ContainerDb(spiUser, "自定义用户源", "Java SPI", "通过实现 SPI 自定义用户源")   
+        System_Ext(providers, "身份联合", "Github、Gitlab、Wechart、SAML v2.0、OIDC 等<br>用户身份联合") 
+    }
+         
+    Boundary(sso, "Plugins Applications", "sso") {
+        Container(backstage, "Backstage","react","开发者门户") 
+        Container(grafana, "Grafana","grafana","监控告警平台")
+        Container(k8s, "Kubernetes","kubernetes","Kubernetes Service Account")    
+    }
+
+    Boundary(apps, "OAuth Proxy Applications", "sso") {
+        Container(proxy, "oauth2-proxy","golang","认证代理<br>认证和 RBAC 权限管理<br>通过后透传用户、角色等信息")
+        Container(login, "自研应用","any", "需要登录才可访<br>自身无用户权限管理功能")       
+    }
+  
 
     Rel(admin, keycloak, "用户管理", "http")
-    Rel(proxy, keycloak, "OIDC","provider")
+    Rel(developer, keycloak, "用户自助", "http")
+    Rel(extUser, keycloak, "用户自助注册", "http")
+    Rel(socialUser, keycloak, "社交账户登录", "http")
+    Rel(developer, backstage, "开发者门户", "http")
+    Rel(developer, proxy, "SSO", "http")
+    Rel(developer, grafana, "SSO", "http")
+    Rel(developer, k8s, "统一身份", "http")
 
-    Rel(developer, proxy, "访问受限应用", "http")
-    Rel(proxy, login, "RBAC","x-user-id")
+    Rel(proxy, login, "RBAC","x-user-id/group/role")
 
-    Rel(developer, backstage, "")
-    
-    Rel(backstage, keycloak, "SSO")
+    Rel(keycloak, ldap, "user storage")
+    Rel(keycloak, spiUser, "user storage")
+    Rel(keycloak, providers, "identity provider")
 
-    UpdateLayoutConfig($c4ShapeInRow="2", $c4BoundaryInRow="2")
+    Rel(backstage, keycloak, "plugin auth backend")
+    Rel(proxy, keycloak, "oidc provider")
+    Rel(grafana, keycloak, "oidc provider")
+    Rel(k8s, keycloak, "oidc provider")
 
-        
+    UpdateRelStyle(proxy, keycloak,$lineColor="blue" $offsetX="260")
+    UpdateLayoutConfig($c4ShapeInRow="4", $c4BoundaryInRow="4")
 
 ```
