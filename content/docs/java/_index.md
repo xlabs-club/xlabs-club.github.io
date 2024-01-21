@@ -1,6 +1,6 @@
 ---
 title: "Java"
-description: "Java 从入门到放弃"
+description: ""
 summary: ""
 date: 2023-09-07T16:06:50+02:00
 lastmod: 2023-09-07T16:06:50+02:00
@@ -13,3 +13,5 @@ menu:
 weight: 90
 toc: true
 ---
+
+Java，冬天已经来了，春天还会远吗。
