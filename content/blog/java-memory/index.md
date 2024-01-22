@@ -12,6 +12,11 @@ tags: [k8s,Java]
 contributors: [l10178]
 pinned: false
 homepage: false
+seo:
+  title: ""
+  description: "K8S 容器内 Java 进程内存分析"
+  canonical: ""
+  noindex: false
 ---
 
 故事背景：
