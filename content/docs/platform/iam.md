@@ -79,6 +79,7 @@ seo:
 一个简单的应用统一身份认证总架构示例如下。
 
 ```mermaid
+
 C4Context
 
     Person(admin, "超级管理员")

@@ -10,7 +10,7 @@ enableRobotsTXT = true
 languageCode = "zh-CN"
 paginate = 10
 rssLimit = 10
-summarylength = 70 # 70 (default)
+summarylength = 20 # 70 (default)
 
 # Multilingual
 defaultContentLanguage = "zh"
@@ -19,8 +19,8 @@ defaultContentLanguageInSubdir = false
 
 copyRight = "Copyright (c) 2020-2024 XLabs Club"
 
-[social]
-  twitter = "XLabs Club"
+[build.buildStats]
+  enable = true
 
 [outputs]
   home = ["HTML", "RSS", "searchIndex"]
@@ -79,8 +79,8 @@ rel  = "sitemap"
     weight = 10
 
 [imaging]
-  anchor = "Smart"
+  anchor = "Center"
   bgColor = "#ffffff"
   hint = "photo"
-  quality = 75
-  resampleFilter = "Box"
+  quality = 85
+  resampleFilter = "Lanczos"

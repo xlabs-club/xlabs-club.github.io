@@ -1,6 +1,7 @@
 .eslintcache
 .stylelintcache
 .netlify
+hugo_stats.json
 .hugo_build.lock
 yarn-error.log
 node_modules

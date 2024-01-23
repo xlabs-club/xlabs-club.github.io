@@ -3,6 +3,11 @@ title = "XLabs"
 description = "XLabs Club"
 images = ["cover.png"]
 
+mainSections = ["docs"]
+
+[social]
+  twitter = "xlabs-club"
+
 # Doks (@hyas/doks-core)
 [doks]
   # Color mode
@@ -65,7 +70,7 @@ images = ["cover.png"]
   imageSingle = true # true (default) or false
 
   # KaTex
-  katex = false
+  # katex = false
 
   # Repository
   editPage = true # false (default) or true
@@ -135,4 +140,4 @@ images = ["cover.png"]
     product = [] # Product sections
 
 # enable mermaid
-mermaid = true
+# mermaid = true
