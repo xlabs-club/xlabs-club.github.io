@@ -1,6 +1,6 @@
 ---
 title: "使用 OpenRewrite 进行代码重构"
-description: ""
+description: "使用 OpenRewrite 进行代码重构"
 summary: ""
 date: 2024-01-09T22:08:54+08:00
 lastmod: 2024-01-09T22:08:54+08:00

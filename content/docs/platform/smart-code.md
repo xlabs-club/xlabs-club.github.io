@@ -1,6 +1,6 @@
 ---
-title: "智能代码重构平台"
-description: ""
+title: "智能代码重构"
+description: "如何创建一个私有化企业级智能代码重构平台"
 summary: ""
 date: 2024-01-21T15:56:42+08:00
 lastmod: 2024-01-21T15:56:42+08:00
