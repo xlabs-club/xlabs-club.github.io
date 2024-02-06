@@ -17,7 +17,7 @@ defaultContentLanguage = "zh"
 disableLanguages = ["en"]
 defaultContentLanguageInSubdir = false
 
-copyRight = "Copyright (c) 2020-2023 XLabs Club"
+copyRight = "Copyright (c) 2020-2024 XLabs Club"
 
 [social]
   twitter = "XLabs Club"
