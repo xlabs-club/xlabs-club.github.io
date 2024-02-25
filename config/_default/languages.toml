@@ -1,0 +1,16 @@
+[zh]
+  languageName = "简体中文"
+  contentDir = "content/zh"
+  weight = 10
+  [zh.params]
+    languageISO = "ZH"
+    languageTag = "zh-CN"
+
+[en]
+  languageName = "English"
+  contentDir = "content/en"
+  weight = 20
+  [en.params]
+    languageISO = "EN"
+    languageTag = "en-US"
+
