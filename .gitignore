@@ -1,0 +1,21 @@
+Thumbs.db
+.DS_Store
+.dist
+.tmp
+.lock
+.sass-cache
+.eslintcache
+.stylelintcache
+.netlify
+.hugo_build.lock
+# hugo_stats.json is necessary for doks
+# hugo_stats.json
+node_modules
+public
+resources
+# pnpm-lock.yaml
+
+.idea
+.vscode
+.impl
+*.log

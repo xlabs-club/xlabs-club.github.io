@@ -1,0 +1,4 @@
+[[main]]
+  name = "GitHub"
+  url = "https://github.com/xlabs-club"
+  weight = 10
