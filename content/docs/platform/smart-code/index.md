@@ -1,6 +1,6 @@
 ---
-title: "使用 OpenRewrite 进行代码重构"
-description: "使用 OpenRewrite 进行代码重构"
+title: "智能代码重构"
+description: "使用 OpenRewrite 进行代码重构，搭建私有企业级智能代码重构平台"
 summary: ""
 date: 2024-01-09T22:08:54+08:00
 lastmod: 2024-01-09T22:08:54+08:00
@@ -12,13 +12,13 @@ menu:
 weight: 999
 toc: true
 seo:
-  title: "" # custom title (optional)
+  title: "使用 OpenRewrite 进行代码重构，搭建私有企业级智能代码重构平台" # custom title (optional)
   description: "" # custom description (recommended)
   canonical: "" # custom canonical URL (optional)
   noindex: false # false (default) or true
 ---
 
-作为一个以 Java 和 Spring 为主要技术栈的团队，在日常的软件开发中，我们经常会遇到一系列的组件升级和代码重构需求，在此过程我们期望能做到几个方面：
+作为一个以 Java 和 Spring 为主要技术栈的团队，在日常的软件开发中，我们经常会遇到一系列的组件升级和代码重构需求，在此过程我们期望能做到几个效果：
 
 - 项目级升级：整个项目（注此项目指 Maven Project）升级，而不是基于某个 Java 类或片段。
 - 不同版本跨度变更：比如从 Spring 项目迁移到 Spring Boot，从 Spring Boot 2.x 升级到 3.x，从 Java 8 升级到 Java 21。
@@ -30,7 +30,7 @@ seo:
 
 ## OpenRewrite
 
-[OpenRewrite][] 是一个开源的代码重写工具，旨在帮助开发人员自动化地重构和修改代码。
+[OpenRewrite][] 是一个开源的代码重写工具，旨在帮助开发人员自动化大规模重构代码。
 
 它提供了一套强大的 API 和插件系统，可以通过静态分析和代码转换技术来解析、修改和生成代码。OpenRewrite 支持多种编程语言，包括 Java、C#、 TypeScript、Python、Kubernetes 等。通过使用 OpenRewrite，开发人员可以轻松地进行代码重构、性能优化、代码风格调整和代码迁移等操作，从而提高代码质量和可维护性。OpenRewrite 的开源性质使得开发人员可以自由地定制和扩展其功能，以满足特定项目的需求。
 
@@ -51,10 +51,72 @@ seo:
 - 可自定义扩展，对于自研代码不可能经过自动学习达到精确的效果，此时可自定义实现。
 - 免费，可离线使用，便于 CI 集成。
 
-值得一提的是，AWS 最近推出了 Amazon Q Code Transformation 专门做代码迁移和重构，同时 AWS 也加入了 OpenRewrite 社区，需要开通 Amazon CodeWhisperer 企业版才能使用，可惜我没有钱去试用。
+值得一提的是，AWS 最近推出了 Amazon Q Code Transformation 专门做代码迁移和重构，需要开通 Amazon CodeWhisperer 企业版才能使用，可惜我没有钱去试用。
 
-### OpenRewrite 工作原理
-### OpenRewrite 运行方式
+### 快速入门
+
+OpenRewrite 支持使用 maven、gradle 以及使用 SaaS 服务 Moderne cli `mod` 这三种方法，maven、gradle 定制比较方便，dependency 管理也比较灵活，另外某些食谱只有 maven、gradle 支持，下面的例子都是使用 maven 执行。
+
+初次使用 OpenRewrite，可通过官方提供的 [热门指导](https://docs.openrewrite.org/running-recipes/popular-recipe-guides) 找到自己感兴趣的按步骤操作。
+
+[![popular-recipe-guides](./popular-recipe-guides.png)](./popular-recipe-guides.png)
+
+更多功能可通过 [食谱分类](https://docs.openrewrite.org/recipes) 搜索，也可通过官网右上方的搜索按钮按照关键字搜索，也可通过 `mvn rewrite:discover` 列出可用的食谱。
+
+[![recipes](./recipes.png)](./recipes.png)
+
+### 最佳实践和定制
+
+OpenRewrite 对不同类型分别内置了一些最佳实践，可通过 `best practices` 关键字搜索。
+
+[![best-practices](./best-practices.png)](./best-practices.png)
+
+最佳实践包含了哪些规则呢，以 [Spring Boot 3.x best practices](https://docs.openrewrite.org/recipes/java/spring/boot3/springboot3bestpractices) 为例，在文档中能看到对应的食谱列表如下：
+
+```yaml
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: org.openrewrite.java.spring.boot3.SpringBoot3BestPractices
+displayName: Spring Boot 3.x best practices
+description: Applies best practices to Spring Boot 3 applications.
+tags:
+  - spring
+  - boot
+recipeList:
+  - org.openrewrite.java.spring.boot2.SpringBoot2BestPractices
+  - org.openrewrite.java.migrate.UpgradeToJava21
+  - org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_2
+
+```
+
+而其中每个食谱又可能包含多个，比如上面的 [org.openrewrite.java.spring.boot2.SpringBoot2BestPractices](https://docs.openrewrite.org/recipes/java/spring/boot2/springboot2bestpractices) 又包含以下列表：
+
+```yaml
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: org.openrewrite.java.spring.boot2.SpringBoot2BestPractices
+displayName: Spring Boot 2.x best practices
+description: Applies best practices to Spring Boot 2 applications.
+tags:
+  - spring
+  - boot
+recipeList:
+  - org.openrewrite.java.spring.NoRequestMappingAnnotation
+  - org.openrewrite.java.spring.ImplicitWebAnnotationNames
+  - org.openrewrite.java.spring.boot2.UnnecessarySpringExtension
+  - org.openrewrite.java.spring.NoAutowiredOnConstructor
+  - org.openrewrite.java.spring.boot2.RestTemplateBuilderRequestFactory
+  - org.openrewrite.java.spring.boot2.ReplaceDeprecatedEnvironmentTestUtils
+
+```
+
+如果官方的某个食谱不和你的胃口，比如想在最佳实践中去掉或新增某个自定义食谱怎么办，可以自己定义一个 `rewrite.yml` 文件，类似上面的 yaml 文件，在文件中自行组合食谱。
+
+### CI 集成
+
+通过 `mvn rewrite:run` 命令执行后，会直接修改代码。但是大部分 CI 场景下，我们可能只想做分析，不想真正改动代码。那么就可以把命令换成 `mvn rewrite:dryRun`，dryRun 会在控制台输出 warning 结果，并生成一个 rewrite.patch 文件。
+
+如果 dryRun 向控制台日志发出任何警告，或者生成了 rewrite.patch 文件，证明此次有需要变更的地方，则可视为 CI 失败。
 
 ## Spring Boot Migrator
 
@@ -164,7 +226,50 @@ Found these recipes:
 
 ```
 
-## Spring 到 Spring Boot 迁移示例
+## OpenRewrite 使用示例
+
+下面使用 maven 方式演示几个例子，注意如果是多模块项目，一定要在根模块下执行，如果还出错，参考官方说明：[Running Rewrite on a multi-module Maven project](https://docs.openrewrite.org/running-recipes/multi-module-maven)。
+
+友情提醒：初次使用会下载很多依赖 jar 包，速度可能比较慢，切换到你最快的 maven 仓库。
+
+### 代码清理
+
+先试一下 CodeCleanup 效果。
+
+pom.xml 文件中增加以下配置，然后执行 `mvn rewrite:run`。
+
+```xml
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.openrewrite.maven</groupId>
+        <artifactId>rewrite-maven-plugin</artifactId>
+        <version>5.23.1</version>
+        <configuration>
+          <activeRecipes>
+            <recipe>org.openrewrite.staticanalysis.CodeCleanup</recipe>
+          </activeRecipes>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.openrewrite.recipe</groupId>
+            <artifactId>rewrite-static-analysis</artifactId>
+            <version>1.3.1</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+    </plugins>
+  </build>
+```
+
+我的某个项目执行效果：
+
+- 删除了一些多余的空格、空行、多括号。
+- 代码格式化，比如多个参数间缺少空格的加了空格。
+- 颠倒了一个 equals 比较： `method.equals("CONNECT") -> "CONNECT".equals(method)`。
+- 长代码换行归整，三元运算格式化。
+
+### Spring 到 Spring Boot
 
 下面介绍下我们将 Spring 项目迁移到 Spring Boot 的过程，以及中间遇到的一些问题。
 
@@ -391,20 +496,14 @@ Found these recipes:
 3. 在上面步骤我是先升级到了 Spring Boot 2，然后再执行升级 Spring Boot 3 和 Jakarta EE。实际上直接升级到 Spring Boot 3 也是可以的。
 4. 执行完成后可从 maven 中删除 rewrite-maven-plugin，也可留着下次做其他变更。
 
+### 试用总结
+
 注意事项：
 
 1. 我们项目配置都是通过远程配置中心管理的，所以升级过程中配置文件无法响应变更，解决办法是将配置从远端拷贝到本地 applicaiton.properties 中，执行完任务后根据变化再更新远程配置中心。
 2. 执行过程中可能会报错，比如 maven 插件升级后某些属性可能变更或失效，需要手动解决错误后，再执行 `mvn rewrite:run`，
 3. 可重复执行 `mvn rewrite:run` 命令，可随时加入新的 recipe 再执行，所以为了观察变更和保证执行成功，可分批次加入 recipe 多次执行。
-4. OpenRewrite 不解析依赖的第三方 jar 包内容，所以第三方 jar 的问题需要自行识别，比如从 Java EE 到 Jakarta EE，只是替换规则中知道的 jar 包版本，不会自动把 jar 包内的 `javax.` 替换为 `jakarta.` 。
-
-## 未完待续
-
-此文将持续更新，继续介绍：
-
-- OpenRewrite 最佳实践
-- OpenRewrite recipes 依赖关系，各种场景下如果搜索和使用 recipes
-- OpenRewrite 代码分析原理，如何自定义 recipes
+4. OpenRewrite 不解析依赖的第三方 jar 包内容，所以第三方 jar 的问题需要自行识别，比如从 Java EE 到 Jakarta EE，只是替换规则中知道的 jar 包版本和当前项目的源代码，不会自动把 jar 包内的 `javax.` 替换为 `jakarta.`。
 
 [OpenRewrite]: https://docs.openrewrite.org/
 [Spring Boot Migrator]: https://github.com/spring-projects-experimental/spring-boot-migrator
