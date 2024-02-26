@@ -55,6 +55,10 @@ seo:
 
 ### 快速入门
 
+OpenRewrite 一个最核心的概念是 `Recipe`，由于我是国内首个翻译这个单词的人，以下将直译为食谱。一个 Recipe 可以理解为是一套声明好的规则，OpenRewrite 按照固定规则进行重构。
+
+一个 Recipe 可以包含多个 Recipe，可以层级累加，比如 `UpgradeSpringBoot_3_2`可能包含对 pom.xml、application.properties、java main source、java test source 的升级改动。
+
 OpenRewrite 支持使用 maven、gradle 以及使用 SaaS 服务 Moderne cli `mod` 这三种方法，maven、gradle 定制比较方便，dependency 管理也比较灵活，另外某些食谱只有 maven、gradle 支持，下面的例子都是使用 maven 执行。
 
 初次使用 OpenRewrite，可通过官方提供的 [热门指导](https://docs.openrewrite.org/running-recipes/popular-recipe-guides) 找到自己感兴趣的按步骤操作。
