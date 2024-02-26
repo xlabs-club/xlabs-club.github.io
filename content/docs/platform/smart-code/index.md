@@ -114,7 +114,7 @@ recipeList:
 
 ```
 
-如果官方的某个食谱不和你的胃口，比如想在最佳实践中去掉或新增某个自定义食谱怎么办，可以自己定义一个 `rewrite.yml` 文件，类似上面的 yaml 文件，在文件中自行组合食谱。
+如果官方的某个食谱不和你的胃口，比如想在最佳实践中去掉或新增某个自定义食谱怎么办，可以自己定义一个 `rewrite.yml` 文件，类似上面的 yaml 文件，在文件中自行组合食谱。注意 `rewrite.yml` 文件要放到 maven 项目的根目录下，更多关于文件的说明参考 [Refactoring with declarative YAML recipes](https://docs.openrewrite.org/running-recipes/popular-recipe-guides/authoring-declarative-yaml-recipes)。
 
 ### CI 集成
 
