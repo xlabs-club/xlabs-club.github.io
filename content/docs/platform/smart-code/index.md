@@ -228,7 +228,7 @@ Found these recipes:
 
 ## OpenRewrite 使用示例
 
-下面使用 maven 方式演示几个例子，注意如果是多模块项目，一定要在根模块下执行，如果还出错，参考官方说明：[Running Rewrite on a multi-module Maven project](https://docs.openrewrite.org/running-recipes/multi-module-maven)。
+下面使用 maven 方式演示几个例子，注意如果是多模块项目运行可能出错，参考官方说明：[Running Rewrite on a multi-module Maven project](https://docs.openrewrite.org/running-recipes/multi-module-maven)。
 
 友情提醒：初次使用会下载很多依赖 jar 包，速度可能比较慢，切换到你最快的 maven 仓库。
 
@@ -504,6 +504,8 @@ pom.xml 文件中增加以下配置，然后执行 `mvn rewrite:run`。
 2. 执行过程中可能会报错，比如 maven 插件升级后某些属性可能变更或失效，需要手动解决错误后，再执行 `mvn rewrite:run`，
 3. 可重复执行 `mvn rewrite:run` 命令，可随时加入新的 recipe 再执行，所以为了观察变更和保证执行成功，可分批次加入 recipe 多次执行。
 4. OpenRewrite 不解析依赖的第三方 jar 包内容，所以第三方 jar 的问题需要自行识别，比如从 Java EE 到 Jakarta EE，只是替换规则中知道的 jar 包版本和当前项目的源代码，不会自动把 jar 包内的 `javax.` 替换为 `jakarta.`。
+
+## 遇见问题和解决办法
 
 [OpenRewrite]: https://docs.openrewrite.org/
 [Spring Boot Migrator]: https://github.com/spring-projects-experimental/spring-boot-migrator
