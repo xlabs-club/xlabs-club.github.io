@@ -76,7 +76,7 @@ C4Context
         Container(nfs, "NFS","nfs","共享文件存储")
     }
 
-    UpdateLayoutConfig($c4ShapeInRow="17", $c4BoundaryInRow="1")
+    UpdateLayoutConfig($c4ShapeInRow="4", $c4BoundaryInRow="1")
 
 ```
 
