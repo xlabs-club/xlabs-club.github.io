@@ -12,6 +12,8 @@ menu:
     identifier: "cloud-native-22e9ba8aefa7ef9891199cf8db3a08cd"
 weight: 30
 toc: true
+sidebar:
+  collapsed: true
 ---
 
 云原生技术探索。
