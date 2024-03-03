@@ -74,6 +74,10 @@
   target = "layouts"
 
 [[mounts]]
+  source = "node_modules/mermaid"
+  target = "assets/js/vendor/mermaid"
+
+[[mounts]]
   source = "layouts"
   target = "layouts"
 

@@ -78,9 +78,8 @@ seo:
 
 一个简单的应用统一身份认证总架构示例如下。
 
-```kroki {type=mermaid}
+```mermaid
 C4Context
-
     Person(admin, "超级管理员")
     Person_Ext(extUser, "自助注册")
     Person_Ext(socialUser, "社交登录")
