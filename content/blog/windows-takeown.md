@@ -1,6 +1,6 @@
 ---
 title: "Windows 提权和设置环境变量"
-description: ""
+description: "Windows 提权和设置环境变量"
 summary: ""
 date: 2024-02-26T23:25:29+08:00
 lastmod: 2024-02-26T23:25:29+08:00

@@ -1,6 +1,6 @@
 ---
 title: "重复 Transfer-Encoding Header 引起的服务 500 问题"
-description: ""
+description: "Spring Boot 重复 Transfer-Encoding Header 引起的服务 500 问题"
 summary: ""
 date: 2023-11-26T10:21:44+08:00
 lastmod: 2023-11-26T10:21:44+08:00
@@ -12,6 +12,11 @@ tags: [Java]
 contributors: [l10178]
 pinned: false
 homepage: false
+seo:
+  title: "重复 Transfer-Encoding Header 引起的服务 500 问题" # custom title (optional)
+  description: "Spring Boot 重复 Transfer-Encoding Header 引起的服务 500 问题" # custom description (recommended)
+  canonical: "" # custom canonical URL (optional)
+  noindex: false # false (default) or true
 ---
 
 我有一个 Spring Boot 应用服务，提供了一些简单的查询接口，本身运行很正常，通过 curl 或其他 http 客户端 localhost 请求都没有问题。
