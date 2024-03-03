@@ -13,7 +13,7 @@ alertText = '<a class="alert-link stretched-link fw-normal" href="/blog/doks-1-3
 footer = "Give Me a <a class=\"text-muted\" href=\"https://github.com/xlabs-club/\">Star</a>"
 
 [social]
-  twitter = "getdoks"
+  twitter = "xlabs-club"
 
 # Add-ons
 [add_ons]
