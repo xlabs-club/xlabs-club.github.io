@@ -1,5 +1,9 @@
 # xlabs-club.github.io
 
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/xlabs-club/xlabs-club.github.io/.github%2Fworkflows%2Fgh-pages.yml)
+![GitHub Repo stars](https://img.shields.io/github/stars/xlabs-club/xlabs-club.github.io)
+![GitHub contributors](https://img.shields.io/github/contributors/xlabs-club/xlabs-club.github.io)
+
 卫星实验室，一个专注于研究 CRM 的开源组织。
 
 此项目为卫星实验室主页 [xlabs.club][] 的源码，记录常用文档和零碎博客，欢迎提交 PR 开源共建。
