@@ -12,6 +12,8 @@ menu:
     identifier: "platform-engineering-22e9ba8aefa7ef9891199cf8db3a08cd"
 weight: 20
 toc: true
+sidebar:
+  collapsed: true
 ---
 
 我们的平台工程建设之路。

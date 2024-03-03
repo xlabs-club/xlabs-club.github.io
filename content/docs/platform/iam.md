@@ -1,6 +1,6 @@
 ---
 title: "统一身份认证"
-description: ""
+description: "统一身份认证（Identity and Access Management，身份认证和访问控制，简称 IAM）的技术选型和实践"
 summary: ""
 date: 2023-12-19T22:26:42+08:00
 lastmod: 2023-12-19T22:26:42+08:00

@@ -59,6 +59,7 @@ module.exports = {
         'hiding',
         'page-item',
         'page-link',
+        'ms-auto',
         ...whitelister([
           './assets/scss/**/*.scss',
           './node_modules/@docsearch/css/dist/modal.css',
