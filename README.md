@@ -6,7 +6,7 @@
 
 卫星实验室，一个专注于研究 CRM 的开源组织。
 
-此项目为卫星实验室主页 [xlabs.club][] 的源码，记录常用文档和零碎博客，欢迎提交 PR 开源共建。
+此项目为卫星实验室主页 [xlabs.club][] 的源码，欢迎提交代码开源共建。
 
 ## 本地开发
 
@@ -18,21 +18,15 @@
 
 # 安装 npm 依赖包，注意网络连接
 pnpm install
-
 # 启动 Web，然后浏览器访问 http://localhost:1313/即可浏览效果
 pnpm run dev
-
-# 代码提交前先检查
-pnpm run lint
-
-# 编译结果
-pnpm run build
-
 # 创建新页面
-pnpm run create docs/guides/faq.md
 pnpm run create docs/platform/backstage.md
 pnpm run create blog/k8s.md
-
+# 代码提交前先检查
+pnpm run lint
+# 编译结果
+pnpm run build
 ```
 
 ## License
