@@ -4,9 +4,11 @@
 ![GitHub Repo stars](https://img.shields.io/github/stars/xlabs-club/xlabs-club.github.io)
 ![GitHub contributors](https://img.shields.io/github/contributors/xlabs-club/xlabs-club.github.io)
 
-卫星实验室，一个专注于研究 CRM 的开源组织。
+卫星实验室，一个专注于研究 CRM（Customer Relationship Management，客户关系管理） 的开源组织。
 
-此项目为卫星实验室主页 [xlabs.club][] 的源码，欢迎提交代码开源共建。
+此项目为卫星实验室主页 [xlabs.club][] 的源码，在这里我们将分享 CRM 领域独有的建设经验，介绍如何以技术驱动 CRM 长期发展。
+
+加入我们，与我们共同共同探索 CRM 技术前沿，解决行业中的挑战。
 
 ## 本地开发
 
