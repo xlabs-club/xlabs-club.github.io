@@ -1,6 +1,6 @@
 ---
 title: '从 Spring 到 Spring Boot'
-description: ""
+description: "从 Spring 到 Spring Boot，迁移升级快速入门以及各种踩坑记录"
 summary: ""
 date: 2023-01-07T10:54:37+08:00
 draft: false
@@ -11,6 +11,11 @@ tags: [Spring Boot,Java]
 contributors: []
 pinned: false
 homepage: false
+seo:
+  title: "" # custom title (optional)
+  description: "" # custom description (recommended)
+  canonical: "" # custom canonical URL (optional)
+  noindex: false # false (default) or true
 ---
 
 从 Spring 到 Spring Boot，迁移升级快速入门以及各种踩坑记录。
