@@ -6,9 +6,16 @@
 
 卫星实验室，一个专注于研究 CRM（Customer Relationship Management，客户关系管理） 的开源组织。
 
-此项目为卫星实验室主页 [xlabs.club][] 的源码，在这里我们将分享 CRM 领域独有的建设经验，介绍如何以技术驱动 CRM 长期发展。
+此项目为卫星实验室主页 [xlabs.club][] 的源码，在这里我们将分享 CRM 领域独有的建设经验，介绍如何以技术驱动 CRM 长期发展和高速增长。
 
 加入我们，与我们共同共同探索 CRM 技术前沿，解决行业中的挑战。
+
+## 主页内容
+
+- 平台工程：我们的平台工程建设之路，关于 DevOps, DataOps, FinOps 以及 AIOps 的工程实践。
+- 云原生：云原生技术探索，如何以云原生技术支撑起不断变化的复杂业务。
+- awesome-x-ops：一些关于 AIOps、DataOps、DevOps、GitOps、FinOps 的优秀软件、博客、配套工具。
+- xlabs-ops：一些运维脚本和模板，如 Argo Workflows 模板仓库，是对官方 Examples 的组合、扩展。
 
 ## 本地开发
 
