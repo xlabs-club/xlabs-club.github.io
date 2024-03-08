@@ -2,13 +2,13 @@
 title: "使用 Sentinel 实现分布式应用限流"
 description: "使用 Sentinel 实现分布式应用限流"
 summary: ""
-date: 2024-03-08T17:06:10+08:00
-lastmod: 2024-03-08T17:06:10+08:00
-draft: true
+date: 2024-03-07T21:06:10+08:00
+lastmod: 2024-03-07T21:06:10+08:00
+draft: false
 weight: 50
 categories: []
-tags: []
-contributors: []
+tags: [Java]
+contributors: [l10178]
 pinned: false
 homepage: false
 seo:
@@ -38,7 +38,9 @@ Sentinel 的基础知识请参考官方文档描述，这里单独介绍一些�
 规则：Sentinel 定义的一系列限流保护规则，比如流量控制规则、自适应保护规则。
 效果：实际上“效果”也是“规则”定义的一部分。任何一条请求，命中某些资源规则后产生的效果，比如直接抛出异常、匀速等待。
 
-全局注意事项和使用限制：
+## Sentinel 全局注意事项和使用限制
+
+使用开源默认 Sentinel 组件，可关注以下注意事项：
 
 1. 单个进程内资源数量阈值是 6000，多出的资源规则将不会生效，也不提示错误而是直接忽略，资源数量太多建议使用热点参数控制。
 2. 对于限流的链路模式，context 阈值是 2000，所以默认的 WEB_CONTEXT_UNIFY 为 true，如果需要链路限流需要把这个改为 false。
@@ -48,6 +50,7 @@ Sentinel 的基础知识请参考官方文档描述，这里单独介绍一些�
 6. 限流的目的是保护系统，计数计量并不准确，所以不要拿限流做计量或配额控制。
 7. 增加限流一定程度上通过时间换空间，降低了 CPU、内存负载，对 K8S HPA 策略会有一定影响。后续我们也会考虑根据 Sentinel 限流指标进行扩缩容。
 8. 接口变慢，各调用链需要关注调用超时和事务配置。
+9. 目前 sentinel-web-servlet 和 sentinel-spring-webmvc-adapter 均不支持热点参数限流。为了支持热点参数需要自行扩展。
 
 ## 接入指导
 
@@ -223,14 +226,8 @@ Sentinel 提供以下几种熔断策略：
 
 可在 Granfana 中以 ClickHouse 作为数据源配置自己需要的视图，并结合告警组件配置告警，比如应用 1 分钟 block 次数超过 10 次触发告警。
 
-## Sentinel 原生组件一些限制
-
-使用开源默认 Sentinel 组件，可关注以下注意事项：
-
-1. 目前 sentinel-web-servlet 和 sentinel-spring-webmvc-adapter 均不支持热点参数限流。为了支持热点参数需要自行扩展。
-2. sentinel-web-servlet 和 sentinel-spring-webmvc-adapter 会将每个到来的不同的 URL 都作为不同的资源处理，因此对于 REST 风格的 API，需要自行实现 UrlCleaner 接口清洗一下资源（比如将满足 /foo/:id 的 URL 都归到 /foo/* 资源下），然后将其注册至 WebCallbackManager 中。否则会导致资源数量过多，超出资源数量阈值（目前是 6000）时多出的资源的规则将不会生效。
-
 ## FAQ
 
-Q：Sentinel 资源生成时如何忽略某些资源。
-A：自定义 UrlCleaner，对想忽略的资源返回空字符。
+- Q：Sentinel 资源生成时如何忽略某些资源。
+
+  A：自定义 UrlCleaner，对想忽略的资源返回空字符。
