@@ -72,15 +72,3 @@ brew install tealdeer
 ## bat
 
 [bat](https://github.com/sharkdp/bat)，一只带翅膀的 cat，代替 cat 命令。
-
-## pngquant
-
-[pngquant](https://pngquant.org/)，无损 PNG 图片压缩工具。
-
-```bash
-for file in $(ls *.png)
-do
-  # 覆盖原文件，根据你自己爱好选择 
-  pngquant $file --force --output $file
-done
-```

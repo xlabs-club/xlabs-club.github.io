@@ -38,6 +38,16 @@ pnpm run lint
 pnpm run build
 ```
 
+如果文章中包含 png 图片，提交到 git 前推荐使用 [pngquant](https://pngquant.org/) 先进行一次无损压缩。
+
+```bash
+# 选择自己的文件夹
+for file in $(ls *.png)
+do
+  pngquant $file --force --output $file
+done
+```
+
 ## License
 
 本文档采用 [CC BY-NC 4.0][] 许可协议。
