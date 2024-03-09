@@ -1,6 +1,6 @@
 ---
-title: "K8S 容器 PID 限制引起的 OOM"
-description: "K8S 容器 PID 限制引起的 OOM"
+title: "K8S 容器 PID 限制引起的 Java OutOfMemoryError"
+description: "K8S 容器 PID 限制引起的 Java OutOfMemoryError"
 summary: ""
 date: 2023-09-07T16:21:44+08:00
 lastmod: 2023-09-07T16:21:44+08:00
@@ -30,7 +30,7 @@ Exception in thread "slow-fetch-15" java.lang.OutOfMemoryError: unable to create
 
 进入 Pod 内，尝试执行任何操作，又会出现 `unable to start container process` 错误。
 
-一开始怀疑是内存不足，调大了内存，同时也缩小了 Java 的 `xss`， 都不起作用。
+一开始怀疑是内存不足，调大了内存，同时也缩小了 Java 的 `xss`，都不起作用。
 
 真实原因： K8S 容器限制了 PID 数，无法创建新的线程，在 Pod 内 `cat /sys/fs/cgroup/pids/pids.max` 发现是 1024。
 
