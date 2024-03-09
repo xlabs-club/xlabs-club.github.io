@@ -18,11 +18,11 @@
 - awesome-x-ops：一些关于 AIOps、DataOps、DevOps、GitOps、FinOps 的优秀软件、博客、配套工具。
 - xlabs-ops：一些运维脚本和模板，如 Argo Workflows 模板仓库，是对官方 Examples 的组合、扩展。
 
-## 本地开发
+## 贡献者指南
 
-本项目使用 [Hugo](https://gohugo.io/) 开发，使用 [Doks](https://github.com/gethyas/doks) 作为 Hugo 主题。
+本项目使用 [Hugo][] 开发，使用 [Doks][] 作为 Hugo 主题，一切内容都是 Markdown，专心写文字即可。
 
-本地开发时先安装 Nodejs，然后使用 pnpm（或 npm） 安装 Hugo bin，本地不需要提前安装 Hugo。
+本地开发时需要先安装 Nodejs，然后使用 pnpm（或 npm） 安装 Hugo bin，本地不需要提前安装 Hugo。
 
 ```bash
 # 安装 npm 依赖包，注意此过程需要连接 github 下载 hugo
@@ -38,7 +38,7 @@ pnpm run lint
 pnpm run build
 ```
 
-如果文章中包含 png 图片，提交到 git 前推荐使用 [pngquant](https://pngquant.org/) 先进行一次无损压缩。
+如果文章中包含图片，提交 Git 前推荐使用 [pngquant][] 先进行无损压缩。
 
 ```bash
 # 选择自己的文件夹
@@ -48,9 +48,18 @@ do
 done
 ```
 
+## 贡献者列表
+
+<a href="https://github.com/xlabs-club/xlabs-club.github.io/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=xlabs-club/xlabs-club.github.io" />
+</a>
+
 ## License
 
 本文档采用 [CC BY-NC 4.0][] 许可协议。
 
 [xlabs.club]: https://www.xlabs.club
+[Hugo]: https://gohugo.io/
+[Doks]: https://github.com/gethyas/doks
+[pngquant]: https://pngquant.org/
 [CC BY-NC 4.0]: https://creativecommons.org/licenses/by-nc/4.0/
