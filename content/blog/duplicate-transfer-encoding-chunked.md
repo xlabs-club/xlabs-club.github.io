@@ -1,6 +1,6 @@
 ---
-title: "重复 Transfer-Encoding Header 引起的服务 500 问题"
-description: "Spring Boot 重复 Transfer-Encoding Header 引起的服务 500 问题"
+title: "重复 Transfer-Encoding Response Header 引起的 Traefik 代理服务 500 问题"
+description: "重复 Transfer-Encoding Response Header 引起的 Traefik 代理服务 500 问题"
 summary: ""
 date: 2023-11-26T10:21:44+08:00
 lastmod: 2023-11-26T10:21:44+08:00
@@ -13,8 +13,8 @@ contributors: [l10178]
 pinned: false
 homepage: false
 seo:
-  title: "重复 Transfer-Encoding Header 引起的服务 500 问题" # custom title (optional)
-  description: "Spring Boot 重复 Transfer-Encoding Header 引起的服务 500 问题" # custom description (recommended)
+  title: "重复 Transfer-Encoding Response Header 引起的 Traefik 代理服务 500 问题" # custom title (optional)
+  description: "重复 Transfer-Encoding Response Header 引起的 Traefik 代理服务 500 问题" # custom description (recommended)
   canonical: "" # custom canonical URL (optional)
   noindex: false # false (default) or true
 ---
