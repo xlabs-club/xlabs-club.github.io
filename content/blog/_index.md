@@ -13,8 +13,8 @@ contributors: []
 pinned: false
 homepage: false
 seo:
-  title: "XLabs Club Blog"
-  description: "卫星实验室技术博客"
+  title: "技术博客"
+  description: "卫星实验室技术博客列表"
   canonical: ""
   noindex: false
 ---
