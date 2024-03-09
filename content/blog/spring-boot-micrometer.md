@@ -8,7 +8,7 @@ weight: 200
 images: []
 categories: [Spring Boot,Java]
 tags: [Spring Boot,Java]
-contributors: []
+contributors: [l10178]
 pinned: false
 homepage: false
 seo:
