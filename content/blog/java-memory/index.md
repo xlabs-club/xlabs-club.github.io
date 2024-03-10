@@ -402,6 +402,8 @@ ts=2022-12-29 21:20:01;thread_name=ForkJoinPool.commonPool-worker-1;id=22;is_dae
         ………………………………
 ```
 
+另外，arthas 有些经常追踪失败，可以切换到原始的 [async-profiler](https://github.com/async-profiler/async-profiler)，用他来追踪“其他”内存分配比较有效。
+
 总结 Java 进程内存占用：Total=heap + non-heap + 上面说的这个其他。
 
 ## jemalloc
@@ -502,6 +504,8 @@ Java 内存不交还，几种情况：
 经过上述调整以后，线下环境 Pod 内存使用量由 1G 降到 600M 作用。线上环境内存使用量在 50%--80%之间根据流量大小浮动，原来是 85% 居高不小。
 
 ## 参考资料
+
+Java 进程内存分析工具：<https://stackoverflow.com/questions/53576163/interpreting-jemaloc-data-possible-off-heap-leak/53598622#53598622>
 
 Java 进程内存分布：<https://cloud.tencent.com/developer/article/1666640>
 
