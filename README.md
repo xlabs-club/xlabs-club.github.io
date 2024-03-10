@@ -1,8 +1,9 @@
 # xlabs-club.github.io
 
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/xlabs-club/xlabs-club.github.io/.github%2Fworkflows%2Fgh-pages.yml)
-![GitHub Repo stars](https://img.shields.io/github/stars/xlabs-club/xlabs-club.github.io)
-![GitHub contributors](https://img.shields.io/github/contributors/xlabs-club/xlabs-club.github.io)
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/xlabs-club/xlabs-club.github.io/.github%2Fworkflows%2Fgh-pages.yml)](https://github.com/xlabs-club/xlabs-club.github.io/actions)
+[![GitHub Repo stars](https://img.shields.io/github/stars/xlabs-club/xlabs-club.github.io)](https://github.com/xlabs-club/xlabs-club.github.io/stargazers)
+[![GitHub contributors](https://img.shields.io/github/contributors/xlabs-club/xlabs-club.github.io)](https://github.com/xlabs-club/xlabs-club.github.io/graphs/contributors)
+[![Commit Activity](https://img.shields.io/github/commit-activity/m/xlabs-club/xlabs-club.github.io)](https://github.com/xlabs-club/xlabs-club.github.io)
 
 卫星实验室，一个专注于研究 CRM（Customer Relationship Management，客户关系管理） 的开源组织。
 
@@ -18,7 +19,7 @@
 - awesome-x-ops：一些关于 AIOps、DataOps、DevOps、GitOps、FinOps 的优秀软件、博客、配套工具。
 - xlabs-ops：一些运维脚本和模板，如 Argo Workflows 模板仓库，是对官方 Examples 的组合、扩展。
 
-## 贡献者指南
+## 贡献指南
 
 本项目使用 [Hugo][] 开发，使用 [Doks][] 作为 Hugo 主题，一切内容都是 Markdown，专心写文字即可。
 
