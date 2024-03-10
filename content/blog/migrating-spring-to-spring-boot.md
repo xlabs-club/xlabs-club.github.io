@@ -24,17 +24,17 @@ seo:
 
 从 Spring 到 Spring Boot，整体开发、运行方式主要变化。
 
-| -           | 当前（老）模式       | 新模式（本地）              | 新模式（线上）                |
-|-------------|----------------------|-----------------------------|-------------------------------|
-| 开发习惯     | Spring + 外置 Tomcat | Spring Boot（embed tomcat）   | Spring Boot War or Jar |
-| Java 版本   | 8、11、16、17        | 11、17（推荐）、21              | 11、17（推荐）、21              |
-| Tomcat 版本 | 8.x、9.x             | 9.x                          | 9.x（推荐）、10.x               |
+| -           | 当前（老）模式         | 新模式（本地开发）          | 新模式（线上运行）       |
+|-------------|----------------------|---------------------------|------------------------|
+| 开发习惯    | Spring + 外置 Tomcat | Spring Boot（embed tomcat） | Spring Boot War or Jar |
+| Java 版本   | 8、11、16、17           | 11、17、21（推荐）            | 11、17、21（推荐）         |
+| Tomcat 版本 | 8.x、9.x              | 9.x                       | 9.x（推荐）、10.x         |
 
 说明：
 
-1. 理论上支持 Java11，但是要求业务方尽量使用 Java17。其他版本都是实验性质尽量兼容。
+1. 理论上完全兼容 Java11，但是要求业务方尽量使用 Java17 或 21。其他版本都是实验性质尽量兼容。
 2. 线上运行支持 Spring Boot jar 直接运行，但主要业务仍推荐以 war + tomcat 为主。如果希望以 `java -jar` 方式运行，参考下面的章节“jar 方式运行”描述。
-3. 目前 Spring Boot 主要推行版本是 2.7.x。 3.x 版本逐渐适配中。
+3. 目前 Spring Boot 主要推行版本是 2.7.x。 3.x 版本逐渐适配中，注意 3.x 要求 Java 最低版本是 17。
 
 ## 快速开始
 
@@ -120,7 +120,7 @@ actuator 的引入会带来一些额外收益，之前我们健康检测只检�
 6. 配置加解密，在配置中心中有个加密功能框（如果看不到可能是没有权限），先使用本 starter 的秘钥加密，使用固定格式 `ENC（加密后的内容）`配置到文件里，在 java 里 get value 就是已经解密后的了。例如：
 
    ```properties
-   sample.sensitive=ENC(30E239E0958AF3179C7E8EBA3DF618FD)
+   sample.sensitive=ENC(xxx)
    ```
 
 响应配置更新：
@@ -176,6 +176,10 @@ actuator 的引入会带来一些额外收益，之前我们健康检测只检�
 5. Unit Test 更换注解，目前默认 junit 版本是 junit5，原 junit4 注解有较大变更，详细请参考下面的参考资料。
 
 ### 迁移辅助工具
+
+- [OpenRewrite](https://docs.openrewrite.org/)
+
+   OpenRewrite 快速入门请参考：[使用 OpenRewrite 进行代码重构](https://www.xlabs.club/docs/platform/smart-code/)。
 
 - [EMT4J](https://github.com/adoptium/emt4j)
 
@@ -320,11 +324,6 @@ webapp web.xml 配置如何转移到 spring boot war 形式。
    功能说明和切换方式请参考官方文档：<https://docs.spring.io/spring-boot/docs/current/reference/html/web.html#web.servlet.spring-mvc.content-negotiation>.
 
 ## 参考资料
-
-- 辅助迁移扫描工具
-
-   从 Java 8 到 Java 17：<https://github.com/adoptium/emt4j>  
-   Spring Boot 迁移工具： <https://github.com/spring-projects-experimental/spring-boot-migrator>
 
 - 从 SpringMVC 迁移到 SpringBoot 的经验总结
 
