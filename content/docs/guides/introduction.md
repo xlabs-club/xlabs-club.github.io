@@ -1,6 +1,6 @@
 ---
 title: "Introduction"
-description: ""
+description: "卫星实验室，一个专注于研究 CRM 的开源组织"
 summary: ""
 date: 2023-09-07T16:04:48+02:00
 lastmod: 2023-09-07T16:04:48+02:00
@@ -14,9 +14,19 @@ weight: 10
 toc: true
 ---
 
-卫星实验室，一个专注于研究 CRM 的开源组织。
+卫星实验室，一个专注于研究 CRM（Customer Relationship Management，客户关系管理） 的开源组织。
 
-此项目为卫星实验室主页 [xlabs.club][] 的源码，记录常用文档和零碎博客，分享开发过程中遇到的坑和经验，欢迎到我们的 [GitHub](https://github.com/xlabs-club/xlabs-club.github.io) 提交 PR 开源共建。
+此项目为卫星实验室主页 [xlabs.club][] 的源码，在这里我们将分享 CRM 领域独有的建设经验，介绍如何以技术驱动 CRM 长期发展和高速增长。
+
+加入我们，与我们共同共同探索 CRM 技术前沿，解决行业中的挑战。
+
+## 主页内容
+
+- 平台工程：我们的平台工程建设之路，关于 DevOps, DataOps, FinOps 以及 AIOps 的工程实践。
+- 云原生：云原生技术探索，如何以云原生技术支撑起不断变化的复杂业务。
+- 技术博客：研发踩坑记录，翻一翻总有惊喜。
+- awesome-x-ops：一些关于 AIOps、DataOps、DevOps、GitOps、FinOps 的优秀软件、博客、配套工具。
+- xlabs-ops：一些运维脚本和模板，如 Argo Workflows 模板仓库，是对官方 Examples 的组合、扩展。
 
 ## License
 
