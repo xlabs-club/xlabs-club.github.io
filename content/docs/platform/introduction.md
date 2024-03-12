@@ -1,6 +1,6 @@
 ---
 title: "总体架构"
-description: "平台工程概述和架构演进"
+description: "平台工程架构概述和架构演进"
 summary: ""
 date: 2023-09-07T16:04:48+02:00
 lastmod: 2023-09-07T16:04:48+02:00
@@ -12,6 +12,11 @@ menu:
     identifier: "platform-engineering-introduction-6a1a6be4373e933280d78ea53de6158e"
 weight: 10
 toc: true
+seo:
+  title: "平台工程架构概述和架构演进" # custom title (optional)
+  description: "平台工程架构概述和架构演进" # custom description (recommended)
+  canonical: "" # custom canonical URL (optional)
+  noindex: false # false (default) or true
 ---
 
 我们的平台工程建设之路，介绍前期方案设计、中间踩坑历程。
