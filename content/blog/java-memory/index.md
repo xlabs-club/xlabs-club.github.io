@@ -1,7 +1,7 @@
 ---
 title: "K8S 容器内 Java 进程内存分析"
 description: "K8S 容器内 Java 进程内存分析"
-summary: ""
+summary: "K8S 容器内 Java 进程内存分析，容器和 Jave OOM 问题定位。"
 date: 2023-01-07T10:54:37+08:00
 lastmod: 2023-01-07T10:54:37+08:00
 draft: false
@@ -13,25 +13,25 @@ contributors: [l10178]
 pinned: false
 homepage: false
 seo:
-  title: ""
-  description: "K8S 容器内 Java 进程内存分析"
+  title: "K8S 容器内 Java 进程内存分析"
+  description: "K8S 容器内 Java 进程内存分析，容器和 Jave OOM 问题定位。"
   canonical: ""
   noindex: false
 ---
 
 故事背景：
 
-一个 K8S Pod，里面只有一个 Java 进程，K8S request 和 limit memory 都是 2G，Java 进程核心参数包括：`-XX:+UseZGC -Xmx1024m -Xms768m -XX:SoftMaxHeapSize=512m`。
+一个 K8S Pod，里面只有一个 Java 进程，K8S request 和 limit memory 都是 2G，Java 进程核心参数包括：`-XX:+UseZGC -Xmx1024m -Xms768m`。
 
-服务启动一段时间后，查看 Grafana 监控数据，Pod 内存使用量约 1.5G，JVM 内存使用量约 500M，通过 jvm dump 分析没有任何大对象，运行三五天后出现 ContainerOOM。
+服务启动一段时间后，查看 Grafana 监控数据，Pod 内存使用量约 1.5G，JVM 内存使用量约 500M，通过 jvm dump 分析没有任何大对象，运行三五天后出现 K8S Container OOM。
 
-首先区分下 ContainerOOM 和 JvmOOM，ContainerOOM 是 Pod 内存不够，Java 向操作系统申请内存时内存不足导致。
+首先区分下 Container OOM 和 Jvm OOM，Container OOM 是 Pod 内进程申请内存大约 K8S Limit 所致。
 
 问题来了：
 
-1. Pod 2G 内存，JVM 设置了 `Xmx 1G`，已经预留了 1G 内存，为什么还会 ContainerOOM，这预留的 1G 内存被谁吃了。
-2. 正常情况下（无 ContainerOOM），Grafana 看到的监控数据，Pod 内存使用量 1.5G， JVM 内存使用量 500M，差别为什么这么大。
-3. Grafana 看到的监控数据，内存使用量、提交量各是什么意思，这些值是怎么算出来的，和 Pod 进程中如何对应，为什么提交量一直居高不小。
+1. Pod 2G 内存，JVM 设置了 `Xmx 1G`，已经预留了 1G 内存，为什么还会 Container OOM，这预留的 1G 内存被谁吃了。
+2. 正常情况下（无 Container OOM），Grafana 看到的监控数据，Pod 内存使用量 1.5G， JVM 内存使用量 500M，差别为什么这么大。
+3. Pod 内存使用量为什么超过 Xmx 限制。
 
 Grafana 监控图。
 
@@ -50,90 +50,12 @@ container_memory_working_set_bytes 是容器真实使用的内存量，也是资
 
 `JVM 内存使用量`统计的指标是 `jvm_memory_bytes_used`： heap、non-heap 以及`其他` 真实用量总和。下面解释其他。
 
-对比一下 top 命令，使用 top 命令看一下 Java 进程真正占了多少。
+首先说结论：在 POD 内，通过 top、free 看到的指标都是不准确的，不用看了，如果要看真实的数据以 cgroup 为准。
+
+container_memory_working_set_bytes 指标来自 cadvisor，cadvisor 数据来源 cgroup，可以查看以下文件获取真实的内存情况。
 
 ```console
-
-top -p $(pgrep java)
-
-# 注意下面的数据和截图不是同一时间的
-
-   PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
-     7 root      20   0   58.2g   1.6g   1.0g S  17.3  2.3 659:42.46 java
-
-```
-
-VIRT：virtual memory usage 虚拟内存
-
-1. 进程“需要的”虚拟内存大小，包括进程使用的库、代码、数据等
-2. 假如进程申请 100m 的内存，但实际只使用了 10m，那么它会增长 100m，而不是实际的使用量
-
-RES：resident memory usage 常驻内存
-
-1. 进程当前使用的内存大小，但不包括被换出到交换区的部分
-2. 包含其他进程的共享
-3. 如果申请 100m 的内存，实际使用 10m，它只增长 10m，与 VIRT 相反
-4. 关于库占用内存的情况，它只统计加载的库文件所占内存大小
-
-SHR：shared memory 共享内存
-
-1. 除了自身进程的共享内存，也包括其他进程的共享内存
-2. 虽然进程只使用了几个共享库的函数，但它包含了整个共享库的大小
-3. 计算某个进程所占的物理内存大小公式：RES – SHR。（JVM 的内存使用量等于 RES-SHR）
-
-container_memory_working_set_bytes 与 Top RES 相等吗。
-
-为什么 container_memory_working_set_bytes 大于 top RES:
-
-因为 container_memory_working_set_bytes 包含 container_memory_cache，这涉及到 `Linux 缓存机制`，延伸阅读：<https://zhuanlan.zhihu.com/p/449630026>。遇到这种场景一般都是文件操作较多，可优先排除文件类操作。
-
-为什么 container_memory_working_set_bytes 小于 top RES:
-
-主要还是算法和数据来源不一样，top 的 `RES=Code + Data`，有些服务 Data 比较大。 当然实际测试会发现 RES!=Code + Data ，延伸阅读：<https://liam.page/2020/07/17/memory-stat-in-TOP/>
-
-另外可能看到的现象，top、granfana、docker stats、JMX 看到的使用量怎么都不一样，都是因为他们统计的维度不一样。
-
-所以通过 top 命令看到的数据不一定是真实的，container_memory_working_set_bytes 指标来自 cadvisor，cadvisor 数据来源 cgroup，可以查看以下文件获取真实的内存情况。
-
-```console
-# 老版本使用 cgroup v1
-ll /sys/fs/cgroup/memory/
-total 0
-drwxr-xr-x.  2 root root   0 Dec 24 19:22 ./
-dr-xr-xr-x. 13 root root 340 Dec 24 19:22 ../
--rw-r--r--.  1 root root   0 Dec 24 19:22 cgroup.clone_children
---w--w--w-.  1 root root   0 Dec 24 19:22 cgroup.event_control
--rw-r--r--.  1 root root   0 Dec 24 19:22 cgroup.procs
--rw-r--r--.  1 root root   0 Dec 24 19:22 memory.failcnt
---w-------.  1 root root   0 Dec 24 19:22 memory.force_empty
--rw-r--r--.  1 root root   0 Dec 24 19:22 memory.kmem.failcnt
--rw-r--r--.  1 root root   0 Dec 24 19:22 memory.kmem.limit_in_bytes
--rw-r--r--.  1 root root   0 Dec 24 19:22 memory.kmem.max_usage_in_bytes
--r--r--r--.  1 root root   0 Dec 24 19:22 memory.kmem.slabinfo
--rw-r--r--.  1 root root   0 Dec 24 19:22 memory.kmem.tcp.failcnt
--rw-r--r--.  1 root root   0 Dec 24 19:22 memory.kmem.tcp.limit_in_bytes
--rw-r--r--.  1 root root   0 Dec 24 19:22 memory.kmem.tcp.max_usage_in_bytes
--r--r--r--.  1 root root   0 Dec 24 19:22 memory.kmem.tcp.usage_in_bytes
--r--r--r--.  1 root root   0 Dec 24 19:22 memory.kmem.usage_in_bytes
--rw-r--r--.  1 root root   0 Dec 24 19:22 memory.limit_in_bytes
--rw-r--r--.  1 root root   0 Dec 24 19:22 memory.max_usage_in_bytes
--rw-r--r--.  1 root root   0 Dec 24 19:22 memory.memsw.failcnt
--rw-r--r--.  1 root root   0 Dec 24 19:22 memory.memsw.limit_in_bytes
--rw-r--r--.  1 root root   0 Dec 24 19:22 memory.memsw.max_usage_in_bytes
--r--r--r--.  1 root root   0 Dec 24 19:22 memory.memsw.usage_in_bytes
--rw-r--r--.  1 root root   0 Dec 24 19:22 memory.move_charge_at_immigrate
--r--r--r--.  1 root root   0 Dec 24 19:22 memory.numa_stat
--rw-r--r--.  1 root root   0 Dec 24 19:22 memory.oom_control
-----------.  1 root root   0 Dec 24 19:22 memory.pressure_level
--rw-r--r--.  1 root root   0 Dec 24 19:22 memory.soft_limit_in_bytes
--r--r--r--.  1 root root   0 Dec 24 19:22 memory.stat
--rw-r--r--.  1 root root   0 Dec 24 19:22 memory.swappiness
--r--r--r--.  1 root root   0 Dec 24 19:22 memory.usage_in_bytes
--rw-r--r--.  1 root root   0 Dec 24 19:22 memory.use_hierarchy
--rw-r--r--.  1 root root   0 Dec 24 19:22 notify_on_release
--rw-r--r--.  1 root root   0 Dec 24 19:22 tasks
-
-# 新版本使用 cgroup v2
+# cgroup v2 文件地址
 
 ll /sys/fs/cgroup/memory.*
 -r--r--r-- 1 root root 0 Jan  6 16:25 /sys/fs/cgroup/memory.current
@@ -168,24 +90,6 @@ Pod 的内存使用量 1.5G，都包含哪些。
 kernel memory 为 0，Cache 约 1100M，rss 约 650M，inactive_file 约 200M。可以看到 Cache 比较大，因为这个服务比较特殊有很多文件操作。
 
 ```console
-# 这个数据和上面的 1.5G 不是同时的。
-cat  /sys/fs/cgroup/memory/memory.stat
-
-cache 1455861760
-rss 685862912
-rss_huge 337641472
-mapped_file 504979456
-swap 0
-inactive_anon 805306368
-active_anon 685817856
-inactive_file 299671552
-active_file 350883840
-total_rss 685862912
-total_rss_huge 337641472
-total_mapped_file 504979456
-total_inactive_file 299671552
-total_active_file 350883840
-
 # cgroup v2 变量变了
 cat /sys/fs/cgroup/memory.stat
 anon 846118912
@@ -315,8 +219,6 @@ Total: reserved=68975MB, committed=1040MB
 
 ```
 
-一图解千愁，盗图。
-
 [![JVM 内存结构](./jvm-memory-structure.png)](./jvm-memory-structure.png)
 
 - Heap
@@ -377,6 +279,10 @@ stack sun.misc.Unsafe allocateMemory
 stack jdk.internal.misc.Unsafe allocateMemory
 stack java.util.zip.Inflater inflate
 
+# stack 经常追踪不到，改用 profiler 输出内存分配火焰图
+profiler start --event alloc --duration 600
+profiler start --event Unsafe_AllocateMemory0 --duration 600
+
 ```
 
 通过上面的命令，能看到 MongoDB 和 netty 一直在申请使用内存。注意：早期的 mongodb client 确实有无法释放内存的 bug，但是在我们场景，长期观察会发现内存申请了逐渐释放了，没有持续增长。回到开头的 ContainerOOM 问题，可能一个原因是流量突增，MongoDB 申请了更多的内存导致 OOM，而不是因为内存不释放。
@@ -387,10 +293,6 @@ ts=2022-12-29 21:20:01;thread_name=ForkJoinPool.commonPool-worker-1;id=22;is_dae
         at java.nio.DirectByteBuffer.<init>(DirectByteBuffer.java:125)
         at java.nio.ByteBuffer.allocateDirect(ByteBuffer.java:332)
         at sun.nio.ch.Util.getTemporaryDirectBuffer(Util.java:243)
-        at sun.nio.ch.NioSocketImpl.tryWrite(NioSocketImpl.java:394)
-        at sun.nio.ch.NioSocketImpl.implWrite(NioSocketImpl.java:413)
-        at sun.nio.ch.NioSocketImpl.write(NioSocketImpl.java:440)
-        at sun.nio.ch.NioSocketImpl$2.write(NioSocketImpl.java:826)
         at java.net.Socket$SocketOutputStream.write(Socket.java:1035)
         at com.mongodb.internal.connection.SocketStream.write(SocketStream.java:99)
         at com.mongodb.internal.connection.InternalStreamConnection.sendMessage(InternalStreamConnection.java:426)
@@ -398,11 +300,10 @@ ts=2022-12-29 21:20:01;thread_name=ForkJoinPool.commonPool-worker-1;id=22;is_dae
         at com.mongodb.internal.connection.DefaultConnectionPool$PooledConnection.sendAndReceive(DefaultConnectionPool.java:444)
         ………………………………
         at com.mongodb.MongoClientExt$1.execute(MongoClientExt.java:42)
-        at com.facishare.oms.thirdpush.dao.MongoDao.save(MongoDao.java:31)
         ………………………………
 ```
 
-另外，arthas 有些经常追踪失败，可以切换到原始的 [async-profiler](https://github.com/async-profiler/async-profiler)，用他来追踪“其他”内存分配比较有效。
+另外，arthas 自带的 profiler 有时候经常追踪失败，可以切换到原始的 [async-profiler](https://github.com/async-profiler/async-profiler)，用他来追踪“其他”内存分配比较有效。
 
 总结 Java 进程内存占用：Total=heap + non-heap + 上面说的这个其他。
 
@@ -489,6 +390,60 @@ Java 内存不交还，几种情况：
 经过调整后的服务，内存提交在 500--800M 之间浮动，不再是一条直线。
 
 [![memory-dance](./memory-dance.png)](./memory-dance.png)
+
+## 内存分析工具速览
+
+使用 Java 自带工具 dump 内存。
+
+```bash
+jcmd <pid> GC.heap_dump <file-path>
+# 这个命令执行，JVM 会先触发 gc，然后再统计信息。
+jmap -dump:live,format=b,file=/opt/tomcat/logs/dump.hprof <pid>
+```
+
+使用 jmap 输出内存占用概览。
+
+```bash
+jmap -histo 1 | head -n 500
+```
+
+使用 async-profiler 追踪 native 内存分配，输出火焰图。
+
+```bash
+async-profiler/bin/asprof -d 600 -e Unsafe_AllocateMemory0 -f /opt/tomcat/logs/unsafe_allocate.html <pid>
+```
+
+使用 vmtouch 查看和清理 Linux 系统文件缓存。
+
+```bash
+
+# 查看文件或文件夹占了多少缓存
+vmtouch /files
+vmtouch /dir
+
+# 清空缓存
+vmtouch -e /dir
+
+```
+
+### pmap 查看内存内容
+
+使用 pmap 查看当前内存分配，如果找到了可疑的内存块，可以通过 gdb 尝试解析出内存块中的内容。
+
+```bash
+# pmap 查看内存，先不要排序，便于找出连续的内存块（一般是 2 个一组）
+# pmap -x <pid> | sort -n -k3
+pmap -x <pid>
+# 举例说明在上面发现有 7f6737dff000 开头的内存块可能异常，一般都是一个或多个一组，是连续的内存
+cat /proc/<pid>/smaps > logs/smaps.txt
+gdb attach <pid>
+# dump 的起始地址，基于上面 smaps.txt 找到的内容，地址加上 0x 前缀
+dump memory /opt/tomcat/logs/gdb-test.dump 0x7f6737dff000 0x7f6737e03000
+# 尝试将 dump 文件内容转成可读的 string，其中 -10 是过滤长度大于 10 的，也可以不过滤
+strings -10 /opt/tomcat/logs/gdb-test.dump
+# 如果幸运，能在上面的 strings 中找到你的 Java 类或 Bean 内容，如果不幸都是一堆乱码，可以尝试扩大 dump 内存块，多找几个连续的块试试
+
+```
 
 ## 问题原因分析和调整
 
