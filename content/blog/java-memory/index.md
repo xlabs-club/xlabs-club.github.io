@@ -420,6 +420,8 @@ async-profiler/bin/asprof -d 600 -e Unsafe_AllocateMemory0 -f /opt/tomcat/logs/u
 # 查看文件或文件夹占了多少缓存
 vmtouch /files
 vmtouch /dir
+# 遍历文件夹输出详细占用
+vmtouch -v /dir
 
 # 清空缓存
 vmtouch -e /dir
