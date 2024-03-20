@@ -9,13 +9,13 @@
 
 // index image animation
 @keyframes animation {
-  50% {
+  100% {
     transform: rotate(360deg);
   }
 }
 
 .animation {
-  animation: animation 3s ease;
+  animation: animation 2s ease;
   animation-fill-mode: forwards;
   border-radius: 64px;
   height: 320px;
