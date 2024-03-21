@@ -459,6 +459,8 @@ stat -fc %T /sys/fs/cgroup/
 
 对于 cgroup v1，输出为 tmpfs。
 
+## 不同 GC 内存占用对比
+
 ## 问题原因分析和调整
 
 回到开头问题，通过上面分析，2G 内存，RSS 其实占用 600M，为什么最终还是 ContainerOOM 了。
