@@ -447,6 +447,18 @@ strings -10 /opt/tomcat/logs/gdb-test.dump
 
 ```
 
+### 识别 Linux 节点上的 cgroup 版本
+
+cgroup 版本取决于正在使用的 Linux 发行版和操作系统上配置的默认 cgroup 版本。 要检查你的发行版使用的是哪个 cgroup 版本，请在该节点上运行 `stat -fc %T /sys/fs/cgroup/` 命令：
+
+```bash
+stat -fc %T /sys/fs/cgroup/
+```
+
+对于 cgroup v2，输出为 cgroup2fs。
+
+对于 cgroup v1，输出为 tmpfs。
+
 ## 问题原因分析和调整
 
 回到开头问题，通过上面分析，2G 内存，RSS 其实占用 600M，为什么最终还是 ContainerOOM 了。
