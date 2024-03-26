@@ -1,6 +1,6 @@
 ---
 title: "使用 Sentinel 实现分布式应用限流"
-description: "使用 Sentinel 实现分布式应用限流"
+description: "基于 Alibaba Sentinel 实现的分布式限流中间件服务"
 summary: ""
 date: 2024-03-07T21:06:10+08:00
 lastmod: 2024-03-07T21:06:10+08:00
@@ -231,3 +231,12 @@ Sentinel 提供以下几种熔断策略：
 - Q：Sentinel 资源生成时如何忽略某些资源。
 
   A：自定义 UrlCleaner，对想忽略的资源返回空字符。
+
+- Q：对于限流的冷启动效果，冷启动结束进入稳定状态后，还会不会重新回到冷启动阶段。
+
+  A：一段时间流量较小或无流量后会回到冷启动阶段。服务第一次启动时，或者接口很久没有被访问，都会导致当前时间与上次生产令牌的时间相差甚远，所以第一次生产令牌将会生产 maxPermits 个令牌，直接将令牌桶装满。由于令牌桶已满，接下来 10s 就是冷启动阶段。具体查看参考资料里的冷启动算法详解。
+
+## 参考资料
+
+- 令牌桶算法在 Sentinel 中的应用：<https://blog.51cto.com/morris131/6506314>
+- Sentinel 中的冷启动限流算法：<https://cloud.tencent.com/developer/article/1674916>

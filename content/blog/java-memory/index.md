@@ -459,8 +459,6 @@ stat -fc %T /sys/fs/cgroup/
 
 对于 cgroup v1，输出为 tmpfs。
 
-## 不同 GC 内存占用对比
-
 ## 问题原因分析和调整
 
 回到开头问题，通过上面分析，2G 内存，RSS 其实占用 600M，为什么最终还是 ContainerOOM 了。
@@ -473,6 +471,23 @@ stat -fc %T /sys/fs/cgroup/
 4. 线下环境内存分配切换到 jemalloc，长期观察大部分效果可以，但是对部分应用基本没有效果。
 
 经过上述调整以后，线下环境 Pod 内存使用量由 1G 降到 600M 作用。线上环境内存使用量在 50%--80%之间根据流量大小浮动，原来是 85% 居高不小。
+
+## 不同 JVM 参数内存占用对比
+
+以下为少量应用实例总结出来的结果，应用的模型不同占用情况会有比较大差异，仅供对比参考。
+
+| 基础参数                                               | 中低流量时内存占用（Xmx 6G） | 高流量时内存占用 |
+|--------------------------------------------------------|----------------------------|------------------|
+| Java 8 + G1                                            | 65%                        | 85%              |
+| Java 17 + G1                                           | 60%                        | 75%              |
+| Java 17 + ZGC                                          | 90%                        | 95%              |
+| Java 21 + ZGC + UseStringDeduplication                 | 85%                        | 90%              |
+| Java 21 + ZGC + ZGenerational + UseStringDeduplication | 65%                        | 80%              |
+
+总结：
+1. G1 比 ZGC 占用内存明显减少。
+2. Java 21 ZGC 分代后确实能降低内存。
+3. 通过 `-XX:+UseStringDeduplication` 启用 String 去重后，有的应用能降低 10% 内存，有的几乎无变化。
 
 ## 参考资料
 
@@ -493,3 +508,9 @@ Linux 内存中的 Cache 真的能被回收么：<https://cloud.tencent.com/deve
 Linux kernel memory 导致的 POD OOM killed: <https://www.cnblogs.com/yannwang/p/13287963.html>
 
 cgroup 内存泄露问题：<https://www.cnblogs.com/leffss/p/15019898.html>
+
+日志打印导致 page-cache 飙升问题解决： <https://juejin.cn/post/6920957433947324423>
+
+logback 之 AsyncAppender 的原理、源码及避坑建议： <https://developer.aliyun.com/article/1127879>
+
+the rocketmq_client.log file spent too much cache/buffer memory： <https://github.com/apache/rocketmq/issues/3252>
