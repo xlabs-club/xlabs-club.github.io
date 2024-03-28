@@ -18,7 +18,7 @@ footer = "Give Me a <a class=\"text-muted\" href=\"https://github.com/xlabs-club
 # Add-ons
 [add_ons]
   carbonAds = false # false (default) or true
-  docSearch = true # false (default) or true
+  docSearch = false # false (default) or true
   plausibleDomain = "xlabs.club" # "example.com" (default)
   keila = false # false (default) or true
 
@@ -41,12 +41,12 @@ footer = "Give Me a <a class=\"text-muted\" href=\"https://github.com/xlabs-club
   flexSearch = true # true (default) or false
   searchExclKinds = [] # list of page kinds to exclude from search indexing (e.g. ["home", "taxonomy", "term"] )
   searchExclTypes = [] # list of content types to exclude from search indexing (e.g. ["blog", "docs", "legal", "contributors", "categories"])
-  showSearch = [] # [] (all pages, default) or homepage (optionally) and list of sections (e.g. ["homepage", "blog", "guides"])
+  showSearch = ["homepage"] # [] (all pages, default) or homepage (optionally) and list of sections (e.g. ["homepage", "blog", "guides"])
   indexSummary = true # true or false (default); whether to index only the `.Summary` instead of the full `.Content`; limits the respective JSON field size and thus increases loading time
 
   ## Search results
   showDate = false # false (default) or true
-  showSummary = true # true (default) or false
+  showSummary = false # true (default) or false
   searchLimit = 99 # 0 (no limit, default) or natural number
 
   # Global alert
