@@ -21,3 +21,24 @@
   height: 320px;
   width: 320px;
 }
+
+// DocSearch
+
+.DocSearch-Container {
+  z-index: 2000 !important;
+}
+
+.DocSearch-Hit-icon {
+  display: flex;
+  align-items: center;
+}
+
+.DocSearch-Hits mark {
+  padding: 0;
+}
+
+@media (max-width:768px) {
+  .DocSearch-Modal {
+    position: fixed !important;
+  }
+}
