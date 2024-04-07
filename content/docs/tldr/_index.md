@@ -1,7 +1,7 @@
 ---
 title: "TL;DR"
 description: "日常开发速查手册"
-summary: ""
+summary: "日常开发速查手册，程序员的瑞士军刀，常用优秀命令行工具"
 date: 2023-09-07T16:06:50+02:00
 lastmod: 2023-09-07T16:06:50+02:00
 draft: false
@@ -14,4 +14,13 @@ weight: 100
 toc: true
 sidebar:
   collapsed: true
+seo:
+  title: "日常开发速查手册，程序员的瑞士军刀，常用优秀命令行工具" # custom title (optional)
+  description: "日常开发速查手册，程序员的瑞士军刀，常用优秀命令行工具" # custom description (recommended)
+  canonical: "" # custom canonical URL (optional)
+  noindex: false # false (default) or true
 ---
+
+日常开发速查手册，程序员的瑞士军刀，常用优秀命令行工具和编程语句汇总。
+
+多一份复制粘贴，多一分开心。
