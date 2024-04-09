@@ -2,9 +2,9 @@ import docsearch from '@docsearch/js';
 
 docsearch({
     container: '#docsearch',
-    appId: 'EN95MC8APY',
-    indexName: 'xlabs.club',
-    apiKey: 'cd973167116e2f2422d784ed19a60512',
+    appId: 'PZEX39DGD3',
+    indexName: 'xlabs',
+    apiKey: '02ab978c596c66c08a026d4ea190a108',
     insights: true,
 });
 
