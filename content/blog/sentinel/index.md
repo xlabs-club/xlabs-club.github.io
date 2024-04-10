@@ -1,6 +1,6 @@
 ---
 title: "使用 Sentinel 实现分布式应用限流"
-description: "基于 Alibaba Sentinel 实现的分布式限流中间件服务"
+description: "基于 Alibaba Sentinel 实现的分布式限流中间件服务以及遇到的坑和注意事项"
 summary: ""
 date: 2024-03-07T21:06:10+08:00
 lastmod: 2024-03-07T21:06:10+08:00
@@ -12,8 +12,8 @@ contributors: [l10178]
 pinned: false
 homepage: false
 seo:
-  title: "" # custom title (optional)
-  description: "" # custom description (recommended)
+  title: "基于 Alibaba Sentinel 实现的分布式限流中间件服务以及遇到的坑和注意事项" # custom title (optional)
+  description: "基于 Alibaba Sentinel 实现的分布式限流中间件服务以及遇到的坑和注意事项" # custom description (recommended)
   canonical: "" # custom canonical URL (optional)
   noindex: false # false (default) or true
 ---
@@ -40,17 +40,18 @@ Sentinel 的基础知识请参考官方文档描述，这里单独介绍一些�
 
 ## Sentinel 全局注意事项和使用限制
 
-使用开源默认 Sentinel 组件，可关注以下注意事项：
+使用开源默认 Sentinel 组件，有一些坑，或者说需要关注的注意事项：
 
-1. 单个进程内资源数量阈值是 6000，多出的资源规则将不会生效，也不提示错误而是直接忽略，资源数量太多建议使用热点参数控制。
+1. 单个进程内资源数量阈值是 6000，多出的资源规则将不会生效（因为是懒加载，资源先到先得），也不提示错误而是直接忽略，资源数量太多建议使用热点参数控制。
 2. 对于限流的链路模式，context 阈值是 2000，所以默认的 WEB_CONTEXT_UNIFY 为 true，如果需要链路限流需要把这个改为 false。
 3. 自定义时，资源名中不要带 `|` 线， 这个日志中要用，日志以此作为分割符。
 4. Sentinel 支持按来源限流，注意 `origin` 数量不能太多，否则会导致内存暴涨，并且目前不支持模式匹配。
 5. 一个资源可以有多个规则，一条请求能否通过，取决于规则里阈值最小的限制条件。
 6. 限流的目的是保护系统，计数计量并不准确，所以不要拿限流做计量或配额控制。
 7. 增加限流一定程度上通过时间换空间，降低了 CPU、内存负载，对 K8S HPA 策略会有一定影响。后续我们也会考虑根据 Sentinel 限流指标进行扩缩容。
-8. 接口变慢，各调用链需要关注调用超时和事务配置。
+8. 限流中如果有增加等待效果会使接口变慢，各调用链需要关注调用超时和事务配置。
 9. 目前 sentinel-web-servlet 和 sentinel-spring-webmvc-adapter 均不支持热点参数限流。为了支持热点参数需要自行扩展。
+10. sentinel-web-servlet 和 sentinel-spring-webmvc-adapter 会将每个到来的不同的 URL 都作为不同的资源处理，因此对于 REST 风格的 API，需要自行实现 UrlCleaner 接口清洗一下资源（比如将满足 /foo/:id 的 URL 都归到 /foo/* 资源下）。否则会导致资源数量过多，超出资源数量阈值（目前是 6000）时多出的资源的规则将不会生效。
 
 ## 接入指导
 
@@ -58,8 +59,9 @@ Sentinel 的基础知识请参考官方文档描述，这里单独介绍一些�
 
 ![架构模块](sentinel.png "架构模块")
 
-我们所有组件，规则加载都是由 Datasource 组件统一加载，配置是懒加载的，在第一次访问的时候加载，如果需要定义规则请在配置中心定义。这是由 Sentinel 在第一次初始化的时候通过 SPI 加载的，所以在咱们的代码里看不到主动加载的动作。
-注意：如果你有自编码使用 Sentinel SDK 自带的 XxxRuleManager.loadRules 加载规则，会被远端配置中心覆盖掉。
+我们所有组件，规则加载都是由 Datasource 组件统一加载，配置是懒加载的，在第一次访问的时候加载，如果需要定义规则请在配置中心定义，这是由 Sentinel 在第一次初始化的时候（参考源码：com.alibaba.csp.sentinel.Env.java）通过 SPI 加载的。
+
+注意：如果你有自编码使用 Sentinel SDK 自带的 XxxRuleManager.loadRules 加载规则，会被远端配置中心覆盖掉，远端配置变更自动刷新后会以远端配置为准，把 XxxRuleManager.loadRules 加载的规则覆盖掉。
 
 ### 规则参数详解
 
@@ -234,7 +236,7 @@ Sentinel 提供以下几种熔断策略：
 
 - Q：对于限流的冷启动效果，冷启动结束进入稳定状态后，还会不会重新回到冷启动阶段。
 
-  A：一段时间流量较小或无流量后会回到冷启动阶段。服务第一次启动时，或者接口很久没有被访问，都会导致当前时间与上次生产令牌的时间相差甚远，所以第一次生产令牌将会生产 maxPermits 个令牌，直接将令牌桶装满。由于令牌桶已满，接下来 10s 就是冷启动阶段。具体查看参考资料里的冷启动算法详解。
+  A：会，一段时间流量较小或无流量后会回到冷启动阶段。Sentinel 固定速率产生令牌再消费，服务第一次启动时，或者接口很久没有被访问，都会导致当前时间与上次生产令牌的时间相差甚远，所以第一次生产令牌将会生产 maxPermits 个令牌，直接将令牌桶装满。由于令牌桶已满，接下来 N 秒就是冷启动阶段。具体查看参考资料里的冷启动算法详解。
 
 ## 参考资料
 
