@@ -1,6 +1,6 @@
 ---
-title: "Git 多用户配置"
-description: "Git 为不同目录配置不同的用户"
+title: "Git SSH 客户端同一机器多用户多仓库配置"
+description: "Git SSH 客户端在同一机器上为不同目录配置不同的用户"
 summary: ""
 date: 2024-02-26T22:55:10+08:00
 lastmod: 2024-02-26T22:55:10+08:00
@@ -12,8 +12,8 @@ contributors: [l10178]
 pinned: false
 homepage: false
 seo:
-  title: "" # custom title (optional)
-  description: "" # custom description (recommended)
+  title: "Git SSH 客户端同一机器多用户多仓库配置"
+  description: "Git SSH 客户端在同一机器上为不同目录配置不同的用户"
   canonical: "" # custom canonical URL (optional)
   noindex: false # false (default) or true
 ---
