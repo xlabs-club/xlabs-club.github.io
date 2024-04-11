@@ -12,6 +12,11 @@ menu:
     identifier: "introduction-6a1a6be4373e933280d78ea53de6158e"
 weight: 10
 toc: true
+seo:
+  title: "卫星实验室，一个专注于研究 CRM 的开源组织"
+  description: "卫星实验室，一个专注于研究 CRM 的开源组织，分享 CRM 领域独有的建设经验，介绍如何以技术驱动 CRM 长期发展和高速增长"
+  canonical: "" # custom canonical URL (optional)
+  noindex: false # false (default) or true
 ---
 
 卫星实验室，一个专注于研究 CRM（Customer Relationship Management，客户关系管理） 的开源组织。
