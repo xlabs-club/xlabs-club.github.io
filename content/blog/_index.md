@@ -13,8 +13,8 @@ contributors: []
 pinned: false
 homepage: false
 seo:
-  title: "技术博客"
-  description: "卫星实验室技术博客列表"
+  title: "卫星实验室技术博客"
+  description: "卫星实验室技术博客，一些关于 AIOps、DataOps、DevOps、GitOps、FinOps 、云原生、Java 开发的日常踩坑记录"
   canonical: ""
   noindex: false
 ---
