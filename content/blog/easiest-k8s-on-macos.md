@@ -20,6 +20,13 @@ seo:
 
 因为工作经常需要用到 K8S，而且有时因网络原因不能完全依赖公司网络，或者因为测试新功能不能直接发布到公司集群，所以就有了本地搭建 K8S 的需求。
 
+另外如果你有以下需求，此文档中提到的方案也许有所帮助：
+
+- 开发机器模拟 Arm、AMD64 等不同架构。
+- 完全隔离的不同环境，比如为测试 docker、podman、buildkit、containd 等不同软件设置的独立环境。
+- CI/CD 流程中即用即消的轻量级虚拟机替代方案。
+- 有限的资源模拟大批量的 K8S 节点。
+
 以下介绍一下我用过的几种不同方案，有些纯属个人观点仅供参考。
 
 1. Docker Desktop 并启用 Kubernetes 功能。
@@ -107,7 +114,7 @@ Linux Machines (Lima) 也是一个虚拟化工具，目前是 CNCF sandbox 工�
 lima 版本还在不断迭代，具体使用请参考官方文档，以下是常用命令。
 
 ```bash
-# 使用 Ubuntu 模版启动一个默认虚拟机
+# 使用 Ubuntu 模版启动一个默认虚拟机，此时需要下载镜像模板文件，镜像比较大耐心等待
 limactl start --name=default --cpus=2 --memory=4 --disk=32 template://ubuntu
 # 在 MacBook Arm 上指定使用 --arch=x86_64 架构
 limactl create --name=agent --arch=x86_64 --cpus=2 --memory=4 --disk=32 template://ubuntu
