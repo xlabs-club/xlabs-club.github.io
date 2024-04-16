@@ -1,24 +1,24 @@
 ---
-title: "MacOS too many open files in system 问题"
-description: "固化配置，彻底解决 MacOS 下 Too many open files in system 问题"
+title: "MacOS 固化配置，彻底解决 too many open files in system 的问题"
+description: "MacOS 固化配置，彻底解决 too many open files in system 的问题"
 summary: ""
 date: 2024-03-19T23:05:07+08:00
-lastmod: 2024-03-19T23:05:07+08:00
+lastmod: 2024-04-16T23:05:07+08:00
 draft: false
 weight: 50
 categories: []
-tags: []
-contributors: []
+tags: [Tools]
+contributors: [l10178]
 pinned: false
 homepage: false
 seo:
-  title: "" # custom title (optional)
-  description: "" # custom description (recommended)
+  title: "MacOS 固化配置，彻底解决 too many open files in system 的问题"
+  description: "MacOS 固化配置，彻底解决 too many open files in system 的问题"
   canonical: "" # custom canonical URL (optional)
   noindex: false # false (default) or true
 ---
 
-作为一个开发， 经常在 MacOS 遇到 Too many open files in system 的报错，尤其是碰到万恶的 node_modules 时，如何固化配置彻底解决，直接上代码。
+作为一个开发者，经常在 MacOS 遇到 Too many open files in system 的报错，尤其是碰到黑洞 node_modules 时，如何固化配置彻底解决，直接上代码。
 
 输入 launchctl limit 即可看到当前的限制，我这里 maxfiles 是改过以后的。
 
