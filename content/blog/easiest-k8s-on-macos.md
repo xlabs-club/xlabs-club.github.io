@@ -1,9 +1,9 @@
 ---
-title: "Mac 搭建本地 K8S 开发环境最佳方案"
+title: "Mac 搭建本地 K8S 开发环境方案选型"
 description: "Mac 搭建本地 K8S 开发环境，基于 K3D、multipass、lima 等不同方案介绍对比"
 summary: ""
 date: 2024-04-13T15:20:43+08:00
-lastmod: 2024-04-13T15:20:43+08:00
+lastmod: 2024-04-16T22:20:43+08:00
 draft: false
 weight: 50
 categories: [k8s]
@@ -12,8 +12,8 @@ contributors: [l10178]
 pinned: false
 homepage: false
 seo:
-  title: "Mac 搭建本地 K8S 开发环境最佳方案"
-  description: "Mac 搭建本地 K8S 开发环境，基于 k3d、multipass、lima 等不同方案介绍对比"
+  title: "Mac 搭建本地 K8S 开发环境方案选型"
+  description: "Mac 搭建本地 K8S 开发环境方案选型，基于 k3d、multipass、lima 等不同方案介绍对比"
   canonical: "" # custom canonical URL (optional)
   noindex: false # false (default) or true
 ---
