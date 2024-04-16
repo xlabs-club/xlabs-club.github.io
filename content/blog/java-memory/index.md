@@ -489,6 +489,15 @@ stat -fc %T /sys/fs/cgroup/
 2. Java 21 ZGC 分代后确实能降低内存。
 3. 通过 `-XX:+UseStringDeduplication` 启用 String 去重后，有的应用能降低 10% 内存，有的几乎无变化。
 
+分享我们所使用的 Java 21 生产环境参数配置，仅供参考请根据自己应用情况选择性使用：
+
+- -XX:InitialRAMPercentage=40.0 -XX:MaxRAMPercentage=70.0：按照百分比设置初始化和最大堆内存。内存充足的情况下建议设置为一样大。
+- -XX:+UseZGC -XX:+ZUncommit -XX:ZUncommitDelay=300 -XX:MinHeapFreeRatio=10 -XX:MaxHeapFreeRatio=30：促进 Java 内存更快交还给操作系统。
+- -XX:+ZGenerational：启用分代 ZGC，能大幅降低内存占用。
+- -XX:+UseStringDeduplication：启用 String 去重，可能较低内存占用。
+- -Xss256k：降低线程内存占用，默认 1Mb，线程比较多的情况下这个占用还是很多的。谨慎设置。
+- -XX:+ParallelRefProcEnabled：多线程并行处理 Reference，减少 GC 的 Reference 数量，减少 Young GC 时间。
+
 ## 参考资料
 
 Java 进程内存分析工具：<https://stackoverflow.com/questions/53576163/interpreting-jemaloc-data-possible-off-heap-leak/53598622#53598622>
