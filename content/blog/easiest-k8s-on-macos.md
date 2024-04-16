@@ -111,7 +111,7 @@ curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIR
 
 Linux Machines (Lima) 也是一个虚拟化工具，目前是 CNCF sandbox 工程，大厂背书颇有前景。
 
-lima 版本还在不断迭代，具体使用请参考官方文档，以下是常用命令。
+lima 版本还在不断迭代，具体使用请参考官方文档，以下是入门常用命令。
 
 ```bash
 
@@ -122,6 +122,11 @@ limactl start --list-templates
 limactl start --name=default --cpus=2 --memory=4 --disk=32 template://ubuntu
 # 在 MacBook Arm 上指定使用 --arch=x86_64 架构
 limactl create --name=agent --arch=x86_64 --cpus=2 --memory=4 --disk=32 template://ubuntu
+
+# 直接启动 k8s 模板
+limactl start --name=k8s --cpus=2 --memory=4 --disk=32 template://k8s
+# 导出可用的 KUBECONFIG
+export KUBECONFIG=$(limactl list k8s --format 'unix://{{.Dir}}/copied-from-guest/kubeconfig.yaml')
 
 # 查看当前虚拟机列表
 limactl list
