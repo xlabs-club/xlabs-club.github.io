@@ -1,9 +1,9 @@
 ---
-title: "使用 Sentinel 实现分布式应用限流"
+title: "基于 Alibaba Sentinel 实现的分布式限流中间件服务以及遇到的坑和注意事项"
 description: "基于 Alibaba Sentinel 实现的分布式限流中间件服务以及遇到的坑和注意事项"
 summary: ""
 date: 2024-03-07T21:06:10+08:00
-lastmod: 2024-03-07T21:06:10+08:00
+lastmod: 2024-04-10T21:06:10+08:00
 draft: false
 weight: 50
 categories: []
@@ -12,8 +12,8 @@ contributors: [l10178]
 pinned: false
 homepage: false
 seo:
-  title: "基于 Alibaba Sentinel 实现的分布式限流中间件服务以及遇到的坑和注意事项" # custom title (optional)
-  description: "基于 Alibaba Sentinel 实现的分布式限流中间件服务以及遇到的坑和注意事项" # custom description (recommended)
+  title: "基于 Alibaba Sentinel 实现的分布式限流中间件服务以及遇到的坑和注意事项"
+  description: "基于 Alibaba Sentinel 实现的分布式限流中间件服务以及遇到的坑和注意事项"
   canonical: "" # custom canonical URL (optional)
   noindex: false # false (default) or true
 ---
@@ -273,6 +273,38 @@ class User implements ParamFlowArgument {
 
 可在 Granfana 中以 ClickHouse 作为数据源配置自己需要的视图，并结合告警组件配置告警，比如应用 1 分钟 block 次数超过 10 次触发告警。
 
+### 自定义实现
+
+如果各个 adapter 模块不能满足你的要求，可以自己编码实现，一个典型的示例代码如下，按需选择。
+
+```java
+public void sample() {
+    String resource = anyStringName();
+    Entry entry = null;
+    try {
+      //支持按照来源设置规则，指定自己的来源，不需要来源的时候不写这行
+      ContextUtil.enter(SAMPLE_CONTEXT, APP_NAME);
+      // 执行 Sentinel 流程，判断是否放行。最后一个 anyArgsArray 是热点参数，如果不需要热点参数限流就可以不写
+      entry = SphU.entry(resource, ResourceTypeConstants.COMMON_WEB, EntryType.OUT, anyArgsArray());
+      //开始执行自己真正的代码逻辑
+      doJobHere();
+    } catch (BlockException e) {
+      //根据情况处理异常
+      handleBlockException(e);
+    } catch (Exception ex) {
+      //如果需要熔断降级规则，需要通过这个 traceEntry 方法把异常数统计上，否则熔断降级里不能按照异常降级
+      Tracer.traceEntry(ex, entry);
+      throw ex;
+    } finally {
+      if (entry != null) {
+        entry.close();
+      }
+      ContextUtil.exit();
+    }
+
+  }
+```
+
 ## FAQ
 
 - Q：Sentinel 资源生成时如何忽略某些资源。
@@ -281,7 +313,7 @@ class User implements ParamFlowArgument {
 
 - Q：对于限流的冷启动效果，冷启动结束进入稳定状态后，还会不会重新回到冷启动阶段。
 
-  A：会，一段时间流量较小或无流量后会回到冷启动阶段。Sentinel 固定速率产生令牌再消费，服务第一次启动时，或者接口很久没有被访问，都会导致当前时间与上次生产令牌的时间相差甚远，所以第一次生产令牌将会生产 maxPermits 个令牌，直接将令牌桶装满。由于令牌桶已满，接下来 N 秒就是冷启动阶段。具体查看参考资料里的冷启动算法详解。
+  A：会，一段时间流量较小或无流量后会回到冷启动阶段。通俗来讲就是会先判断一下“冷不冷”，很久没有流量或者流量很小，不就很冷。Sentinel 固定速率产生令牌再消费，服务第一次启动时，或者接口很久没有被访问，都会导致当前时间与上次生产令牌的时间相差甚远，所以第一次生产令牌将会生产 maxPermits 个令牌，直接将令牌桶装满。由于令牌桶已满，接下来 N 秒就是冷启动阶段。具体查看参考资料里的冷启动算法详解。
 
 - Q: 很多开发通过错误码来处理流程，而非通过异常。这种写法，导致 Sentinel 不能拦截到异常，无法触发降级。对于这种情况，有没有什么好的处理方法。
 
