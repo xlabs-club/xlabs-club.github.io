@@ -1,6 +1,6 @@
 ---
-title: "MySQL 大文件导入优化"
-description: "MySQL 大文件导入优化"
+title: "MySQL 大文件导入优化，提高速度，提升性能"
+description: "MySQL 大文件导入优化，提高速度，提升性能"
 summary: ""
 date: 2024-03-10T15:18:22+08:00
 lastmod: 2024-03-10T15:18:22+08:00
@@ -18,11 +18,11 @@ seo:
   noindex: false # false (default) or true
 ---
 
-项目中需要根据 SQL 文件导入数据，文件大约 20G，正常导入约需要 2 小时，如何加快导入速度。
+项目中需要根据 SQL 文件导入数据，文件大约 20G，正常导入约需要 2 小时，如何提高导入速度。
 
-如果一个 SQL 文件只有一个表的数据，可以直接使用 mysql load data infile 语法，速度比较快。
+经过实验测试，如果一个 SQL 文件只有一个表的数据，可以直接使用 mysql load data infile 语法，速度比较快。
 
-我们是一个 SQL 文件包含了很多表，导入过程经过如下设置，20G 大约需要 40 分钟，比之前快了很多。
+我们是一个 SQL 文件包含了很多表，mysql load data infile 就不支持了，可考虑在导入过程中设置如下参数，经过测试 20G 大约需要 40 分钟，比之前快了很多。
 
 ```bash
 # 进入 mysql
@@ -42,7 +42,7 @@ use 数据库名；
 # 开启事务
 START TRANSACTION;
 
-# 导入 SQL 文件并 COMMIT（因为导入比较耗时，导入和 COMMIT 一行命令）
-source 文件的路径；COMMIT;
+# 导入 SQL 文件并 COMMIT（因为导入比较耗时，导入和 COMMIT 一行命令，这样不用盯着屏幕等提交了）
+source /xxx.sql；COMMIT;
 
 ```
