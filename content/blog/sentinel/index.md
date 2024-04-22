@@ -319,6 +319,10 @@ public void sample() {
 
   A: 实际上 Sentinel 是通过 Tracer.trace(e) 来统计业务异常的，因此可以收到错误码就调用此函数来统计业务异常。
 
+- Q: 我的服务响应有时快有时慢，为了尽可能保证服务可用，我能不能向未来“借”指标，或者某些接口比较重要能否优先处理。
+
+  A：QPS 模式下能。但是各个 adapter 都不支持，需要自己实现，参考 com.alibaba.csp.sentinel.slots.block.flow.controller.DefaultController#canPass(com.alibaba.csp.sentinel.node.Node, int, boolean) 和 com.alibaba.csp.sentinel.SphU#entryWithPriority(java.lang.String, com.alibaba.csp.sentinel.EntryType)，核心在于需要 prioritized 为 true。
+
 ## 参考资料
 
 - 令牌桶算法在 Sentinel 中的应用：<https://blog.51cto.com/morris131/6506314>
