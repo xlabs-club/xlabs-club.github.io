@@ -40,7 +40,7 @@ Sentinel 的基础知识请参考官方文档描述，这里单独介绍一些�
 
 效果：实际上“效果”也是“规则”定义的一部分。任何一条请求，命中某些资源规则后产生的效果，比如直接抛出异常、匀速等待。
 
-## Sentinel 全局注意事项和使用限制
+### Sentinel 全局注意事项和使用限制
 
 使用开源默认 Sentinel 组件，有一些坑，或者说需要关注的注意事项：
 
@@ -99,6 +99,8 @@ Sentinel 底层限流策略共有 2 种，另外有 2 个 WARMUP 的变体，总
         return new DefaultController(rule.getCount(), rule.getGrade());
     }
 ```
+
+根据以上代码，可以确定限流各个参数适用的范围，比如 “按照并发线程数限流，实现匀速等待效果” 就做不到了。
 
 ### 规则参数详解
 
@@ -159,8 +161,8 @@ Sentinel 规则的资源名字匹配支持正则表达式，但是不知道为�
 - controlBehavior：限流效果，有直接拒绝（RuleConstant.CONTROL_BEHAVIOR_DEFAULT = 0）、冷启动（RuleConstant.CONTROL_BEHAVIOR_WARM_UP=1）、匀速器（RuleConstant.CONTROL_BEHAVIOR_RATE_LIMITER=2）、冷启动-匀速器（RuleConstant.CONTROL_BEHAVIOR_WARM_UP_RATE_LIMITER=3）。
 - warmUpPeriodSec：冷启动时间，单位秒，默认 10s。
 - maxQueueingTimeMs：最大排队等待时长，默认 500ms。（仅在匀速排队模式 + QPS 下生效）
-- limitApp: 按来源限流，默认 default 表示忽略来源。
-- strategy: 根据调用关系选择策略（默认用 RuleConstant.STRATEGY_DIRECT=0，直接来源）
+- limitApp: 按来源限流，默认 default 表示忽略来源，所有来源都限流。如果 limitApp 为 null，将忽略此条规则，不限流直接放行。
+- strategy: 根据调用关系选择策略：根据调用方限流（STRATEGY_DIRECT=0），根据调用链路入口限流（STRATEGY_CHAIN=1），具有关系的资源流量控制（STRATEGY_RELATE=2）。
 
 注意：
 
@@ -340,6 +342,10 @@ public void sample() {
 - Q：Sentinel 资源生成时如何忽略某些资源。
 
   A：自定义 UrlCleaner，对想忽略的资源返回空字符。
+
+- Q：Sentinel DataSource adapter 和 XxxRuleManager.loadRules 两种加载规则的方式能不能同时使用。
+
+  A：不能。比如 Nacos DataSource adapter，远端配置有变更后自动刷新，会以远端配置为准，覆盖掉 XxxRuleManager.loadRules 主动加载的规则。
 
 - Q：对于限流的冷启动效果，冷启动结束进入稳定状态后，还会不会重新回到冷启动阶段。
 
