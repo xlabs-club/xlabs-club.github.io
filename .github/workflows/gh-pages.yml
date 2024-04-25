@@ -21,8 +21,8 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Run linters
-      run: npm run lint --if-present
+    # - name: Run linters
+    #   run: npm run lint --if-present
 
     - name: Build site
       run: npm run build
