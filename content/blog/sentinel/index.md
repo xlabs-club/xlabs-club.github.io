@@ -35,7 +35,9 @@ Sentinel 的基础知识请参考官方文档描述，这里单独介绍一些�
 限流简单来说就三个点：资源、规则、效果。
 
 资源：就是一个字符串，这个字符串可以自己定义、可以用注解自动生成、可以通过拦截器按规则生成。
+
 规则：Sentinel 定义的一系列限流保护规则，比如流量控制规则、自适应保护规则。
+
 效果：实际上“效果”也是“规则”定义的一部分。任何一条请求，命中某些资源规则后产生的效果，比如直接抛出异常、匀速等待。
 
 ## Sentinel 全局注意事项和使用限制
@@ -68,6 +70,35 @@ Sentinel 的基础知识请参考官方文档描述，这里单独介绍一些�
 我们所有组件，规则加载都是由 Datasource 组件统一加载，配置是懒加载的，在第一次访问的时候加载，如果需要定义规则请在配置中心定义，这是由 Sentinel 在第一次初始化的时候（参考源码：com.alibaba.csp.sentinel.Env.java）通过 SPI 加载的。
 
 注意：如果你有自编码使用 Sentinel SDK 自带的 XxxRuleManager.loadRules 加载规则，会被远端配置中心覆盖掉，远端配置变更自动刷新后会以远端配置为准，把 XxxRuleManager.loadRules 加载的规则覆盖掉。
+
+### 底层限流策略实现
+
+Sentinel 底层限流策略共有 2 种，另外有 2 个 WARMUP 的变体，总共 4 个。参考源码 `com.alibaba.csp.sentinel.slots.block.flow.TrafficShapingController` 。
+
+1. 基于绝对值的 DefaultController，只要总值校验通过即可，比如 QPS 10，1s 内可以前 500ms 通过 10 个，后 500ms 通过 0 个，只要在这 1s 内没超标就行。
+2. 基于频率的 ThrottlingController，漏桶算法，比如 QPS 10，要求以每 100ms 一个的固定频率执行。如果前 500ms 有 10 个请求，最多通过 5 个，其他的都要排队。
+
+关于这几种策略支持的范围，有兴趣的可以查看源码 `com.alibaba.csp.sentinel.slots.block.flow.FlowRuleUtil#generateRater`，核心代码如下。
+
+```java
+  private static TrafficShapingController generateRater(FlowRule rule) {
+        if (rule.getGrade() == RuleConstant.FLOW_GRADE_QPS) {
+            switch (rule.getControlBehavior()) {
+                case RuleConstant.CONTROL_BEHAVIOR_WARM_UP:
+                    return new WarmUpController(rule.getCount(), rule.getWarmUpPeriodSec(),
+                            ColdFactorProperty.coldFactor);
+                case RuleConstant.CONTROL_BEHAVIOR_RATE_LIMITER:
+                    return new ThrottlingController(rule.getMaxQueueingTimeMs(), rule.getCount());
+                case RuleConstant.CONTROL_BEHAVIOR_WARM_UP_RATE_LIMITER:
+                    return new WarmUpRateLimiterController(rule.getCount(), rule.getWarmUpPeriodSec(),
+                            rule.getMaxQueueingTimeMs(), ColdFactorProperty.coldFactor);
+                case RuleConstant.CONTROL_BEHAVIOR_DEFAULT:
+                default:
+            }
+        }
+        return new DefaultController(rule.getCount(), rule.getGrade());
+    }
+```
 
 ### 规则参数详解
 
@@ -133,8 +164,7 @@ Sentinel 规则的资源名字匹配支持正则表达式，但是不知道为�
 
 注意：
 
-1. 匀速器模式的时候一定要计算好 maxQueueingTimeMs，这个值默认比较小，避免排队超时（也就抛出异常）达不到匀速的效果。
-2. 匀速排队模式不支持 QPS > 1000 的场景，因为 Sentinel 内部通过 Thread::sleep 来实现虚拟等待队列，QPS 等于 1000 时，每个请求正好 sleep 1 ms，而当 QPS > 1000 时，没法精准的控制 sleep 小于 1 ms 的时长。
+1. 匀速器模式的时候根据实际情况设置 maxQueueingTimeMs，处理好排队超时情况，如果太长客户端可能超时，如果太短直接抛出超时异常了，达不到匀速的效果。
 
 #### 热点参数限流
 
