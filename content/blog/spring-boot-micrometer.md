@@ -1,8 +1,9 @@
 ---
-title: 'Spring Boot 自定义监控指标'
+title: 'Spring Boot 使用 Micrometer 集成 Prometheus 监控，5 分钟接入自定义监控指标'
 description: "Spring Boot 使用 Micrometer 集成 Prometheus 监控，5 分钟接入自定义监控指标"
 summary: ""
 date: 2023-08-07T10:54:37+08:00
+lastmod: 2024-03-09T14:29:03+08:00
 draft: false
 weight: 200
 images: []
@@ -58,7 +59,7 @@ Micrometer 中两个最核心的概念：计量器注册表 (MeterRegistry)，�
 
 * Spring Boot Micrometer：提供监控门面 Api。
 * Spring Boot Actuator：提供监控指标采集服务，通过 `/actuator/prometheus` 获取数据。
-* Prometheus + Granfana：采集和存储数据，提供图表展示，根据告警规则发出告警。
+* Prometheus + Granfana：采集和存储数据，提供图表展示，另外 Granfana 可根据指标配置告警规则发出告警。
 
 总体实现步骤如下：
 
@@ -70,7 +71,7 @@ Micrometer 中两个最核心的概念：计量器注册表 (MeterRegistry)，�
     management.metrics.export.prometheus.enabled=true
     ```
 
-2. 创建 Prometheus `ServiceMonitor`，从 `/actuator/prometheus` path 采集指标，如果涉及多个 war 合并部署到一个 tomcat 的，从多个 path 采集。
+2. 创建 Prometheus ServiceMonitor 或 PodMonitor，从 `/actuator/prometheus` path 采集指标，如果涉及多个 war 合并部署到一个 tomcat 的，从多个 path 采集。
 
     ```yaml
     apiVersion: monitoring.coreos.com/v1
@@ -78,7 +79,7 @@ Micrometer 中两个最核心的概念：计量器注册表 (MeterRegistry)，�
     metadata:
     labels:
         app.kubernetes.io/component: metrics
-        release: eye2
+        release: your-prometheus
     name: eye-consumer
     namespace: test
     spec:
@@ -187,17 +188,21 @@ public class MicrometerAspectConfiguration {
 
 ```
 
-为了方便大家使用，已经在我们的 starter 里自动注入了以上 Bean，大家只需要引入以下两个 starter。
+另外这里有个疑惑，我的请求量很大，`Metrics.counter` 对象要不要缓存起来，减少获取 counter 对象的压力。
 
-```xml
-    <dependency>
-      <groupId>com.fxiaoke.boot</groupId>
-      <artifactId>metrics-spring-boot-starter</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-aop</artifactId>
-    </dependency>
+其实不用，MeterRegistry 已经做了缓存，参考 `io.micrometer.core.instrument.MeterRegistry#registerMeterIfNecessary` 代码。
+
+```java
+
+  private <M extends Meter> M registerMeterIfNecessary(Class<M> meterClass, Meter.Id id, @Nullable DistributionStatisticConfig config, BiFunction<Meter.Id, DistributionStatisticConfig, M> builder, Function<Meter.Id, M> noopBuilder) {
+    Meter.Id mappedId = this.getMappedId(id);
+    Meter m = this.getOrCreateMeter(config, builder, id, mappedId, noopBuilder);
+    if (!meterClass.isInstance(m)) {
+      throw new IllegalArgumentException(String.format("There is already a registered meter of a different type (%s vs. %s) with the same name: %s", m.getClass().getSimpleName(), meterClass.getSimpleName(), id.getName()));
+    } else {
+      return (Meter)meterClass.cast(m);
+    }
+  }
 ```
 
 ### 自定义指标高级配置
@@ -239,7 +244,7 @@ management.metrics.tags.application=${spring.application.name}
     ```
 
 6. 编码中如果需要 MeterRegistry，不允许引用具体实现（比如 Prometheus 的 io.prometheus.client.CollectorRegistry），而是使用 Micrometer 提供的统一接口 `MeterRegistry`。类比，在打印日志时不允许直接使用 logback 或 log4j api，而是使用 slf4j api.
-7. 不要自己 new MeterRegistry，而是使用自动注入的或静态方法，因为我们可能随时在公司的 starter 增加自定义的配置。
+7. 不要自己 new MeterRegistry，而是使用自动注入的或静态方法。
 8. 建议为指标加上 `description` 字段。
 
 ## 最佳实践
@@ -247,18 +252,14 @@ management.metrics.tags.application=${spring.application.name}
 1. 合理规划 Tag，一个 Meter 具体类型需要通过名字和 Tag 作为它的唯一标识，这样做的好处是可以使用名字进行标记，通过不同的 Tag 去区分多种维度进行数据统计。
 
     ```console
-    反例 1（全部用 name 区分，无 Tag，重复计量）：
+    反例 1（全部用 name 区分，无 Tag，重复计量，无法多维度分析汇聚）：
       Metrics.counter("fs.sms.all");
       Metrics.counter("fs.sms.aliyun");
       Metrics.counter("fs.sms.huaweiyun");
     
     正例：
       Metrics.counter("fs.sms.send","provider","ali");
-      Metrics.counter("fs.sms.send","provider","huawei");
+      Metrics.counter("fs.sms.send","provider","huawei","result","success");
     ```
 
 2. 避免无意义不可枚举的 Tag，混乱的 Tag 比无 Tag 更难管理。
-
-## 注意事项
-
-1. 注意引入的类名，有很多同名的类，使用 `io.micrometer.core` 包下的类。
