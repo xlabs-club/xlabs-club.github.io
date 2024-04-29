@@ -1,9 +1,9 @@
 ---
-title: "K8S 容器内 Java 进程内存分析"
-description: "K8S 容器内 Java 进程内存分析"
-summary: "K8S 容器内 Java 进程内存分析，容器和 Jave OOM 问题定位。"
+title: "K8S Pod 容器内 Java 进程内存分析"
+description: "K8S Pod 容器内 jvm 进程内存分析"
+summary: "K8S Pod 容器内 Java 进程内存分析，容器 OOM 和 Jave OOM 问题定位。"
 date: 2023-01-07T10:54:37+08:00
-lastmod: 2023-01-07T10:54:37+08:00
+lastmod: 2024-01-07T10:54:37+08:00
 draft: false
 weight: 50
 images: []
@@ -13,8 +13,8 @@ contributors: [l10178]
 pinned: false
 homepage: false
 seo:
-  title: "K8S 容器内 Java 进程内存分析"
-  description: "K8S 容器内 Java 进程内存分析，容器和 Jave OOM 问题定位。"
+  title: "K8S Pod 容器内 Java 进程内存分析"
+  description: "K8S Pod 容器内 jvm 进程内存分析"
   canonical: ""
   noindex: false
 ---
