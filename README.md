@@ -23,20 +23,20 @@
 
 本项目使用 [Hugo][] 开发，使用 [Doks][] 作为 Hugo 主题，一切内容都是 Markdown，专心写文字即可。
 
-本地开发时需要先安装 Nodejs，然后使用 pnpm（或 npm） 安装 Hugo bin，本地不需要提前安装 Hugo。
+本地开发时需要先安装 Nodejs，然后使用 npm 安装 Hugo bin，本地不需要提前安装 Hugo。
 
 ```bash
 # 安装 npm 依赖包，注意此过程需要连接 github 下载 hugo
-pnpm install
+npm install
 # 启动 Web，然后浏览器访问 http://localhost:1313/即可浏览效果
-pnpm run dev
+npm run dev
 # 创建新页面
-pnpm run create docs/platform/backstage.md
-pnpm run create blog/k8s.md
+npm run create docs/platform/backstage.md
+npm run create blog/k8s.md
 # 执行代码检查
-pnpm run lint
+npm run lint
 # 编译结果
-pnpm run build
+npm run build
 ```
 
 如果文章中包含图片，提交 Git 前推荐使用 [pngquant][] 先进行无损压缩。

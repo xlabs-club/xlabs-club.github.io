@@ -19,10 +19,7 @@ jobs:
         node-version: 20
 
     - name: Install dependencies
-      run: npm install
-
-    # - name: Run linters
-    #   run: npm run lint --if-present
+      run: npm ci
 
     - name: Build site
       run: npm run build
