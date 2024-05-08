@@ -26,7 +26,7 @@ seo:
 - 经验产品化：最佳实践就是产品，比如我并不（想）了解 Spring Boot 3.2 具体有哪些变更，但希望能一键从 3.0 自动升级到 3.2，直接告诉有哪些变更。
 - 自定义重构：对于某些自研代码，希望能自定义重构逻辑，一键自动重构。
 
-基于以上背景，我们探索了 [OpenRewrite][]、[Spring Boot Migrator][]、[Redhat Windup][] 和一众不便具名的 AI 代码助手，本文将分享我们使用 OpenRewrite、Spring Boot Migrator 进行代码重构和升级的一些使用经验和体验。
+基于以上背景，我们探索了 [OpenRewrite][]、[Spring Boot Migrator][]、[Redhat Windup][]、[emt4j][] 和一众不便具名的 AI 代码助手，本文将分享我们使用 OpenRewrite、Spring Boot Migrator 进行代码重构和升级的一些使用经验和体验。
 
 ## OpenRewrite
 
@@ -514,3 +514,4 @@ pom.xml 文件中增加以下配置，然后执行 `mvn rewrite:run`。
 [OpenRewrite]: https://docs.openrewrite.org/
 [Spring Boot Migrator]: https://github.com/spring-projects-experimental/spring-boot-migrator
 [Redhat Windup]: https://github.com/windup
+[emt4j]: https://github.com/adoptium/emt4j
