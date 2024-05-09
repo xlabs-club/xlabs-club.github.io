@@ -7,19 +7,15 @@
   text-transform: none;
 }
 
-// index image animation
-@keyframes animation {
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
 .animation {
-  animation: animation 2s ease;
-  animation-fill-mode: forwards;
   border-radius: 64px;
   height: 320px;
   width: 320px;
+}
+
+.animation:hover{
+  transform: scale(1.25);
+  border-radius: 200px;
 }
 
 // DocSearch
