@@ -22,8 +22,8 @@
     "@hyas/seo": "^2.3.0",
     "@tabler/icons": "^3.2.0",
     "gethyas": "^2.4.2",
-    "@docsearch/css": "^3.5.2",
-    "@docsearch/js": "^3.5.2",
+    "@docsearch/css": "^3.6.0",
+    "@docsearch/js": "^3.6.0",
     "mermaid": "^10.8.0"
   },
   "devDependencies": {

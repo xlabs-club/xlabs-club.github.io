@@ -47,12 +47,6 @@ do
 done
 ```
 
-## 贡献者列表
-
-<a href="https://github.com/xlabs-club/xlabs-club.github.io/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=xlabs-club/xlabs-club.github.io" />
-</a>
-
 ## License
 
 本文档采用 [CC BY-NC 4.0][] 许可协议。
