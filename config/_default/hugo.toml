@@ -1,5 +1,5 @@
 title = "XLabs"
-baseurl = "/"
+baseurl = "http://localhost:1313/"
 canonifyURLs = false
 disableAliases = true
 disableHugoGeneratorInject = true

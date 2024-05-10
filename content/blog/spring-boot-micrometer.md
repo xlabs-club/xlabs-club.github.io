@@ -1,5 +1,5 @@
 ---
-title: 'Spring Boot 使用 Micrometer 集成 Prometheus 监控，5 分钟接入自定义监控指标'
+title: "Spring Boot 使用 Micrometer 集成 Prometheus 监控，5 分钟接入自定义监控指标"
 description: "Spring Boot 使用 Micrometer 集成 Prometheus 监控，5 分钟接入自定义监控指标"
 summary: ""
 date: 2023-08-07T10:54:37+08:00
@@ -7,8 +7,8 @@ lastmod: 2024-03-09T14:29:03+08:00
 draft: false
 weight: 200
 images: []
-categories: [Spring Boot,Java]
-tags: [Spring Boot,Java]
+categories: [Spring Boot, Java]
+tags: [Spring Boot, Java]
 contributors: [l10178]
 pinned: false
 homepage: false
@@ -36,20 +36,21 @@ Micrometer 提供了多种度量指标类型（Timers、Guauges、Counters 等�
 
 Micrometer 中两个最核心的概念：计量器注册表 (MeterRegistry)，计量器 (Meter)。
 
-* MeterRegistry
+- MeterRegistry
 
-  * 内存注册表 (SimpleMeterRegistry): 在内存中保存每一个 Meter（指标）的最新值，并且不会将数据导出到任何地方。
-  * 组合注册表 (CompositeMeterRegistry): 可以添加多个注册表，用于将各个注册表组合起来，可以同时将指标发布到多个监控系统。Micrometer 提供了一个全局的 MeterRegistry，`io.micrometer.core.instrument.Metrics` 中持有一个静态 final 的 CompositeMeterRegistry 实例 globalRegistry。
-  * 普罗米修斯注册表 (PrometheusMeterRegistry): 当使用普罗米修斯监控时，引入 micrometer-registry-prometheus 依赖时会提供此种收集器，用于将指标数据转换为普罗米修斯识别的格式和导出数据等功能。
+  - 内存注册表 (SimpleMeterRegistry): 在内存中保存每一个 Meter（指标）的最新值，并且不会将数据导出到任何地方。
+  - 组合注册表 (CompositeMeterRegistry): 可以添加多个注册表，用于将各个注册表组合起来，可以同时将指标发布到多个监控系统。Micrometer 提供了一个全局的 MeterRegistry，`io.micrometer.core.instrument.Metrics` 中持有一个静态 final 的 CompositeMeterRegistry 实例 globalRegistry。
+  - 普罗米修斯注册表 (PrometheusMeterRegistry): 当使用普罗米修斯监控时，引入 micrometer-registry-prometheus 依赖时会提供此种收集器，用于将指标数据转换为普罗米修斯识别的格式和导出数据等功能。
 
-* Meter（指标）
+- Meter（指标）
 
   监控数据的整个过程都是围绕着 Meter（指标）, 通过一个一个的 Meter（指标）数据来进行观察应用的状态。常用的指标如：
-  * Counter（计数器）: 单一计数指标，允许按固定数量递增，用来统计无上限数据。只允许递增。
-  * Gauge（仪表盘）: 表示单个的变化的值，例如温度，气压。用于统计有上限可增可减的数据。在每次取样时，Gauge 会返回当前值。
-  * Timer（计时器）: 通常用来记录事件的持续时间。Timer 会记录两类的数据，事件的数量和总的持续时间。
 
-* Tag（标签）
+  - Counter（计数器）: 单一计数指标，允许按固定数量递增，用来统计无上限数据。只允许递增。
+  - Gauge（仪表盘）: 表示单个的变化的值，例如温度，气压。用于统计有上限可增可减的数据。在每次取样时，Gauge 会返回当前值。
+  - Timer（计时器）: 通常用来记录事件的持续时间。Timer 会记录两类的数据，事件的数量和总的持续时间。
+
+- Tag（标签）
 
   Mircrometer 通过 Tag（标签）实现了多维度的度量数据收集，通过 Tag 的命名可以推断出其指向的数据代表什么维度或是什么类型的度量指标。
 
@@ -57,46 +58,46 @@ Micrometer 中两个最核心的概念：计量器注册表 (MeterRegistry)，�
 
 总体架构：Spring Boot Actuator + Micrometer + Prometheus + Granfana。
 
-* Spring Boot Micrometer：提供监控门面 Api。
-* Spring Boot Actuator：提供监控指标采集服务，通过 `/actuator/prometheus` 获取数据。
-* Prometheus + Granfana：采集和存储数据，提供图表展示，另外 Granfana 可根据指标配置告警规则发出告警。
+- Spring Boot Micrometer：提供监控门面 Api。
+- Spring Boot Actuator：提供监控指标采集服务，通过 `/actuator/prometheus` 获取数据。
+- Prometheus + Granfana：采集和存储数据，提供图表展示，另外 Granfana 可根据指标配置告警规则发出告警。
 
 总体实现步骤如下：
 
 1. Spring Boot Actuator 放开 `prometheus` http 访问，在配置文件中增加以下配置。
 
-    ```properties
-    management.endpoint.prometheus.enabled=true
-    management.endpoints.web.exposure.include=info,health,metrics,prometheus
-    management.metrics.export.prometheus.enabled=true
-    ```
+   ```properties
+   management.endpoint.prometheus.enabled=true
+   management.endpoints.web.exposure.include=info,health,metrics,prometheus
+   management.metrics.export.prometheus.enabled=true
+   ```
 
 2. 创建 Prometheus ServiceMonitor 或 PodMonitor，从 `/actuator/prometheus` path 采集指标，如果涉及多个 war 合并部署到一个 tomcat 的，从多个 path 采集。
 
-    ```yaml
-    apiVersion: monitoring.coreos.com/v1
-    kind: ServiceMonitor
-    metadata:
-    labels:
-        app.kubernetes.io/component: metrics
-        release: your-prometheus
-    name: eye-consumer
-    namespace: test
-    spec:
-    endpoints:
-      - interval: 30s
-        honorLabels: true
-        path: /client-biz/actuator/prometheus
-        port: metrics
-      - interval: 30s
-        honorLabels: true
-        path: /gateway-biz/actuator/prometheus
-        port: metrics
-    jobLabel: eye-consumer
-    selector:
-        matchLabels:
-        app: eye-consumer
-    ```
+   ```yaml
+   apiVersion: monitoring.coreos.com/v1
+   kind: ServiceMonitor
+   metadata:
+   labels:
+     app.kubernetes.io/component: metrics
+     release: your-prometheus
+   name: eye-consumer
+   namespace: test
+   spec:
+   endpoints:
+     - interval: 30s
+       honorLabels: true
+       path: /client-biz/actuator/prometheus
+       port: metrics
+     - interval: 30s
+       honorLabels: true
+       path: /gateway-biz/actuator/prometheus
+       port: metrics
+   jobLabel: eye-consumer
+   selector:
+     matchLabels:
+     app: eye-consumer
+   ```
 
 3. 业务可通过 `http://localhost:8080/actuator/metrics` 查看指标是否已上报，通过 `http://localhost:8080/actuator/prometheus` 查看指标值。
 
@@ -153,9 +154,9 @@ public class MicrometerSampleService {
    * @param result result
    */
   public void countByResult(String result) {
-    
+
     registry.counter("fs.sms.send", "result", result).increment();
-    
+
     // or
     Counter.builder("fs.sms.send")
         .description("send sms")
@@ -239,9 +240,9 @@ management.metrics.tags.application=${spring.application.name}
 4. 使用注解`@Timed @Counted`会默认增加 `method、class、result、exception` 这几个 Tag，注意不要与之冲突。
 5. 公司和开源默认 Tag 如下，这些会被 ServiceMonitor 强制覆盖，业务不要自己定义。
 
-    ```console
-    namespace、application、service、container、pod、instance、job、endpoint、id
-    ```
+   ```console
+   namespace、application、service、container、pod、instance、job、endpoint、id
+   ```
 
 6. 编码中如果需要 MeterRegistry，不允许引用具体实现（比如 Prometheus 的 io.prometheus.client.CollectorRegistry），而是使用 Micrometer 提供的统一接口 `MeterRegistry`。类比，在打印日志时不允许直接使用 logback 或 log4j api，而是使用 slf4j api.
 7. 不要自己 new MeterRegistry，而是使用自动注入的或静态方法。
@@ -251,15 +252,15 @@ management.metrics.tags.application=${spring.application.name}
 
 1. 合理规划 Tag，一个 Meter 具体类型需要通过名字和 Tag 作为它的唯一标识，这样做的好处是可以使用名字进行标记，通过不同的 Tag 去区分多种维度进行数据统计。
 
-    ```console
-    反例 1（全部用 name 区分，无 Tag，重复计量，无法多维度分析汇聚）：
-      Metrics.counter("fs.sms.all");
-      Metrics.counter("fs.sms.aliyun");
-      Metrics.counter("fs.sms.huaweiyun");
-    
-    正例：
-      Metrics.counter("fs.sms.send","provider","ali");
-      Metrics.counter("fs.sms.send","provider","huawei","result","success");
-    ```
+   ```console
+   反例 1（全部用 name 区分，无 Tag，重复计量，无法多维度分析汇聚）：
+     Metrics.counter("fs.sms.all");
+     Metrics.counter("fs.sms.aliyun");
+     Metrics.counter("fs.sms.huaweiyun");
+
+   正例：
+     Metrics.counter("fs.sms.send","provider","ali");
+     Metrics.counter("fs.sms.send","provider","huawei","result","success");
+   ```
 
 2. 避免无意义不可枚举的 Tag，混乱的 Tag 比无 Tag 更难管理。

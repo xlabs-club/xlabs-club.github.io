@@ -8,7 +8,7 @@ draft: false
 weight: 50
 images: []
 categories: [Java]
-tags: [k8s,Java]
+tags: [k8s, Java]
 contributors: [l10178]
 pinned: false
 homepage: false
@@ -477,16 +477,17 @@ stat -fc %T /sys/fs/cgroup/
 以下为少量应用实例总结出来的结果，应用的模型不同占用情况会有比较大差异，仅供对比参考。
 
 | 基础参数                                               | 中低流量时内存占用（Xmx 6G） | 高流量时内存占用 |
-|--------------------------------------------------------|----------------------------|------------------|
-| Java 8 + G1                                            | 65%                        | 85%              |
-| Java 17 + G1                                           | 60%                        | 75%              |
-| Java 17 + ZGC                                          | 90%                        | 95%              |
-| Java 21 + G1                                           | 40%                        | 60%              |
-| Java 21 + ZGC                                          | 80%                        | 90%              |
-| Java 21 + ZGC + UseStringDeduplication                 | 85%                        | 90%              |
-| Java 21 + ZGC + ZGenerational + UseStringDeduplication | 75%                        | 80%              |
+| ------------------------------------------------------ | ---------------------------- | ---------------- |
+| Java 8 + G1                                            | 65%                          | 85%              |
+| Java 17 + G1                                           | 60%                          | 75%              |
+| Java 17 + ZGC                                          | 90%                          | 95%              |
+| Java 21 + G1                                           | 40%                          | 60%              |
+| Java 21 + ZGC                                          | 80%                          | 90%              |
+| Java 21 + ZGC + UseStringDeduplication                 | 85%                          | 90%              |
+| Java 21 + ZGC + ZGenerational + UseStringDeduplication | 75%                          | 80%              |
 
 总结：
+
 1. G1 比 ZGC 占用内存明显减少。
 2. Java 21 比 Java 8、17 占用内存明显偏少。
 3. Java 21 ZGC 分代后确实能降低内存。
