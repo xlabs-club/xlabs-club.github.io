@@ -481,20 +481,22 @@ stat -fc %T /sys/fs/cgroup/
 | Java 8 + G1                                            | 65%                        | 85%              |
 | Java 17 + G1                                           | 60%                        | 75%              |
 | Java 17 + ZGC                                          | 90%                        | 95%              |
+| Java 21 + G1                                           | 40%                        | 60%              |
+| Java 21 + ZGC                                          | 80%                        | 90%              |
 | Java 21 + ZGC + UseStringDeduplication                 | 85%                        | 90%              |
-| Java 21 + ZGC + ZGenerational + UseStringDeduplication | 65%                        | 80%              |
+| Java 21 + ZGC + ZGenerational + UseStringDeduplication | 75%                        | 80%              |
 
 总结：
-1. G1 比 ZGC 占用内存明显减少。
+1. G1 比 ZGC 占用内存明显减少，Java21 比 Java 8、17 占用内存明显偏少。
 2. Java 21 ZGC 分代后确实能降低内存。
 3. 通过 `-XX:+UseStringDeduplication` 启用 String 去重后，有的应用能降低 10% 内存，有的几乎无变化。
 
 分享我们所使用的 Java 21 生产环境参数配置，仅供参考请根据自己应用情况选择性使用：
 
 - -XX:InitialRAMPercentage=40.0 -XX:MaxRAMPercentage=70.0：按照百分比设置初始化和最大堆内存。内存充足的情况下建议设置为一样大。
-- -XX:+UseZGC -XX:+ZUncommit -XX:ZUncommitDelay=300 -XX:MinHeapFreeRatio=10 -XX:MaxHeapFreeRatio=30：促进 Java 内存更快交还给操作系统。
-- -XX:+ZGenerational：启用分代 ZGC，能大幅降低内存占用。
-- -XX:+UseStringDeduplication：启用 String 去重，可能较低内存占用。
+- -XX:+UseZGC -XX:+ZUncommit -XX:ZUncommitDelay=300 -XX:MinHeapFreeRatio=10 -XX:MaxHeapFreeRatio=30：促进 Java 内存更快交还给操作系统，但同时 CPU 可能偏高。
+- -XX:+ZGenerational：启用分代 ZGC，能降低内存占用。
+- -XX:+UseStringDeduplication：启用 String 去重，可能降低内存占用。
 - -Xss256k：降低线程内存占用，默认 1Mb，线程比较多的情况下这个占用还是很多的。谨慎设置。
 - -XX:+ParallelRefProcEnabled：多线程并行处理 Reference，减少 GC 的 Reference 数量，减少 Young GC 时间。
 
