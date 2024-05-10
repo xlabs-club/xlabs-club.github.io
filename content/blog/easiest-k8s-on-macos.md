@@ -31,27 +31,27 @@ seo:
 
 1. Docker Desktop 并启用 Kubernetes 功能。
 
-    优点：最简单，开箱即用。
+   优点：最简单，开箱即用。
 
-    缺点：只支持单节点 K8S，且 K8S 部分功能不支持，不易定制。
-  
+   缺点：只支持单节点 K8S，且 K8S 部分功能不支持，不易定制。
+
 2. Docker run K3D, K3D run K3S。
 
-    优点：简单，任何支持 docker 的工具（Rancher Desktop、Podman） 启动一个容器即可。
+   优点：简单，任何支持 docker 的工具（Rancher Desktop、Podman） 启动一个容器即可。
 
-    缺点：只支持 K3S。
+   缺点：只支持 K3S。
 
 3. [multipass][] 启动虚拟机安装 K8S 或 K3S。
 
-    优点：multipass 可启动空白 ubuntu 虚拟机，或者启动已经安装好 minikube 的虚拟机。
+   优点：multipass 可启动空白 ubuntu 虚拟机，或者启动已经安装好 minikube 的虚拟机。
 
-    缺点：只支持 ubuntu，虚拟机与宿主机同架构。
-  
+   缺点：只支持 ubuntu，虚拟机与宿主机同架构。
+
 4. [lima][] 启动虚拟机安装 K8S 或 K3S。
 
-    优点：支持虚拟多种 Linux，支持异构虚拟机，支持 contained 可代替 docker。
+   优点：支持虚拟多种 Linux，支持异构虚拟机，支持 contained 可代替 docker。
 
-    缺点：架构稍复杂，启动略慢，不如 multipass 稳定，不支持运行在 Windows。
+   缺点：架构稍复杂，启动略慢，不如 multipass 稳定，不支持运行在 Windows。
 
 以上方案，在网络畅通的情况下，均能在 10 分钟内启动一个单节点 K8S，所以整体方案都不复杂。
 

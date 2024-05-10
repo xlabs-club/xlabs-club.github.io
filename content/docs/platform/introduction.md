@@ -58,7 +58,7 @@ C4Context
         Container(ops, "统一运维平台","x-ops","数据库、中间件、日志、监控告警平台")
         Container(iam, "IAM", "Keycloak", "统一用户、组织、角色权限管理")
     }
-    
+
     Boundary(paas, "PaaS", "PaaS") {
         ContainerDb(rds, "RDS", "PostgreSQL/MySQL", "PostgreSQL、MySQL 等关系型数据库")
         ContainerDb(clickhouse, "ClickHouse", "ClickHouse", "BI、Logging、Metrics 等列式数据库")
@@ -73,7 +73,7 @@ C4Context
         Container(harbor, "Harbor","harbor","容器镜像仓库")
         Container(git, "IaC","GitLab","IaC、GitOps 源码仓库")
     }
-    
+
     Boundary(iaas, "IaaS", "IaaS") {
         Container(vm, "云主机","vm","云主机自带本地存储")
         Container(cbh, "堡垒机","cbh","安全运维审计堡垒机")

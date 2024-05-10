@@ -8,7 +8,7 @@ draft: false
 weight: 50
 images: []
 categories: [k8s]
-tags: [k8s,Java]
+tags: [k8s, Java]
 contributors: [l10178]
 pinned: false
 homepage: false

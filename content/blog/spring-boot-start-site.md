@@ -6,8 +6,8 @@ date: 2024-03-09T14:29:03+08:00
 lastmod: 2024-03-09T14:29:03+08:00
 draft: false
 weight: 50
-categories: [Spring Boot,Java]
-tags: [Spring Boot,Java]
+categories: [Spring Boot, Java]
+tags: [Spring Boot, Java]
 contributors: [l10178]
 pinned: false
 homepage: false
