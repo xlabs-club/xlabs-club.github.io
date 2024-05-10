@@ -487,9 +487,10 @@ stat -fc %T /sys/fs/cgroup/
 | Java 21 + ZGC + ZGenerational + UseStringDeduplication | 75%                        | 80%              |
 
 总结：
-1. G1 比 ZGC 占用内存明显减少，Java21 比 Java 8、17 占用内存明显偏少。
-2. Java 21 ZGC 分代后确实能降低内存。
-3. 通过 `-XX:+UseStringDeduplication` 启用 String 去重后，有的应用能降低 10% 内存，有的几乎无变化。
+1. G1 比 ZGC 占用内存明显减少。
+2. Java 21 比 Java 8、17 占用内存明显偏少。
+3. Java 21 ZGC 分代后确实能降低内存。
+4. 通过 `-XX:+UseStringDeduplication` 启用 String 去重后，有的应用能降低 10% 内存，有的几乎无变化。
 
 分享我们所使用的 Java 21 生产环境参数配置，仅供参考请根据自己应用情况选择性使用：
 
