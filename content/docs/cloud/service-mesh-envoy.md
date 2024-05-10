@@ -1,13 +1,13 @@
 ---
-title: '基于 Envoy 的智能路由服务'
+title: "基于 Envoy 的智能路由服务"
 description: ""
 summary: ""
 date: 2023-08-07T10:54:37+08:00
 draft: false
 weight: 200
 images: []
-categories: [Spring Boot,Java]
-tags: [Spring Boot,Java,Envoy]
+categories: [Spring Boot, Java]
+tags: [Spring Boot, Java, Envoy]
 contributors: []
 pinned: false
 homepage: false
@@ -41,7 +41,7 @@ C4Context
         Container(appA, "Application A", "Java,Agent", "Agent 拦截客户端重定向到 Envoy")
         Container(envoy, "Envoy Proxy", "Envoy,WASM", "代理所有入口流量<br>基于租户、服务负载均衡")
         Container(appB, "Application B", "Java,Agent", "应用注册到服务中心")
-        
+
         Rel(appA, envoy, "request by name", "http")
         Rel(envoy, appB, "http proxy & lb", "http")
         UpdateRelStyle(appA, envoy, $offsetX="-40",$offsetY="-40")
@@ -57,15 +57,15 @@ C4Context
          Rel_R(xdsServer, config, "实时配置刷新")
          UpdateRelStyle(xdsServer, registry, $offsetX="-40",$offsetY="-20")
          UpdateRelStyle(xdsServer, config, $offsetX="-40",$offsetY="-20")
-      
+
       }
-      
+
       Rel_U(xdsServer,envoy,"通过 XDS 实现配置动态下发","grpc")
       Rel_D(appA, registry, "服务注册，配置刷新")
       Rel_D(appB, config, "服务注册，配置刷新")
-      
+
       UpdateLayoutConfig($c4ShapeInRow="3", $c4BoundaryInRow="1")
-      
+
 ```
 
 ## 方案对比
@@ -109,13 +109,13 @@ namespace 和 group 的设计目的是为了实现隔离。
 1. 同 service 下 instance 唯一标记：ip + port + cluster。metadata 不作为唯一性标记。
 2. 同 namespace 不同 group 下 service 可以完全相同。
 
-| Nacos 模型   | 开源原生默认值 |    我们方案  |
-| ----------- | ----------- | -----------  |
-| namespace   | 租户/环境 ，默认 public       | 固定自定义值       |
-| group       | 组织/虚拟分组，默认 DEFAULT    | 默认 DEFAULT，如果某个组确认自己的服务不给组用可自定义 group |
-| service     | spring.application.name    | 默认也是 spring.application.name，子模块名   |
-| cluster     | 虚拟，a k8s cluster/ a AZ   | 线上发布系统的“环境”英文名，实际是 k8s 的 namespace  |
-| instance    | 一个 Java 应用，一个 jar 或一个 war 服务 | 一个 jar 或一个 war 服务 |
+| Nacos 模型 | 开源原生默认值                           | 我们方案                                                     |
+| ---------- | ---------------------------------------- | ------------------------------------------------------------ |
+| namespace  | 租户/环境 ，默认 public                  | 固定自定义值                                                 |
+| group      | 组织/虚拟分组，默认 DEFAULT              | 默认 DEFAULT，如果某个组确认自己的服务不给组用可自定义 group |
+| service    | spring.application.name                  | 默认也是 spring.application.name，子模块名                   |
+| cluster    | 虚拟，a k8s cluster/ a AZ                | 线上发布系统的“环境”英文名，实际是 k8s 的 namespace          |
+| instance   | 一个 Java 应用，一个 jar 或一个 war 服务 | 一个 jar 或一个 war 服务                                     |
 
 注册实例信息约束：
 

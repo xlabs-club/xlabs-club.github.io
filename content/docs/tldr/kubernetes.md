@@ -69,7 +69,7 @@ chmod 600 ~/.kube/config
 
 ns=your-namespace
 
-for resource in `kubectl api-resources --verbs=list --namespaced -o name | xargs -n 1 kubectl get -o name -n $ns`; do 
+for resource in `kubectl api-resources --verbs=list --namespaced -o name | xargs -n 1 kubectl get -o name -n $ns`; do
     kubectl get $resource  -n $ns;
     # kubectl patch $resource -p '{"metadata": {"finalizers": []}}' --type='merge' -n $ns;
 done

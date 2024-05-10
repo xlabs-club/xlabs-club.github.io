@@ -17,7 +17,6 @@ seo:
   canonical: "" # custom canonical URL (optional)
   noindex: false # false (default) or true
 ---
-    
 
 在 K8S 中使用 Helm 部署了一些有状态应用，并通过 Helm 自动生成了 PV 和 PVC，某天想扩容，竟然报错了。
 
@@ -34,11 +33,11 @@ Error: UPGRADE FAILED: cannot patch "zookeeper" with kind StatefulSet: StatefulS
 ```yaml
 spec:
   volumeClaimTemplates:
-  - apiVersion: v1
-    spec:
-      resources:
-        requests:
-          storage: 8Gi
+    - apiVersion: v1
+      spec:
+        resources:
+          requests:
+            storage: 8Gi
 ```
 
 查看 K8S 官方说明，果然当前版本 (1.29) 还不支持，参考链接如下。
@@ -65,17 +64,17 @@ rancher/local-path-provisioner 是 Rancher 提供的一个本地存储卷插件�
 apiVersion: v1
 kind: List
 items:
-- apiVersion: v1
-  kind: PersistentVolumeClaim
-  spec:
-    resources:
-      requests:
-        storage: 10Gi
-    storageClassName: local-path
-  status:
-    capacity:
-      storage: 8Gi
-    phase: Bound
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    spec:
+      resources:
+        requests:
+          storage: 10Gi
+      storageClassName: local-path
+    status:
+      capacity:
+        storage: 8Gi
+      phase: Bound
 ```
 
 通过 `kubectl describe pvc` 发现 Events 中有以下 warning。
@@ -93,6 +92,7 @@ local-path   cluster.local/local-path-provisioner   Retain          WaitForFirst
 ```
 
 使用 local-path-provisioner 注意事项：
+
 1. local-path-provisioner 使用 hostPath 映射，不支持磁盘扩容，扩容后会出现以上 Warning。
 2. 不管是 K8S hostPath、Local volumes 还是 local-path-provisioner，都不支持限制磁盘大小，映射到主机的 hostPath 磁盘有多大，Pod 就能用多大。PV/PVC 声明的大小都只是声明并不起作用，所以也不用给 PV/PVC 尝试做扩容。
 3. 目前常用的 NFS 存储和 local-path-provisioner 一样，也不支持扩容和限制磁盘大小。

@@ -7,8 +7,8 @@ lastmod: 2024-04-16T23:05:07+08:00
 draft: false
 weight: 100
 images: []
-categories: [Spring Boot,Java]
-tags: [Spring Boot,Java]
+categories: [Spring Boot, Java]
+tags: [Spring Boot, Java]
 contributors: [l10178]
 pinned: false
 homepage: false
@@ -25,11 +25,11 @@ seo:
 
 从 Spring 到 Spring Boot，整体开发、运行方式主要变化。
 
-| -           | 当前（老）模式         | 新模式（本地开发）          | 新模式（线上运行）       |
-|-------------|----------------------|---------------------------|------------------------|
+| -           | 当前（老）模式       | 新模式（本地开发）          | 新模式（线上运行）     |
+| ----------- | -------------------- | --------------------------- | ---------------------- |
 | 开发习惯    | Spring + 外置 Tomcat | Spring Boot（embed tomcat） | Spring Boot War or Jar |
-| Java 版本   | 8、11、16、17           | 11、17、21（推荐）            | 11、17、21（推荐）         |
-| Tomcat 版本 | 8.x、9.x              | 9.x                       | 9.x（推荐）、10.x         |
+| Java 版本   | 8、11、16、17        | 11、17、21（推荐）          | 11、17、21（推荐）     |
+| Tomcat 版本 | 8.x、9.x             | 9.x                         | 9.x（推荐）、10.x      |
 
 说明：
 
@@ -180,19 +180,19 @@ actuator 的引入会带来一些额外收益，之前我们健康检测只检�
 
 - [OpenRewrite](https://docs.openrewrite.org/)
 
-   OpenRewrite 快速入门请参考：[使用 OpenRewrite 进行代码重构](https://www.xlabs.club/docs/platform/smart-code/)。
+  OpenRewrite 快速入门请参考：[使用 OpenRewrite 进行代码重构](https://www.xlabs.club/docs/platform/smart-code/)。
 
 - [EMT4J](https://github.com/adoptium/emt4j)
 
-   通过静态扫描指导从 Java 8 升级到 Java 17 需要注意的变更项。
+  通过静态扫描指导从 Java 8 升级到 Java 17 需要注意的变更项。
 
 - [tomcat-jakartaee-migration](https://github.com/apache/tomcat-jakartaee-migration)
 
-   Tomcat 9 到 10 迁移辅助工具。
+  Tomcat 9 到 10 迁移辅助工具。
 
 - [spring-boot-migrator](https://github.com/spring-projects-experimental/spring-boot-migrator)
 
-   Spring Boot 迁移工具，通过扫描输出 从 Spring 到 Spring Boot，以及 Spring Boot 3 迁移指导意见。
+  Spring Boot 迁移工具，通过扫描输出 从 Spring 到 Spring Boot，以及 Spring Boot 3 迁移指导意见。
 
 ### War 配置转移
 
@@ -208,139 +208,139 @@ webapp web.xml 配置如何转移到 spring boot war 形式。
 
 - com.google.common.io.Resources#getResource 无法获取到 jar 包内资源
 
-   如果是 `java -jar` 模式运行， `Thread.currentThread().getContextClassLoader().getResource(resourceName)` 形式的调用都无法获取 jar 包内资源，可考虑使用 `InputStream resourceFile = getClass().getResourceAsStream(resourceName);` 方式代替。
+  如果是 `java -jar` 模式运行， `Thread.currentThread().getContextClassLoader().getResource(resourceName)` 形式的调用都无法获取 jar 包内资源，可考虑使用 `InputStream resourceFile = getClass().getResourceAsStream(resourceName);` 方式代替。
 
 - PostConstruct 和 PreDestroy 注解不生效
 
-   参考链接 <https://stackoverflow.com/questions/18161682/why-is-postconstruct-not-called> 先逐个排除。  
+  参考链接 <https://stackoverflow.com/questions/18161682/why-is-postconstruct-not-called> 先逐个排除。  
    我所遇到的原因：PostConstruct、PreDestroy 等注解可能存在多个实现或者过个版本，比如以下 jar 包都可能包含：
 
-   ```console
-         javax.annotation-api-1.3.2.jar
-         jakarta.annotation-api-1.3.5.jar
-         jboss-annotations-api_1.3_spec-2.0.1.Final.jar
-   ```
+  ```console
+        javax.annotation-api-1.3.2.jar
+        jakarta.annotation-api-1.3.5.jar
+        jboss-annotations-api_1.3_spec-2.0.1.Final.jar
+  ```
 
-   解决方法：排除依赖，只保留 jakarta.annotation-api 一种，且只能有一个版本。
+  解决方法：排除依赖，只保留 jakarta.annotation-api 一种，且只能有一个版本。
 
 - kafka 使用报错，日志类似如下：
 
-   ```log
-   ERROR c.f.s.SenderManager cannot send, org.apache.kafka.common.KafkaException: org.apache.kafka.clients.producer.internals.DefaultPartitioner is not an instance of org.apache.kafka.clients.producer.Partitioner
-   ```
+  ```log
+  ERROR c.f.s.SenderManager cannot send, org.apache.kafka.common.KafkaException: org.apache.kafka.clients.producer.internals.DefaultPartitioner is not an instance of org.apache.kafka.clients.producer.Partitioner
+  ```
 
-   原因：因为 classpath 下包含多个不同版本的 kafka-client.jar，检查依赖项，确保只引用一个版本。
+  原因：因为 classpath 下包含多个不同版本的 kafka-client.jar，检查依赖项，确保只引用一个版本。
 
 - 告警：SLF4J: Class path contains multiple SLF4J bindings.
 
-   多个 jar 包含 SLF4J 实现，或引入了多个 logback 版本，请根据提示排除不需要的 jar 包。
+  多个 jar 包含 SLF4J 实现，或引入了多个 logback 版本，请根据提示排除不需要的 jar 包。
 
 - XML 中使用 AOP 注解，运行期报错如下（建议用到 AOP 的提前检查，因为运行期才会报错）：JoinPointMatch ClassNotFoundException
 
-   ```log
-   Caused by: java.lang.ClassNotFoundException: org.aspectj.weaver.tools.JoinPointMatch
-   at org.apache.catalina.loader.WebappClassLoaderBase.loadClass(WebappClassLoaderBase.java:1412)
-   at org.apache.catalina.loader.WebappClassLoaderBase.loadClass(WebappClassLoaderBase.java:1220)
-   ... 58 more
-   ```
+  ```log
+  Caused by: java.lang.ClassNotFoundException: org.aspectj.weaver.tools.JoinPointMatch
+  at org.apache.catalina.loader.WebappClassLoaderBase.loadClass(WebappClassLoaderBase.java:1412)
+  at org.apache.catalina.loader.WebappClassLoaderBase.loadClass(WebappClassLoaderBase.java:1220)
+  ... 58 more
+  ```
 
-   依赖 spring aop，请确认是否引入 `spring-boot-starter-aop`。
+  依赖 spring aop，请确认是否引入 `spring-boot-starter-aop`。
 
 - 本地使用 Java 17 启动，类似如下报错。
 
-   ```log
-   ERROR o.s.b.SpringApplication Application run failed java.lang.reflect.InaccessibleObjectException: Unable to make protected final java.lang.Class java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain) throws java.lang.ClassFormatError accessible: module java.base does not "opens java.lang" to unnamed module @443118b0
-         at java.base/java.lang.reflect.AccessibleObject.checkCanSetAccessible(AccessibleObject.java:354)
-         at java.base/java.lang.reflect.AccessibleObject.checkCanSetAccessible(AccessibleObject.java:297)
-         at java.base/java.lang.reflect.Method.checkCanSetAccessible(Method.java:199)
-         at java.base/java.lang.reflect.Method.setAccessible(Method.java:193)
-         at com.alibaba.dubbo.common.compiler.support.JavassistCompiler.doCompile(JavassistCompiler.java:123) [6 skipped]
-         at com.alibaba.dubbo.common.compiler.support.AbstractCompiler.compile(AbstractCompiler.java:59)
-         at com.alibaba.dubbo.common.compiler.support.AdaptiveCompiler.compile(AdaptiveCompiler.java:46)
-   ```
+  ```log
+  ERROR o.s.b.SpringApplication Application run failed java.lang.reflect.InaccessibleObjectException: Unable to make protected final java.lang.Class java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain) throws java.lang.ClassFormatError accessible: module java.base does not "opens java.lang" to unnamed module @443118b0
+        at java.base/java.lang.reflect.AccessibleObject.checkCanSetAccessible(AccessibleObject.java:354)
+        at java.base/java.lang.reflect.AccessibleObject.checkCanSetAccessible(AccessibleObject.java:297)
+        at java.base/java.lang.reflect.Method.checkCanSetAccessible(Method.java:199)
+        at java.base/java.lang.reflect.Method.setAccessible(Method.java:193)
+        at com.alibaba.dubbo.common.compiler.support.JavassistCompiler.doCompile(JavassistCompiler.java:123) [6 skipped]
+        at com.alibaba.dubbo.common.compiler.support.AbstractCompiler.compile(AbstractCompiler.java:59)
+        at com.alibaba.dubbo.common.compiler.support.AdaptiveCompiler.compile(AdaptiveCompiler.java:46)
+  ```
 
-   本地命令行中启动参数里主动追加以下参数（这些参数在发布系统的镜像里默认已经加了），IDEA 启动时设置到`VM options`里：
+  本地命令行中启动参数里主动追加以下参数（这些参数在发布系统的镜像里默认已经加了），IDEA 启动时设置到`VM options`里：
 
-   ```bash
-   --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.math=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
-   ```
+  ```bash
+  --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.math=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+  ```
 
 - Bean 重复定义错误，报错信息类似如下。
 
-   ```log
-   The bean 'eieaConverterImpl', defined in class path resource [spring/ei-ea-converter.xml], could not be registered. A bean with that name has already been defined in class path resource [spring/ei-ea-converter.xml] and overriding is disabled.
-   Action:
-   Consider renaming one of the beans or enabling overriding by setting spring.main.allow-bean-definition-overriding=true
-   ```
+  ```log
+  The bean 'eieaConverterImpl', defined in class path resource [spring/ei-ea-converter.xml], could not be registered. A bean with that name has already been defined in class path resource [spring/ei-ea-converter.xml] and overriding is disabled.
+  Action:
+  Consider renaming one of the beans or enabling overriding by setting spring.main.allow-bean-definition-overriding=true
+  ```
 
-   可能因为注解扫描范围增广或者有同样包多版本引入，导致扫描到多个。确认多处定义是否一致，如果不一致查看原项目哪个生效，以生效为准。如果一致，找到定义的地方查看是否能整个文件排除掉，实在不能在 application.properties 中设置 spring.main.allow-bean-definition-overriding=true 可解决。
+  可能因为注解扫描范围增广或者有同样包多版本引入，导致扫描到多个。确认多处定义是否一致，如果不一致查看原项目哪个生效，以生效为准。如果一致，找到定义的地方查看是否能整个文件排除掉，实在不能在 application.properties 中设置 spring.main.allow-bean-definition-overriding=true 可解决。
 
 - 如下报错 `class xxx is not visible from class loader`，常见于 dubbo 服务。
 
-   解决办法：不要用 spring-boot-devtools。 参考链接：<https://blog.csdn.net/zhailuxu/article/details/79305661>
+  解决办法：不要用 spring-boot-devtools。 参考链接：<https://blog.csdn.net/zhailuxu/article/details/79305661>
 
 - dubbo 服务 `java.io.IOException: invalid constant type: 18`，日志类似如下：
 
-   ```console
-   Wrapped by: java.lang.IllegalStateException: Can not create adaptive extenstion interface com.alibaba.dubbo.rpc.Protocol, cause: java.io.IOExc
-   eption: invalid constant type: 18
-      at com.alibaba.dubbo.common.extension.ExtensionLoader.createAdaptiveExtension(ExtensionLoader.java:723)
-      at com.alibaba.dubbo.common.extension.ExtensionLoader.getAdaptiveExtension(ExtensionLoader.java:455)
-      ... 29 common frames omitted
-   Wrapped by: java.lang.IllegalStateException: fail to create adaptive instance: java.lang.IllegalStateException: Can not create adaptive extens
-   tion interface com.alibaba.dubbo.rpc.Protocol, cause: java.io.IOException: invalid constant type: 18
-      at com.alibaba.dubbo.common.extension.ExtensionLoader.getAdaptiveExtension(ExtensionLoader.java:459)
-      at com.alibaba.dubbo.config.ServiceConfig.<clinit>(ServiceConfig.java:51)
-      ... 28 common frames omitted
-   ```
+  ```console
+  Wrapped by: java.lang.IllegalStateException: Can not create adaptive extenstion interface com.alibaba.dubbo.rpc.Protocol, cause: java.io.IOExc
+  eption: invalid constant type: 18
+     at com.alibaba.dubbo.common.extension.ExtensionLoader.createAdaptiveExtension(ExtensionLoader.java:723)
+     at com.alibaba.dubbo.common.extension.ExtensionLoader.getAdaptiveExtension(ExtensionLoader.java:455)
+     ... 29 common frames omitted
+  Wrapped by: java.lang.IllegalStateException: fail to create adaptive instance: java.lang.IllegalStateException: Can not create adaptive extens
+  tion interface com.alibaba.dubbo.rpc.Protocol, cause: java.io.IOException: invalid constant type: 18
+     at com.alibaba.dubbo.common.extension.ExtensionLoader.getAdaptiveExtension(ExtensionLoader.java:459)
+     at com.alibaba.dubbo.config.ServiceConfig.<clinit>(ServiceConfig.java:51)
+     ... 28 common frames omitted
+  ```
 
-   原因：缺少 javassist 或 javassist 版本太低。目前可用的版本是 `javassist:javassist:3.27.0-GA`。
+  原因：缺少 javassist 或 javassist 版本太低。目前可用的版本是 `javassist:javassist:3.27.0-GA`。
 
 - Spring Auto Configuration 常见排除：
 
-   ```console
-      An attempt was made to call a method that does not exist. The attempt was made from the following location:
-      org.springframework.boot.autoconfigure.mongo.MongoPropertiesClientSettingsBuilderCustomizer.applyUuidRepresentation(MongoPropertiesClientSettingsBuilderCustomizer.java:58)
-      The following method did not exist:
-         'com.mongodb.MongoClientSettings$Builder com.mongodb.MongoClientSettings$Builder.uuidRepresentation(org.bson.UuidRepresentation)'
-      The calling method's class, org.springframework.boot.autoconfigure.mongo.MongoPropertiesClientSettingsBuilderCustomizer, was loaded from the following location:
-   ```
+  ```console
+     An attempt was made to call a method that does not exist. The attempt was made from the following location:
+     org.springframework.boot.autoconfigure.mongo.MongoPropertiesClientSettingsBuilderCustomizer.applyUuidRepresentation(MongoPropertiesClientSettingsBuilderCustomizer.java:58)
+     The following method did not exist:
+        'com.mongodb.MongoClientSettings$Builder com.mongodb.MongoClientSettings$Builder.uuidRepresentation(org.bson.UuidRepresentation)'
+     The calling method's class, org.springframework.boot.autoconfigure.mongo.MongoPropertiesClientSettingsBuilderCustomizer, was loaded from the following location:
+  ```
 
-   Spring 默认增加很多 Auto Configuration，使用 support 时可能触发 Auto Configuration 但又缺少配置，或者依赖版本与 Spring Boot 不匹配，可主动排除掉。  
+  Spring 默认增加很多 Auto Configuration，使用 support 时可能触发 Auto Configuration 但又缺少配置，或者依赖版本与 Spring Boot 不匹配，可主动排除掉。
 
-   ```java
-   @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, MongoDataAutoConfiguration.class})
-   ```
+  ```java
+  @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, MongoDataAutoConfiguration.class})
+  ```
 
 - 关注 Spring Boot 默认 Path 解析器变更，Spring Boot 2.6 版本以后默认由 ANT_PATH_MATCHER 变为 PATH_PATTERN_PARSER。
 
-   双斜线 `//` 以前是可以匹配成功，目前版本会返回 404，比如 <http://localhost:8080//actuator/health>。
+  双斜线 `//` 以前是可以匹配成功，目前版本会返回 404，比如 <http://localhost:8080//actuator/health>。
 
-   默认禁用了后缀匹配，比如 `GET /projects/spring-boot.json` 将不能匹配到 `@GetMapping("/projects/spring-boot")`。
+  默认禁用了后缀匹配，比如 `GET /projects/spring-boot.json` 将不能匹配到 `@GetMapping("/projects/spring-boot")`。
 
-   据说，中文不主动进行 URLEncode 也会受影响，比如原来 `http://localhost/卫星实验室` 是能成功，目前也会 404。
+  据说，中文不主动进行 URLEncode 也会受影响，比如原来 `http://localhost/卫星实验室` 是能成功，目前也会 404。
 
-   PATH_PATTERN_PARSER 只支持末尾 `**` 匹配，不支持中间路径 `**` 正则匹配，比如：`/api/**/query` 不支持。
-  
-   功能说明和切换方式请参考官方文档：<https://docs.spring.io/spring-boot/docs/current/reference/html/web.html#web.servlet.spring-mvc.content-negotiation>.
+  PATH_PATTERN_PARSER 只支持末尾 `**` 匹配，不支持中间路径 `**` 正则匹配，比如：`/api/**/query` 不支持。
+
+  功能说明和切换方式请参考官方文档：<https://docs.spring.io/spring-boot/docs/current/reference/html/web.html#web.servlet.spring-mvc.content-negotiation>.
 
 ## 参考资料
 
 - 从 SpringMVC 迁移到 SpringBoot 的经验总结
 
-   <https://juejin.cn/post/6844903640361074696>
+  <https://juejin.cn/post/6844903640361074696>
 
-   <https://juejin.cn/post/6844903573453537294>
+  <https://juejin.cn/post/6844903573453537294>
 
-   <https://juejin.cn/post/7129751916002672654>
+  <https://juejin.cn/post/7129751916002672654>
 
 - 从 Java8 升级到 jdk17 的全过程记录
 
-   <https://juejin.cn/post/7258170075198259257>
+  <https://juejin.cn/post/7258170075198259257>
 
 - 从 JUnit 4 迁移到 JUnit 5
 
-   <https://zhuanlan.zhihu.com/p/144763642>
+  <https://zhuanlan.zhihu.com/p/144763642>
 
 - 我服了！SpringBoot 升级后这服务我一个星期都没跑起来
 
@@ -350,19 +350,19 @@ webapp web.xml 配置如何转移到 spring boot war 形式。
 
 - Spring Boot 2 到 Spring Boot 3 官方迁移指南
 
-   <https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.0-Migration-Guide>
+  <https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.0-Migration-Guide>
 
-   <https://www.baeldung.com/spring-boot-3-migration>
+  <https://www.baeldung.com/spring-boot-3-migration>
 
 - Spring Boot 2.7.6 升级 3.1.0 爬坑指北
 
-   <https://juejin.cn/post/7237029359135408165>
+  <https://juejin.cn/post/7237029359135408165>
 
 - Spring Boot 3.1 的新特性、升级说明以及核心功能的改进
 
-   <https://juejin.cn/post/7280787657013002301>
+  <https://juejin.cn/post/7280787657013002301>
 
-   <https://juejin.cn/post/7170907270631718920>
+  <https://juejin.cn/post/7170907270631718920>
 
 - Why is PostConstruct not called
 

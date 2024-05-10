@@ -7,7 +7,7 @@ lastmod: 2024-04-29T21:49:22+08:00
 draft: false
 weight: 50
 categories: []
-tags: [k8s,pulumi]
+tags: [k8s, pulumi]
 contributors: [l10178]
 pinned: false
 homepage: false
@@ -36,70 +36,69 @@ import * as tls from "@pulumi/tls";
 
 // 部署 cert-manager Helm chart
 const certManagerRelease = new kubernetes.helm.v3.Release("cert-manager", {
-    name: "cert-manager",
-    chart: "cert-manager",
-    version: "1.14.5",
-    namespace: "cert-manager",
-    createNamespace: true,
-    timeout: 600,
-    repositoryOpts: {
-        repo: "https://charts.jetstack.io",
-    },
-    values: {
-        installCRDs: true,
-    },
+  name: "cert-manager",
+  chart: "cert-manager",
+  version: "1.14.5",
+  namespace: "cert-manager",
+  createNamespace: true,
+  timeout: 600,
+  repositoryOpts: {
+    repo: "https://charts.jetstack.io"
+  },
+  values: {
+    installCRDs: true
+  }
 });
 
 // 生成一个 CA private key
 const caPrivateKey = new tls.PrivateKey("caPrivateKey", {
-    algorithm: "RSA",
+  algorithm: "RSA"
 });
 
 // 生成一个 自签名 CA 证书
 const caCert = new tls.SelfSignedCert("caCert", {
-    // keyAlgorithm: "RSA",
-    privateKeyPem: caPrivateKey.privateKeyPem,
-    isCaCertificate: true,
-    validityPeriodHours: 87600, // 10 year
-    allowedUses: [
-        "cert_signing",
-        "crl_signing",
-    ],
-    subject: {
-        commonName: "your.domain.com",
-        organization: "Xlabs Club",
-    },
+  // keyAlgorithm: "RSA",
+  privateKeyPem: caPrivateKey.privateKeyPem,
+  isCaCertificate: true,
+  validityPeriodHours: 87600, // 10 year
+  allowedUses: ["cert_signing", "crl_signing"],
+  subject: {
+    commonName: "your.domain.com",
+    organization: "Xlabs Club"
+  }
 });
 
 // 生成一个带有 CA crt 和 key 的 Kubernetes Secret
 const caSecret = new kubernetes.core.v1.Secret("caSecret", {
-    metadata: {
-        name: "selfsigned-cert-manager-ca",
-        namespace: "cert-manager",
-    },
-    type: "Opaque",
-    stringData: {
-        "tls.crt": caCert.certPem,
-        "tls.key": caPrivateKey.privateKeyPem,
-    },
+  metadata: {
+    name: "selfsigned-cert-manager-ca",
+    namespace: "cert-manager"
+  },
+  type: "Opaque",
+  stringData: {
+    "tls.crt": caCert.certPem,
+    "tls.key": caPrivateKey.privateKeyPem
+  }
 });
 
 // 创建一个自签名的 ClusterIssuer 给 ingress 用
-const clusterIssuer = new kubernetes.apiextensions.CustomResource("selfsigned-issuer", {
+const clusterIssuer = new kubernetes.apiextensions.CustomResource(
+  "selfsigned-issuer",
+  {
     apiVersion: "cert-manager.io/v1",
     kind: "ClusterIssuer",
     metadata: {
-        name: "selfsigned-issuer",
-        // 注意 ClusterIssuer 和 caSecret 放在同一个 namespace，不写 namespace 时 ClusterIssuer 找不到 caSecret
-        namespace: "cert-manager",
+      name: "selfsigned-issuer",
+      // 注意 ClusterIssuer 和 caSecret 放在同一个 namespace，不写 namespace 时 ClusterIssuer 找不到 caSecret
+      namespace: "cert-manager"
     },
     spec: {
-        ca: {
-            secretName: caSecret.metadata.name,
-        },
-    },
-},
-    { dependsOn: certManagerRelease }
+      ca: {
+        secretName: caSecret.metadata.name
+      }
+    }
+  },
+  { dependsOn: certManagerRelease }
 );
 
 export const certManagerVersion = certManagerRelease.version;
@@ -107,7 +106,6 @@ export const clusterIssuerName = clusterIssuer.metadata.name;
 
 // Export CA 证书，便于客户端导入信任证书
 export const caCertificatePem = caCert.certPem;
-
 ```
 
 以上执行 `pulumi up` 后，我们就得到了一个自签名的 CA 证书、一个可用于为 ingress 自动签发 TLS 的 ClusterIssuer。

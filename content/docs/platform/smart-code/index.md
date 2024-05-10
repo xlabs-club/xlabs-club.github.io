@@ -90,7 +90,6 @@ recipeList:
   - org.openrewrite.java.spring.boot2.SpringBoot2BestPractices
   - org.openrewrite.java.migrate.UpgradeToJava21
   - org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_2
-
 ```
 
 而其中每个食谱又可能包含多个，比如上面的 [org.openrewrite.java.spring.boot2.SpringBoot2BestPractices](https://docs.openrewrite.org/recipes/java/spring/boot2/springboot2bestpractices) 又包含以下列表：
@@ -111,7 +110,6 @@ recipeList:
   - org.openrewrite.java.spring.NoAutowiredOnConstructor
   - org.openrewrite.java.spring.boot2.RestTemplateBuilderRequestFactory
   - org.openrewrite.java.spring.boot2.ReplaceDeprecatedEnvironmentTestUtils
-
 ```
 
 如果官方的某个食谱不和你的胃口，比如想在最佳实践中去掉或新增某个自定义食谱怎么办，可以自己定义一个 `rewrite.yml` 文件，类似上面的 yaml 文件，在文件中自行组合食谱。注意 `rewrite.yml` 文件要放到 maven 项目的根目录下，更多关于文件的说明参考 [Refactoring with declarative YAML recipes](https://docs.openrewrite.org/running-recipes/popular-recipe-guides/authoring-declarative-yaml-recipes)。
@@ -226,7 +224,7 @@ Found these recipes:
   43) migrate-boot-2.3-2.4
      -> Migrate from Spring Boot 2.3 to 2.4
   44) upgrade-boot-1x-to-2x
-     -> Migrate applications built on previous versions of Spring Boot to the latest Spring Boot 2.7 release. 
+     -> Migrate applications built on previous versions of Spring Boot to the latest Spring Boot 2.7 release.
 
 ```
 
@@ -278,7 +276,7 @@ pom.xml 文件中增加以下配置，然后执行 `mvn rewrite:run`。
 下面介绍下我们将 Spring 项目迁移到 Spring Boot 的过程，以及中间遇到的一些问题。
 
 | 升级项  | 迁移前          | 迁移后          |
-|---------|-----------------|-----------------|
+| ------- | --------------- | --------------- |
 | Runtime | Spring + Tomcat | Spring Boot 3.2 |
 | Spring  | Spring 4        | Spring 6        |
 | Junit   | Junit 4         | Junit 5         |

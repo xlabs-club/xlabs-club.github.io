@@ -1,44 +1,44 @@
 .container-fw {
-  // 原 docs 文本阅读内容是1200px，太窄了，加宽
-  max-width: 1800px;
+    // 原 docs 文本阅读内容是1200px，太窄了，加宽
+    max-width: 1800px;
 }
 
 .btn-toggle {
-  text-transform: none;
+    text-transform: none;
 }
 
 .animation {
-  border-radius: 64px;
-  height: 320px;
-  width: 320px;
+    border-radius: 64px;
+    height: 320px;
+    width: 320px;
 }
 
-.animation:hover{
-  transform: scale(1.25);
-  border-radius: 200px;
+.animation:hover {
+    transform: scale(1.25);
+    border-radius: 200px;
 }
 
 // DocSearch
 
 .DocSearch-Container {
-  z-index: 2000 !important;
+    z-index: 2000 !important;
 }
 
 .DocSearch-Hit-title {
-  overflow: hidden;
+    overflow: hidden;
 }
 
 .DocSearch-Hit-icon {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 .DocSearch-Hits mark {
-  padding: 0;
+    padding: 0;
 }
 
-@media (max-width:768px) {
-  .DocSearch-Modal {
-    position: fixed !important;
-  }
+@media (max-width: 768px) {
+    .DocSearch-Modal {
+        position: fixed !important;
+    }
 }
