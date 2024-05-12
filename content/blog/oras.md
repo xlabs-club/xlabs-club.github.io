@@ -1,6 +1,6 @@
 ---
 title: "Oras"
-description: ""
+description: "使用 OCI Artifacts、ORAS 和 Harbor 标准化软件交付"
 summary: ""
 date: 2024-04-12T10:13:01+08:00
 lastmod: 2024-04-12T10:13:01+08:00
@@ -17,3 +17,6 @@ seo:
   canonical: "" # custom canonical URL (optional)
   noindex: false # false (default) or true
 ---
+
+see：<https://zhuanlan.zhihu.com/p/144019487>
+see：<https://zhuanlan.zhihu.com/p/640246011>
