@@ -54,6 +54,7 @@ Sentinel 的基础知识请参考官方文档描述，这里单独介绍一些�
 8. 限流中如果有增加等待效果会使接口变慢，各调用链需要关注调用超时和事务配置。
 9. 目前 sentinel-web-servlet 和 sentinel-spring-webmvc-adapter 均不支持热点参数限流。为了支持热点参数需要自行扩展。
 10. sentinel-web-servlet 和 sentinel-spring-webmvc-adapter 会将每个到来的不同的 URL 都作为不同的资源处理，因此对于 REST 风格的 API，需要自行实现 UrlCleaner 接口清洗一下资源（比如将满足 /foo/:id 的 URL 都归到 /foo/\* 资源下）。否则会导致资源数量过多，超出资源数量阈值（目前是 6000）时多出的资源的规则将不会生效。
+11. Java 中 `sentinel-time-tick-thread` 线程会额外多占用约 1-2% CPU，详细代码参考 `com.alibaba.csp.sentinel.util.TimeUtil`。
 
 一些文档中尚未更新但是大家可能关心的内容：
 
