@@ -80,7 +80,7 @@ JVM 关于使用量和提交量的解释。
 `Used Size`：The used space is the amount of memory that is currently occupied by Java objects.
 当前实际真的用着的内存，每个 bit 都对应了有值的。
 
-`Committed Size`：The committed size is the amount of memory guaranteed to be available for use by the Java virtual machine.  
+`Committed Size`：The committed size is the amount of memory guaranteed to be available for use by the Java virtual machine.
 操作系统向 JVM 保证可用的内存大小，或者说 JVM 向操作系统已经要的内存。站在操作系统的角度，就是已经分出去（占用）的内存，保证给 JVM 用了，其他进程不能用了。 由于操作系统的内存管理是惰性的，对于已申请的内存虽然会分配地址空间，但并不会直接占用物理内存，真正使用的时候才会映射到实际的物理内存，所以 committed > res 也是很可能的。
 
 ## Java 进程内存分析
@@ -399,6 +399,8 @@ Java 内存不交还，几种情况：
 jcmd <pid> GC.heap_dump <file-path>
 # 这个命令执行，JVM 会先触发 gc，然后再统计信息。
 jmap -dump:live,format=b,file=/opt/tomcat/logs/dump.hprof <pid>
+# dump all
+jmap -dump:format=b,file=/opt/tomcat/logs/dump.hprof <pid>
 ```
 
 使用 jmap 输出内存占用概览。
@@ -529,3 +531,7 @@ cgroup 内存泄露问题：<https://www.cnblogs.com/leffss/p/15019898.html>
 logback 之 AsyncAppender 的原理、源码及避坑建议： <https://developer.aliyun.com/article/1127879>
 
 the rocketmq_client.log file spent too much cache/buffer memory： <https://github.com/apache/rocketmq/issues/3252>
+
+生产环境 Java ehcache 内存泄漏分析与解决 :<https://www.cnblogs.com/cgli/p/17201943.html>
+
+ehcache DirectByteBuffer leak when using persistent storage :<https://github.com/ehcache/ehcache3/issues/2868>
