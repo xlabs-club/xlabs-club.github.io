@@ -18,5 +18,6 @@ seo:
   noindex: false # false (default) or true
 ---
 
+镜像搬运工具：<https://github.com/containers/skopeo>
 see：<https://zhuanlan.zhihu.com/p/144019487>
 see：<https://zhuanlan.zhihu.com/p/640246011>
