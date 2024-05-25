@@ -1,9 +1,9 @@
 ---
-title: "GitOps 场景下如何管理 Kubernetes Secret"
+title: "GitOps 中的 Kubernetes Secret 管理"
 description: "GitOps 场景下如何管理 Kubernetes Secret"
 summary: ""
-date: 2024-05-17T11:41:08+08:00
-lastmod: 2024-05-17T11:41:08+08:00
+date: 2024-05-17T21:41:08+08:00
+lastmod: 2024-05-17T21:41:08+08:00
 draft: true
 weight: 50
 categories: [k8s]
@@ -17,3 +17,5 @@ seo:
   canonical: "" # custom canonical URL (optional)
   noindex: false # false (default) or true
 ---
+
+介绍 GitOps 中几种 Kubernetes Secret 管理方式。
