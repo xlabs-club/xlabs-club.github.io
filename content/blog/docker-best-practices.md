@@ -1,14 +1,14 @@
 ---
-title: "容器镜像制作最佳实践，研发 DevOps 平台建设实践经验和踩坑记录"
-description: "容器镜像制作最佳实践，研发 DevOps 平台建设实践经验和踩坑记录"
+title: "容器镜像制作最佳实践，Dockerfile 实践经验和踩坑记录"
+description: "容器镜像制作最佳实践，Dockerfile 实践经验和踩坑记录"
 summary: ""
 date: 2024-05-24T20:56:08+08:00
 lastmod: 2024-05-24T20:56:08+08:00
-draft: true
+draft: false
 weight: 50
 categories: []
-tags: []
-contributors: []
+tags: [k8s]
+contributors: [l10178]
 pinned: false
 homepage: false
 seo:
@@ -18,54 +18,47 @@ seo:
   noindex: false # false (default) or true
 ---
 
-分享我们在容器镜像制作过程中的一些经验，以及踩过的坑。
+整理了由 Docker 官方和社区推荐的用于构建高效镜像的最佳实践和方法，当然有些可能并不适用于你，请注意分辨。
 
-## 容器镜像制作最佳实践
+1. 使用官方镜像作为基础镜像。官方镜像经过了充分验证并集成了最佳实践。
 
-整理的一些网上流传已久的一些最佳实践，当然有些可能已经过时，有些可能并不适用于你，请注意分辨。
+    ```sh
+    正例：
+        FROM node
+    反例：
+        FROM ubuntu
+        RUN apt-get install -y node
+    ```
 
-使用官方镜像，不要自己安装 xxx。
-Small Size
-Tag
-优化 cacheing layers， all flowing layers will re-created
-dockerignore
-多阶段构建
-no root use：独立的 group AND use
-镜像安全扫描。
-use buildkit
+2. 保持尽可能小的镜像大小，绝不安装无关依赖。
+3. 严格的版本化管理，使用确定性的标签，基础镜像禁用 latest。
+4. 使用 .dockerignore 文件排除文件干扰。
+5. 最经常变化的命令越往后执行，充分利用分层缓存机制。
+6. Dockerfile 中每行命令产生一层，请合并命令执行，最大限度减少层数。
+7. 使用多阶段构建，减少所构建镜像的大小。
+8. 禁用 root 用户，使用独立的 use 和 group。
+9. 启用镜像安全扫描，并及时更新。
+10. 一个容器只专注做一件事情。
+11. Java 应用程序不要使用 PID 为 1 的进程，使用 tini 或 dump-init 管理进程，避免僵尸进程。
+
+以上都是一些基本的原则，但是实际工作的过程中，大家可能会像我一样纠结几个问题。
+
+- 关于第 1 点，一定要使用官方镜像吗。未必，看情况。比如我们作为平台，涉及很多种开发语言，很多种组合场景，每个官方基础镜像可能都不同，就会自建基础镜像，以便统一操作系统、统一脚本和安全维护。为什么要统一操作系统，操作系统投的毒，就像出骨鱼片里未净的刺，给人一种不期待的伤痛。
+- 为了镜像大小和安全，一定要使用 Alpine 或 distroless 镜像吗。我的建议是不要使用 Alpine 镜像，如有能力才使用 distroless 镜像。毕竟 libc 的坑，谁痛谁知道。
 
 ## 我们的镜像策略
 
-基础镜像和镜像分层策略：distroless
+## Dockerfile 编写小技巧
 
-Agent、数据文件
-工具包：可自由使用的，比如 arthas，策略管控（时间点）； 不可自由使用的
+## 辅助工具
+
+### kubectl debug
+
 kubectl debug 1.18
 
-## kubectl debug
-
-我们需要一个包含 tcpdump 工具的调试容器镜像。例如，我们可以使用 nicolaka/netshoot 镜像，这是一个常用的网络调试工具镜像，包含 tcpdump 和其他网络诊断工具。
-
-为 Kubernetes 工作负载使用重型容器镜像效率低下（我们都经历过这些需要永远完成的 CI/CD 管道）并且不安全（你拥有的东西越多，遇到严重漏洞的机会就越大）。因此，让调试工具即时进入行为不端的 Pod 是一项非常需要的能力，而 Kubernetes 临时容器在将它引入我们的集群方面做得很好。
-
-我非常喜欢使用改进后的 kubectl debug 功能。然而，它显然需要大量的低级容器（和 Kubernetes）知识才能有效使用。否则，会出现各种令人惊讶的行为，从丢失的进程开始，到 Pod 的意外大规模重启结束。
-
-我并不是说你在创建 Java Docker 时不应使用这些工具。但是，如果你打算发布这些镜像，则应研究 Java 镜像所有方面的安全。镜像扫描将是一个好的开始。从安全性的角度来看，我的观点是，以完全控制和正确的方式创建 Dockerfile，是创建镜像更好，更安全的方式。
-
-## Tools
+### skopeo
 
 镜像搬运工具：<https://github.com/containers/skopeo>
-
-多阶段构建是最灵活和强大的方法，推荐在可能的情况下优先使用。对于需要额外合并的场景，可以选择 docker-squash 工具或者 BuildKit 的 --squash 选项。
-
-```bash
-
-# Enable Docker BuildKit
-export DOCKER_BUILDKIT=1
-
-# Build and squash the image
-docker build --tag myapp:latest --squash .
-```
 
 ## 参考资料
 
