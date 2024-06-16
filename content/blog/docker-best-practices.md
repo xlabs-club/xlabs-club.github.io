@@ -22,10 +22,10 @@ seo:
 
 1. 使用官方镜像作为基础镜像。官方镜像经过了充分验证并集成了最佳实践。
 
-    ```sh
-    正例：
+    ```dockerfile
+    # 正例：
         FROM node
-    反例：
+    # 反例：
         FROM ubuntu
         RUN apt-get install -y node
     ```
@@ -49,6 +49,34 @@ seo:
 ## 我们的镜像策略
 
 ## Dockerfile 编写小技巧
+
+- 使用 Heredocs 语法代替又长又臭的字符串拼接，当然 Heredocs 支持更多功能比如 run python、多文件内容拷贝，以下举例只是最常用的。
+
+  ```dockerfile
+  # 以前
+  RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y ...
+
+  # 使用 Heredocs
+  RUN <<EOF
+    apt-get update
+    apt-get upgrade -y
+    apt-get install -y ...
+  EOF
+
+  # 单文件或多文件内容拷贝
+  COPY <<EOF /usr/share/nginx/html/index.html
+  (your index page goes here)
+  EOF
+
+  COPY <<robots.txt <<humans.txt /usr/share/nginx/html/
+  (robots content)
+  robots.txt
+  (humans content)
+  humans.txt
+
+  ```
 
 ## 辅助工具
 
