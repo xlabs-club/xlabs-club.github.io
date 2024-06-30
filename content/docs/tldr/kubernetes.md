@@ -63,7 +63,7 @@ chmod 600 ~/.kube/config
 
 ```
 
-- 获取某个 namespace 下的全部资源，找出你看不见的资源，常用于 CR/CRD 清理。
+- 获取某个 namespace 下的全部资源，找出你看不见的资源，常用于 webhook/CR/CRD 等资源清理，解决强制删除失败。
 
 ```sh
 
