@@ -59,8 +59,6 @@ OpenRewrite 一个最核心的概念是 `Recipe`，由于我是国内首个翻�
 
 一个 Recipe 可以包含多个 Recipe，可以层级累加，比如 `UpgradeSpringBoot_3_2`可能包含对 pom.xml、application.properties、java main source、java test source 的升级改动。
 
-OpenRewrite 支持使用 maven、gradle 以及使用 SaaS 服务 Moderne cli `mod` 这三种方法，maven、gradle 定制比较方便，dependency 管理也比较灵活，另外某些食谱只有 maven、gradle 支持，下面的例子都是使用 maven 执行。
-
 初次使用 OpenRewrite，可通过官方提供的 [热门指导](https://docs.openrewrite.org/running-recipes/popular-recipe-guides) 找到自己感兴趣的按步骤操作。
 
 [![popular-recipe-guides](./popular-recipe-guides.png)](./popular-recipe-guides.png)
@@ -68,6 +66,19 @@ OpenRewrite 支持使用 maven、gradle 以及使用 SaaS 服务 Moderne cli `mo
 更多功能可通过 [食谱分类](https://docs.openrewrite.org/recipes) 搜索，也可通过官网右上方的搜索按钮按照关键字搜索，也可通过 `mvn rewrite:discover` 列出可用的食谱。
 
 [![recipes](./recipes.png)](./recipes.png)
+
+### 运行方式
+
+OpenRewrite 支持使用 maven、gradle 以及使用 SaaS 服务 Moderne cli `mod` 这三种方法。
+
+1. 使用 maven、gradle 文件定制比较方便，dependency 管理也比较灵活，另外某些食谱只有 maven、gradle 支持，缺点则是需要修改 pom、gradle 文件。
+2. 使用 maven 命令行直接执行插件任务并指定属性，不用改 pom.xml 更方便，缺点是不方便管理 dependencies。
+
+   ```bash
+   mvn -U org.openrewrite.maven:rewrite-maven-plugin:run -Drewrite.recipeArtifactCoordinates=org.openrewrite.recipe:rewrite-migrate-java:RELEASE -Drewrite.activeRecipes=org.openrewrite.java.migrate.jakarta.JakartaEE10 -Drewrite.exportDatatables=true
+   ```
+
+3. 使用 SaaS 服务提供的 Moderne CLI 最方便，比如 `mod run . --recipe JakartaEE10`, 需要注册 license。
 
 ### 最佳实践和定制
 
@@ -233,6 +244,16 @@ Found these recipes:
 下面使用 maven 方式演示几个例子，注意如果是多模块项目运行可能出错，参考官方说明：[Running Rewrite on a multi-module Maven project](https://docs.openrewrite.org/running-recipes/multi-module-maven)。
 
 友情提醒：初次使用会下载很多依赖 jar 包，速度可能比较慢，切换到你最快的 maven 仓库。
+
+### 升级到 JakartaEE10，从 javax 到 jakarta
+
+在 maven 项目父（根）模块下执行以下命令即可，注意命令可能随着版本变化，请去官网查看最新版本示例。
+
+```bash
+mvn -U org.openrewrite.maven:rewrite-maven-plugin:run -Drewrite.recipeArtifactCoordinates=org.openrewrite.recipe:rewrite-migrate-java:RELEASE -Drewrite.activeRecipes=org.openrewrite.java.migrate.jakarta.JakartaEE10 -Drewrite.exportDatatables=true
+```
+
+执行完成后可根据 git diff 查看修改效果。
 
 ### 代码清理
 
