@@ -245,9 +245,9 @@ Found these recipes:
 
 友情提醒：初次使用会下载很多依赖 jar 包，速度可能比较慢，切换到你最快的 maven 仓库。
 
-### 升级到 JakartaEE10，从 javax 到 jakarta
+### 升级到 JakartaEE
 
-在 maven 项目父（根）模块下执行以下命令即可，注意命令可能随着版本变化，请去官网查看最新版本示例。
+从 javax 到 jakarta，在 maven 项目父（根）模块下执行以下命令即可，注意命令可能随着版本变化，请去官网查看最新版本示例。
 
 ```bash
 mvn -U org.openrewrite.maven:rewrite-maven-plugin:run -Drewrite.recipeArtifactCoordinates=org.openrewrite.recipe:rewrite-migrate-java:RELEASE -Drewrite.activeRecipes=org.openrewrite.java.migrate.jakarta.JakartaEE10 -Drewrite.exportDatatables=true
