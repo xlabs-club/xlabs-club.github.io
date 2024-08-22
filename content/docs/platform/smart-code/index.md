@@ -241,9 +241,20 @@ Found these recipes:
 
 ## OpenRewrite 使用示例
 
-下面使用 maven 方式演示几个例子，注意如果是多模块项目运行可能出错，参考官方说明：[Running Rewrite on a multi-module Maven project](https://docs.openrewrite.org/running-recipes/multi-module-maven)。
+下面使用 maven 方式演示几个例子，注意如果是 maven 多模块项目，请在父模块下执行，否则运行可能出错，参考官方说明：[Running Rewrite on a multi-module Maven project](https://docs.openrewrite.org/running-recipes/multi-module-maven)。
 
 友情提醒：初次使用会下载很多依赖 jar 包，速度可能比较慢，切换到你最快的 maven 仓库。
+
+### 升级到 Java 21
+
+从任意版本升级到 Java 21。
+
+```bash
+mvn -U org.openrewrite.maven:rewrite-maven-plugin:run -Drewrite.recipeArtifactCoordinates=org.openrewrite.recipe:rewrite-migrate-java:RELEASE -Drewrite.activeRecipes=org.openrewrite.java.migrate.UpgradeToJava21
+
+# 或者手动指定版本
+mvn -U org.openrewrite.maven:rewrite-maven-plugin:5.31.0:run -Drewrite.recipeArtifactCoordinates=org.openrewrite.recipe:rewrite-migrate-java:2.14.0 -Drewrite.activeRecipes=org.openrewrite.java.migrate.UpgradeToJava21
+```
 
 ### 升级到 JakartaEE
 
