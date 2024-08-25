@@ -1,5 +1,5 @@
 ---
-title: "从 Java 8 升级到 Java 21，变更评估和辅助工具介绍"
+title: "从 Java 8 升级到 Java 21，踩坑记录、变更评估和工具介绍"
 description: ""
 summary: ""
 date: 2024-05-23T21:03:11+08:00
@@ -160,6 +160,8 @@ Location: refclass:file:my-java-project-dir/target/classes/com/mypackage/spring/
 [OpenRewrite](https://docs.openrewrite.org/): 一键升级依赖包，重构源码，入门指导可参考我的另一篇博客：[智能代码重构](https://www.xlabs.club/docs/platform/smart-code/)。 OpenRewrite 更成熟易用。
 
 [JaCoLine](https://jacoline.dev/inspect): 检查 Java 命令行选项的问题，识别出已经过时不支持的参数。
+
+## 遇见问题和解决办法
 
 ## 参考资料
 

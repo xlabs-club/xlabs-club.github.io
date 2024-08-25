@@ -322,6 +322,8 @@ pom.xml 文件中增加以下配置，然后执行 `mvn rewrite:run`。
 
    ```console
 
+   # 注意在执行 spring-boot-migrator 前，先在你要升级的项目中执行 mvn clean package install，拉取和安装依赖包，避免下面的 scan 步骤中下载依赖包失败
+
    # 使用 Java 17 启动 spring-boot-migrator 程序
    $ java -jar spring-boot-migrator.jar
 
