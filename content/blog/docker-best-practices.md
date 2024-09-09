@@ -50,7 +50,7 @@ seo:
 
 ## Dockerfile 编写小技巧
 
-- 使用 Heredocs 语法代替又长又臭的字符串拼接，当然 Heredocs 支持更多功能比如 run python、多文件内容拷贝，以下举例只是最常用的。
+- 使用 Heredocs 语法代替又长又臭的字符串拼接，当然 Heredocs 支持更多功能比如 run python、多文件内容拷贝，具体请参考官方文档。
 
   ```dockerfile
   # 以前
@@ -65,11 +65,12 @@ seo:
     apt-get install -y ...
   EOF
 
-  # 单文件或多文件内容拷贝
+  # 单文件内容拷贝，直接生成文件内容到目标文件
   COPY <<EOF /usr/share/nginx/html/index.html
   (your index page goes here)
   EOF
 
+  # 多文件内容拷贝，每个文件指定不同的文件内容
   COPY <<robots.txt <<humans.txt /usr/share/nginx/html/
   (robots content)
   robots.txt
@@ -78,11 +79,30 @@ seo:
 
   ```
 
+- 使用 ARG 变量动态构建。
+
+  ```dockerfile
+  # ARG 可写默认值，也可不写
+  ARG TOMCAT_TAG=9.0.93-jre21
+  # 把 ARG 放到 FROM 的前面，FROM 指令即可使用变量
+  FROM docker.io/tomcat:${TOMCAT_TAG}
+  # 想在 FROM 后面继续使用 ARG，需在 FROM 后再声明一次
+  ARG TOMCAT_TAG=9.0.93-jre21
+  RUN echo "Tomcat tag is ${TOMCAT_TAG}"
+
+  ```
+
+- 使用 `COPY --from` 代替 curl 或 wget 静态文件下载，适用于一些 COPY 即可用的文件。
+
+  ```dockerfile
+  # 去 github.com releases 下载文件可能很慢，有些组件本身有 docker 版本，COPY 来用
+  ARG JMX_VER=1.0.1
+  FROM docker.io/nxest/tomcat-jmx-agent:${JMX_VER} AS tomcat-jmx-agent
+  COPY --from=tomcat-jmx-agent /plugins /opt/tomcat/plugins
+
+  ```
+
 ## 辅助工具
-
-### kubectl debug
-
-kubectl debug 1.18
 
 ### skopeo
 
