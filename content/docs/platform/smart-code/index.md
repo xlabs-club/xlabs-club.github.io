@@ -36,7 +36,7 @@ seo:
 
 比如 Java 领域一些热门的应用场景：
 
-- Java 版本升级：从 Java 8 到 Java 17，从 Java EE 到 Jakarta EE 。
+- Java 版本升级：从 Java 8 到 Java 21，从 Java EE 到 Jakarta EE 。
 - Spring 框架迁移：从 Spring 5 到 Spring 6，从 Spring Boot 2 到 Spring Boot 3。
 - 测试框架迁移： 从 Junit 4 到 Junit 5。
 - 依赖管理：自动更新 Java 项目的 Maven 或 Gradle 依赖，确保使用最新和最安全的库版本。
@@ -61,6 +61,8 @@ OpenRewrite 一个最核心的概念是 `Recipe`，由于我是国内首个翻�
 
 初次使用 OpenRewrite，可通过官方提供的 [热门指导](https://docs.openrewrite.org/running-recipes/popular-recipe-guides) 找到自己感兴趣的按步骤操作。
 
+另外就是食谱很多，一个一个用很麻烦，可优先考虑 `best practices` 系列，里面聚合了多个食谱。
+
 [![popular-recipe-guides](./popular-recipe-guides.png)](./popular-recipe-guides.png)
 
 更多功能可通过 [食谱分类](https://docs.openrewrite.org/recipes) 搜索，也可通过官网右上方的搜索按钮按照关键字搜索，也可通过 `mvn rewrite:discover` 列出可用的食谱。
@@ -68,6 +70,8 @@ OpenRewrite 一个最核心的概念是 `Recipe`，由于我是国内首个翻�
 [![recipes](./recipes.png)](./recipes.png)
 
 ### 运行方式
+
+友情提示：运行前请把代码交给 Git 管理，并 checkout 一个全新的分支，便于比对自动修改了哪些代码。
 
 OpenRewrite 支持使用 maven、gradle 以及使用 SaaS 服务 Moderne cli `mod` 这三种方法。
 
@@ -256,6 +260,32 @@ mvn -U org.openrewrite.maven:rewrite-maven-plugin:run -Drewrite.recipeArtifactCo
 mvn -U org.openrewrite.maven:rewrite-maven-plugin:5.31.0:run -Drewrite.recipeArtifactCoordinates=org.openrewrite.recipe:rewrite-migrate-java:2.14.0 -Drewrite.activeRecipes=org.openrewrite.java.migrate.UpgradeToJava21
 ```
 
+OpenRewrite 会自动替换一些 Java 21 支持的新特性，如：
+
+1. 大文本块 JEP 378: Text Blocks，自动优化格式化。
+2. 模式匹配增强：支持在执行 instanceof 操作时同时定义指定类型的新变量，省却了类型转换的过程。
+3. String 类增加的新格式化方法： formatted(Object…​ args)。
+4. 排序性集合：可以直接使用 getFirst() 和 getLast() 来获取第一个和最后一个集合元素了。参考： JEP 431: Sequenced Collections。
+
+### Base64 方法替换
+
+Base64 常用的实现有：
+
+1. Apache Common Codec，依然可用，可以选择是否转换成 java.util.Base64。
+2. sun.misc 包下提供的实现类，从 Java 9 开始，已经不再对外提供，需要替换。
+3. 从 Java 1.8 开始提供的标准库 java.util.Base64。
+
+```bash
+# UseJavaUtilBase64
+mvn -U org.openrewrite.maven:rewrite-maven-plugin:run -Drewrite.recipeArtifactCoordinates=org.openrewrite.recipe:rewrite-migrate-java:RELEASE -Drewrite.activeRecipes=org.openrewrite.java.migrate.UseJavaUtilBase64 -Drewrite.exportDatatables=true
+
+# ApacheBase64ToJavaBase64
+mvn -U org.openrewrite.maven:rewrite-maven-plugin:run -Drewrite.recipeArtifactCoordinates=org.openrewrite.recipe:rewrite-apache:RELEASE -Drewrite.activeRecipes=org.openrewrite.apache.commons.codec.ApacheBase64ToJavaBase64 -Drewrite.exportDatatables=true
+
+```
+
+另外更多关于 Apache 包升级、使用 Java 自带方法代替 Apache Utils 的方法，请参考 OpenRewrite 官网 `apache` 下的食谱。
+
 ### 升级到 JakartaEE
 
 从 javax 到 jakarta，在 maven 项目父（根）模块下执行以下命令即可，注意命令可能随着版本变化，请去官网查看最新版本示例。
@@ -302,6 +332,26 @@ pom.xml 文件中增加以下配置，然后执行 `mvn rewrite:run`。
 - 代码格式化，比如多个参数间缺少空格的加了空格。
 - 颠倒了一个 equals 比较： `method.equals("CONNECT") -> "CONNECT".equals(method)`。
 - 长代码换行归整，三元运算格式化。
+
+### 静态分析、查找、重构
+
+支持以下功能，不一一列举，请参考官方文档。
+
+- 分析依赖关系。
+- 查找某个方法是否被使用。
+- 将某个方法替换为某个方法。
+- 批量修改方法名字，修改参数类型等。
+- 排序 imports ，删除未使用的 imports。
+
+### 通用代码格式化
+
+无用空行、空白符、前后空白符、方法参数前后空白符、Tab 转 space 等一些常用格式化方式。
+
+### 日志优化
+
+- Parameterize logging statements：把字符串拼接自动转为参数类型。
+- 用 logger 代替 System.err、System.out、printStackTrace。
+- 把 JUL、log4j、logback 都转为 slf4j API。
 
 ### Spring 到 Spring Boot
 

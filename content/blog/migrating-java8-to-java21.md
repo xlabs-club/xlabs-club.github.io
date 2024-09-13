@@ -89,7 +89,6 @@ class com/company/Util uses deprecated method java/lang/Double::<init>(D)V
 
 ```xml
 <project>
-  ...
   <build>
     <plugins>
       <plugin>
@@ -99,31 +98,215 @@ class com/company/Util uses deprecated method java/lang/Double::<init>(D)V
         <executions>
           <execution>
             <goals>
-              <goal>jdkinternals</goal> <!-- verify main classes -->
-              <goal>test-jdkinternals</goal> <!-- verify test classes -->
+              <!-- verify main classes -->
+              <goal>jdkinternals</goal>
+              <!-- verify test classes -->
+              <goal>test-jdkinternals</goal>
             </goals>
           </execution>
         </executions>
         <configuration>
           <multiRelease>21</multiRelease>
-          ...
+          <!-- 其他参数按需配置 -->
         </configuration>
       </plugin>
     </plugins>
-    ...
   </build>
-  ...
 </project>
 
 ```
 
-## 易踩坑破坏性变更
+## 升级兼容方法
+
+1. 利用 Maven 的 `profile` 机制，根据 JDK 版本号，自动激活不同的配置。
+
+    ```xml
+    <profiles>
+      <!-- 以下配置抄自地瓜哥博客，感谢地瓜哥    -->
+      <profile>
+        <id>Java1.8</id>
+        <activation>
+          <!-- 在 JDK 1.8 时自动激活-->
+          <jdk>1.8</jdk>
+        </activation>
+        <properties>
+          <spring.version>5.3.33</spring.version>
+        </properties>
+        <!-- 在父 POM 中使用 dependencyManagement 生命 -->
+        <!-- 在需要的子模块中可以直接使用 -->
+        <dependencyManagement>
+          <dependencies>
+            <dependency>
+              <groupId>javax.servlet</groupId>
+              <artifactId>javax.servlet-api</artifactId>
+              <version>4.0.1</version>
+              <scope>provided</scope>
+            </dependency>
+          </dependencies>
+        </dependencyManagement>
+        <build>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-surefire-plugin</artifactId>
+              <version>3.2.5</version>
+              <configuration>
+                <includes>
+                  <include>**/*Test.java</include>
+                </includes>
+              </configuration>
+            </plugin>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <version>3.13.0</version>
+              <configuration>
+                <showWarnings>true</showWarnings>
+                <fork>true</fork>
+              </configuration>
+            </plugin>
+          </plugins>
+        </build>
+      </profile>
+
+      <profile>
+        <id>Java21</id>
+        <activation>
+          <!-- 在 Java 21 以上激活        -->
+          <jdk>[21,)</jdk>
+        </activation>
+        <properties>
+          <spring.version>6.0.19</spring.version>
+        </properties>
+        <!-- 在父 POM 中使用 dependencyManagement 生命 -->
+        <!-- 在需要的子模块中可以直接使用 -->
+        <dependencyManagement>
+          <dependencies>
+            <dependency>
+              <groupId>jakarta.servlet</groupId>
+              <artifactId>jakarta.servlet-api</artifactId>
+              <version>6.0.0</version>
+              <scope>provided</scope>
+            </dependency>
+            <dependency>
+              <groupId>org.openjdk.nashorn</groupId>
+              <artifactId>nashorn-core</artifactId>
+              <version>15.4</version>
+            </dependency>
+            <dependency>
+              <groupId>org.glassfish.jaxb</groupId>
+              <artifactId>jaxb-runtime</artifactId>
+              <version>2.3.9</version>
+            </dependency>
+          </dependencies>
+        </dependencyManagement>
+        <dependencies>
+          <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+            <version>1.3.2</version>
+          </dependency>
+        </dependencies>
+        <build>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-surefire-plugin</artifactId>
+              <version>3.2.5</version>
+              <configuration>
+                <includes>
+                  <include>**/*Test.java</include>
+                </includes>
+                <argLine>
+                  --add-opens java.base/java.lang=ALL-UNNAMED
+                  --add-opens java.base/java.util=ALL-UNNAMED
+                  --add-opens java.base/java.math=ALL-UNNAMED
+                  --add-opens java.base/java.time=ALL-UNNAMED
+                </argLine>
+              </configuration>
+            </plugin>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <configuration>
+                <showWarnings>true</showWarnings>
+                <fork>true</fork>
+                <compilerArgs>
+                  <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
+                </compilerArgs>
+              </configuration>
+            </plugin>
+          </plugins>
+        </build>
+      </profile>
+    </profiles>
+
+    ```
+
+2. Java 模块化兼容。
+
+    你一定见过这种错误。
+
+    ```console
+    Caused by: java.lang.reflect.InaccessibleObjectException: Unable to make field protected int[] java.util.Calendar.fields accessible: module java.base does not "opens java.util" to unnamed module @21282ed8
+    ```
+
+    也一定知道怎么解决了，将没开放的模块强制对外开放，有两个参数选项：
+    --add-exports 导出包，意味着其中的所有公共类型和成员都可以在编译和运行时访问。
+    --add-opens 打开包，意味着其中的所有类型和成员（不仅是公共类型）都可以在运行时访问。
+
+    两者的区别在于 --add-opens 开放的更加彻底，不仅 public 类型、变量及方法可以访问，就连非 public 元素，也可以通过调用 setAccessible(true) 后也可以访问。简单起见，直接使用 --add-opens 即可。
+
+    使用 Maven 命令时，配置 maven-surefire-plugin 插件，参考如下：
+
+    ```xml
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <argLine>
+          --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+          --add-opens=java.base/java.math=ALL-UNNAMED
+          </argLine>
+        </configuration>
+      </plugin>
+    ```
+
+    在 IntelliJ IDEA 运行程序如果报错，可以通过在 “VM Option” 配置项中，增加 Java 模块化 `--add-opens` 相关启动参数即可正常启动。
+
+    完整 `add-opens` 列表。
+
+    ```sh
+    --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+    --add-opens=java.base/java.lang=ALL-UNNAMED
+    --add-opens=java.base/java.io=ALL-UNNAMED
+    --add-opens=java.base/java.util=ALL-UNNAMED
+    --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+    --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+    --add-opens=java.base/java.math=ALL-UNNAMED
+    --add-opens=java.base/java.net=ALL-UNNAMED
+    --add-opens=java.base/java.nio=ALL-UNNAMED
+    --add-opens=java.base/java.security=ALL-UNNAMED
+    --add-opens=java.base/java.text=ALL-UNNAMED
+    --add-opens=java.base/java.time=ALL-UNNAMED
+    --add-opens=java.base/jdk.internal.access=ALL-UNNAMED
+    --add-opens=java.base/jdk.internal.misc=ALL-UNNAMED
+    ```
+
+## 推荐配置
+
+升级到 Java 21 以后以下是根据我们公司常规经验推荐的配置，非普世可用，请根据自己的应用情况臻选。
+
+- 如果在使用 ZGC，推荐启用分代 `-XX:+ZGenerational` ，对稳定性、吞吐量、内存占用都有很大优化。
+- 在很多场景下 G1 仍然是最稳的选择，内存占用比 ZGC 低，CPU 更稳定。大部分场景下小内存应用，并不需要 ZGC。
 
 ## 辅助迁移工具
 
-[Eclipse Migration Toolkit for Java (EMT4J)](https://github.com/adoptium/emt4j)
+一些辅助迁移到新版本的工具，仅供参考。
 
-EMT4J 也是一个静态分析工具，可输出分析报告，也可直接 apply 到 git。
+### [Eclipse Migration Toolkit for Java (EMT4J)](https://github.com/adoptium/emt4j)
+
+EMT4J 也是一个静态分析工具，可输出分析报告，也可直接 apply 到 git，直接通过 maven 插件、cli 命令行、Java Agent 3 种方式分析。
 
 目前发布比较慢，只有 master 分支支持 Java 21，可以基于 master 分支自己编译构建，也可以使用已 Realease 版本只分析到 Java 17。
 
@@ -157,13 +340,71 @@ Location: refclass:file:my-java-project-dir/target/classes/com/mypackage/spring/
 
 ```
 
-[OpenRewrite](https://docs.openrewrite.org/): 一键升级依赖包，重构源码，入门指导可参考我的另一篇博客：[智能代码重构](https://www.xlabs.club/docs/platform/smart-code/)。 OpenRewrite 更成熟易用。
+可通过 emt4j-maven-plugin 进行检查。增加以下 plugin，执行 `mvn emt4j:check` 成功后查看报告。
 
-[JaCoLine](https://jacoline.dev/inspect): 检查 Java 命令行选项的问题，识别出已经过时不支持的参数。
+注意 emt4j-maven-plugin 目前版本 0.8.0 比较老，请使用 Java 8 或 Java 17 跑 mvn 命令，版本太高会失败。
+
+```xml
+<plugin>
+  <groupId>org.eclipse.emt4j</groupId>
+  <artifactId>emt4j-maven-plugin</artifactId>
+  <version>0.8.0</version>
+  <configuration>
+      <!-- 当前版本 -->
+      <fromVersion>8</fromVersion>
+      <!-- 期望升级版本，0.8.0 还不支持 Java 21 -->
+      <toVersion>17</toVersion>
+      <outputFile>target/report.html</outputFile>
+  </configuration>
+</plugin>
+```
+
+不想使用 xml 配置的，可参考以下命令行直接 run plugin。
+
+```sh
+mvn org.eclipse.emt4j:emt4j-maven-plugin:0.8.0:check -DfromVersion=8 -DtoVersion=17 -DoutputFile=emt4j-report.html
+```
+
+检查结果错误可能很多，根据优先级修改，比如我的检查结果。
+
+```console
+
+Non-heap memory footprint increasing
+
+Description
+
+Priority: p1 Issue Count: 1
+Netty uses the direct byte buffer internally. There 2 ways to manage the direct buffer lifecycle, the first it's managed by Netty self, and the second is managed by JVM. In JDK 8, netty uses the first way, but in JDK 11, netty uses the second. The first cannot be monitored through MXBean, but the second can be monitored.
+
+How to fix
+
+If you want keep the first way,add the option to JVM:"-Dio.netty.tryReflectionSetAccessible=true --add-opens=java.base/jdk.internal.misc=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED" when running on JDK 11.But if use the second way,the netty should upgrade to a version at least 4.1.33. Because the older netty use a remove API tht release byte buffer.
+
+Issues Context
+
+Target: file:/Users/l10178/.m2/repository/io/netty/netty/3.10.0.Final/netty-3.10.0.Final.jar
+
+```
+
+### [OpenRewrite](https://docs.openrewrite.org/)
+
+一键升级依赖包，重构源码，入门指导可参考我的另一篇博客：[智能代码重构](https://www.xlabs.club/docs/platform/smart-code/)。 OpenRewrite 更成熟易用。
+
+### [JaCoLine](https://jacoline.dev/inspect)
+
+检查 Java 命令行选项参数有没有问题，识别出已经过时不支持的参数。
+
+### [Java 参数查询工具](https://chriswhocodes.com/corretto_jdk21_options.html)
+
+Java 参数太多，到 [VM Options Explorer - Corretto JDK21](https://chriswhocodes.com/corretto_jdk21_options.html) 中参照，里面根据 JDK 的版本以及发行商，列出来所有的相关参数，选择好对应发行商的正确版本，就可以搜索或者查看 java 命令支持的所有参数了。
 
 ## 遇见问题和解决办法
 
 ## 参考资料
+
+- Oracle 出的 Java 21 迁移指南，包含新特性介绍、Removed APIs、Removed Tools and Components 等
+
+  <https://docs.oracle.com/en/java/javase/21/migrate/getting-started.html>
 
 - Microsoft transition from java 8 to java 11
 
@@ -173,10 +414,6 @@ Location: refclass:file:my-java-project-dir/target/classes/com/mypackage/spring/
 
    <https://wiki.openjdk.org/display/JDK8/Java+Dependency+Analysis+Tool>
 
-- Oracle Migrating From JDK 8 to Later JDK Releases
-
-   <https://docs.oracle.com/en/java/javase/21/migrate/migrating-jdk-8-later-jdk-releases.html#GUID-7744EF96-5899-4FB2-B34E-86D49B2E89B6>
-
 - 什么是多版本 Jar（Multi Release Jar）
 
    <https://docs.oracle.com/en/java/javase/11/docs/specs/jar/jar.html#multi-release-jar-files>
@@ -184,3 +421,7 @@ Location: refclass:file:my-java-project-dir/target/classes/com/mypackage/spring/
 - Java G1 重要参数设置参考
 
    <https://gceasy.io/gc-recommendations/important-g1-gc-arguments.jsp>
+
+- 地瓜哥 JVM GC 性能测试（三）：真实流量
+
+   <https://www.diguage.com/post/gc-performance-real-qps/>
