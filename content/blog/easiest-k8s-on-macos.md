@@ -41,15 +41,15 @@ seo:
 
    缺点：只支持 K3S。
 
-3. [multipass][] 启动虚拟机安装 K8S 或 K3S。
+3. [multipass][] 启动虚拟机，然后安装 K8S、K3S 或 minikube。
 
    优点：multipass 可启动空白 ubuntu 虚拟机，或者启动已经安装好 minikube 的虚拟机。
 
    缺点：只支持 ubuntu，虚拟机与宿主机同架构。
 
-4. [lima][] 启动虚拟机安装 K8S 或 K3S。
+4. [lima][] 启动虚拟机，然后安装 K8S、K3S 或 minikube。
 
-   优点：支持虚拟多种 Linux，支持异构虚拟机，支持 contained 可代替 docker。
+   优点：支持虚拟多种 Linux，支持异构虚拟机。
 
    缺点：架构稍复杂，启动略慢，不如 multipass 稳定，不支持运行在 Windows。
 
@@ -63,9 +63,9 @@ seo:
 
 - 如果你的开发机器是 Windows，可排除 lima，目前还不支持运行在 Windows 上。
 
-在过去的 N 多年，我一直使用 multipass 虚拟出 ubuntu，自己按需安装 K8S 或 K3S，相对比较稳定，使用也很方便，这是我最喜欢的方案。
+在过去的很多年，我一直使用 multipass 虚拟出 ubuntu 虚拟机，有了虚拟机就想干啥干啥了，自己按需安装 K8S 或 K3S，相对比较稳定，使用也很方便，这是我最喜欢的方案。
 
-直到我换了 MacBook Arm 架构，经常需要联调或测试一些 amd64 的功能，不得不寻找一种新的解决方案，就换到了 lima。
+直到我换了 MacBook Arm 架构，经常需要联调或测试一些 amd64 的功能，为方便异构编译和测试，不得不寻找一种新的解决方案，就换到了 lima。
 
 lima 支持 ARM on Intel、Intel on ARM 异构虚拟机，异构机器整体性能上有所损失，基本能满足日常开发联调使用。
 
