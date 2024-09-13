@@ -17,3 +17,11 @@ seo:
   canonical: "" # custom canonical URL (optional)
   noindex: false # false (default) or true
 ---
+
+Temp:
+
+```console
+
+java -XX:+UnlockExperimentalVMOptions -XX:+UseGraalJIT -Djdk.graal.ShowConfiguration=info com.example.myapp
+
+```

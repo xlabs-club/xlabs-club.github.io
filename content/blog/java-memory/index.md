@@ -506,6 +506,14 @@ stat -fc %T /sys/fs/cgroup/
 
 关于 Java 8、17 和 21 不同 GC 更多维度的对比效果可参考： [JDK 21: The GCs keep getting better](https://kstefanj.github.io/2023/12/13/jdk-21-the-gcs-keep-getting-better.html)。
 
+## Java 分析工具
+
+- [推荐] 在线 GC 分析工具 [GCeasy.io](https://gceasy.io/)
+- [推荐] 在线 Thread 分析工具 [FastThread.io](https://fastthread.io/)
+- [推荐] 在线 Heap 分析工具 [HeapHero.io](https://heaphero.io/)
+- [推荐] 在线 jstack 分析工具 [jstack.review](https://jstack.review/)
+- [Beta] 可私有化部署 Online GC、Heap Dump、Thread、JFR 分析工具 [eclipse/jifa](https://github.com/eclipse/jifa)
+
 ## 参考资料
 
 Java 进程内存分析工具：<https://stackoverflow.com/questions/53576163/interpreting-jemaloc-data-possible-off-heap-leak/53598622#53598622>
