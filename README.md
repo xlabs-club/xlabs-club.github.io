@@ -45,5 +45,5 @@ npm run build
 
 [xlabs.club]: https://www.xlabs.club
 [Hugo]: https://gohugo.io/
-[Doks]: https://github.com/gethyas/doks
+[Doks]: https://github.com/thuliteio/doks
 [CC BY-NC 4.0]: https://creativecommons.org/licenses/by-nc/4.0/
