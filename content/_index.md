@@ -6,8 +6,8 @@ date: 2023-09-07T16:33:54+02:00
 lastmod: 2023-09-07T16:33:54+02:00
 draft: false
 seo:
-  title: "卫星实验室" # custom title (optional)
-  description: "卫星实验室，一个专注于技术创新的开源组织，分享有关 DevOps、AIOps、云原生、平台工程等相关的技术" # custom description (recommended)
+  title: "卫星实验室"
+  description: "卫星实验室，一个专注于技术创新的开源组织，分享有关 DevOps、AIOps、云原生、平台工程等相关的技术"
   canonical: "" # custom canonical URL (optional)
   noindex: false # false (default) or true
 ---
