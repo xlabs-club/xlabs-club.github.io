@@ -1,6 +1,6 @@
 ---
-title: "K8S 服务长连接负载不均衡问题分析和解决办法"
-description: "K8S 服务长连接负载不均衡问题分析和解决办法"
+title: "K8S Tomcat 服务长连接负载不均衡问题分析和解决办法"
+description: "K8S Tomcat 服务长连接负载不均衡问题分析和解决办法"
 summary: ""
 date: 2024-04-11T21:05:46+08:00
 lastmod: 2024-04-11T21:05:46+08:00
@@ -12,13 +12,13 @@ contributors: [l10178]
 pinned: false
 homepage: false
 seo:
-  title: "K8S 服务长连接负载不均衡问题分析和解决办法" # custom title (optional)
-  description: "K8S 服务长连接负载不均衡问题分析和解决办法" # custom description (recommended)
+  title: "K8S Tomcat 服务长连接负载不均衡问题分析和解决办法" # custom title (optional)
+  description: "K8S Tomcat 服务长连接负载不均衡问题分析和解决办法" # custom description (recommended)
   canonical: "" # custom canonical URL (optional)
   noindex: false # false (default) or true
 ---
 
-问题背景，我们有一个 Http 服务在 K8S 内部署了 3 个 Pod，客户端使用 Service NodePort 进行连接，发现流量几乎都集中到了一个 Pod 上。
+问题背景，我们有一个 Http 服务在 K8S 内部署了 3 个 Pod，客户端使用 Service NodePort 进行连接，发现流量几乎都集中到了一个 Pod 上，很不均衡。
 
 已知的情况是：
 
@@ -44,14 +44,15 @@ server.tomcat.max-keep-alive-requests=100
 server.netty.max-keep-alive-requests=100
 ```
 
-对于独立部署 Tomcat，在 server.xml 文件 Connector 中配置 maxKeepAliveRequests。
+对于独立部署 Tomcat，可在 server.xml 文件 Connector 中配置 maxKeepAliveRequests，Tomcat xml 可解析启动参数，启动时增加 `-D=server.tomcat.max-keep-alive-requests=200` 来调整默认值大小，另外注意，Tomcat xml 不支持解析 ENV 变量。
 
 ```xml
 <Connector port="80" protocol="org.apache.coyote.http11.Http11Nio2Protocol"
             maxKeepAliveRequests="${server.tomcat.max-keep-alive-requests:-100}"/>
 ```
 
-以上，也解释了另外一个问题，在有些场景可能想一直保持长连接，为什么 Tomcat 主动发了一个 `Connection: close` Header，因为 maxKeepAliveRequests 默认值是 100。
+以上，也解释了另外一个问题，在有些场景可能想一直保持长连接，为什么收到一个 `Connection: close` Header 断开了长连接。
+因为 maxKeepAliveRequests 默认值是 100。
 
 ## 客户端负载均衡和服务端负载均衡
 
