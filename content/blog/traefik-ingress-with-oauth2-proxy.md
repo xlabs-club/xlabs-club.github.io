@@ -23,3 +23,9 @@ Thanks:
 <https://www.leejohnmartin.co.uk/infrastructure/kubernetes/2022/05/31/traefik-oauth-proxy.html>
 
 <https://joeeey.com/blog/selfhosting-sso-with-traefik-oauth2-proxy-part-2/>
+
+<https://oauth2-proxy.github.io/oauth2-proxy/configuration/providers/keycloak_oidc>
+
+<!-- audience mapper  -->
+<!-- Group Scope -->
+<!-- Configure a dedicated audience mapper for your client by navigating to Clients -> <your client's id> -> Client scopes. -->

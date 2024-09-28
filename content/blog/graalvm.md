@@ -25,3 +25,7 @@ Temp:
 java -XX:+UnlockExperimentalVMOptions -XX:+UseGraalJIT -Djdk.graal.ShowConfiguration=info com.example.myapp
 
 ```
+
+## 参考资料
+
+GraalVM 和 OpenJDK GC 对比：<https://blog.gceasy.io/graalvm-vs-openjdk-gc-performance-comparison/>
