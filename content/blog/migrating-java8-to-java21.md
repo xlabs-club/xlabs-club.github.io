@@ -402,6 +402,10 @@ Java 参数太多，到 [VM Options Explorer - Corretto JDK21](https://chriswhoc
 
 ## 参考资料
 
+- 从 Java 15 到 23 关于 G1 GC 的优化
+
+  <https://tschatzl.github.io/>
+
 - Oracle 出的 Java 21 迁移指南，包含新特性介绍、Removed APIs、Removed Tools and Components 等
 
   <https://docs.oracle.com/en/java/javase/21/migrate/getting-started.html>
