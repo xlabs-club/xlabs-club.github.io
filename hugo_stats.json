@@ -55,6 +55,7 @@
       "ul"
     ],
     "classes": [
+      "about",
       "active",
       "anchor",
       "animation",
@@ -306,6 +307,7 @@
       "升级兼容方法",
       "升级到-jakartaee",
       "升级到-java-21",
+      "卫星实验室账号",
       "压缩",
       "原则",
       "参考资料",
