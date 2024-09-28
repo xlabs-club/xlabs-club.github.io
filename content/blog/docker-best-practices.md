@@ -111,4 +111,5 @@ seo:
 ## 参考资料
 
 构建 Java 镜像的 10 个最佳实践：<https://zhuanlan.zhihu.com/p/469820791>
+
 K8S 1.18 版本之前使用 kubectl-debug 插件：<https://github.com/aylei/kubectl-debug/blob/master/docs/zh-cn.md>
