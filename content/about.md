@@ -6,8 +6,8 @@ date: 2024-09-28T11:27:33+08:00
 lastmod: 2024-09-28T11:27:33+08:00
 draft: false
 seo:
-  title: "" # custom title (optional)
-  description: "" # custom description (recommended)
+  title: "关于卫星实验室的自我介绍" # custom title (optional)
+  description: "关于卫星实验室，官方账号列表和联系方式" # custom description (recommended)
   canonical: "" # custom canonical URL (optional)
   noindex: false # false (default) or true
 ---
