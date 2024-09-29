@@ -47,3 +47,120 @@ seo:
 <!-- audience mapper  -->
 <!-- Group Scope -->
 <!-- Configure a dedicated audience mapper for your client by navigating to Clients -> <your client's id> -> Client scopes. -->
+
+```yaml
+#  kubectl -n kube-system edit deployments.apps traefik
+#  --providers.kubernetescrd.allowCrossNamespace=true
+# providers:
+#   kubernetesCRD:
+#     enabled: true
+#     allowCrossNamespace: true
+# https://doc.traefik.io/traefik/routing/providers/kubernetes-ingress/
+---
+
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: backstage-ingress-route
+  namespace: backstage
+  annotations:
+    cert-manager.io/issuer: selfsigned-issuer
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+    - match: "Host(`app.nxest.com`) && PathPrefix(`/oauth2`)"
+      kind: Rule
+      services:
+        - name: oauth2-proxy
+          namespace: oauth2-proxy
+          port: http
+      middlewares:
+        - name: oauth-errors
+    - match: Host(`app.nxest.com`)
+      kind: Rule
+      middlewares:
+        - name: oauth-errors
+        - name: oauth2-proxy
+      services:
+        - name: backstage
+          namespace: backstage
+          port: http-backend
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: selfsigned-issuer
+    traefik.ingress.kubernetes.io/router.middlewares: oauth-errors
+  labels:
+    app.kubernetes.io/component: oauth2-proxy
+    app.kubernetes.io/instance: oauth2-proxy
+    app.kubernetes.io/name: oauth2-proxy
+  name: oauth-errors
+  namespace: oauth2-proxy
+spec:
+  ingressClassName: traefik
+  rules:
+  - host: "*.nxest.com"
+    http:
+      paths:
+      - backend:
+          service:
+            name: oauth2-proxy
+            port:
+              name: http
+        path: /oauth2
+        pathType: Prefix
+  tls:
+  - hosts:
+    - "*.nxest.com"
+    secretName: "widles-place.nxest.com-tls"
+---
+
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: oauth-errors
+  namespace: oauth2-proxy
+spec:
+  errors:
+    status:
+      - "401-403"
+    service:
+      name: oauth2-proxy
+      port: 4180
+    query: "/oauth2/sign_in"
+---
+
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: oauth-errors
+  # namespace: backstage
+spec:
+  errors:
+    status:
+      - "401-403"
+    service:
+      name: oauth2-proxy
+      namespace: oauth2-proxy
+      port: 4180
+    query: "/oauth2/sign_in"
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: oauth2-proxy
+  # namespace: backstage
+spec:
+  forwardAuth:
+    address: http://oauth2-proxy.oauth2-proxy.svc:4180/oauth2/auth
+    trustForwardHeader: true
+    authResponseHeaders:
+      - X-Auth-Request-User
+      - Set-Cookie
+
+```
