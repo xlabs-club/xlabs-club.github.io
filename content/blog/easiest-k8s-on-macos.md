@@ -1,9 +1,9 @@
 ---
-title: "Mac 搭建本地 K8S 开发环境方案选型"
-description: "Mac 搭建本地 K8S 开发环境，基于 K3D、multipass、lima 等不同方案介绍对比"
+title: "MacOS 搭建本地 K8S 开发环境方案选型，基于 K3D、multipass、lima 等不同方案优缺点介绍对比"
+description: "MacOS 搭建本地 K8S 开发环境方案选型，基于 K3D、multipass、lima 等不同方案优缺点介绍对比"
 summary: ""
 date: 2024-04-13T15:20:43+08:00
-lastmod: 2024-04-16T22:20:43+08:00
+lastmod: 2024-10-10T22:20:43+08:00
 draft: false
 weight: 50
 categories: [k8s]
@@ -12,26 +12,26 @@ contributors: [l10178]
 pinned: false
 homepage: false
 seo:
-  title: "Mac 搭建本地 K8S 开发环境方案选型"
-  description: "Mac 搭建本地 K8S 开发环境方案选型，基于 k3d、multipass、lima 等不同方案介绍对比"
+  title: "MacOS 搭建本地 K8S 开发环境方案选型，基于 K3D、multipass、lima 等不同方案优缺点介绍对比"
+  description: "MacOS 搭建本地 K8S 开发环境方案选型，基于 K3D、multipass、lima 等不同方案优缺点介绍对比"
   canonical: "" # custom canonical URL (optional)
   noindex: false # false (default) or true
 ---
 
-因为工作经常需要用到 K8S，而且有时因网络原因不能完全依赖公司网络，或者因为测试新功能不能直接发布到公司集群，所以就有了本地搭建 K8S 的需求。
+因为工作经常需要用到 K8S，而且有时因网络原因不能完全依赖公司网络，或者因为测试新功能不能直接发布到公司 K8S 集群，所以就有了本地搭建 K8S 的需求。
 
-另外如果你有以下需求，此文档中提到的方案也许有所帮助：
+另外如果你有以下需求，此文档中提到的方案也可能对你有所帮助：
 
-- 开发机器模拟 Arm、AMD64 等不同架构。
-- 完全隔离的不同环境，比如为测试 docker、podman、buildkit、containd 等不同软件设置的独立环境。
-- CI/CD 流程中即用即消的轻量级虚拟机替代方案。
-- 有限的资源模拟大批量的 K8S 节点。
+- 开发机器模拟 Arm、AMD64 等不同 CPU 架构。
+- 本地搭建完全隔离的开发环境，比如为测试 docker、podman、buildkit、containd 等不同软件设置的独立环境。
+- CI/CD 流程中即用即消的轻量级虚拟机替代方案，比如单元测试、集成测试中需要虚拟机或 K8S，快速启动，用完删除。
+- 有限的资源模拟大批量的 K8S 节点，测试 K8S API 能力。
 
-以下介绍一下我用过的几种不同方案，有些纯属个人观点仅供参考。
+以下介绍一下我用过的几种不同方案，纯属个人观点仅供参考。
 
-1. Docker Desktop 并启用 Kubernetes 功能。
+1. 使用 Docker Desktop 并启用 Kubernetes 功能。
 
-   优点：最简单，开箱即用。
+   优点：使用最简单，开箱即用。
 
    缺点：只支持单节点 K8S，且 K8S 部分功能不支持，不易定制。
 
@@ -39,7 +39,7 @@ seo:
 
    优点：简单，任何支持 docker 的工具（Rancher Desktop、Podman） 启动一个容器即可。
 
-   缺点：只支持 K3S。
+   缺点：只支持 K3S，稳定性越来越不行了，以前多优秀啊。
 
 3. [multipass][] 启动虚拟机，然后安装 K8S、K3S 或 minikube。
 
@@ -49,7 +49,7 @@ seo:
 
 4. [lima][] 启动虚拟机，然后安装 K8S、K3S 或 minikube。
 
-   优点：支持虚拟多种 Linux，支持异构虚拟机。
+   优点：支持虚拟多种 Linux 发行版，支持异构 CPU 虚拟机，同时能代替 Docker Desktop。
 
    缺点：架构稍复杂，启动略慢，不如 multipass 稳定，不支持运行在 Windows。
 
@@ -59,15 +59,15 @@ seo:
 
 - 如果你需要在公司使用，并且不想买商业 License 的话，可直接排除 Docker Desktop。
 
-- 如果你需要对 K8S 集群有些把控，有较多定制，可排除 K3D。
+- 如果你是一个深度 K8S 开发者，需要对 K8S 集群有些把控，有较多定制，可排除 K3D。
 
-- 如果你的开发机器是 Windows，可排除 lima，目前还不支持运行在 Windows 上。
+- 如果你的开发机器是 Windows，可排除 lima，截止写稿还不支持运行在 Windows 上，今天是否支持请参考他的官方文档。
 
 在过去的很多年，我一直使用 multipass 虚拟出 ubuntu 虚拟机，有了虚拟机就想干啥干啥了，自己按需安装 K8S 或 K3S，相对比较稳定，使用也很方便，这是我最喜欢的方案。
 
-直到我换了 MacBook Arm 架构，经常需要联调或测试一些 amd64 的功能，为方便异构编译和测试，不得不寻找一种新的解决方案，就换到了 lima。
+直到我换了 MacBook Arm 架构，经常需要联调或测试一些 AMD64 的功能，为方便异构编译和测试，不得不寻找一种新的解决方案，就换到了 lima。
 
-lima 支持 ARM on Intel、Intel on ARM 异构虚拟机，异构机器整体性能上有所损失，基本能满足日常开发联调使用。
+lima 支持 ARM on Intel、Intel on ARM 异构虚拟机，异构机器整体性能上会有所损失，基本能满足日常开发联调使用。
 
 ## multipass 快速安装 K3S
 
@@ -95,7 +95,7 @@ minikube                                      latest           minikube is local
 # 启动一个新虚拟机，名字叫 k3s，使用 ubuntu 22.04 镜像
 multipass launch --name k3s --cpus 8 --memory 16G --disk 256G 22.04
 
-# 查看虚拟机信息
+# 查看虚拟机信息，获取 IP，后面连接测试使用 multipass 给我们的内部 IP
 multipass info k3s
 # 进入虚拟机
 multipass shell k3s
@@ -103,7 +103,7 @@ multipass shell k3s
 # Install or upgrade k3s as master
 curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn K3S_KUBECONFIG_MODE=600 INSTALL_K3S_CHANNEL=latest sh -
 
-# copy /etc/rancher/k3s/k3s.yaml as your kube config file
+# 按照成功后拷贝 /etc/rancher/k3s/k3s.yaml 当做 kube/config 文件。
 
 ```
 

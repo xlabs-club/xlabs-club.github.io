@@ -1,5 +1,5 @@
 ---
-title: "从 Java 8 升级到 Java 21，踩坑记录、变更评估和工具介绍"
+title: "从 Java 8 升级到 Java 23，踩坑记录、变更评估和工具介绍"
 description: ""
 summary: ""
 date: 2024-05-23T21:03:11+08:00
