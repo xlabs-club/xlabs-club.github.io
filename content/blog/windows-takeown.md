@@ -1,9 +1,9 @@
 ---
-title: "Windows 提权和设置环境变量"
-description: "Windows 提权和设置环境变量"
+title: "Windows 使用脚本提高权限以及设置环境变量"
+description: "Windows 使用脚本提高权限以及设置环境变量"
 summary: ""
 date: 2024-02-26T23:25:29+08:00
-lastmod: 2024-02-26T23:25:29+08:00
+lastmod: 2024-09-26T23:25:29+08:00
 draft: false
 weight: 50
 categories: []
@@ -18,7 +18,8 @@ seo:
   noindex: false # false (default) or true
 ---
 
-背景：公司 Windows 办公机受域控安全策略限制，部分文件无权直接修改，另外开发常用的设置系统环境变量也变灰无法设置。此问题解决方式如下。
+背景：公司 Windows 办公机受域控安全策略限制，部分文件无权直接修改，另外开发常用的设置系统环境变量也变灰无法设置。
+此问题解决方式如下。
 
 ## 提升文件权限
 
