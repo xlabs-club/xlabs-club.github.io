@@ -1,19 +1,19 @@
 ---
-title: "使用 oauth2-proxy 为任意程序增加认证授权，结合 k8s、traefik、keycloak、backstage 部署代码示例解读"
-description: "使用 oauth2-proxy 为任意程序增加认证授权，结合 k8s、traefik、keycloak、backstage 部署代码示例解读"
+title: "使用 oauth2-proxy 为任意程序增加认证授权，结合 K8S、traefik、keycloak、backstage 部署代码示例解读"
+description: "使用 oauth2-proxy 为任意程序增加认证授权，结合 K8S、traefik、keycloak、backstage 部署代码示例解读"
 summary: ""
 date: 2024-09-22T16:30:40+08:00
-lastmod: 2024-09-22T16:30:40+08:00
-draft: true
+lastmod: 2024-10-10T23:30:40+08:00
+draft: false
 weight: 50
-categories: [k8s,idaas]
-tags: [k8s,idaas]
+categories: [k8s, idaas]
+tags: [k8s, idaas]
 contributors: [l10178]
 pinned: false
 homepage: false
 seo:
-  title: "使用 oauth2-proxy 为任意程序增加认证授权，结合 k8s、traefik、keycloak、backstage 部署代码示例解读"
-  description: "使用 oauth2-proxy 为任意程序增加认证授权，结合 k8s、traefik、keycloak、backstage 部署代码示例解读"
+  title: "使用 oauth2-proxy 为任意程序增加认证授权，结合 K8S、traefik、keycloak、backstage 部署代码示例解读"
+  description: "使用 oauth2-proxy 为任意程序增加认证授权，结合 K8S、traefik、keycloak、backstage 部署代码示例解读"
   canonical: ""
   noindex: false
 ---
@@ -22,27 +22,78 @@ seo:
 
 写在前面：
 
-1. 本文档融合了 k3s、traefik ingress controller、oauth2-proxy、keycloak、backstage，以这几个组件为基础进行示例，完善略显复杂，但是基本原理都是一样的，都是开源软件，开箱即用。
+1. 本文档里的示例代码是以 k3s 为基础，融合了 traefik ingress controller、oauth2-proxy、keycloak、backstage 这几个组件，完善略显复杂，如果没有 K3S/K8S，以其他方式部署也是完全可以的，基本原理都是一样的，都是开源软件，开箱即用。
 2. 对于某些场景下可选的配置，会单独说明，请注意分别。
 3. 这里提到的每个组件都是可替换的，比如 nginx 代替 traefik，Pomerium 代替 oauth2-proxy，可根据爱好选择，后面也会适当补充几种不同方式的对比和部署差异，更详细内容请参考本站另外一篇文档 [统一身份认证](https://www.xlabs.club/docs/platform/iam/)。
 4. 示例中的代码都是从真实环境拷贝经过检验的，完整的安装部署源码请参考我们的部署脚本 [xlabs-club/xlabs-ops](https://github.com/xlabs-club/xlabs-ops)。
-5. 涉及一些 k8s、OIDC 基础知识，此处只提供链接不展开说明。
+5. 需要懂一些 K8S、OIDC 基础知识，此处只提供链接不展开说明。
 
 ## 组件介绍
 
+1. Keycloak
+   Keycloak 是一个开源的身份和访问管理解决方案，支持 OAuth 2.0、OpenID Connect、SAML 等协议。它提供用户管理、角色管理、单点登录（SSO）、身份提供服务等功能。关于 Keycloak 的中文介绍，可参考本站单独的博客 [IDaaS Book](https://idaas.xlabs.club/)。
+
+2. [oauth2-proxy](https://oauth2-proxy.github.io/oauth2-proxy/)
+   顾名思义它是一个关于 oauth 反向代理，主要用来为后端服务增加身份验证层。它支持多种 OAuth 2.0 提供者（如 Google、OIDC、Keycloak 等），可以保护未提供身份验证的应用。oauth2-proxy 在请求进入后端服务之前，会先进行 OAuth 2.0 登录认证，确保请求者具有访问权限。它承担了登录的合法性校验、重定向、登录成功后的 cookie、response 处理。
+
+3. Backstage
+   Backstage 是一个开源的开发者门户平台。在此文档里你可以理解为是一个普通的应用，类似你自己写的应用，这里只是拿他来举例而已。关于 Backstage 集成 oauth2-proxy 的详情文档可参考 [Backstage OAuth 2 Proxy Provider](https://backstage.io/docs/auth/oauth2-proxy/provider)。
+
+另外特别补充一点，关于 oauth2-proxy 的 set header 和 paas header。
+
 ## 基本原理和流程
+
+目前使用 oauth2-proxy 有几种主流的模式。
+
+第一种，Docker 或 bin 方式部署，直接使用 oauth2-proxy 对外提供服务，承担认证流程并提供简单的权限校验，认证通过后通过 Header 传递一些用户信息到 upstream，流量由 oauth2-proxy 分发。
+他的网络流量大概类似如下模式。
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant oauth2-proxy
+    participant Backend
+
+    User->>oauth2-proxy: Access Service
+    oauth2-proxy->>oauth2-proxy: Authenticate User
+    oauth2-proxy->>Backend: Forward request to Backend, proxy paas headers(user id/name/groups/roles)
+    Backend->>Backend: Do more things by header info
+    Backend-->>oauth2-proxy: Response
+    oauth2-proxy-->>User: Return Response
+```
+
+第二种，借助 traefik forwardAuth Middleware 或 nginx auth_request Module，进行认证重定向，认证通过后流量的分发仍然由 traefik/nginx 执行。
+他的网络流量大概类似如下模式，此文档中提到的就是这种模式。
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Traefik/Nginx
+    participant oauth2-proxy
+    participant Backend
+
+    User->>Traefik/Nginx: Access Service
+    Traefik/Nginx->>oauth2-proxy: ForwardAuth for Authentication
+    oauth2-proxy->>oauth2-proxy: Authenticate User
+    oauth2-proxy-->>Traefik/Nginx: Return Auth Result, set response headers(cookies, user id/name/groups/roles)
+    Traefik/Nginx->>Backend: Forward request to Backend, proxy paas headers from response header (user id/name/groups/roles)
+    Backend->>Backend: Do more things by header info
+    Backend-->>Traefik/Nginx: Response
+    Traefik/Nginx-->>User: Return Response
+
+```
 
 ## 基于 traefik ingress controller 部署代码实例
 
 ## 扩展：nginx 集合 oauth2-proxy
 
-## Thanks
+<!-- ## Thanks
 
 <https://www.leejohnmartin.co.uk/infrastructure/kubernetes/2022/05/31/traefik-oauth-proxy.html>
 
 <https://joeeey.com/blog/selfhosting-sso-with-traefik-oauth2-proxy-part-2/>
 
-<https://oauth2-proxy.github.io/oauth2-proxy/configuration/providers/keycloak_oidc>
+<https://oauth2-proxy.github.io/oauth2-proxy/configuration/providers/keycloak_oidc> -->
 
 <!-- audience mapper  -->
 <!-- Group Scope -->
@@ -57,7 +108,6 @@ seo:
 #     allowCrossNamespace: true
 # https://doc.traefik.io/traefik/routing/providers/kubernetes-ingress/
 ---
-
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
@@ -104,22 +154,21 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-  - host: "*.nxest.com"
-    http:
-      paths:
-      - backend:
-          service:
-            name: oauth2-proxy
-            port:
-              name: http
-        path: /oauth2
-        pathType: Prefix
+    - host: "*.nxest.com"
+      http:
+        paths:
+          - backend:
+              service:
+                name: oauth2-proxy
+                port:
+                  name: http
+            path: /oauth2
+            pathType: Prefix
   tls:
-  - hosts:
-    - "*.nxest.com"
-    secretName: "widles-place.nxest.com-tls"
+    - hosts:
+        - "*.nxest.com"
+      secretName: "widles-place.nxest.com-tls"
 ---
-
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
@@ -134,7 +183,6 @@ spec:
       port: 4180
     query: "/oauth2/sign_in"
 ---
-
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
@@ -162,5 +210,44 @@ spec:
     authResponseHeaders:
       - X-Auth-Request-User
       - Set-Cookie
-
 ```
+
+下面是使用 Mermaid JS 描述上述几个组件（Keycloak、oauth2-proxy、Traefik、Backstage）登录流程的代码：
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Traefik
+    participant oauth2-proxy
+    participant Keycloak
+    participant Backstage
+
+    User->>Traefik: Access Backstage URL
+    Traefik->>oauth2-proxy: Forward request (auth check)
+    oauth2-proxy->>oauth2-proxy: Check if user is authenticated
+    oauth2-proxy-->>User: Redirect to Keycloak login
+    User->>Keycloak: Enter credentials
+    Keycloak->>Keycloak: Authenticate User
+    Keycloak-->>User: Return Authorization Code
+    User->>oauth2-proxy: Send Authorization Code
+    oauth2-proxy->>Keycloak: Exchange Code for Access Token
+    Keycloak-->>oauth2-proxy: Return Access Token
+    oauth2-proxy-->>User: Set authentication cookie
+    oauth2-proxy->>Traefik: Forward original request
+    Traefik->>Backstage: Forward request to Backstage
+    Backstage-->>Traefik: Return response
+    Traefik-->>User: Return response
+```
+
+流程描述：
+
+1. 用户访问 Backstage URL，请求被 Traefik 捕获。
+2. Traefik 将请求转发给 oauth2-proxy，检查用户是否已认证。
+3. 如果用户未认证，oauth2-proxy 会将用户重定向到 Keycloak 登录页面。
+4. 用户在 Keycloak 上输入凭证并进行认证。
+5. 认证成功后，Keycloak 返回授权码给用户。
+6. 用户将授权码发送给 oauth2-proxy，oauth2-proxy 使用授权码向 Keycloak 请求访问令牌。
+7. Keycloak 返回访问令牌给 oauth2-proxy，oauth2-proxy 设置身份验证 cookie。
+8. oauth2-proxy 将原始请求转发给 Traefik。
+9. Traefik 将请求发送给 Backstage。
+10. Backstage 返回响应，最终由 Traefik 返回给用户。
