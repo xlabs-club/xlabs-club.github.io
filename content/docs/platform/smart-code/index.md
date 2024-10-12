@@ -1,6 +1,6 @@
 ---
 title: "智能代码重构"
-description: "使用 OpenRewrite 进行代码重构，搭建私有企业级智能代码重构平台"
+description: "使用 OpenRewrite 进行大规模自动化代码重构，搭建私有化企业智能代码重构平台"
 summary: ""
 date: 2024-01-09T22:08:54+08:00
 lastmod: 2024-01-09T22:08:54+08:00
@@ -12,7 +12,7 @@ menu:
 weight: 999
 toc: true
 seo:
-  title: "使用 OpenRewrite 进行代码重构，搭建私有企业级智能代码重构平台" # custom title (optional)
+  title: "使用 OpenRewrite 进行大规模自动化代码重构，搭建私有化企业智能代码重构平台" # custom title (optional)
   description: "" # custom description (recommended)
   canonical: "" # custom canonical URL (optional)
   noindex: false # false (default) or true
