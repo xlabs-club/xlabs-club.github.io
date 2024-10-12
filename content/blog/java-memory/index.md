@@ -1,20 +1,20 @@
 ---
-title: "K8S Pod 容器内 Java 进程内存分析"
-description: "K8S Pod 容器内 jvm 进程内存分析"
-summary: "K8S Pod 容器内 Java 进程内存分析，容器 OOM 和 Jave OOM 问题定位。"
+title: "K8S Pod 容器内 Java 进程内存分析，内存虚高以及容器 OOM 或 Jave OOM 问题定位"
+description: "K8S Pod 容器内 Java 进程内存分析，内存虚高以及容器 OOM 或 Jave OOM 问题定位，不同 GC 效果对比"
+summary: ""
 date: 2023-01-07T10:54:37+08:00
-lastmod: 2024-01-07T10:54:37+08:00
+lastmod: 2024-10-07T10:54:37+08:00
 draft: false
 weight: 50
 images: []
 categories: [Java]
 tags: [k8s, Java]
 contributors: [l10178]
-pinned: false
+pinned: true
 homepage: false
 seo:
-  title: "K8S Pod 容器内 Java 进程内存分析"
-  description: "K8S Pod 容器内 jvm 进程内存分析"
+  title: "K8S Pod 容器内 Java 进程内存分析，内存虚高以及容器 OOM 或 Jave OOM 问题定位"
+  description: "K8S Pod 容器内 Java 进程内存分析，内存虚高以及容器 OOM 或 Jave OOM 问题定位，不同 GC 效果对比"
   canonical: ""
   noindex: false
 ---
@@ -513,33 +513,3 @@ stat -fc %T /sys/fs/cgroup/
 - [推荐] 在线 Heap 分析工具 [HeapHero.io](https://heaphero.io/)
 - [推荐] 在线 jstack 分析工具 [jstack.review](https://jstack.review/)
 - [Beta] 可私有化部署 Online GC、Heap Dump、Thread、JFR 分析工具 [eclipse/jifa](https://github.com/eclipse/jifa)
-
-## 参考资料
-
-Java 进程内存分析工具：<https://stackoverflow.com/questions/53576163/interpreting-jemaloc-data-possible-off-heap-leak/53598622#53598622>
-
-Java 进程内存分布：<https://cloud.tencent.com/developer/article/1666640>
-
-Java Metaspace 详解：<https://www.javadoop.com/post/metaspace>
-
-how we’ve reduced memory usage without changing any code：<https://blog.malt.engineering/java-in-k8s-how-weve-reduced-memory-usage-without-changing-any-code-cbef5d740ad>
-
-Spring Boot 引起的堆外内存泄漏排查及经验总结：<https://tech.meituan.com/2019/01/03/spring-boot-native-memory-leak.html>
-
-Pod 进程内存缓存分析：<https://zhuanlan.zhihu.com/p/449630026>
-
-Linux 内存中的 Cache 真的能被回收么：<https://cloud.tencent.com/developer/article/1115557>
-
-Linux kernel memory 导致的 POD OOM killed: <https://www.cnblogs.com/yannwang/p/13287963.html>
-
-cgroup 内存泄露问题：<https://www.cnblogs.com/leffss/p/15019898.html>
-
-日志打印导致 page-cache 飙升问题解决： <https://juejin.cn/post/6920957433947324423>
-
-logback 之 AsyncAppender 的原理、源码及避坑建议： <https://developer.aliyun.com/article/1127879>
-
-the rocketmq_client.log file spent too much cache/buffer memory： <https://github.com/apache/rocketmq/issues/3252>
-
-生产环境 Java ehcache 内存泄漏分析与解决 :<https://www.cnblogs.com/cgli/p/17201943.html>
-
-ehcache DirectByteBuffer leak when using persistent storage :<https://github.com/ehcache/ehcache3/issues/2868>
