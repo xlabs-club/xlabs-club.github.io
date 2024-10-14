@@ -24,7 +24,7 @@
     "thulite": "^2.5.0",
     "@docsearch/css": "^3.6.1",
     "@docsearch/js": "^3.6.1",
-    "mermaid": "^11.2.1"
+    "mermaid": "^11.3.0"
   },
   "devDependencies": {
     "prettier": "^3.3.3",

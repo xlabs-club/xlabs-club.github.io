@@ -23,7 +23,7 @@ jobs:
     - name: Setup Hugo
       uses: peaceiris/actions-hugo@v3
       with:
-        hugo-version: '0.134.3'
+        hugo-version: '0.135.0'
         extended: true
 
     - name: Install dependencies
