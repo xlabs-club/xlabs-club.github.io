@@ -4,7 +4,7 @@ description = "XLabs Club"
 images = ["cover.png"]
 
 # mainSections
-mainSections = ["docs", "migration-guides"]
+mainSections = ["docs"]
 
 # Global alert
 alertText = '<a class="alert-link stretched-link fw-normal" href="/blog/doks-1-3/">Doks 1.3 is out!</a>'
@@ -58,7 +58,7 @@ footer = "Give Me a <a class=\"text-muted\" href=\"https://github.com/xlabs-club
 
   # Nav
   sectionNav = ["docs"] # ["docs"] (default) or list of sections (e.g. ["docs", "guides"])
-  toTopButton = false # false (default) or true
+  toTopButton = true # false (default) or true
   breadcrumbTrail = false # false (default) or true
   headlineHash = true # true (default) or false
   scrollSpy = true # true (default) or false
@@ -142,8 +142,8 @@ footer = "Give Me a <a class=\"text-muted\" href=\"https://github.com/xlabs-club
   [seo.schemas]
     type = "Organization" # Organization (default) or Person
     logo = "favicon-512x512.png" # Logo of Organization — favicon-512x512.png (default)
-    name = "XLabs Club" # Name of Organization or Person
-    sameAs = ["https://github.com/xlabs-club/xlabs-club.github.io"] # E.g. ["https://github.com/getthulite/thulite", "https://fosstodon.org/@thulite"]
+    name = "XLabs Club 卫星实验室" # Name of Organization or Person
+    sameAs = ["https://github.com/xlabs-club/xlabs-club.github.io"]
     images = ["cover.png"] # ["cover.png"] (default)
     article = [] # Article sections
     newsArticle = [] # NewsArticle sections
