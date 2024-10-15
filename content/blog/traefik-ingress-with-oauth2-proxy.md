@@ -78,7 +78,7 @@ sequenceDiagram
 
 ```
 
-第二种，借助 traefik forwardAuth Middleware 或 nginx auth_request Module，进行认证重定向，认证通过后流量的分发仍然由 traefik/nginx 执行。
+第二种，借助 traefik forwardAuth 认证插件 或 nginx auth_request 认证模块，结合 oauth2-proxy 提供的认证相关 Endpoints，承担认证流程，认证通过后流量的分发仍然由 traefik/nginx 执行。
 他的网络流量大概类似如下方式，此文档中提到的就是这种方式。
 
 ```mermaid
@@ -375,4 +375,11 @@ server {
     # or "root /path/to/site;" or "fastcgi_pass ..." etc
   }
 }
+```
+
+如果是在 K8S 内使用 nginx ingress controller 实现，请参考官方文档将以上配置转换为注解和 lua 片段，类似如下设置。
+
+```yaml
+nginx.ingress.kubernetes.io/auth-signin: https://$host/oauth2/start?rd=$escaped_request_uri
+nginx.ingress.kubernetes.io/auth-url: https://$host/oauth2/auth
 ```
