@@ -2,7 +2,7 @@
 title: "使用 oauth2-proxy 为任意程序增加认证鉴权，结合 K8S、traefik、keycloak、backstage 部署配置详解"
 description: "使用 oauth2-proxy 为任意程序增加认证鉴权，结合 K8S、traefik、keycloak、backstage 部署配置详解"
 summary: ""
-date: 2024-09-22T16:30:40+08:00
+date: 2024-10-10T23:30:40+08:00
 lastmod: 2024-10-10T23:30:40+08:00
 draft: false
 weight: 50

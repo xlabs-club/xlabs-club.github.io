@@ -56,12 +56,6 @@
   url = "/blog/xlabs-link-exchange"
   weight = 50
 
-
-# [[footer]]
-#   name = "Privacy Policy"
-#   url = "/privacy/"
-#   weight = 10
-
 [[footer]]
   name = "Powered by Hugo, and based on Doks"
   # url = "/terms/"
