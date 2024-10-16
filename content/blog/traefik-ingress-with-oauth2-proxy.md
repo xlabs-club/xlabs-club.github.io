@@ -27,13 +27,14 @@ seo:
 3. 为 Kubernetus Ingress 提供统一的认证入口，一键实现所有入口必须登录才可访问，类似第一条只是场景更简单。
 4. 为 Kubernetus Pod 增加认证 Sidecar，实现 Zero Trust，任意 API 均需要认证，不仅仅是对外入口。
 5. 基于用户、角色等不同属性，路由到不同服务。
+6. 如果你凑巧也在用 [Backstage](https://backstage.io/)，这里顺便提供了 Backstage 接入 keycloak 的方法。
 
 写在前面：
 
-1. 本文档里的示例代码是以 k3s 为基础，使用 traefik 作为 ingress controller，整体完善但略显复杂，如果没有 K3S/K8S，以其他方式部署也是完全可以的，基本原理都是一样的，都是开源软件，开箱即用。
+1. 本文档里的示例代码是以 k3s 为基础，使用 traefik 作为 ingress controller，整体完善但略显复杂，如果没有 K3S/K8S，以其他方式部署也是完全可以的，基本原理都是一样的。
 2. 对于某些场景下可选的配置，会单独说明，请注意分别。
 3. 这里提到的每个组件都是可替换的，比如 nginx 代替 traefik，Pomerium 代替 oauth2-proxy，可根据爱好选择，后面也会适当补充几种不同方式的对比和部署差异，更详细内容请参考本站另外一篇文档 [统一身份认证](https://www.xlabs.club/docs/platform/iam/)。
-4. 示例中的代码都是从真实环境拷贝经过检验的，完整的安装部署源码请参考我们的部署脚本 [xlabs-club/xlabs-ops](https://github.com/xlabs-club/xlabs-ops)。
+4. 示例中的代码都是从真实环境拷贝经过检验的，但为了便于理解可能裁剪无关紧要的内容，完整的安装部署源码请参考我们的部署脚本 [xlabs-club/xlabs-ops](https://github.com/xlabs-club/xlabs-ops)。
 5. 需要懂一些 K8S、OIDC 基础知识，此处只提供链接不展开说明。
 
 ## 组件介绍
@@ -271,7 +272,7 @@ sequenceDiagram
 
 如果以上你的所有应用都部署在 K8S 同一个 namespace 里，就不用关注这个了。
 
-K3S Traefik 默认未开启 `allowCrossNamespace`, 不允许跨 namespace 访问，所以如果你给其他 namespace 的应用也加上 auth Middleware，在应用上访问看不到错误就是一直没有 Auth 功能，以为是配置不生效，其实查看 K3S Traefik log 可以看到有关于 Middleware 找不到或无法访问的错误日志。
+K3S Traefik 默认未开启 `allowCrossNamespace`, 不允许跨 namespace 访问，所以如果你给其他 namespace 的应用也加上 auth Middleware，在应用上访问看不到错误就是一直没有 Auth 功能，以为是配置不生效，其实查看 K3S Traefik log 可以看到有关于 Middleware 找不到或 Service 无法访问的错误日志。
 
 以下解决办法任选其一：
 
@@ -279,11 +280,13 @@ K3S Traefik 默认未开启 `allowCrossNamespace`, 不允许跨 namespace 访问
 2. 为 Traefik 开启 `allowCrossNamespace` 配置。
 
    ```console
-   $ kubectl -n kube-system edit deployments.apps traefik
+   # 手动临时改配置，不推荐，可能后续更新丢失
+   $ kubectl -n kube-system edit deployment traefik
    # 在 args 中增加 `--providers.kubernetescrd.allowCrossNamespace=true`
    ```
 
    ```yaml
+   # 固定配置
    # vi /var/lib/rancher/k3s/server/manifests/traefik-config.yaml
    apiVersion: helm.cattle.io/v1
    kind: HelmChartConfig
@@ -309,6 +312,10 @@ K3S Traefik 默认未开启 `allowCrossNamespace`, 不允许跨 namespace 访问
 ## nginx 使用 auth_request 对接 oauth2-proxy
 
 原理同 Traefik，将 /oauth2 相关请求交给 oauth2-proxy 服务，认证通过后 proxy_pass 到后端服务，注意设置 Header 和 Cookie。
+
+另外注意下这一行 `auth_request /oauth2/auth;`，前面我们提到 auth endpoint 后面可以追加 query parameters `allowed_groups/allowed_emails`，在 nginx 里我们可以根据不同 server 或 location 设置不同的 group，类似 `auth_request /oauth2/auth?allowed_groups=cms-admin;`, 这样不就组成了一个简单的基于 Group 的权限认证。
+
+如果想根据用户属性代理到不同的服务实例或路径，把 `proxy_pass http://backend/;` 用 lua if else 包装一下，不就实现了一个简单的路由功能。
 
 ```nginx
 
