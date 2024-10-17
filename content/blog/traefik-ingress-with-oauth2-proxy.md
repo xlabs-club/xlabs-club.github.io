@@ -277,7 +277,7 @@ K3S Traefik 默认未开启 `allowCrossNamespace`, 不允许跨 namespace 访问
 以下解决办法任选其一：
 
 1. 在应用所在的 namespace 都创建 Middleware，创建 K8S ExternalName Service 指定 oauth2-proxy Service，这样 Middleware 和 Service 都在同 namespace 了。
-2. 为 Traefik 开启 `allowCrossNamespace` 配置。
+2. 为 Traefik 开启 `allowCrossNamespace` 配置，关于 K3S 如何使用 HelmChartConfig 定制 Traefik 配置，可参考官方文档 [Customizing Packaged Components with HelmChartConfig](https://docs.k3s.io/helm#customizing-packaged-components-with-helmchartconfig)。
 
    ```console
    # 手动临时改配置，不推荐，可能后续更新丢失
