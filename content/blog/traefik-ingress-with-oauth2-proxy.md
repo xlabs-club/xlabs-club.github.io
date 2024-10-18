@@ -390,3 +390,7 @@ server {
 nginx.ingress.kubernetes.io/auth-signin: https://$host/oauth2/start?rd=$escaped_request_uri
 nginx.ingress.kubernetes.io/auth-url: https://$host/oauth2/auth
 ```
+
+## 遇见问题和解决办法
+
+我们使用过程中遇见的问题和解决办法，记录下来仅供参考。
