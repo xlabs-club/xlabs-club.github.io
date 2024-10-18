@@ -24,8 +24,8 @@ seo:
 
 1. 为原本没有登录验证的服务提供认证服务，比如某些开源组件不支持认证但是又因携带一些危险数据而不想公开访问。
 2. 实现统一的单点登录认证、并支持简单的 RBAC、UBAC 鉴权。
-3. 为 Kubernetus Ingress 提供统一的认证入口，一键实现所有入口必须登录才可访问，类似第一条只是场景更简单。
-4. 为 Kubernetus Pod 增加认证 Sidecar，实现 Zero Trust，任意 API 均需要认证，不仅仅是对外入口。
+3. 为 Kubernetus Traefik Nginx Ingress 提供统一的认证入口，一键实现所有入口必须登录才可访问。
+4. 配置 Traefik 使用 Forward Auth，Nginx 使用 auth_request 实现认证，也可以一并参考。
 5. 基于用户、角色等不同属性，路由到不同服务。
 6. 如果你凑巧也在用 [Backstage](https://backstage.io/)，这里顺便提供了 Backstage 接入 keycloak 的方法。
 
