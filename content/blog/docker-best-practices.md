@@ -1,6 +1,6 @@
 ---
-title: "容器镜像制作最佳实践，Dockerfile 实践经验和踩坑记录"
-description: "容器镜像制作最佳实践，Dockerfile 实践经验和踩坑记录"
+title: "容器镜像制作最佳实践，Dockerfile 编写小技巧和踩坑记录，镜像维护辅助工具介绍"
+description: "容器镜像制作最佳实践，Dockerfile 编写小技巧和踩坑记录，镜像维护辅助工具介绍"
 summary: ""
 date: 2024-05-24T20:56:08+08:00
 lastmod: 2024-05-24T20:56:08+08:00
@@ -45,8 +45,6 @@ seo:
 
 - 关于第 1 点，一定要使用官方镜像吗。未必，看情况。比如我们作为平台，涉及很多种开发语言，很多种组合场景，每个官方基础镜像可能都不同，就会自建基础镜像，以便统一操作系统、统一脚本和安全维护。为什么要统一操作系统，操作系统投的毒，就像出骨鱼片里未净的刺，给人一种不期待的伤痛。
 - 为了镜像大小和安全，一定要使用 Alpine 或 distroless 镜像吗。我的建议是不要使用 Alpine 镜像，如有能力才使用 distroless 镜像。毕竟 libc 的坑，谁痛谁知道。
-
-## 我们的镜像策略
 
 ## Dockerfile 编写小技巧
 
@@ -102,11 +100,86 @@ seo:
 
   ```
 
+- 校验 curl 结果，如果失败退出。
+
+  ```bash
+  # 关于 -jkfSL 请参考 man 说明
+  curl -jkfSL -o /plugins/vmtouch/vmtouch.zip 'https://github.com/hoytech/vmtouch/archive/refs/tags/v1.3.1.zip'
+  ```
+
+## 多架构编译
+
+为 docker 启用多架构编译：
+
+```sh
+
+# 创建新的 build，支持多架构，直接 use 生效
+docker buildx create --name=multi-platform --platform=linux/amd64,linux/arm64 --driver=docker-container --use --bootstrap
+
+# 查看是否生效，星号的代表当前生效的
+docker buildx ls
+
+# 指定 platform，build and push
+docker buildx build --platform linux/amd64,linux/arm64 --push --tag tester:1.0
+
+```
+
+在 Dockerfile 中判断架构，支持如下架构相关的变量。
+
+- **TARGETPLATFORM**: 构建镜像的目标平台，例如 `linux/amd64`, `linux/arm/v7`, `windows/amd64`。
+- **TARGETOS**: `TARGETPLATFORM` 的 OS 类型，例如 `linux`, `windows`。
+- **TARGETARCH**: `TARGETPLATFORM` 的架构类型，例如 `amd64`, `arm64`。
+- **TARGETVARIANT**: `TARGETPLATFORM` 的变种，该变量可能为空，例如 `v7`。
+- **BUILDPLATFORM**: 构建镜像主机平台，例如 `linux/amd64`。
+- **BUILDOS**: `BUILDPLATFORM` 的 OS 类型，例如 `linux`。
+- **BUILDARCH**: `BUILDPLATFORM` 的架构类型，例如 `amd64`。
+- **BUILDVARIANT**: `BUILDPLATFORM` 的变种，该变量可能为空，例如 `v7`。
+
+代码中判断架构举例。
+
+```dockerfile
+
+FROM alpine:3.20
+
+# 需要先声明 ARG 才可使用， 但不需要主动赋值，docker 会自动赋值
+ARG TARGETARCH
+
+RUN <<EOF
+set -e
+
+if [ "${TARGETARCH}" = "amd64" ]; then
+  echo "this is amd64"
+elif [ "${TARGETARCH}" = "arm64" ]; then
+  echo "this is arm64"
+fi
+
+EOF
+
+```
+
+在 FROM 中强制切换架构，使用特定平台的基础镜像。
+
+```dockerfile
+# 使用特定平台的基础镜像
+FROM --platform=linux/amd64 ubuntu:20.04
+
+# 在这里添加你的指令
+RUN apt-get update && apt-get install -y curl
+```
+
 ## 辅助工具
 
 ### skopeo
 
 镜像搬运工具：<https://github.com/containers/skopeo>
+
+```bash
+# 指定自建的 harbor 地址
+expport PRIVATE_HARBOR=custom.harbor.local
+skopeo login ${PRIVATE_HARBOR}
+skopeo copy --multi-arch=all docker://ghcr.io/graalvm/jdk-community:23.0.1 docker://${PRIVATE_HARBOR}/ghcr.io/graalvm/jdk-community:23.0.1
+
+```
 
 ## 参考资料
 
