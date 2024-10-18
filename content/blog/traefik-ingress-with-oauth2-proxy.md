@@ -282,7 +282,7 @@ K3S Traefik 默认未开启 `allowCrossNamespace`, 不允许跨 namespace 访问
    ```console
    # 手动临时改配置，不推荐，可能后续更新丢失
    $ kubectl -n kube-system edit deployment traefik
-   # 在 args 中增加 `--providers.kubernetescrd.allowCrossNamespace=true`
+   # 在 args 中增加 --providers.kubernetescrd.allowCrossNamespace=true
    ```
 
    ```yaml
