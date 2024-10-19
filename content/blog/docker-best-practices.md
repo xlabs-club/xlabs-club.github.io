@@ -1,9 +1,9 @@
 ---
-title: "容器镜像制作最佳实践，Dockerfile 编写小技巧和踩坑记录，镜像维护辅助工具介绍"
-description: "容器镜像制作最佳实践，Dockerfile 编写小技巧和踩坑记录，镜像维护辅助工具介绍"
+title: "容器镜像制作最佳实践，Dockerfile 编写小技巧和踩坑记录，镜像维护辅助工具 ORAS、skopeo 等介绍"
+description: "容器镜像制作最佳实践，Dockerfile 编写小技巧和踩坑记录，镜像维护辅助工具 ORAS、skopeo 等介绍"
 summary: ""
 date: 2024-05-24T20:56:08+08:00
-lastmod: 2024-05-24T20:56:08+08:00
+lastmod: 2024-09-24T20:56:08+08:00
 draft: false
 weight: 50
 categories: []
@@ -12,10 +12,10 @@ contributors: [l10178]
 pinned: false
 homepage: false
 seo:
-  title: "" # custom title (optional)
-  description: "" # custom description (recommended)
-  canonical: "" # custom canonical URL (optional)
-  noindex: false # false (default) or true
+  title: "容器镜像制作最佳实践，Dockerfile 编写小技巧和踩坑记录，镜像维护辅助工具 ORAS、skopeo 等介绍"
+  description: "容器镜像制作最佳实践，Dockerfile 编写小技巧和踩坑记录，镜像维护辅助工具 ORAS、skopeo 等介绍"
+  canonical: ""
+  noindex: false
 ---
 
 整理了由 Docker 官方和社区推荐的用于构建高效镜像的最佳实践和方法，当然有些可能并不适用于你，请注意分辨。
@@ -77,7 +77,7 @@ seo:
 
   ```
 
-- 使用 ARG 变量动态构建。
+- 使用 ARG 变量动态构建，注意 ARG 作用域。
 
   ```dockerfile
   # ARG 可写默认值，也可不写
@@ -88,6 +88,9 @@ seo:
   ARG TOMCAT_TAG=9.0.93-jre21
   RUN echo "Tomcat tag is ${TOMCAT_TAG}"
 
+  # ARG 作用域：
+  # 1. 在第一个 FROM 之前的所有 ARG , 在所有 FROM 中生效，仅在 FROM 中生效。
+  # 2. 在 FROM 后的 ARG, 仅在当前 FROM 作用域生效。 即尽在当前 stage 生效。
   ```
 
 - 使用 `COPY --from` 代替 curl 或 wget 静态文件下载，适用于一些 COPY 即可用的文件。
@@ -104,16 +107,20 @@ seo:
 
   ```bash
   # 关于 -jkfSL 请参考 man 说明
-  curl -jkfSL -o /plugins/vmtouch/vmtouch.zip 'https://github.com/hoytech/vmtouch/archive/refs/tags/v1.3.1.zip'
+  curl -jkfSL -o vmtouch.zip 'https://github.com/hoytech/vmtouch/archive/refs/tags/v1.3.1.zip'
   ```
 
 ## 多架构编译
+
+如果你本身具备多架构的机器资源，使用 docker 远端 builder 或 [GoogleContainerTools/kaniko](https://github.com/GoogleContainerTools/kaniko) 同架构编译，速度和性能是最理想的。高度依赖指令集的应用，跨架构编译可能需要 3 小时，而同架构只需要 10 分钟。
+
+kaniko 支持“多架构编译”，但是不支持跨架构编译，不能在 amd64 机器上编译 arm64 容器，如果需要多架构只能在不同机器上多次编译，然后使用 manifest-tool 合并。
 
 为 docker 启用多架构编译：
 
 ```sh
 
-# 创建新的 build，支持多架构，直接 use 生效
+# 创建新的 build，支持多架构，直接 use 生效，关于 --driver 类型请参考官方文档
 docker buildx create --name=multi-platform --platform=linux/amd64,linux/arm64 --driver=docker-container --use --bootstrap
 
 # 查看是否生效，星号的代表当前生效的
@@ -121,6 +128,12 @@ docker buildx ls
 
 # 指定 platform，build and push
 docker buildx build --platform linux/amd64,linux/arm64 --push --tag tester:1.0
+
+# 切换其他构建器
+docker buildx use multi-platform
+
+# 使用 buildx 提供的 imagetools inspect 工具可以查看远程仓库中的清单列表信息
+docker buildx imagetools inspect tester:1.0
 
 ```
 
@@ -162,6 +175,7 @@ EOF
 ```dockerfile
 # 使用特定平台的基础镜像
 FROM --platform=linux/amd64 ubuntu:20.04
+FROM --platform=$TARGETPLATFORM ubuntu:20.04
 
 # 在这里添加你的指令
 RUN apt-get update && apt-get install -y curl
@@ -171,18 +185,52 @@ RUN apt-get update && apt-get install -y curl
 
 ### skopeo
 
-镜像搬运工具：<https://github.com/containers/skopeo>
+[skopeo](https://github.com/containers/skopeo) 是一个镜像搬运工具。
+
+不需要运行守护进程，用于对容器镜像与容器仓库执行管理操作的命令行工具，支持 OCI 镜像与 Docker V2 镜像。
+
+看一下他的 help 就知道什么意思了。
+
+```console
+$ skopeo --help
+Various operations with container images and container image registries
+
+Usage:
+  skopeo [flags]
+  skopeo [command]
+
+Available Commands:
+  copy                                          Copy an IMAGE-NAME from one location to another
+  delete                                        Delete image IMAGE-NAME
+  inspect                                       查看一个镜像的 manifest 或者 image config 详细信息
+  list-tags                                     List tags in the transport/repository specified by the SOURCE-IMAGE
+  login                                         Login to a container registry
+  manifest-digest                               计算文件的清单摘要是一个 sha256sum 值
+  standalone-sign                               使用本地文件创建签名
+  standalone-verify                             验证本地文件的签名
+  sync                                          将一个或多个图像从一个位置同步到另一个位置，非常实用
+
+# 查询支持支持的传输格式，举例
+$ skopeo copy --help
+
+Supported transports:
+containers-storage, dir, docker, docker-archive, docker-daemon, oci, oci-archive, ostree, sif, tarball
+
+Usage:
+skopeo copy [command options] SOURCE-IMAGE DESTINATION-IMAGE
+
+Examples:
+skopeo copy docker://quay.io/skopeo/stable:latest docker://registry.example.com/skopeo:latest
+
+```
+
+日常使用可留作 shell 脚本，快速复制镜像。
 
 ```bash
 # 指定自建的 harbor 地址
 expport PRIVATE_HARBOR=custom.harbor.local
 skopeo login ${PRIVATE_HARBOR}
+# 指定 --multi-arch=all，复制多架构镜像
 skopeo copy --multi-arch=all docker://ghcr.io/graalvm/jdk-community:23.0.1 docker://${PRIVATE_HARBOR}/ghcr.io/graalvm/jdk-community:23.0.1
 
 ```
-
-## 参考资料
-
-构建 Java 镜像的 10 个最佳实践：<https://zhuanlan.zhihu.com/p/469820791>
-
-K8S 1.18 版本之前使用 kubectl-debug 插件：<https://github.com/aylei/kubectl-debug/blob/master/docs/zh-cn.md>
