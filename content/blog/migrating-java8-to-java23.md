@@ -1,6 +1,6 @@
 ---
-title: "从 Java 8 升级到 Java 23，踩坑记录、变更评估和工具介绍"
-description: ""
+title: "从 Java 8 升级到 Java 23，踩坑记录、变更评估方法、辅助工具介绍"
+description: "从 Java 8 升级到 Java 23，踩坑记录、变更评估方法、辅助工具介绍"
 summary: ""
 date: 2024-05-23T21:03:11+08:00
 lastmod: 2024-05-23T21:03:11+08:00
@@ -12,8 +12,8 @@ contributors: []
 pinned: false
 homepage: false
 seo:
-  title: "" # custom title (optional)
-  description: "" # custom description (recommended)
+  title: "从 Java 8 升级到 Java 23，踩坑记录、变更评估方法、辅助工具介绍" # custom title (optional)
+  description: "从 Java 8 升级到 Java 23，踩坑记录、变更评估方法、辅助工具介绍" # custom description (recommended)
   canonical: "" # custom canonical URL (optional)
   noindex: false # false (default) or true
 ---
@@ -399,6 +399,38 @@ Target: file:/Users/l10178/.m2/repository/io/netty/netty/3.10.0.Final/netty-3.10
 Java 参数太多，到 [VM Options Explorer - Corretto JDK21](https://chriswhocodes.com/corretto_jdk21_options.html) 中参照，里面根据 JDK 的版本以及发行商，列出来所有的相关参数，选择好对应发行商的正确版本，就可以搜索或者查看 java 命令支持的所有参数了。
 
 ## 遇见问题和解决办法
+
+- TLS 不兼容问题，类似如下错误。JDK 17 是支持 TLS1.0 ~ TLS1.3 的，但是默认使用的 TLS 版本是 TLS 1.3, 老版本被禁用了，需要主动放开。
+
+  ```console
+  # 错误日志
+  The server selected protocol version TLS10 is not accepted by client preferences [TLS13, TLS12]。
+
+  # 配置文件
+  $JAVA_HOME/conf/security/java.security
+
+  # 找到里面的一行配置：
+  jdk.tls.disabledAlgorithms=SSLv3, TLSv1, TLSv1.1, RC4, DES, MD5withRSA, \
+      DH keySize < 1024, EC keySize < 224, 3DES_EDE_CBC, anon, NULL
+
+  # 说明：JDK 中的 jdk.tls.disabledAlgorithms 参数用于禁用不安全或不需要的 TLS 密码算法，
+  以提高系统的安全性。通过配置这个参数，可以指定 JDK 不支持的密码算法或协议，以降低它们的优先级，
+  减少被攻击的风险。
+
+  # 我们把 TLSv1，TLSv1.1 这两个删除掉，变成如下：
+  jdk.tls.disabledAlgorithms=SSLv3, RC4, DES, MD5withRSA, \
+      DH keySize < 1024, EC keySize < 224, 3DES_EDE_CBC, anon, NULL
+
+  ```
+
+  ```console
+  # 不建议直接去改原 java.security 文件，可自定义一个新文件 custom.java.security，内容只包含 disabledAlgorithms 配置
+  jdk.tls.disabledAlgorithms=RC4, DES, MD5withRSA, \
+     DH keySize < 1024, EC keySize < 224, 3DES_EDE_CBC, anon, NULL, \
+     include jdk.disabled.namedCurves
+  # 然后启动的命令行增加以下参数配置
+  -Djava.security.properties=$JAVA_HOME/conf/security/custom.java.security
+  ```
 
 ## 参考资料
 
