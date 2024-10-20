@@ -68,167 +68,19 @@ seo:
 sequenceDiagram
     participant User
     participant oauth2-proxy
-    participant Backend
+    participant Backstage
 
     User->>oauth2-proxy: Access Service
     oauth2-proxy->>oauth2-proxy: Authenticate User
-    oauth2-proxy->>Backend: Forward request to Backend <br> proxy paas headers(user id/name/groups/roles)
-    Backend->>Backend: Do more things by header info
-    Backend-->>oauth2-proxy: Response
+    oauth2-proxy->>Backstage: Forward request to Backend <br> proxy paas headers(user id/name/groups/roles)
+    Backstage->>Backstage: Do more things by header info
+    Backstage-->>oauth2-proxy: Response
     oauth2-proxy-->>User: Return Response
 
 ```
 
 第二种，借助 traefik forwardAuth 认证插件 或 nginx auth_request 认证模块，结合 oauth2-proxy 提供的认证相关 Endpoints，承担认证流程，认证通过后流量的分发仍然由 traefik/nginx 执行。
-他的网络流量大概类似如下方式，此文档中提到的就是这种方式。
-
-```mermaid
-
-sequenceDiagram
-    participant User
-    participant Traefik/Nginx
-    participant oauth2-proxy
-    participant Backend
-
-    User->>Traefik/Nginx: Access Service
-    Traefik/Nginx->>oauth2-proxy: ForwardAuth for Authentication
-    oauth2-proxy->>oauth2-proxy: Authenticate User
-    oauth2-proxy-->>Traefik/Nginx: Return Auth Result, set response headers(cookies, user id/name/groups/roles)
-    Traefik/Nginx->>Backend: Forward request to Backend, proxy paas headers from response header (user id/name/groups/roles)
-    Backend->>Backend: Do more things by header info
-    Backend-->>Traefik/Nginx: Response
-    Traefik/Nginx-->>User: Return Response
-
-```
-
-本文档部署示例使用的是第二种方式。
-
-## 部署配置详解
-
-此处的 Traefik 使用的 K3S Traefik ingress controller，相关的功能是 ingress 标准注解实现，如果你使用 docker/bin 方式部署，请参考 [Traefik 文档](https://doc.traefik.io/traefik/routing/providers/kubernetes-ingress/) 转换为对应的 yaml 配置。
-
-<!-- ## Thanks
-
-<https://www.leejohnmartin.co.uk/infrastructure/kubernetes/2022/05/31/traefik-oauth-proxy.html>
-
-<https://joeeey.com/blog/selfhosting-sso-with-traefik-oauth2-proxy-part-2/>
-
-<https://oauth2-proxy.github.io/oauth2-proxy/configuration/providers/keycloak_oidc> -->
-
-```yaml
-#  kubectl -n kube-system edit deployments.apps traefik
-#  --providers.kubernetescrd.allowCrossNamespace=true
-# providers:
-#   kubernetesCRD:
-#     enabled: true
-#     allowCrossNamespace: true
-# https://doc.traefik.io/traefik/routing/providers/kubernetes-ingress/
----
-apiVersion: traefik.io/v1alpha1
-kind: IngressRoute
-metadata:
-  name: backstage-ingress-route
-  namespace: backstage
-  annotations:
-    cert-manager.io/issuer: selfsigned-issuer
-spec:
-  entryPoints:
-    - web
-    - websecure
-  routes:
-    - match: "Host(`app.nxest.com`) && PathPrefix(`/oauth2`)"
-      kind: Rule
-      services:
-        - name: oauth2-proxy
-          namespace: oauth2-proxy
-          port: http
-      middlewares:
-        - name: oauth-errors
-    - match: Host(`app.nxest.com`)
-      kind: Rule
-      middlewares:
-        - name: oauth-errors
-        - name: oauth2-proxy
-      services:
-        - name: backstage
-          namespace: backstage
-          port: http-backend
-
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  annotations:
-    cert-manager.io/cluster-issuer: selfsigned-issuer
-    traefik.ingress.kubernetes.io/router.middlewares: oauth-errors
-  labels:
-    app.kubernetes.io/component: oauth2-proxy
-    app.kubernetes.io/instance: oauth2-proxy
-    app.kubernetes.io/name: oauth2-proxy
-  name: oauth-errors
-  namespace: oauth2-proxy
-spec:
-  ingressClassName: traefik
-  rules:
-    - host: "*.nxest.com"
-      http:
-        paths:
-          - backend:
-              service:
-                name: oauth2-proxy
-                port:
-                  name: http
-            path: /oauth2
-            pathType: Prefix
-  tls:
-    - hosts:
-        - "*.nxest.com"
-      secretName: "widles-place.nxest.com-tls"
----
-apiVersion: traefik.io/v1alpha1
-kind: Middleware
-metadata:
-  name: oauth-errors
-  namespace: oauth2-proxy
-spec:
-  errors:
-    status:
-      - "401-403"
-    service:
-      name: oauth2-proxy
-      port: 4180
-    query: "/oauth2/sign_in"
----
-apiVersion: traefik.io/v1alpha1
-kind: Middleware
-metadata:
-  name: oauth-errors
-  # namespace: backstage
-spec:
-  errors:
-    status:
-      - "401-403"
-    service:
-      name: oauth2-proxy
-      namespace: oauth2-proxy
-      port: 4180
-    query: "/oauth2/sign_in"
----
-apiVersion: traefik.io/v1alpha1
-kind: Middleware
-metadata:
-  name: oauth2-proxy
-  # namespace: backstage
-spec:
-  forwardAuth:
-    address: http://oauth2-proxy.oauth2-proxy.svc:4180/oauth2/auth
-    trustForwardHeader: true
-    authResponseHeaders:
-      - X-Auth-Request-User
-      - Set-Cookie
-```
-
-下面是使用 Mermaid JS 描述上述几个组件（Keycloak、oauth2-proxy、Traefik、Backstage）登录流程的代码：
+他的网络流量和流程大概类似如下方式。
 
 ```mermaid
 sequenceDiagram
@@ -268,6 +120,232 @@ sequenceDiagram
 9. Traefik 将请求发送给 Backstage。
 10. Backstage 返回响应，最终由 Traefik 返回给用户。
 
+本文档部署示例使用的是第二种方式。
+
+## 部署配置详解
+
+此处的 Traefik 使用的 K3S Traefik ingress controller，相关的功能通过 ingress annotations 实现，如果你使用其他方式部署，请参考 [Traefik 文档](https://doc.traefik.io/traefik/routing/providers/kubernetes-ingress/) 转换为对应的 yaml 配置。
+
+### Keycloak 配置
+
+首先，我们需要在 Keycloak 中创建一个 client，用于允许 [oauth2-proxy 使用 Keycloak](https://oauth2-proxy.github.io/oauth2-proxy/configuration/providers/keycloak_oidc) 验证用户身份验证。
+
+OIDC 客户端必须配置 `audience mapper`，以将客户端的名称包含在 JWT 令牌的 aud 声明中。
+aud 声明指定令牌的预期接收者，oauth2-proxy 期望与 --client-id 或 --oidc-extra-audience 的值匹配。
+在 Keycloak 中，通过使用 `client scopes` 或 `dedicated` 将声明添加到 JWT Token 中。
+
+1. 登录 Keycloak admin 控制台，切换到你自己的 realm。
+2. 通过 `Clients -> Create client` （注： -> 连接代表 Keycloak 的菜单和按钮导航）来创建新客户端，核心参数如下，注：app.example.com 为我的应用地址。
+
+    - Client type： OpenID Connect
+    - Client ID：oauth2-proxy
+    - Client authentication 勾选，打开
+    - Authentication flow 勾选 Standard flow
+    - Valid redirect URIs: 设置为你的应用 callback 地址，`https://app.example.com/oauth2/callback`，可以设置多个，也可以设置正则匹配，如 `https://app.example.com/*`
+    - Valid post logout redirect URIs：`https://app.example.com/oauth2/sign_out`
+
+3. 以上点保存后，从 `Clients -> oauth2-proxy -> Credentials` 页面，复制客户端密钥，下面会用到。
+4. 配置一个 `audience mapper`, 在 `Clients -> oauth2-proxy -> Client scopes`页签，此时在列表应该看到一个名字叫 `oauth2-proxy-dedicated`的，点击进去，通过 `Configure a new mapper` 按钮创建一个新的 mapper。
+
+    - 类型选择 `Audience`
+    - 名字叫 `aud-mapper-oauth2-proxy`
+    - Included Client Audience：选择 oauth2-proxy
+    - 勾选 `Add to ID token`、`Add to access token`、`Add to token introspection`
+
+5. 如果想使用 oauth2-proxy 的 `--allowed-group` 验证，需要在 `Client scopes -> Create client scope` 创建一个名字叫 `groups` 的 scope，下面参数是保持 groups 后才能使用，在 groups 的 detail -> mapper 里创建 `Group Membership` 类型的 mapper。
+
+    - name：groups-mapper
+    - Token Claim Name: groups
+    - 勾选 `Add to xxx`，全勾上。
+
+6. 再回到 `Clients -> oauth2-proxy -> Client scopes`页签， `Add client scope`选择我们上一步创建的 `groups`, Add 类型选择 `Optional`。这样就能把用户的 group 加到 JWT token 里了。
+
+### oauth2-proxy 配置
+
+oauth2-proxy 对接 keycloak，可以选择 `Keycloak OIDC` provider，也可以选择 `OpenID Connect` provider，这里我们选择 `Keycloak OIDC`，他比 OpenID Connect 多支持按照 role 和 group 授权。
+
+这里我们使用 bitnami/oauth2-proxy helm chart 部署，values.yaml 主要配置如下。
+
+```yaml
+
+# service 默认 port 4180
+service:
+  port: 4180
+
+## Configuration section
+##
+configuration:
+  clientID: oauth2-proxy
+  clientSecret: <%= 替换成上面创建的 clientSecret %>
+  # cookieSecret 创建命令： openssl rand -base64 32 | tr -- '+/' '-_'
+  cookieSecret: "iSGfyi0EbDrkg6eNJpAXGLmwN1jZDZossmElq5GgXeI="
+  ##  content 会映射到 oauth2-proxy.cfg 配置文件里
+  content: |
+    reverse_proxy = true
+    provider = "keycloak-oidc"
+    provider_display_name = "Keycloak"
+    email_domains = "*"
+    ssl_insecure_skip_verify = true
+    insecure_oidc_allow_unverified_email = true
+    code_challenge_method = "S256"
+    upstreams = "file:///dev/null"
+
+  # 填你自己的 keycloak 服务地址
+  oidcIssuerUrl: https://keycloak.example.com/realms/master
+  # 不需要填 redirectUrl，由 Traefik 帮我们处理
+  redirectUrl: ""
+
+```
+
+再次强调，因为我们是使用 Traefik 做流量分发，oauth2-proxy 仅提供认证功能，所以这几个参数很重要。
+
+```yaml
+  redirectUrl: ""
+  content: |
+    reverse_proxy = true
+    upstreams = "file:///dev/null"
+```
+
+### Traefik 配置
+
+Traefik 我们需要两个 Middleware：
+
+- errors: 将 http 返回状态码是 401-403 的请求，重定向到 oauth2-proxy  `/oauth2/sign_in` 端点。
+- forwardAuth：检查登录状态并设置 cookie 和 Header。
+
+先创建这两个 Middleware。
+
+```yaml
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: errors-sign-in
+  namespace: oauth2-proxy
+spec:
+  errors:
+    status:
+      - "401-403"
+    service:
+      name: oauth2-proxy
+      namespace: oauth2-proxy
+      port: 4180
+    query: "/oauth2/sign_in"
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: forward-auth
+  namespace: oauth2-proxy
+spec:
+  forwardAuth:
+    # oauth2-proxy k8s service 地址
+    address: http://oauth2-proxy.oauth2-proxy.svc:4180/oauth2/auth
+    trustForwardHeader: true
+    authResponseHeaders:
+      - X-Auth-Request-User
+      - Set-Cookie
+```
+
+创建完了，在 k8s 里可使用 traefik IngressRoute 对外暴露服务，也可使用标准 traefik ingress，看个人爱好。
+
+因为 IngressRoute 看起来比较直观，好理解，我们先看下 IngressRoute 配置。
+
+```yaml
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: app-ingress-route
+  namespace: oauth2-proxy
+  # annotations:
+  #   cert-manager.io/issuer: selfsigned-issuer
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+    - match: "Host(`app.example.com`) && PathPrefix(`/oauth2`)"
+      kind: Rule
+      services:
+        - name: oauth2-proxy
+          namespace: oauth2-proxy
+          port: http
+      middlewares:
+        - name: errors-sign-in
+    # 需要代理的应用对外暴露服务
+    - match: Host(`app.example.com`)
+      kind: Rule
+      middlewares:
+        - name: errors-sign-in
+        - name: forward-auth
+      services:
+        # 后端应用
+        - name: backstage
+          namespace: oauth2-proxy
+          port: http-backend
+```
+
+使用 k8s ingress 实现，annotations 请参考 [traefik.ingress.kubernetes.io](https://doc.traefik.io/traefik/routing/providers/kubernetes-ingress/)。
+
+注意这里有两个关键点：
+
+1. 因为 ingress 没办法像 IngressRoute 那样，为不同 path 设置不同的 middlewares，所以我们拆分成两个 ingress 定义。
+2. traefik annotations 的 middlewares 名字定义格式为：namespace-middleware@@kubernetescrd，一定要加 namespace 前缀，如果是 default namespace 的话，也要加 `default-`前缀，否则查看 traefik 日志会看到一些 middlewares 找不到的错误，从而导致服务不生效。
+
+```yaml
+# 第一个 ingress，对应 match: "Host(`app.example.com`) && PathPrefix(`/oauth2`)"，使用 errors-sign-in middleware
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    traefik.ingress.kubernetes.io/router.middlewares: oauth2-proxy-errors-sign-in@kubernetescrd
+  name: errors-sign-in
+  # namespace: oauth2-proxy
+spec:
+  ingressClassName: traefik
+  rules:
+    # traefik 支持泛域名拦截，如果你想给所有的 ingress 都设置 oauth2，此处可以设置为 "*.example.com"
+    - host: "app.example.com"
+      http:
+        paths:
+          - backend:
+              service:
+                name: oauth2-proxy
+                port:
+                  name: http
+            path: /oauth2
+            pathType: Prefix
+
+  # 根据你自己的情况设置 TLS
+  # tls:
+  #   - hosts:
+  #       - "app.example.com"
+  #     secretName: "app.example.com-tls"
+---
+# 第二个 ingress，对应 match: "Host(`app.example.com`)，使用 errors-sign-in,oauth2-proxy 两个 middleware
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    # 这里设置 errors-sign-in,oauth2-proxy 两个 middleware
+    traefik.ingress.kubernetes.io/router.middlewares: oauth2-proxy-errors-sign-in@kubernetescrd,oauth2-proxy-forward-auth@kubernetescrd
+  name: errors-sign-in-ingress
+  namespace: oauth2-proxy
+spec:
+  ingressClassName: traefik
+  rules:
+    # traefik 支持泛域名拦截，如果你想给所有的 ingress 都设置 oauth2，此处可以设置为 "*.example.com"
+    - host: "app.example.com"
+      http:
+        paths:
+          - backend:
+              service:
+                name: backstage
+                port:
+                  name: http-backend
+            path: /
+            pathType: Prefix
+```
+
 ## K3S Traefik 对接 oauth2-proxy 特别说明
 
 如果以上你的所有应用都部署在 K8S 同一个 namespace 里，就不用关注这个了。
@@ -303,9 +381,7 @@ K3S Traefik 默认未开启 `allowCrossNamespace`, 不允许跨 namespace 访问
 
 ## Keycloak 对接 oauth2-proxy 特别说明
 
-<!-- audience mapper  -->
-<!-- Group Scope -->
-<!-- Configure a dedicated audience mapper for your client by navigating to Clients -> <your client's id> -> Client scopes. -->
+Keycloak 需要创建 audience mapper 和 groups scope mapper，这在 [oauth2-proxy 官方文档](https://oauth2-proxy.github.io/oauth2-proxy/configuration/providers/keycloak_oidc) 中有详细的说明和创建步骤。
 
 ## Backstage 对接 oauth2-proxy 特别说明
 
@@ -394,3 +470,18 @@ nginx.ingress.kubernetes.io/auth-url: https://$host/oauth2/auth
 ## 遇见问题和解决办法
 
 我们使用过程中遇见的问题和解决办法，记录下来仅供参考。
+
+- traefik log 中 middleware 找不到，请参考本文上面说明，将 middlewares 名字改为：namespace-middleware@@kubernetescrd，一定要加 namespace 前缀，如果是 default namespace 的话，也要加 `default-` 前缀。
+
+  ```console
+  level=error msg="middleware \"errors-sign-in@kubernetes\" does not exist" entryPointName=web routerName=oauth2-proxy-errors-sign-in-sign-in-example-com-oauth2@kubernetes
+  ```
+
+- oauth2-proxy 能重定向到登录页面，输入密码登录成功，回调到 callback 时出现下面这个错误，原因是缺少 audience mapper，参考本文上面介绍增加 mapper。
+
+    ```console
+    500 Internal Server Error
+    Oops! Something went wrong. For more information contact your server administrator.
+
+    [oauthproxy.go:902] Error creating session during OAuth2 callback: audience from claim aud with value [account] does not match with any of allowed audiences map[oauth2-proxy:{}]
+    ```
