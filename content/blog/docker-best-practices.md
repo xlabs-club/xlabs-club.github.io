@@ -112,7 +112,7 @@ seo:
 
 ## 多架构编译
 
-如果你本身具备多架构的机器资源，使用 docker 远端 builder 或 [GoogleContainerTools/kaniko](https://github.com/GoogleContainerTools/kaniko) 同架构编译，速度和性能是最理想的。高度依赖指令集的应用，跨架构编译可能需要 3 小时，而同架构只需要 10 分钟。
+如果你本身具备多架构的机器资源，使用 docker 远端 builder 或 [GoogleContainerTools/kaniko](https://github.com/GoogleContainerTools/kaniko) 同架构编译，速度和性能是最理想的。高度依赖指令集的应用，比如某些老 python 包无 arm 版本触发编译，跨架构编译可能需要 3 小时，而同架构只需要 10 分钟。
 
 kaniko 支持“多架构编译”，但是不支持跨架构编译，不能在 amd64 机器上编译 arm64 容器，如果需要多架构只能在不同机器上多次编译，然后使用 manifest-tool 合并。
 
@@ -183,11 +183,19 @@ RUN apt-get update && apt-get install -y curl
 
 ## 辅助工具
 
+### hadolint
+
+[hadolint](https://github.com/hadolint/hadolint) 是一个 Dockerfile 语法检测工具，根据最近实践检测语法给出修改方式。
+
+可以用命令行执行，可以 Docker 镜像执行，也可以使用 [Online 在线分析](https://hadolint.github.io/hadolin)。
+
 ### skopeo
 
 [skopeo](https://github.com/containers/skopeo) 是一个镜像搬运工具。
 
 不需要运行守护进程，用于对容器镜像与容器仓库执行管理操作的命令行工具，支持 OCI 镜像与 Docker V2 镜像。
+
+主要用于跨仓库之间镜像复制，镜像仓库与本地文件同步。
 
 看一下他的 help 就知道什么意思了。
 
