@@ -14,8 +14,8 @@ homepage: false
 seo:
   title: "K8S StatefulSet 应用 PV/PVC 平滑扩容"
   description: "K8S StatefulSet 应用 PV/PVC 平滑扩容"
-  canonical: "" # custom canonical URL (optional)
-  noindex: false # false (default) or true
+  canonical: ""
+  noindex: false
 ---
 
 在 K8S 中使用 Helm 部署了一些有状态应用，并通过 Helm 自动生成了 PV 和 PVC，某天想扩容，竟然报错了。

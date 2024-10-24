@@ -8,10 +8,10 @@ draft: false
 weight: 999
 toc: true
 seo:
-  title: "程序员的瑞士军刀，常用优秀命令行工具" # custom title (optional)
-  description: "程序员的瑞士军刀，常用优秀命令行工具" # custom description (recommended)
-  canonical: "" # custom canonical URL (optional)
-  noindex: false # false (default) or true
+  title: "程序员的瑞士军刀，常用优秀命令行工具"
+  description: "程序员的瑞士军刀，常用优秀命令行工具"
+  canonical: ""
+  noindex: false
 ---
 
 程序员的瑞士军刀，常用优秀命令行工具，上榜都是有理由的。

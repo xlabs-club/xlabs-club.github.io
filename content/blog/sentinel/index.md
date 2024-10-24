@@ -14,8 +14,8 @@ homepage: false
 seo:
   title: "基于 Alibaba Sentinel 实现的分布式限流中间件服务以及遇到的坑和注意事项"
   description: "基于 Alibaba Sentinel 实现的分布式限流中间件服务以及遇到的坑和注意事项"
-  canonical: "" # custom canonical URL (optional)
-  noindex: false # false (default) or true
+  canonical: ""
+  noindex: false
 ---
 
 基于 Alibaba Sentinel 实现的分布式限流中间件服务。主要对服务提供者提供限流、系统保护，对服务调用者提供熔断降级、限流排队等待效果。

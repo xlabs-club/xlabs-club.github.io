@@ -12,10 +12,10 @@ contributors: []
 pinned: false
 homepage: false
 seo:
-  title: "从 Java 8 升级到 Java 23，踩坑记录、变更评估方法、辅助工具介绍" # custom title (optional)
-  description: "从 Java 8 升级到 Java 23，踩坑记录、变更评估方法、辅助工具介绍" # custom description (recommended)
-  canonical: "" # custom canonical URL (optional)
-  noindex: false # false (default) or true
+  title: "从 Java 8 升级到 Java 23，踩坑记录、变更评估方法、辅助工具介绍"
+  description: "从 Java 8 升级到 Java 23，踩坑记录、变更评估方法、辅助工具介绍"
+  canonical: ""
+  noindex: false
 ---
 
 ## 破坏性变更评估

@@ -15,8 +15,8 @@ toc: true
 seo:
   title: "卫星实验室，一个专注于技术创新的开源组织"
   description: "卫星实验室，一个专注于技术创新的开源组织，在这里将分享我们的平台工程实践经验，介绍如何以技术驱动业务长期发展和高速增长"
-  canonical: "" # custom canonical URL (optional)
-  noindex: false # false (default) or true
+  canonical: ""
+  noindex: false
 ---
 
 卫星实验室，一个专注于技术创新的开源组织。

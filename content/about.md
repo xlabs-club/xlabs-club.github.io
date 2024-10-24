@@ -6,10 +6,10 @@ date: 2024-09-28T11:27:33+08:00
 lastmod: 2024-09-28T11:27:33+08:00
 draft: false
 seo:
-  title: "关于卫星实验室的自我介绍" # custom title (optional)
-  description: "关于卫星实验室，官方账号列表和联系方式" # custom description (recommended)
-  canonical: "" # custom canonical URL (optional)
-  noindex: false # false (default) or true
+  title: "关于卫星实验室的自我介绍"
+  description: "关于卫星实验室，官方账号列表和联系方式"
+  canonical: ""
+  noindex: false
 ---
 
 卫星实验室，一个专注于技术创新的开源组织，此项目为卫星实验室主页 [xlabs.club][] 的源码，合作交流请到我们的 [GitHub](https://github.com/xlabs-club) 主页。

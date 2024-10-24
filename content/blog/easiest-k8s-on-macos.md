@@ -1,6 +1,6 @@
 ---
-title: "MacOS 搭建本地 K8S 开发环境方案选型，基于 K3D、multipass、lima 等不同方案优缺点介绍对比"
-description: "MacOS 搭建本地 K8S 开发环境方案选型，基于 K3D、multipass、lima 等不同方案优缺点介绍对比"
+title: "MacOS 搭建本地 K8S 开发环境方案选型，基于 multipass、lima 等不同方案优缺点介绍对比"
+description: "MacOS 搭建本地 K8S 开发环境方案选型，基于 multipass、lima 等不同方案优缺点介绍对比"
 summary: ""
 date: 2024-04-13T15:20:43+08:00
 lastmod: 2024-10-10T22:20:43+08:00
@@ -12,10 +12,10 @@ contributors: [l10178]
 pinned: false
 homepage: false
 seo:
-  title: "MacOS 搭建本地 K8S 开发环境方案选型，基于 K3D、multipass、lima 等不同方案优缺点介绍对比"
-  description: "MacOS 搭建本地 K8S 开发环境方案选型，基于 K3D、multipass、lima 等不同方案优缺点介绍对比"
-  canonical: "" # custom canonical URL (optional)
-  noindex: false # false (default) or true
+  title: "MacOS 搭建本地 K8S 开发环境方案选型，基于 multipass、lima 等不同方案优缺点介绍对比"
+  description: "MacOS 搭建本地 K8S 开发环境方案选型，基于 multipass、lima 等不同方案优缺点介绍对比"
+  canonical: ""
+  noindex: false
 ---
 
 因为工作经常需要用到 K8S，而且有时因网络原因不能完全依赖公司网络，或者因为测试新功能不能直接发布到公司 K8S 集群，所以就有了本地搭建 K8S 的需求。

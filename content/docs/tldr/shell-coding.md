@@ -8,10 +8,10 @@ draft: false
 weight: 999
 toc: true
 seo:
-  title: "Linux Shell 编程实用句式速查" # custom title (optional)
-  description: "Linux Shell 编程实用句式速查" # custom description (recommended)
-  canonical: "" # custom canonical URL (optional)
-  noindex: false # false (default) or true
+  title: "Linux Shell 编程实用句式速查"
+  description: "Linux Shell 编程实用句式速查"
+  canonical: ""
+  noindex: false
 ---
 
 Linux Shell 日常编程实用句式速查，注意以下例子如无特殊说明都是 bash 语法。

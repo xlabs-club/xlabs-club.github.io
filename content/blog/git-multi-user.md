@@ -14,8 +14,8 @@ homepage: false
 seo:
   title: "Git SSH 客户端同一机器多用户多仓库配置"
   description: "Git SSH 客户端在同一机器上为不同目录配置不同的用户"
-  canonical: "" # custom canonical URL (optional)
-  noindex: false # false (default) or true
+  canonical: ""
+  noindex: false
 ---
 
 Git 为不同目录配置不同的 config，比如在同一个电脑上区分个人开发账号和公司开发账号，开源项目放一个文件夹，公司项目放一个文件夹，这样在提交代码的时候就不会混乱。

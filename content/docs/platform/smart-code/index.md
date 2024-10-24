@@ -12,10 +12,10 @@ menu:
 weight: 999
 toc: true
 seo:
-  title: "使用 OpenRewrite 进行大规模自动化代码重构，搭建私有化企业智能代码重构平台" # custom title (optional)
-  description: "" # custom description (recommended)
-  canonical: "" # custom canonical URL (optional)
-  noindex: false # false (default) or true
+  title: "使用 OpenRewrite 进行大规模自动化代码重构，搭建私有化企业智能代码重构平台"
+  description: ""
+  canonical: ""
+  noindex: false
 ---
 
 作为一个以 Java 和 Spring 为主要技术栈的团队，在日常的软件开发中，我们经常会遇到一系列的组件升级和代码重构需求，在此过程我们期望能做到几个效果：
