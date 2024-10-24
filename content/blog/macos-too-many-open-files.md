@@ -14,8 +14,8 @@ homepage: false
 seo:
   title: "MacOS 固化配置，彻底解决 too many open files in system 的问题"
   description: "MacOS 固化配置，彻底解决 too many open files in system 的问题"
-  canonical: "" # custom canonical URL (optional)
-  noindex: false # false (default) or true
+  canonical: ""
+  noindex: false
 ---
 
 作为一个开发者，经常在 MacOS 遇到 Too many open files in system 的报错，尤其是碰到黑洞 node_modules 时，如何固化配置彻底解决，直接上代码。

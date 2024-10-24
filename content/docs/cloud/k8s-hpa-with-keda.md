@@ -8,10 +8,10 @@ draft: false
 weight: 200
 toc: true
 seo:
-  title: "基于 KEDA 实现的 K8S 高效扩缩容方案" # custom title (optional)
-  description: "基于 KEDA 实现的 K8S 高效扩缩容方案" # custom description (recommended)
-  canonical: "" # custom canonical URL (optional)
-  noindex: false # false (default) or true
+  title: "基于 KEDA 实现的 K8S 高效扩缩容方案"
+  description: "基于 KEDA 实现的 K8S 高效扩缩容方案"
+  canonical: ""
+  noindex: false
 ---
 
 ## Install KEDA

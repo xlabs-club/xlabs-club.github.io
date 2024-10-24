@@ -8,6 +8,6 @@ draft: false
 seo:
   title: "卫星实验室"
   description: "卫星实验室，一个专注于技术创新的开源组织，分享有关 DevOps、AIOps、云原生、平台工程等相关的技术"
-  canonical: "" # custom canonical URL (optional)
-  noindex: false # false (default) or true
+  canonical: ""
+  noindex: false
 ---

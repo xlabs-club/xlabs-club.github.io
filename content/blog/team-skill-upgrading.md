@@ -12,10 +12,10 @@ contributors: [l10178]
 pinned: false
 homepage: false
 seo:
-  title: "" # custom title (optional)
-  description: "" # custom description (recommended)
-  canonical: "" # custom canonical URL (optional)
-  noindex: false # false (default) or true
+  title: ""
+  description: ""
+  canonical: ""
+  noindex: false
 ---
 
 研发团队如何提升整体技能水平，分享一些实施有效的措施。

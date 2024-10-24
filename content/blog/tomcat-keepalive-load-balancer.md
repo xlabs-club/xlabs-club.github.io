@@ -12,10 +12,10 @@ contributors: [l10178]
 pinned: false
 homepage: false
 seo:
-  title: "K8S Tomcat 服务长连接负载不均衡问题分析和解决办法" # custom title (optional)
-  description: "K8S Tomcat 服务长连接负载不均衡问题分析和解决办法" # custom description (recommended)
-  canonical: "" # custom canonical URL (optional)
-  noindex: false # false (default) or true
+  title: "K8S Tomcat 服务长连接负载不均衡问题分析和解决办法"
+  description: "K8S Tomcat 服务长连接负载不均衡问题分析和解决办法"
+  canonical: ""
+  noindex: false
 ---
 
 问题背景，我们有一个 Http 服务在 K8S 内部署了 3 个 Pod，客户端使用 Service NodePort 进行连接，发现流量几乎都集中到了一个 Pod 上，很不均衡。

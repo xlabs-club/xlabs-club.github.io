@@ -13,10 +13,10 @@ menu:
 weight: 10
 toc: true
 seo:
-  title: "平台工程架构概述和架构演进" # custom title (optional)
-  description: "平台工程架构概述和架构演进" # custom description (recommended)
-  canonical: "" # custom canonical URL (optional)
-  noindex: false # false (default) or true
+  title: "平台工程架构概述和架构演进"
+  description: "平台工程架构概述和架构演进"
+  canonical: ""
+  noindex: false
 ---
 
 我们的平台工程建设之路，介绍前期方案设计、中间踩坑历程。

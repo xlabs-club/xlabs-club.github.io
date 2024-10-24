@@ -12,10 +12,10 @@ contributors: []
 pinned: false
 homepage: false
 seo:
-  title: "" # custom title (optional)
-  description: "" # custom description (recommended)
-  canonical: "" # custom canonical URL (optional)
-  noindex: false # false (default) or true
+  title: ""
+  description: ""
+  canonical: ""
+  noindex: false
 ---
 
 备考 CKA （Certified Kubernetes Administrator）过程，心得，遇见问题，CKA 真题。
@@ -43,7 +43,7 @@ deb https://mirrors.aliyun.com/kubernetes/apt kubernetes-xenial main
 
 踩坑：因为使用的是 ubuntu 20.04，代号 `focal`，专门去各个代理镜像源找`kubernetes-focal`都没有找到，后来发现 google 官方根本没发布对应的版本，只有`kubernetes-xenial`， k8s 官方文档里 ubuntu 也是用的这一个版本。可以用，就用他吧。
 
-kubeadm init 时指定使用阿里镜像源（解决国内连不上 k8s.gcr.io 的问题）、指定版本号（安装考试对应的版本，不一定是最新版本）。  
+kubeadm init 时指定使用阿里镜像源（解决国内连不上 k8s.gcr.io 的问题）、指定版本号（安装考试对应的版本，不一定是最新版本）。
 通过指定`--image-repository`，不需要手动下载镜像重新打 tag，kubeadm 自动使用指定的 repository。
 
 ```sh

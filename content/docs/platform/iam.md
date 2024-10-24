@@ -12,10 +12,10 @@ menu:
 weight: 20
 toc: true
 seo:
-  title: "" # custom title (optional)
-  description: "" # custom description (recommended)
-  canonical: "" # custom canonical URL (optional)
-  noindex: false # false (default) or true
+  title: ""
+  description: ""
+  canonical: ""
+  noindex: false
 ---
 
 统一身份认证（Identity and Access Management，身份认证和访问控制，简称 IAM）的技术选型和实践。

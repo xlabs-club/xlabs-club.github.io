@@ -17,10 +17,10 @@ footer = "Give Me a <a class=\"text-muted\" href=\"https://github.com/xlabs-club
 
 # Add-ons
 [add_ons]
-  carbonAds = false # false (default) or true
-  docSearch = true # false (default) or true
+  carbonAds = false
+  docSearch = true
   plausibleDomain = "xlabs.club" # "example.com" (default)
-  keila = false # false (default) or true
+  keila = false
 
 # Doks (@thulite/doks-core)
 [doks]
@@ -33,7 +33,7 @@ footer = "Give Me a <a class=\"text-muted\" href=\"https://github.com/xlabs-club
   containerBreakpoint = "fluid" # "", "sm", "md", "lg" (default), "xl", "xxl", or "fluid"
 
   ## Button
-  navBarButton = false # false (default) or true
+  navBarButton = false
   navBarButtonUrl = "https://www.xlabs.club/"
   navBarButtonText = "Get started"
 
@@ -45,30 +45,30 @@ footer = "Give Me a <a class=\"text-muted\" href=\"https://github.com/xlabs-club
   indexSummary = true # true or false (default); whether to index only the `.Summary` instead of the full `.Content`; limits the respective JSON field size and thus increases loading time
 
   ## Search results
-  showDate = false # false (default) or true
+  showDate = false
   showSummary = false # true (default) or false
   searchLimit = 99 # 0 (no limit, default) or natural number
 
   # Global alert
-  alert = false # false (default) or true
+  alert = false
   alertDismissable = true # true (default) or false
 
   # Bootstrap
-  bootstrapJavascript = true # false (default) or true
+  bootstrapJavascript = true
 
   # Nav
   sectionNav = ["docs"] # ["docs"] (default) or list of sections (e.g. ["docs", "guides"])
-  toTopButton = true # false (default) or true
-  breadcrumbTrail = false # false (default) or true
+  toTopButton = true
+  breadcrumbTrail = false
   headlineHash = true # true (default) or false
   scrollSpy = true # true (default) or false
 
   # Multilingual
-  multilingualMode = false # false (default) or true
+  multilingualMode = false
   showMissingLanguages = true # whether or not to show untranslated languages in the language menu; true (default) or false
 
   # Versioning
-  docsVersioning = false # false (default) or true
+  docsVersioning = false
   docsVersion = "1.0"
 
   # UX
@@ -76,16 +76,16 @@ footer = "Give Me a <a class=\"text-muted\" href=\"https://github.com/xlabs-club
   backgroundDots = true # true (default) or false
 
   # Homepage
-  sectionFooter = true # false (default) or true
+  sectionFooter = true
 
   # Blog
-  relatedPosts = false # false (default) or true
+  relatedPosts = false
   imageList = true # true (default) or false
   imageSingle = true # true (default) or false
 
   # Repository
-  editPage = true # false (default) or true
-  lastMod = true # false (default) or true
+  editPage = true
+  lastMod = true
   repoHost = "GitHub" # GitHub (default), Gitea, GitLab, Bitbucket, or BitbucketServer
   docsRepo = "https://github.com/xlabs-club/xlabs-club.github.io"
   docsRepoBranch = "main" # main (default), master, or <branch name>

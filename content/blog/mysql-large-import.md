@@ -12,10 +12,10 @@ contributors: []
 pinned: false
 homepage: false
 seo:
-  title: "" # custom title (optional)
-  description: "" # custom description (recommended)
-  canonical: "" # custom canonical URL (optional)
-  noindex: false # false (default) or true
+  title: ""
+  description: ""
+  canonical: ""
+  noindex: false
 ---
 
 项目中需要根据 SQL 文件导入数据，文件大约 20G，正常导入约需要 2 小时，如何提高导入速度。

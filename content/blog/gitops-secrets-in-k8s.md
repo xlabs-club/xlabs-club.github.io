@@ -12,10 +12,10 @@ contributors: [l10178]
 pinned: false
 homepage: false
 seo:
-  title: "" # custom title (optional)
-  description: "" # custom description (recommended)
-  canonical: "" # custom canonical URL (optional)
-  noindex: false # false (default) or true
+  title: ""
+  description: ""
+  canonical: ""
+  noindex: false
 ---
 
 介绍 GitOps 中几种 Kubernetes Secret 管理方式。

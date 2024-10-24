@@ -15,10 +15,10 @@ toc: true
 sidebar:
   collapsed: true
 seo:
-  title: "日常开发速查手册，程序员的瑞士军刀，常用优秀命令行工具" # custom title (optional)
-  description: "日常开发速查手册，程序员的瑞士军刀，常用优秀命令行工具" # custom description (recommended)
-  canonical: "" # custom canonical URL (optional)
-  noindex: false # false (default) or true
+  title: "日常开发速查手册，程序员的瑞士军刀，常用优秀命令行工具"
+  description: "日常开发速查手册，程序员的瑞士军刀，常用优秀命令行工具"
+  canonical: ""
+  noindex: false
 ---
 
 日常开发速查手册，程序员的瑞士军刀，常用优秀命令行工具和编程语句汇总。

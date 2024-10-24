@@ -13,10 +13,10 @@ contributors: [l10178]
 pinned: false
 homepage: false
 seo:
-  title: "重复 Transfer-Encoding Response Header 引起的 Traefik 代理服务 500 问题" # custom title (optional)
-  description: "重复 Transfer-Encoding Response Header 引起的 Traefik 代理服务 500 问题" # custom description (recommended)
-  canonical: "" # custom canonical URL (optional)
-  noindex: false # false (default) or true
+  title: "重复 Transfer-Encoding Response Header 引起的 Traefik 代理服务 500 问题"
+  description: "重复 Transfer-Encoding Response Header 引起的 Traefik 代理服务 500 问题"
+  canonical: ""
+  noindex: false
 ---
 
 我有一个 Spring Boot 应用服务，提供了一些简单的查询接口，本身运行很正常，通过 curl 或其他 http 客户端 localhost 请求都没有问题。

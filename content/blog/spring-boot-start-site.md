@@ -12,10 +12,10 @@ contributors: [l10178]
 pinned: false
 homepage: false
 seo:
-  title: "" # custom title (optional)
-  description: "" # custom description (recommended)
-  canonical: "" # custom canonical URL (optional)
-  noindex: false # false (default) or true
+  title: ""
+  description: ""
+  canonical: ""
+  noindex: false
 ---
 
 介绍基于 `start.spring.io` 快速定制自己的 Spring Boot 脚手架，主要应用场景：

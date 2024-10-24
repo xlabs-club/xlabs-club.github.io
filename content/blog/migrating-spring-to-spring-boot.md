@@ -13,10 +13,10 @@ contributors: [l10178]
 pinned: false
 homepage: false
 seo:
-  title: "" # custom title (optional)
-  description: "" # custom description (recommended)
-  canonical: "" # custom canonical URL (optional)
-  noindex: false # false (default) or true
+  title: ""
+  description: ""
+  canonical: ""
+  noindex: false
 ---
 
 从 Spring 到 Spring Boot，迁移升级快速入门以及各种踩坑记录。
@@ -212,7 +212,7 @@ webapp web.xml 配置如何转移到 spring boot war 形式。
 
 - PostConstruct 和 PreDestroy 注解不生效
 
-  参考链接 <https://stackoverflow.com/questions/18161682/why-is-postconstruct-not-called> 先逐个排除。  
+  参考链接 <https://stackoverflow.com/questions/18161682/why-is-postconstruct-not-called> 先逐个排除。
    我所遇到的原因：PostConstruct、PreDestroy 等注解可能存在多个实现或者过个版本，比如以下 jar 包都可能包含：
 
   ```console
