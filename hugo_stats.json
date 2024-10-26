@@ -284,6 +284,7 @@
       "multipass-快速安装-k3s",
       "nacos-服务端部署",
       "nginx-使用-auth_request-对接-oauth2-proxy",
+      "oauth2-proxy-自动重定向到-keycloak-登录",
       "oauth2-proxy-配置",
       "offcanvasNavMain",
       "offcanvasNavMainLabel",

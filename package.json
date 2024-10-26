@@ -1,6 +1,6 @@
 {
   "name": "xlabs-club",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "This is the source of xlabs.club",
   "author": "xlabs-club",
   "license": "CC BY-NC 4.0",
@@ -16,15 +16,15 @@
     "preview": "vite preview --outDir public"
   },
   "dependencies": {
-    "@thulite/doks-core": "^1.7.0",
-    "@thulite/images": "^3.3.0",
-    "@thulite/inline-svg": "^1.1.0",
-    "@thulite/seo": "^2.4.0",
-    "@tabler/icons": "^3.12.0",
-    "thulite": "^2.5.0",
     "@docsearch/css": "^3.6.1",
     "@docsearch/js": "^3.6.1",
-    "mermaid": "^11.3.0"
+    "@tabler/icons": "^3.20.0",
+    "@thulite/doks-core": "^1.8.0",
+    "@thulite/images": "^3.3.0",
+    "@thulite/inline-svg": "^1.2.0",
+    "@thulite/seo": "^2.4.1",
+    "mermaid": "^11.3.0",
+    "thulite": "^2.5.0"
   },
   "devDependencies": {
     "prettier": "^3.3.3",
