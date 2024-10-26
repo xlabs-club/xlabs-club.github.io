@@ -367,3 +367,7 @@ webapp web.xml 配置如何转移到 spring boot war 形式。
 - Why is PostConstruct not called
 
   <https://stackoverflow.com/questions/18161682/why-is-postconstruct-not-called>
+
+- 关于 dubbo 占位符无法解析的问题分析
+
+  <https://blog.51cto.com/u_15742657/5546703>
