@@ -179,12 +179,15 @@ configuration:
   clientSecret: <%= 替换成上面创建的 clientSecret %>
   # cookieSecret 创建命令： openssl rand -base64 32 | tr -- '+/' '-_'
   cookieSecret: "iSGfyi0EbDrkg6eNJpAXGLmwN1jZDZossmElq5GgXeI="
-  ##  content 会映射到 oauth2-proxy.cfg 配置文件里
+  ## content 会映射到 oauth2-proxy.cfg 配置文件里
+  ## 各个参数含义请参考 https://oauth2-proxy.github.io/oauth2-proxy/configuration/overview
   content: |
     reverse_proxy = true
     provider = "keycloak-oidc"
     provider_display_name = "Keycloak"
     email_domains = "*"
+    set_xauthrequest = true
+    set_authorization_header = true
     ssl_insecure_skip_verify = true
     insecure_oidc_allow_unverified_email = true
     code_challenge_method = "S256"
@@ -204,6 +207,25 @@ configuration:
   content: |
     reverse_proxy = true
     upstreams = "file:///dev/null"
+```
+
+为了配合下面的 Traefik forwardAuth 实现 `authResponseHeaders`，还需要开启这两个参数。
+
+```yaml
+  content: |
+    set_xauthrequest = true
+    set_authorization_header = true
+```
+
+开启后，在 backend 服务里就能通过 Header 获取到当前用户的登录信息，以 keycloak-oidc provider 为例，获取到的 Header 如下。
+
+```yaml
+x-auth-request-user: af188bba-0388-2623-8cdb-39422e8be30a # user database id
+x-auth-request-preferred-username: lisan123 # user login name
+x-auth-request-groups: role:admin,role:developer,role:account:manage-account
+authorization: Bearer xxx token
+cookie: xxx
+
 ```
 
 ### Traefik 配置
@@ -241,9 +263,14 @@ spec:
     # oauth2-proxy k8s service 地址
     address: http://oauth2-proxy.oauth2-proxy.svc:4180/oauth2/auth
     trustForwardHeader: true
+    # 增加 header，可用 header 参考 oauth2-proxy 文档
     authResponseHeaders:
       - X-Auth-Request-User
+      - X-Auth-Request-Preferred-Username
+      - Authorization
       - Set-Cookie
+      # - X-Auth-Request-Groups
+      # - X-Auth-Request-Access-Token
 ```
 
 创建完了，在 k8s 里可使用 traefik IngressRoute 对外暴露服务，也可使用标准 traefik ingress，看个人爱好。
@@ -314,7 +341,6 @@ spec:
                   name: http
             path: /oauth2
             pathType: Prefix
-
   # 根据你自己的情况设置 TLS
   # tls:
   #   - hosts:
@@ -382,6 +408,57 @@ K3S Traefik 默认未开启 `allowCrossNamespace`, 不允许跨 namespace 访问
 ## Keycloak 对接 oauth2-proxy 特别说明
 
 Keycloak 需要创建 audience mapper 和 groups scope mapper，这在 [oauth2-proxy 官方文档](https://oauth2-proxy.github.io/oauth2-proxy/configuration/providers/keycloak_oidc) 中有详细的说明和创建步骤。
+
+## oauth2-proxy 自动重定向到 keycloak 登录
+
+以上使用 traefik errors middlewares 实现的方案，有两个弊端：
+
+1. 登录成功后的回调，无法回到原始请求页面，会丢失 oauth2-proxy 的 `rd`，只能回到根目录。
+2. 每次需要登录的时候，先停在 oauth2-proxy 的 sign-in 登录页，等着你点 `Sign in with`，需要点击一下才会跳转到 keycloak 的登录页。
+
+为了解决这个问题，我们可以定制 oauth2-proxy 的登录页 `sign_in.html`，在登录页面直接重定向，`sign_in.html` 内容如下。
+
+```html
+
+{{define "sign_in.html"}}
+<!DOCTYPE html>
+<html lang="en" charset="utf-8">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Redirecting</title>
+    <script>
+        window.location = "{{.ProxyPrefix}}/start?rd=" + encodeURI(window.location)
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
+{{end}}
+
+```
+
+然后给 oauth2-proxy 增加环境变量 OAUTH2_PROXY_CUSTOM_TEMPLATES_DIR 放置以上登录页面。
+
+如果在 k8s 里，可以通过重编 oauth2-proxy 镜像，或者通过 initContainers 挂载目录复制以上文件，我已做好了一个这样的镜像，在此 [GitHub](https://github.com/l10178/x-container)。
+
+使用方式类似如下。
+
+```yaml
+
+initContainers:
+  # copy 自定义模板，不需要点击 `Sign in` 按钮，自动重定向到登录页
+  - name: auto-sign-in
+    # 源码： https://github.com/l10178/x-container
+    image: docker.io/nxest/oauth2-proxy-auto-sign-in:v7.7.1
+    imagePullPolicy: IfNotPresent
+    env:
+    - name: OAUTH2_PROXY_CUSTOM_TEMPLATES_DIR
+      value: /bitnami/oauth2-proxy/templates
+    volumeMounts:
+      - mountPath: /bitnami/oauth2-proxy/templates
+        name: templates
+```
 
 ## Backstage 对接 oauth2-proxy 特别说明
 
@@ -470,6 +547,10 @@ nginx.ingress.kubernetes.io/auth-url: https://$host/oauth2/auth
 ## 遇见问题和解决办法
 
 我们使用过程中遇见的问题和解决办法，记录下来仅供参考。
+
+- traefik middleware 配置未生效。
+
+  检查 traefik 日志，看看有没有错误，如果有语法错误或者权限问题，traefik 也能正常启动，只是配置不生效。
 
 - traefik log 中 middleware 找不到，请参考本文上面说明，将 middlewares 名字改为：namespace-middleware@@kubernetescrd，一定要加 namespace 前缀，如果是 default namespace 的话，也要加 `default-` 前缀。
 
