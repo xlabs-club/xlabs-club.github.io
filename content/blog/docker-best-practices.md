@@ -110,6 +110,14 @@ seo:
   curl -jkfSL -o vmtouch.zip 'https://github.com/hoytech/vmtouch/archive/refs/tags/v1.3.1.zip'
   ```
 
+- 变量扩展，简化 Shell 书写。
+
+  ```bash
+  ${variable:-word}：如果变量未设置，则将值设置为 word
+  ${variable:+word}：如果变量已设置，则将值设置为 word
+  ${var1:-$var2}: 如果 var1 未设置则取 var1
+  ```
+
 ## 多架构编译
 
 如果你本身具备多架构的机器资源，使用 docker 远端 builder 或 [GoogleContainerTools/kaniko](https://github.com/GoogleContainerTools/kaniko) 同架构编译，速度和性能是最理想的。高度依赖指令集的应用，比如某些老 python 包无 arm 版本触发编译，跨架构编译可能需要 3 小时，而同架构只需要 10 分钟。
@@ -195,7 +203,12 @@ RUN apt-get update && apt-get install -y curl
 
 不需要运行守护进程，用于对容器镜像与容器仓库执行管理操作的命令行工具，支持 OCI 镜像与 Docker V2 镜像。
 
-主要用于跨仓库之间镜像复制，镜像仓库与本地文件同步。
+可以执行的典型操作场景：
+
+- 通过各种存储机制复制镜像，例如，可以在不需要特权的情况下将镜像从一个 Registry 复制到另一个 Registry。
+- 检测远程镜像并查看其属性，包括其图层，无需将镜像拉到本地。
+- 从镜像库中删除镜像。
+- 当存储库需要时，skopeo 可以传递适当的凭据和证书进行身份验证。
 
 看一下他的 help 就知道什么意思了。
 
@@ -232,7 +245,7 @@ skopeo copy docker://quay.io/skopeo/stable:latest docker://registry.example.com/
 
 ```
 
-日常使用可留作 shell 脚本，快速复制镜像。
+日常使用可留作 shell 脚本，快速复制镜像，包括 OCI 格式的 helm charts。
 
 ```bash
 # 指定自建的 harbor 地址
