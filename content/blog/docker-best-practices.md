@@ -1,6 +1,6 @@
 ---
-title: "容器镜像制作最佳实践，Dockerfile 编写小技巧和踩坑记录，镜像维护辅助工具 ORAS、skopeo 等介绍"
-description: "容器镜像制作最佳实践，Dockerfile 编写小技巧和踩坑记录，镜像维护辅助工具 ORAS、skopeo 等介绍"
+title: "容器镜像制作最佳实践，多架构编译，Dockerfile 编写小技巧和踩坑记录，镜像维护辅助工具 ORAS、skopeo 等介绍"
+description: "容器镜像制作最佳实践，多架构编译，Dockerfile 编写小技巧和踩坑记录，镜像维护辅助工具 ORAS、skopeo 等介绍"
 summary: ""
 date: 2024-05-24T20:56:08+08:00
 lastmod: 2024-09-24T20:56:08+08:00
@@ -12,11 +12,15 @@ contributors: [l10178]
 pinned: false
 homepage: false
 seo:
-  title: "容器镜像制作最佳实践，Dockerfile 编写小技巧和踩坑记录，镜像维护辅助工具 ORAS、skopeo 等介绍"
-  description: "容器镜像制作最佳实践，Dockerfile 编写小技巧和踩坑记录，镜像维护辅助工具 ORAS、skopeo 等介绍"
+  title: "容器镜像制作最佳实践，多架构编译，Dockerfile 编写小技巧和踩坑记录，镜像维护辅助工具 ORAS、skopeo 等介绍"
+  description: "容器镜像制作最佳实践，多架构编译，Dockerfile 编写小技巧和踩坑记录，镜像维护辅助工具 ORAS、skopeo 等介绍"
   canonical: ""
   noindex: false
 ---
+
+汇总整理了容器镜像制作最佳实践、多架构编译、Dockerfile 编写小技巧等常用技术问题，同时介绍下我日常使用的 ORAS、skopeo 等辅助工具。
+
+## 最佳实践
 
 整理了由 Docker 官方和社区推荐的用于构建高效镜像的最佳实践和方法，当然有些可能并不适用于你，请注意分辨。
 
@@ -118,13 +122,27 @@ seo:
   ${var1:-$var2}: 如果 var1 未设置则取 var1
   ```
 
+- 通过 --build-arg 指定 Http 代理，注意不要在 Dockerfile 里通过 ENV 指定，ENV 指定不安全且对后续部署出来的 Pod 也生效。
+
+  ```bash
+  docker buildx build --build-arg http_proxy=http://your-proxy --build-arg https_proxy=http://your-proxy --build-arg no_proxy=localhost,127.0.0.1,10.*,172.*,*.cn
+  ```
+
 ## 多架构编译
 
-如果你本身具备多架构的机器资源，使用 docker 远端 builder 或 [GoogleContainerTools/kaniko](https://github.com/GoogleContainerTools/kaniko) 同架构编译，速度和性能是最理想的。高度依赖指令集的应用，比如某些老 python 包无 arm 版本触发编译，跨架构编译可能需要 3 小时，而同架构只需要 10 分钟。
+多架构编译目前比较流行的几种方案：
+
+- docker 配合 qemu 实现交叉混合编译，一台机器即可。优点：简单。缺点：异构编译速度很慢。
+- docker 使用远端 builder，多个 builder 机器，各自编译各自原生架构，docker 会帮我们自动合并 manifest。相对简单，速度快。
+- 使用 buildkit 或 [GoogleContainerTools/kaniko](https://github.com/GoogleContainerTools/kaniko) 在 k8s 集群内编译。速度最快，水平扩缩容，适用于大型编译场景，需要准备更多资源。
+
+如果你本身具备多架构的机器资源，使用 docker 远端 builder 或 kaniko 同架构编译，速度和性能是最理想的。
+
+高度依赖指令集的应用，比如某些老 python 包无 arm 版本触发编译，跨架构编译可能需要 3 小时，而同架构只需要 10 分钟。
 
 kaniko 支持“多架构编译”，但是不支持跨架构编译，不能在 amd64 机器上编译 arm64 容器，如果需要多架构只能在不同机器上多次编译，然后使用 manifest-tool 合并。
 
-为 docker 启用多架构编译：
+方式 1：为一台 docker 机器启用多架构编译：
 
 ```sh
 
@@ -142,6 +160,53 @@ docker buildx use multi-platform
 
 # 使用 buildx 提供的 imagetools inspect 工具可以查看远程仓库中的清单列表信息
 docker buildx imagetools inspect tester:1.0
+
+```
+
+方式 2：组合一台 AMD64、一台 ARM64 机器，多节点各自编译。
+
+放开 docker 的 tcp 端口，注意，在生产环境启用 TLS，放开端口是一件很危险的事情。
+
+```console
+
+$ cat /etc/docker/daemon.json
+
+{
+  "hosts": ["unix:///var/run/docker.sock", "tcp://0.0.0.0:2375"]
+}
+
+```
+
+```sh
+# 创建一个新的 builder，指定支持的架构类型
+docker buildx create --name multi-remote --node node-amd64 --platform linux/amd64
+# 使用 --append，追加节点，指定支持的架构类型。除了使用 tcp 方式，也可使用 ssh 方式，ssh 需要配置免密登录
+docker buildx create --name multi-remote --append \
+  --node node-arm64 --platform linux/arm64,linux/arm64/v8,linux/arm/v7 \
+  tcp://your-arm64-node-ip:2375
+
+# 切换，启用
+docker buildx use multi-remote
+docker buildx inspect --bootstrap
+
+```
+
+查看 buildx，确认是否生效。
+
+```console
+
+$ docker buildx ls
+
+NAME/NODE              DRIVER/ENDPOINT                   STATUS     BUILDKIT   PLATFORMS
+builder                docker-container
+ \_ builder0            \_ unix:///var/run/docker.sock   inactive
+multi-container*       docker-container
+ \_ multi-container0    \_ unix:///var/run/docker.sock   running    v0.16.0    linux/amd64*, linux/arm64*, linux/amd64/v2, linux/amd64/v3, linux/386, linux/riscv64, linux/ppc64le, linux/s390x, linux/mips64le, linux/mips64, linux/arm/v7, linux/arm/v6
+multi-remote           docker-container
+ \_ node-amd64          \_ unix:///var/run/docker.sock   inactive              linux/amd64*
+ \_ node-arm64          \_ tcp://192.168.100.200:2375     inactive              linux/arm64*, linux/arm/v7*
+default                docker
+ \_ default             \_ default                       running    v0.13.2    linux/amd64, linux/amd64/v2, linux/amd64/v3, linux/386
 
 ```
 
@@ -254,4 +319,19 @@ skopeo login ${PRIVATE_HARBOR}
 # 指定 --multi-arch=all，复制多架构镜像
 skopeo copy --multi-arch=all docker://ghcr.io/graalvm/jdk-community:23.0.1 docker://${PRIVATE_HARBOR}/ghcr.io/graalvm/jdk-community:23.0.1
 
+```
+
+## 遇见问题和解决办法
+
+在 docker 多节点构建时，偶尔出现编译完了，一直卡在 `exporting to client directory` 不动，任务无法结束。
+
+参考官方 [buildkit/issues/2950](https://github.com/moby/buildkit/issues/2950)，按照大家的描述，build 镜像大于 500M 时就容易触发此问题。
+
+我的解决办法是，在 build 时指定 `compression=zstd` 启用压缩，基本上能解决这个问题。我这里使用了 zstd 压缩，需要在 docker 机器上安装 zstd，如果没有安装，改为 gzip 压缩即可。
+
+```bash
+# compression=zstd 解决 buildkit/issues/2950 exporting 偶尔卡死问题
+# type=image,oci-mediatypes=false 编译出 docker v2 格式镜像，为了兼容有些老版本集群还不支持 oci 格式
+# --provenance=false 是为了不生成烦人的无 tag metadata
+docker buildx build --output type=image,oci-mediatypes=false,compression=zstd --provenance=false --push
 ```
