@@ -327,7 +327,7 @@ skopeo copy --multi-arch=all docker://ghcr.io/graalvm/jdk-community:23.0.1 docke
 
 参考官方 [buildkit/issues/2950](https://github.com/moby/buildkit/issues/2950)，按照大家的描述，build 镜像大于 500M 时就容易触发此问题。
 
-我的解决办法是，在 build 时指定 `compression=zstd` 启用压缩，基本上能解决这个问题。我这里使用了 zstd 压缩，需要在 docker 机器上安装 zstd，如果没有安装，改为 gzip 压缩即可。
+我的解决办法是，在 build 时指定 `compression=zstd` 启用压缩，基本上能解决这个问题。我这里使用了 zstd 压缩，需要在 docker 编译机器上安装 zstd 并且需要 K8S 运行集群支持，否则拉取镜像时可能出现不支持的类型 `zstd`，简单起见改为 gzip 压缩即可。
 
 ```bash
 # compression=zstd 解决 buildkit/issues/2950 exporting 偶尔卡死问题
