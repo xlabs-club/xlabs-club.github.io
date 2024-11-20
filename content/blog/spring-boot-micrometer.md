@@ -80,13 +80,14 @@ Micrometer 中两个最核心的概念：计量器注册表 (MeterRegistry)，�
    metadata:
    labels:
      app.kubernetes.io/component: metrics
-     release: your-prometheus
+     release: your-prometheus-instance-name
    name: eye-consumer
    namespace: test
    spec:
    endpoints:
      - interval: 30s
        honorLabels: true
+       # /client-biz 是我的服务 ContextPath
        path: /client-biz/actuator/prometheus
        port: metrics
      - interval: 30s
@@ -99,7 +100,7 @@ Micrometer 中两个最核心的概念：计量器注册表 (MeterRegistry)，�
      app: eye-consumer
    ```
 
-3. 业务可通过 `http://localhost:8080/actuator/metrics` 查看指标是否已上报，通过 `http://localhost:8080/actuator/prometheus` 查看指标值。
+3. 业务可通过 `http://localhost:8080/actuator/metrics` 查看指标是否已上报，通过 `http://localhost:8080/actuator/prometheus` 查看指标的当前值。
 
 ## 自定义 Metrics 指标
 
@@ -189,9 +190,9 @@ public class MicrometerAspectConfiguration {
 
 ```
 
-另外这里有个疑惑，我的请求量很大，`Metrics.counter` 对象要不要缓存起来，减少获取 counter 对象的压力。
+另外这里大家可能有个疑惑，我的请求量很大，`Metrics.counter` 对象是不是每次都 new 出来的，要不要缓存起来，减少获取 counter 对象的压力。
 
-其实不用，MeterRegistry 已经做了缓存，参考 `io.micrometer.core.instrument.MeterRegistry#registerMeterIfNecessary` 代码。
+其实不用，MeterRegistry 已经做了缓存，参考 `io.micrometer.core.instrument.MeterRegistry#registerMeterIfNecessary` 以下代码片段。
 
 ```java
 
@@ -237,8 +238,8 @@ management.metrics.tags.application=${spring.application.name}
 1. 指标和 Tag 命名约定使用英语句号分隔，全小写，Tag 可根据实际情况使用缩写。指标名在不同的 MeterRegistry 里会自动转换，比如在 Prometheus 会把 `fs.sms.send` 转换为 `fs_sms_send`。
 2. 指标命名建议以 `fs.application.action` 为模板，避免与开源或其他项目组冲突。
 3. 注意 Tag values 不能为 Null， 且必须是可枚举的某些固定类型便于统计。
-4. 使用注解`@Timed @Counted`会默认增加 `method、class、result、exception` 这几个 Tag，注意不要与之冲突。
-5. 公司和开源默认 Tag 如下，这些会被 ServiceMonitor 强制覆盖，业务不要自己定义。
+4. 使用注解 `@Timed @Counted` 会默认增加 `method、class、result、exception` 这几个 Tag，注意不要与之冲突。
+5. 在 K8S 集群内，公司和开源默认 Tag 如下，这些会被 ServiceMonitor 强制覆盖，业务不要自己定义。
 
    ```console
    namespace、application、service、container、pod、instance、job、endpoint、id
