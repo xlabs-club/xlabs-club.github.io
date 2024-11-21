@@ -45,7 +45,7 @@ seo:
 
 - 认证使用官方内置的 [OAuth 2 Proxy Provider](https://backstage.io/docs/auth/oauth2-proxy/provider).
 - 用户同步使用 Red Hat 贡献的社区开源插件 [@backstage-community/plugin-catalog-backend-module-keycloak](https://github.com/backstage/community-plugins/tree/main/workspaces/keycloak/plugins/catalog-backend-module-keycloak)，将 keycloak 用户同步到 Backstage 数据库，后面我们会提到为什么需要这一步。
-- 权限管理 Permissions，支持 RBAC、ABAC， 使用 Red Hat 贡献的社区开源插件 [@backstage-community/plugin-rbac](https://github.com/backstage/community-plugins/tree/main/workspaces/rbac/plugins)。
+- 权限管理 Permissions，支持 RBAC、ABAC， 使用 Red Hat 贡献的社区开源插件 [@backstage-community/plugin-rbac](https://github.com/backstage/community-plugins/tree/main/workspaces/rbac/plugins)。注意 Spotify 也有 [RBAC 插件](https://backstage.spotify.com/marketplace/spotify/plugin/rbac/) 需要购买 License 才能用。
 
 整体架构流程图：
 
@@ -72,4 +72,4 @@ sequenceDiagram
 
 ```
 
-## 安装部署配置详解
+## 安装部署配置和原理详解
