@@ -1,6 +1,6 @@
 ---
-title: "使用 oauth2-proxy 为任意程序增加认证鉴权，结合 K8S、traefik、keycloak、backstage 部署配置详解"
-description: "使用 oauth2-proxy 为任意程序增加认证鉴权，结合 K8S、traefik、keycloak、backstage 部署配置详解"
+title: "使用 oauth2-proxy 为任意程序增加认证鉴权，结合 K8S、traefik、keycloak 部署配置详解"
+description: "使用 oauth2-proxy 为任意程序增加认证鉴权，结合 K8S、traefik、keycloak 部署配置详解"
 summary: ""
 date: 2024-10-10T23:30:40+08:00
 lastmod: 2024-10-10T23:30:40+08:00
@@ -12,8 +12,8 @@ contributors: [l10178]
 pinned: false
 homepage: false
 seo:
-  title: "使用 oauth2-proxy 为任意程序增加认证鉴权，结合 K8S、traefik、keycloak、backstage 部署配置详解"
-  description: "使用 oauth2-proxy 为任意程序增加认证鉴权，结合 K8S、traefik、keycloak、backstage 部署配置详解"
+  title: "使用 oauth2-proxy 为任意程序增加认证鉴权，结合 K8S、traefik、keycloak 部署配置详解"
+  description: "使用 oauth2-proxy 为任意程序增加认证鉴权，结合 K8S、traefik、keycloak 部署配置详解"
   canonical: ""
   noindex: false
 ---
@@ -27,7 +27,7 @@ seo:
 3. 为 Kubernetus Traefik Nginx Ingress 提供统一的认证入口，一键实现所有入口必须登录才可访问。
 4. 配置 Traefik 使用 Forward Auth，Nginx 使用 auth_request 实现认证，也可以一并参考。
 5. 基于用户、角色等不同属性，路由到不同服务。
-6. 如果你凑巧也在用 [Backstage](https://backstage.io/)，这里顺便提供了 Backstage 接入 keycloak 的方法。
+6. 如果你凑巧也在用 [Backstage](https://backstage.io/)，请参考 [另一篇博客](https://www.xlabs.club/blog/backstage-oauth2-proxy-keycloak/)。
 
 写在前面：
 
@@ -45,10 +45,10 @@ seo:
 2. [oauth2-proxy](https://oauth2-proxy.github.io/oauth2-proxy/)
    顾名思义它是一个关于 oauth 反向代理，主要用来为后端服务增加身份验证层。它支持多种 OAuth 2.0 提供者（如 Google、OIDC、Keycloak 等），可以保护未提供身份验证的应用。oauth2-proxy 在请求进入后端服务之前，会先进行 OAuth 2.0 登录认证，确保请求者具有访问权限。它承担了登录的合法性校验、重定向、登录成功后的 cookie、response 设置等功能。
 
-3. Backstage
-   Backstage 是一个开源的开发者门户平台。在此文档里你可以理解为是一个普通的应用，类似你自己写的应用，这里只是拿他来举例而已。关于 Backstage 集成 oauth2-proxy 的详情文档可参考 [Backstage OAuth 2 Proxy Provider](https://backstage.io/docs/auth/oauth2-proxy/provider)。
+3. Application
+   应用代号，可以是任何应用。
 
-在开始之前，建议先了解下 oauth2-proxy 的基本功能，并需要特别关注一下他的这几个功能设置。
+在开始之前，建议先了解下 oauth2-proxy 的基本功能，并需要特别关注一下他的这几个容易令人疑惑的设置。
 
 1. oauth2-proxy 的 set header 设置的是 response header，这在下面提到的 nginx auth_request 模块和 traefik forwardAuth Middleware 会用到。
 2. pass header 是认证通过后，将一些基本信息，比如 Access Token、User ID、User Group 通过 Http Header 传递到 upstream（代理的目标应用），upstream 可以拿到 Header 信息后做更多的事情。
@@ -68,13 +68,13 @@ seo:
 sequenceDiagram
     participant User
     participant oauth2-proxy
-    participant Backstage
+    participant Application
 
     User->>oauth2-proxy: Access Service
     oauth2-proxy->>oauth2-proxy: Authenticate User
-    oauth2-proxy->>Backstage: Forward request to Backend <br> proxy paas headers(user id/name/groups/roles)
-    Backstage->>Backstage: Do more things by header info
-    Backstage-->>oauth2-proxy: Response
+    oauth2-proxy->>Application: Forward request to Backend <br> proxy paas headers(user id/name/groups/roles)
+    Application->>Application: Do more things by header info
+    Application-->>oauth2-proxy: Response
     oauth2-proxy-->>User: Return Response
 
 ```
@@ -88,9 +88,9 @@ sequenceDiagram
     participant Traefik
     participant oauth2-proxy
     participant Keycloak
-    participant Backstage
+    participant Application
 
-    User->>Traefik: Access Backstage URL
+    User->>Traefik: Access Application URL
     Traefik->>oauth2-proxy: Forward request (auth check)
     oauth2-proxy->>oauth2-proxy: Check if user is authenticated
     oauth2-proxy-->>User: Redirect to Keycloak login
@@ -102,14 +102,14 @@ sequenceDiagram
     Keycloak-->>oauth2-proxy: Return Access Token
     oauth2-proxy-->>User: Set authentication cookie
     oauth2-proxy->>Traefik: Forward original request
-    Traefik->>Backstage: Forward request to Backstage
-    Backstage-->>Traefik: Return response
+    Traefik->>Application: Forward request to Application
+    Application-->>Traefik: Return response
     Traefik-->>User: Return response
 ```
 
 流程描述：
 
-1. 用户访问 Backstage URL，请求被 Traefik 捕获。
+1. 用户访问 Application URL，请求被 Traefik 捕获。
 2. Traefik 将请求转发给 oauth2-proxy，检查用户是否已认证。
 3. 如果用户未认证，oauth2-proxy 会将用户重定向到 Keycloak 登录页面。
 4. 用户在 Keycloak 上输入凭证并进行认证。
@@ -117,8 +117,8 @@ sequenceDiagram
 6. 用户将鉴权码发送给 oauth2-proxy，oauth2-proxy 使用鉴权码向 Keycloak 请求访问令牌。
 7. Keycloak 返回访问令牌给 oauth2-proxy，oauth2-proxy 设置身份验证 cookie。
 8. oauth2-proxy 将原始请求转发给 Traefik。
-9. Traefik 将请求发送给 Backstage。
-10. Backstage 返回响应，最终由 Traefik 返回给用户。
+9. Traefik 将请求发送给 Application。
+10. Application 返回响应，最终由 Traefik 返回给用户。
 
 本文档部署示例使用的是第二种方式。
 
@@ -222,8 +222,9 @@ configuration:
 ```yaml
 x-auth-request-user: af188bba-0388-2623-8cdb-39422e8be30a # user database id
 x-auth-request-preferred-username: lisan123 # user login name
-x-auth-request-groups: role:admin,role:developer,role:account:manage-account
-authorization: Bearer xxx token
+x-auth-request-groups: admin,test-group # user groups
+x-auth-request-access-token: xxx # Access Token
+authorization: Bearer token xxx # 注意这个是 ID Token，不是 Access Token
 cookie: xxx
 
 ```
@@ -267,10 +268,10 @@ spec:
     authResponseHeaders:
       - X-Auth-Request-User
       - X-Auth-Request-Preferred-Username
+      - X-Auth-Request-Access-Token
+      - X-Auth-Request-Groups
       - Authorization
       - Set-Cookie
-      # - X-Auth-Request-Groups
-      # - X-Auth-Request-Access-Token
 ```
 
 创建完了，在 k8s 里可使用 traefik IngressRoute 对外暴露服务，也可使用标准 traefik ingress，看个人爱好。
@@ -306,7 +307,7 @@ spec:
         - name: forward-auth
       services:
         # 后端应用
-        - name: backstage
+        - name: backend
           namespace: oauth2-proxy
           port: http-backend
 ```
@@ -365,7 +366,7 @@ spec:
         paths:
           - backend:
               service:
-                name: backstage
+                name: backend
                 port:
                   name: http-backend
             path: /
@@ -390,7 +391,7 @@ K3S Traefik 默认未开启 `allowCrossNamespace`, 不允许跨 namespace 访问
    ```
 
    ```yaml
-   # 固定配置
+   # 永久生效配置
    # vi /var/lib/rancher/k3s/server/manifests/traefik-config.yaml
    apiVersion: helm.cattle.io/v1
    kind: HelmChartConfig
@@ -459,8 +460,6 @@ initContainers:
       - mountPath: /bitnami/oauth2-proxy/templates
         name: templates
 ```
-
-## Backstage 对接 oauth2-proxy 特别说明
 
 ## nginx 使用 auth_request 对接 oauth2-proxy
 
