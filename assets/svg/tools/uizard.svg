@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="uizard_gradient" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#6366F1"/>
+            <stop offset="100%" stop-color="#8B5CF6"/>
+        </linearGradient>
+    </defs>
+    <path d="M4 4H20V8H4V4ZM4 10H12V20H4V10ZM14 10H20V14H14V10ZM14 16H20V20H14V16Z" fill="url(#uizard_gradient)"/>
+</svg>

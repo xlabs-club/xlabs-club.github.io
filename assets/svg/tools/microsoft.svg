@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="microsoftGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#00B0FF"/>
+            <stop offset="50%" style="stop-color:#0091EA"/>
+            <stop offset="100%" style="stop-color:#0277BD"/>
+        </linearGradient>
+    </defs>
+    <path d="M2 3h9v9H2V3zm11 0h9v9h-9V3zM2 14h9v7H2v-7zm11 0h9v7h-9v-7z" fill="url(#microsoftGradient)"/>
+</svg>

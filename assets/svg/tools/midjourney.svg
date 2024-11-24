@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.236L19.09 8 12 11.764 4.91 8 12 4.236zM4 9.618v6.764L11 20v-6.764L4 9.618zm16 0L13 13.236V20l7-3.618V9.618z" fill="currentColor"/>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="midjourneyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#FF6B6B"/>
+            <stop offset="50%" style="stop-color:#9B51E0"/>
+            <stop offset="100%" style="stop-color:#3B82F6"/>
+        </linearGradient>
+    </defs>
+    <path d="M12 2L2 19h20L12 2zm0 4l6.5 11h-13L12 6zm0 3l-3.5 6h7L12 9z" fill="url(#midjourneyGradient)"/>
 </svg>
