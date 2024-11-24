@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="firefly_gradient" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#FF0000"/>
+            <stop offset="100%" stop-color="#FF9A00"/>
+        </linearGradient>
+    </defs>
+    <path d="M12 2L3 9V21H21V9L12 2ZM12 4.5L18.5 9.5V18.5H5.5V9.5L12 4.5ZM11 8V13H9V15H11V17H13V15H15V13H13V8H11Z" fill="url(#firefly_gradient)"/>
+</svg>

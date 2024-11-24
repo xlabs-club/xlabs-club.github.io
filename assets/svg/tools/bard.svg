@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <path d="M12,2 L4,7 L4,17 L12,22 L20,17 L20,7 L12,2 Z M12,4.236 L18,8.118 L18,15.882 L12,19.764 L6,15.882 L6,8.118 L12,4.236 Z" fill="#000000" fill-rule="nonzero"></path>
-        <path d="M12,7 L8,9.5 L8,14.5 L12,17 L16,14.5 L16,9.5 L12,7 Z" fill="#000000" fill-rule="nonzero"></path>
-    </g>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="bardGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#4285F4"/>
+            <stop offset="33%" style="stop-color:#EA4335"/>
+            <stop offset="66%" style="stop-color:#FBBC05"/>
+            <stop offset="100%" style="stop-color:#34A853"/>
+        </linearGradient>
+    </defs>
+    <path d="M12 2L4 7v10l8 5 8-5V7l-8-5zm6 14.18l-6 3.82-6-3.82V8.82l6-3.82 6 3.82v7.36zm-6-1.18l4-2.5v-5l-4-2.5L8 7.5v5l4 2.5z" fill="url(#bardGradient)"/>
 </svg>

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <path d="M23.15,2.587 L18.21,0.210 C17.36,-0.233 16.37,0.216 15.93,1.064 L1.93,22.064 C1.49,22.912 1.94,23.902 2.79,24.345 L7.73,26.722 C8.58,27.165 9.57,26.716 10.01,25.868 L24.01,4.868 C24.45,4.020 24,3.030 23.15,2.587 Z" fill="#000000" fill-rule="nonzero"></path>
-    </g>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="vscodeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#0EA5E9"/>
+            <stop offset="50%" style="stop-color:#0284C7"/>
+            <stop offset="100%" style="stop-color:#0369A1"/>
+        </linearGradient>
+    </defs>
+    <path d="M16.5 2.25L21 4.5v15l-4.5 2.25-11.25-4.5 4.5-2.25 11.25 4.5v-15l-11.25 4.5v15l-4.5-2.25v-15L16.5 2.25z" fill="url(#vscodeGradient)"/>
 </svg>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="udacityGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#02B3E4"/>
+            <stop offset="50%" style="stop-color:#02A4D3"/>
+            <stop offset="100%" style="stop-color:#0288D1"/>
+        </linearGradient>
+    </defs>
+    <path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.33L19 8v8l-7 3.5L5 16V8l7-3.67zM12 15l-5-2.5V10l5 2.5 5-2.5v2.5L12 15z" fill="url(#udacityGradient)"/>
+</svg>

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <path d="M12,1 C5.925,1 1,5.925 1,12 C1,18.075 5.925,23 12,23 C18.075,23 23,18.075 23,12 C23,5.925 18.075,1 12,1 Z M12,3 C16.971,3 21,7.029 21,12 C21,16.971 16.971,21 12,21 C7.029,21 3,16.971 3,12 C3,7.029 7.029,3 12,3 Z" fill="#000000" fill-rule="nonzero"></path>
-        <path d="M8,10 C8,8.895 8.895,8 10,8 C11.105,8 12,8.895 12,10 C12,11.105 11.105,12 10,12 C8.895,12 8,11.105 8,10 Z" fill="#000000" fill-rule="nonzero"></path>
-        <path d="M14,10 C14,8.895 14.895,8 16,8 C17.105,8 18,8.895 18,10 C18,11.105 17.105,12 16,12 C14.895,12 14,11.105 14,10 Z" fill="#000000" fill-rule="nonzero"></path>
-        <path d="M12,14 C9.791,14 8,15.791 8,18 L16,18 C16,15.791 14.209,14 12,14 Z" fill="#000000" fill-rule="nonzero"></path>
-    </g>
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="copilotGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#7C3AED"/>
+            <stop offset="100%" style="stop-color:#2563EB"/>
+        </linearGradient>
+    </defs>
+    <path d="M12 1C5.925 1 1 5.925 1 12s4.925 11 11 11 11-4.925 11-11S18.075 1 12 1zm0 2c4.97 0 9 4.03 9 9s-4.03 9-9 9-9-4.03-9-9 4.03-9 9-9z" fill="url(#copilotGradient)"/>
+    <path d="M8 9.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm8 0a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm-7.5 4.5c-.828 0-1.5-.895-1.5-2s.672-2 1.5-2h7c.828 0 1.5.895 1.5 2s-.672 2-1.5 2h-7z" fill="url(#copilotGradient)"/>
 </svg>

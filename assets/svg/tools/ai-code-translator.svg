@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <path d="M11 7H6a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2v-8a2 2 0 00-2-2h-5l2-2h-6l2 2zm-.5 2l-1 1h7l-1-1h-5z" fill="currentColor"/>
-    <path d="M8 13l-3 3 3 3M16 13l3 3-3 3" fill="currentColor"/>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="codeTranslatorGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#06B6D4"/>
+            <stop offset="50%" style="stop-color:#0891B2"/>
+            <stop offset="100%" style="stop-color:#0E7490"/>
+        </linearGradient>
+    </defs>
+    <path d="M6.5 8.5l-1.41 1.41L9.67 14 5.09 18.59 6.5 20l6-6-6-5.5zm11 7l1.41-1.41L14.33 10l4.58-4.59L17.5 4l-6 6 6 5.5z" fill="url(#codeTranslatorGradient)"/>
 </svg>

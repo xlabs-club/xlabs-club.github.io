@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <path d="M13 1L0 14l4 2 7 7 2-4 11-13L13 1zm5.2 9.3l-5.3 6.5-.7 3.5-3.5-.7-4.8-4.8 6.5-5.3 7.8.8z" fill="currentColor"/>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="cursorGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#F43F5E"/>
+            <stop offset="50%" style="stop-color:#E11D48"/>
+            <stop offset="100%" style="stop-color:#BE123C"/>
+        </linearGradient>
+    </defs>
+    <path d="M13.64 21.97c-.65.48-1.56.36-2.05-.29L6.29 15H3c-.55 0-1-.45-1-1V8c0-.55.45-1 1-1h3.29l5.29-6.67c.48-.65 1.41-.77 2.05-.29.65.48.77 1.41.29 2.05L9.8 8H14c.55 0 1 .45 1 1v4c0 .55-.45 1-1 1H9.8l4.13 5.91c.47.65.35 1.57-.29 2.06z" fill="url(#cursorGradient)"/>
 </svg>
