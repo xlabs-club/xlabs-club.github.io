@@ -6,9 +6,9 @@ date: 2024-11-16T16:55:26+08:00
 lastmod: 2024-11-16T16:55:26+08:00
 draft: false
 weight: 50
-categories: []
-tags: []
-contributors: []
+categories: [k8s, idaas]
+tags: [k8s, idaas]
+contributors: [l10178]
 pinned: false
 homepage: false
 seo:
