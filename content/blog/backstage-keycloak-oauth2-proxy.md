@@ -18,13 +18,13 @@ seo:
   noindex: false
 ---
 
-基于 K8S 部署 Backstage， 集成 oauth2-proxy 和 Keycloak，实现用户管理、认证和授权，都是基于开源软件原始功能实现。
+基于 K8S 部署 Backstage，集成 oauth2-proxy 和 Keycloak，实现用户管理、认证和授权，配置详解和原理介绍。
 
-如果你有以下类似需求，可以参考此文档。
+如果你遇到以下问题或诉求，可以参考此文档。
 
-- [Backstage](https://backstage.io/) 接入 oauth2-proxy 认证。
+- [Backstage](https://backstage.io/) 接入 oauth2-proxy，登录或认证失败。
 - Backstage 实现 RBAC、ABAC 授权管理，以及如何实现自定义权限。
-- [oauth2-proxy](https://oauth2-proxy.github.io/oauth2-proxy/) 对接 keycloak，功能和参数详解。
+- [oauth2-proxy](https://oauth2-proxy.github.io/oauth2-proxy/) 对接 keycloak，参数不理解或者配置一直错误。
 
 在开始之前，我们先了解一个点，Backstage 官方开源有开箱即用的容器镜像，也有丰富的插件生态，然而区别于其他插件类应用，Backstage 有自己的特点：
 
