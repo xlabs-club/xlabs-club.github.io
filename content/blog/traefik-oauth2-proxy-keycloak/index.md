@@ -23,10 +23,10 @@ seo:
 如果你有类似以下的需求，都可以参考此文档，原理是一样的，组件也可复用。
 
 1. 为原本没有登录验证的服务提供认证服务，比如某些开源组件不支持认证但是又因携带一些危险数据而不想公开访问。
-2. 实现统一的单点登录认证、并支持简单的 RBAC、UBAC 鉴权。
+2. 实现统一的单点登录 SSO、并支持简单的 RBAC、UBAC 鉴权。
 3. 为 Kubernetus Traefik Nginx Ingress 提供统一的认证入口，一键实现所有入口必须登录才可访问。
 4. 配置 Traefik 使用 Forward Auth，Nginx 使用 auth_request 实现认证，也可以一并参考。
-5. 基于用户、角色等不同属性，路由到不同服务。
+5. 在 K8S 或应用网关，基于用户、角色等不同属性，路由到不同服务。
 6. 如果你凑巧也在用 [Backstage](https://backstage.io/)，请参考 [另一篇博客](https://www.xlabs.club/blog/backstage-oauth2-proxy-keycloak/)。
 
 写在前面：
@@ -40,28 +40,32 @@ seo:
 ## 组件介绍
 
 1. Keycloak
+
    Keycloak 是一个开源的身份和访问管理解决方案，支持 OAuth 2.0、OpenID Connect、SAML 等协议。它提供用户管理、角色管理、单点登录（SSO）、身份提供服务等功能，在本示例中担任 Auth Provider 角色。关于 Keycloak 的中文介绍，可参考本站单独的博客 [IDaaS Book](https://idaas.xlabs.club/)。
 
 2. [oauth2-proxy](https://oauth2-proxy.github.io/oauth2-proxy/)
+
    顾名思义它是一个关于 oauth 反向代理，主要用来为后端服务增加身份验证层。它支持多种 OAuth 2.0 提供者（如 Google、OIDC、Keycloak 等），可以保护未提供身份验证的应用。oauth2-proxy 在请求进入后端服务之前，会先进行 OAuth 2.0 登录认证，确保请求者具有访问权限。它承担了登录的合法性校验、重定向、登录成功后的 cookie、response 设置等功能。
 
 3. Application
-   应用代号，可以是任何应用。
+
+   应用代号，可以是任何应用，UI 也好，API 也好，都可以，只要想拦截都行。
 
 在开始之前，建议先了解下 oauth2-proxy 的基本功能，并需要特别关注一下他的这几个容易令人疑惑的设置。
 
-1. oauth2-proxy 的 set header 设置的是 response header，这在下面提到的 nginx auth_request 模块和 traefik forwardAuth Middleware 会用到。
-2. pass header 是认证通过后，将一些基本信息，比如 Access Token、User ID、User Group 通过 Http Header 传递到 upstream（代理的目标应用），upstream 可以拿到 Header 信息后做更多的事情。
+1. oauth2-proxy 的 set header 和 pass header 的区别， set header 设置的是 response header，这在下面提到的 nginx auth_request 模块和 traefik forwardAuth Middleware 会用到。
+2. pass header 是认证通过后，将一些基本信息，比如 Access Token、User ID、User Group 通过 Http Request Header 传递到 upstream（代理的目标应用），upstream 可以拿到 Header 信息后做更多的事情。
 3. 目标应用 `--upstream` 一般就是一个或多个具体的后端服务地址，也可以是静态文件。还有一种特殊的文件 `file:///dev/null`, 相当于舍弃 upstream，下面我们会用他结合 traefik forwardAuth 使用。
 4. 关注下 oauth2-proxy 的 [Endpoints](https://oauth2-proxy.github.io/oauth2-proxy/features/endpoints)，主要使用 start、auth、sign_in、sign_out 等几个，另外 auth endpoint 后面可以追加 query parameters `allowed_groups/allowed_emails`，这样不就组成了一个简单的基于 Group 的权限认证。
-5. 注意看文档中关于 proxy 的设置，比如 `--reverse-proxy`，很多错误都是因为认证和配置没问题，但是到了后端 OAuth 本身校验失败，Token 的校验对 scheme、host 都有要求。
+5. 注意看文档中关于 proxy 的设置，比如 `--reverse-proxy`，很多错误都是因为认证和配置没问题，但是到了后端 OAuth 本身校验失败，Token 的校验对 scheme、host 都有要求，如果经过了 proxy，要透传 header 中的 scheme、host。
 
 ## 基本原理和流程
 
 目前 oauth2-proxy 有几种主流的使用方式。
 
-第一种，直接使用 oauth2-proxy 对外提供服务，承担认证流程并提供简单的权限校验，认证通过后通过 Header 传递一些用户信息到 upstream，流量由 oauth2-proxy 分发。
-他的网络流量大概类似如下方式。
+第一种，直接使用 oauth2-proxy 对外提供服务，承担认证流程并提供简单的权限校验，认证通过后通过 Header 传递一些用户信息到 upstream application，流量由 oauth2-proxy 分发。
+
+这种方式网络流量大概类似如下方式。
 
 ```mermaid
 
@@ -71,7 +75,7 @@ sequenceDiagram
     participant Application
 
     User->>oauth2-proxy: Access Service
-    oauth2-proxy->>oauth2-proxy: Authenticate User
+    oauth2-proxy->>oauth2-proxy: Authenticate User to Auth Provider (eg. keycloak)
     oauth2-proxy->>Application: Forward request to Backend <br> proxy paas headers(user id/name/groups/roles)
     Application->>Application: Do more things by header info
     Application-->>oauth2-proxy: Response
@@ -79,7 +83,8 @@ sequenceDiagram
 
 ```
 
-第二种，借助 traefik forwardAuth 认证插件 或 nginx auth_request 认证模块，结合 oauth2-proxy 提供的认证相关 Endpoints，承担认证流程，认证通过后流量的分发仍然由 traefik/nginx 执行。
+第二种，借助 traefik forwardAuth 认证插件 或 nginx auth_request 认证模块，结合 oauth2-proxy 提供的认证相关 Endpoints，承担认证流程，认证通过后流量的分发仍然由 traefik/nginx 执行。此方案的优点很明显，就是 traefik/nginx 的流量分发能力远超过 oauth2-proxy，不破坏 traefik/nginx 本身的功能。
+
 他的网络流量和流程大概类似如下方式。
 
 ```mermaid
@@ -101,8 +106,8 @@ sequenceDiagram
     oauth2-proxy->>Keycloak: Exchange Code for Access Token
     Keycloak-->>oauth2-proxy: Return Access Token
     oauth2-proxy-->>User: Set authentication cookie
-    oauth2-proxy->>Traefik: Forward original request
-    Traefik->>Application: Forward request to Application
+    oauth2-proxy->>Traefik: Forward original request, add Response Header
+    Traefik->>Application: Response Header to Request Header, Forward request to Application
     Application-->>Traefik: Return response
     Traefik-->>User: Return response
 ```
@@ -116,9 +121,8 @@ sequenceDiagram
 5. 认证成功后，Keycloak 返回鉴权码给用户。
 6. 用户将鉴权码发送给 oauth2-proxy，oauth2-proxy 使用鉴权码向 Keycloak 请求访问令牌。
 7. Keycloak 返回访问令牌给 oauth2-proxy，oauth2-proxy 设置身份验证 cookie。
-8. oauth2-proxy 将原始请求转发给 Traefik。
-9. Traefik 将请求发送给 Application。
-10. Application 返回响应，最终由 Traefik 返回给用户。
+8. oauth2-proxy 认证通过后，设置 Response Header 给 Traefik，Traefik 将 Response Header 转成 Request Header 传递给 Application。
+9. Application 返回响应，最终由 Traefik 返回给用户。
 
 本文档部署示例使用的是第二种方式。
 
@@ -137,37 +141,39 @@ aud 声明指定令牌的预期接收者，oauth2-proxy 期望与 --client-id �
 1. 登录 Keycloak admin 控制台，切换到你自己的 realm。
 2. 通过 `Clients -> Create client` （注： -> 连接代表 Keycloak 的菜单和按钮导航）来创建新客户端，核心参数如下，注：app.example.com 为我的应用地址。
 
-    - Client type： OpenID Connect
-    - Client ID：oauth2-proxy
-    - Client authentication 勾选，打开
-    - Authentication flow 勾选 Standard flow
-    - Valid redirect URIs: 设置为你的应用 callback 地址，`https://app.example.com/oauth2/callback`，可以设置多个，也可以设置正则匹配，如 `https://app.example.com/*`
-    - Valid post logout redirect URIs：`https://app.example.com/oauth2/sign_out`
+   - Client type： OpenID Connect
+   - Client ID：oauth2-proxy
+   - Client authentication 勾选，打开
+   - Authentication flow 勾选 Standard flow
+   - Valid redirect URIs: 设置为你的应用 callback 地址，`https://app.example.com/oauth2/callback`，可以设置多个，也可以设置正则匹配，如 `https://app.example.com/*`
+   - Valid post logout redirect URIs：`https://app.example.com/oauth2/sign_out`
 
 3. 以上点保存后，从 `Clients -> oauth2-proxy -> Credentials` 页面，复制客户端密钥，下面会用到。
 4. 配置一个 `audience mapper`, 在 `Clients -> oauth2-proxy -> Client scopes`页签，此时在列表应该看到一个名字叫 `oauth2-proxy-dedicated`的，点击进去，通过 `Configure a new mapper` 按钮创建一个新的 mapper。
 
-    - 类型选择 `Audience`
-    - 名字叫 `aud-mapper-oauth2-proxy`
-    - Included Client Audience：选择 oauth2-proxy
-    - 勾选 `Add to ID token`、`Add to access token`、`Add to token introspection`
+   - 类型选择 `Audience`
+   - 名字叫 `aud-mapper-oauth2-proxy`
+   - Included Client Audience：选择 oauth2-proxy
+   - 勾选 `Add to ID token`、`Add to access token`、`Add to token introspection`
 
 5. 如果想使用 oauth2-proxy 的 `--allowed-group` 验证，需要在 `Client scopes -> Create client scope` 创建一个名字叫 `groups` 的 scope，下面参数是保持 groups 后才能使用，在 groups 的 detail -> mapper 里创建 `Group Membership` 类型的 mapper。
 
-    - name：groups-mapper
-    - Token Claim Name: groups
-    - 勾选 `Add to xxx`，全勾上。
+   - name：groups-mapper
+   - Token Claim Name: groups
+   - 勾选 `Add to xxx`，全勾上。
 
 6. 再回到 `Clients -> oauth2-proxy -> Client scopes`页签， `Add client scope`选择我们上一步创建的 `groups`, Add 类型选择 `Optional`。这样就能把用户的 group 加到 JWT token 里了。
 
 ### oauth2-proxy 配置
 
-oauth2-proxy 对接 keycloak，可以选择 `Keycloak OIDC` provider，也可以选择 `OpenID Connect` provider，这里我们选择 `Keycloak OIDC`，他比 OpenID Connect 多支持按照 role 和 group 授权。
+在开始之前我们先做出两个选择：
+
+1. oauth2-proxy 对接 keycloak，可以选择 `Keycloak OIDC` provider，也可以选择 `OpenID Connect` provider，这里我们选择 `Keycloak OIDC`，他比 `OpenID Connect` 多了按照 role 和 group 授权。
+2. oauth2-proxy 对接 Traefik，可以使用 `errors middlewares` 实现，也可以使用 Redirect 实现，这两种方式在 oauth2-proxy 的文档里都有详细的说明，两种方式都能实现根据情况选择一个，配置上稍有差别，返回值对 401 和 403 的处理也不同。
 
 这里我们使用 bitnami/oauth2-proxy helm chart 部署，values.yaml 主要配置如下。
 
 ```yaml
-
 # service 默认 port 4180
 service:
   port: 4180
@@ -197,24 +203,23 @@ configuration:
   oidcIssuerUrl: https://keycloak.example.com/realms/master
   # 不需要填 redirectUrl，由 Traefik 帮我们处理
   redirectUrl: ""
-
 ```
 
 再次强调，因为我们是使用 Traefik 做流量分发，oauth2-proxy 仅提供认证功能，所以这几个参数很重要。
 
 ```yaml
-  redirectUrl: ""
-  content: |
-    reverse_proxy = true
-    upstreams = "file:///dev/null"
+redirectUrl: ""
+content: |
+  reverse_proxy = true
+  upstreams = "file:///dev/null"
 ```
 
 为了配合下面的 Traefik forwardAuth 实现 `authResponseHeaders`，还需要开启这两个参数。
 
 ```yaml
-  content: |
-    set_xauthrequest = true
-    set_authorization_header = true
+content: |
+  set_xauthrequest = true
+  set_authorization_header = true
 ```
 
 开启后，在 backend 服务里就能通过 Header 获取到当前用户的登录信息，以 keycloak-oidc provider 为例，获取到的 Header 如下。
@@ -226,14 +231,13 @@ x-auth-request-groups: admin,test-group # user groups
 x-auth-request-access-token: xxx # Access Token
 authorization: Bearer token xxx # 注意这个是 ID Token，不是 Access Token
 cookie: xxx
-
 ```
 
 ### Traefik 配置
 
 Traefik 我们需要两个 Middleware：
 
-- errors: 将 http 返回状态码是 401-403 的请求，重定向到 oauth2-proxy  `/oauth2/sign_in` 端点。
+- errors: 将 http 返回状态码是 401-403 的请求，重定向到 oauth2-proxy `/oauth2/sign_in` 端点。
 - forwardAuth：检查登录状态并设置 cookie 和 Header。
 
 先创建这两个 Middleware。
@@ -420,23 +424,20 @@ Keycloak 需要创建 audience mapper 和 groups scope mapper，这在 [oauth2-p
 为了解决这个问题，我们可以定制 oauth2-proxy 的登录页 `sign_in.html`，在登录页面直接重定向，`sign_in.html` 内容如下。
 
 ```html
-
 {{define "sign_in.html"}}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" charset="utf-8">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
     <title>Redirecting</title>
     <script>
-        window.location = "{{.ProxyPrefix}}/start?rd=" + encodeURI(window.location)
+      window.location = "{{.ProxyPrefix}}/start?rd=" + encodeURI(window.location);
     </script>
   </head>
-  <body>
-  </body>
+  <body></body>
 </html>
 {{end}}
-
 ```
 
 然后给 oauth2-proxy 增加环境变量 OAUTH2_PROXY_CUSTOM_TEMPLATES_DIR 放置以上登录页面。
@@ -446,7 +447,6 @@ Keycloak 需要创建 audience mapper 和 groups scope mapper，这在 [oauth2-p
 使用方式类似如下。
 
 ```yaml
-
 initContainers:
   # copy 自定义模板，不需要点击 `Sign in` 按钮，自动重定向到登录页
   - name: auto-sign-in
@@ -454,8 +454,8 @@ initContainers:
     image: docker.io/nxest/oauth2-proxy-auto-sign-in:v7.7.1
     imagePullPolicy: IfNotPresent
     env:
-    - name: OAUTH2_PROXY_CUSTOM_TEMPLATES_DIR
-      value: /bitnami/oauth2-proxy/templates
+      - name: OAUTH2_PROXY_CUSTOM_TEMPLATES_DIR
+        value: /bitnami/oauth2-proxy/templates
     volumeMounts:
       - mountPath: /bitnami/oauth2-proxy/templates
         name: templates
@@ -559,9 +559,9 @@ nginx.ingress.kubernetes.io/auth-url: https://$host/oauth2/auth
 
 - oauth2-proxy 能重定向到登录页面，输入密码登录成功，回调到 callback 时出现下面这个错误，原因是缺少 audience mapper，参考本文上面介绍增加 mapper。
 
-    ```console
-    500 Internal Server Error
-    Oops! Something went wrong. For more information contact your server administrator.
+  ```console
+  500 Internal Server Error
+  Oops! Something went wrong. For more information contact your server administrator.
 
-    [oauthproxy.go:902] Error creating session during OAuth2 callback: audience from claim aud with value [account] does not match with any of allowed audiences map[oauth2-proxy:{}]
-    ```
+  [oauthproxy.go:902] Error creating session during OAuth2 callback: audience from claim aud with value [account] does not match with any of allowed audiences map[oauth2-proxy:{}]
+  ```
