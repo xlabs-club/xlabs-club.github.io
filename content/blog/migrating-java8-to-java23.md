@@ -432,6 +432,19 @@ Java 参数太多，到 [VM Options Explorer - Corretto JDK21](https://chriswhoc
   -Djava.security.properties=$JAVA_HOME/conf/security/custom.java.security
   ```
 
+- module jdk.proxy3 does not "opens jdk.proxy3" to unnamed module.
+
+  网上包括人工智能推荐的答案都是 add-opens，这也是我想到的第一个方式，毕竟以前遇见 unnamed module 都是这么干的。
+
+  ```console
+  -–add-opens=jdk.proxy3=ALL-UNNAMED
+  --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+  --add-opens=java.base/java.lang=ALL-UNNAMED
+  --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+  ```
+
+  实际上都不生效。Java 里并没有一个真的叫 `jdk.proxy3` 的模块，这是由 Dynamic Proxy 动态生成的一个虚拟方法。最根本的解决办法还是升级代码，不要调用 Java 过时的方法。我这里是因为 Groovy 调用产生，升级了一下 Groovy，完美解决。
+
 ## 参考资料
 
 - 从 Java 15 到 23 关于 G1 GC 的优化
