@@ -165,7 +165,7 @@ docker buildx imagetools inspect tester:1.0
 
 方式 2：组合一台 AMD64、一台 ARM64 机器，多节点各自编译。
 
-放开 docker 的 tcp 端口，注意，在生产环境启用 TLS，放开端口是一件很危险的事情。
+放开 docker 的 tcp 端口，注意，在生产环境一定要启用 TLS 认证，放开端口是一件很危险的事情。
 
 ```console
 
