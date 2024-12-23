@@ -156,6 +156,12 @@ aud 声明指定令牌的预期接收者，oauth2-proxy 期望与 --client-id �
    - Included Client Audience：选择 oauth2-proxy
    - 勾选 `Add to ID token`、`Add to access token`、`Add to token introspection`
 
+    ![keycloak-client-scopes1](keycloak-client-scopes1.png)
+    ![keycloak-client-scopes2](keycloak-client-scopes2.png)
+    ![keycloak-client-scopes3](keycloak-client-scopes3.png)
+    ![keycloak-client-scopes4](keycloak-client-scopes4.png)
+    ![keycloak-client-scopes5](keycloak-client-scopes5.png)
+
 5. 如果想使用 oauth2-proxy 的 `--allowed-group` 验证，需要在 `Client scopes -> Create client scope` 创建一个名字叫 `groups` 的 scope，下面参数是保持 groups 后才能使用，在 groups 的 detail -> mapper 里创建 `Group Membership` 类型的 mapper。
 
    - name：groups-mapper
