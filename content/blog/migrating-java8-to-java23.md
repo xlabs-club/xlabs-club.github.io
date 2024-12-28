@@ -297,8 +297,9 @@ class com/company/Util uses deprecated method java/lang/Double::<init>(D)V
 
 升级到 Java 21 以后以下是根据我们公司常规经验推荐的配置，非普世可用，请根据自己的应用情况臻选。
 
-- 如果在使用 ZGC，推荐启用分代 `-XX:+ZGenerational` ，对稳定性、吞吐量、内存占用都有很大优化。
+- 如果在使用 ZGC，推荐启用分代 `-XX:+ZGenerational` ，对稳定性、吞吐量、内存占用都有很大优化。Java 23 默认已启用分代 ZGC。
 - 在很多场景下 G1 仍然是最稳的选择，内存占用比 ZGC 低，CPU 更稳定。大部分场景下小内存应用，并不需要 ZGC。
+- 亲测大部分应用 Java 23 比 Java 21 内存占用约少 5%-10%，GC 更稳定。
 
 ## 辅助迁移工具
 
