@@ -10,9 +10,9 @@
       </div>
     {{ end -}}
     {{ with .Params.headline -}}
-      <h2 class="text-center">{{ . }}</h2>
+      <h1 class="text-center">{{ . }}</h1>
     {{ else -}}
-      <h2 class="text-center">{{ .Title }}</h2>
+      <h1 class="text-center">{{ .Title }}</h1>
     {{ end -}}
     {{ with .Params.summary -}}<p class="lead text-center">{{ . }}</p>{{ end -}}
     {{ with .Content -}}<div class="text-center">{{ . }}</div>{{ end -}}
