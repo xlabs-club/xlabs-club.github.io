@@ -1,6 +1,6 @@
 ---
-title: "K8S Tomcat 服务长连接负载不均衡问题分析和解决办法"
-description: "K8S Tomcat 服务长连接负载不均衡问题分析和解决办法"
+title: "K8S Service 长连接导致负载不均衡问题分析和解决办法"
+description: "K8S Service 长连接导致负载不均衡问题分析和解决办法"
 summary: ""
 date: 2024-04-11T21:05:46+08:00
 lastmod: 2024-04-11T21:05:46+08:00
@@ -12,17 +12,17 @@ contributors: [l10178]
 pinned: false
 homepage: false
 seo:
-  title: "K8S Tomcat 服务长连接负载不均衡问题分析和解决办法"
-  description: "K8S Tomcat 服务长连接负载不均衡问题分析和解决办法"
+  title: "K8S Service 长连接导致负载不均衡问题分析和解决办法"
+  description: "K8S Service 长连接导致负载不均衡问题分析和解决办法"
   canonical: ""
   noindex: false
 ---
 
-问题背景，我们有一个 Http 服务在 K8S 内部署了 3 个 Pod，客户端使用 Service NodePort 进行连接，发现流量几乎都集中到了一个 Pod 上，很不均衡。
+问题背景，我们有一个 Http 服务在 K8S 内部署了 3 个 Pod，客户端使用 Service NodePort 进行连接，发现流量几乎都集中到了一个 Pod 上，各 Pod 承载流量很不均衡。
 
 已知的情况是：
 
-1. K8S Service 使用 round-robin 负载均衡策略。
+1. K8S Service 底层是 ipvs round-robin 负载均衡策略，按道理讲应该是均衡的。
 2. 客户端和服务端都启用了 Keep-Alive 长连接。
 
 经过抓包分析，负载较高的 Pod 保持着较多 KeepAlive 长连接。将 kube-proxy 的 ipvs 转发模式设置为 Least-Connection，即倾向转发给连接数少的 Pod，可能会有所缓解，但也不一定，因为 ipvs 的负载均衡状态是分散在各个节点的，并没有收敛到一个地方，也就无法在全局层面感知哪个 Pod 上的连接数少，并不能真正做到 Least-Connection。
@@ -44,7 +44,7 @@ server.tomcat.max-keep-alive-requests=100
 server.netty.max-keep-alive-requests=100
 ```
 
-对于独立部署 Tomcat，可在 server.xml 文件 Connector 中配置 maxKeepAliveRequests，Tomcat xml 可解析启动参数，启动时增加 `-D=server.tomcat.max-keep-alive-requests=200` 来调整默认值大小，另外注意，Tomcat xml 不支持解析 ENV 变量。
+对于独立部署 Tomcat，可在 server.xml 文件 Connector 中配置 maxKeepAliveRequests，Tomcat xml 可解析启动参数，启动时增加 `-D=server.tomcat.max-keep-alive-requests=200` 来调整默认值大小，另外注意，Tomcat xml 不支持解析 ENV 环境变量，只支持解析 `-D` 启动参数。
 
 ```xml
 <Connector port="80" protocol="org.apache.coyote.http11.Http11Nio2Protocol"
