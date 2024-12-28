@@ -58,7 +58,7 @@ footer = "Give Me a <a class=\"text-muted\" href=\"https://github.com/xlabs-club
 
   # Nav
   sectionNav = ["docs"] # ["docs"] (default) or list of sections (e.g. ["docs", "guides"])
-  toTopButton = true
+  toTopButton = false
   breadcrumbTrail = false
   headlineHash = true # true (default) or false
   scrollSpy = true # true (default) or false
