@@ -198,7 +198,7 @@ Sentinel 利用 LRU 策略统计最近最常访问的热点参数，结合令牌
 
 - 默认参数参考流量控制规则的解释。
 - paramIdx：热点参数的索引，必填，对应 SphU.entry(xxx, args) 中的 args 参数索引位置，从 0 开始。
-- durationInSec：统计窗口时间长度（单位为秒），默认 1s。
+- durationInSec：统计窗口时间长度（单位为秒），默认 1s。在此单位时间 durationInSec 内允许 count 值，比如 1s 10 个，10s 100 个。注意这个 durationInSec 不要太长，另外思考一个问题 1s 10 个和 10s 100 个数字上相等效果相等吗，显然不是。
 - paramFlowItemList：参数例外项，可以针对指定的参数值单独设置限流阈值，不受前面 count 阈值的限制。仅支持基本类型和字符串类型。
 - burstCount: 为应对突发流量"额外允许"的流量，在原 count 的基础上再额外加上这个值，相当于保底。默认为 0，仅在 `快速失败|Warm UP` + QPS 下生效。（Java 文档中未提及，代码中支持）
 
@@ -357,6 +357,22 @@ public void sample() {
   }
 ```
 
+## 实战经验和踩坑记录
+
+- LB 或 K8S Service 长连接负载不均衡问题，可能导致误触发限流，本来计算好的一个实例承载 10 QPS，怎么请求全集中在一个实例上，所以最好预留一些余量。为什么会有这个问题以及解决办法参考 [此博客](https://www.xlabs.club/blog/tomcat-keepalive-load-balancer/)。
+
+- 单机限流阈值到底配多少。
+
+   无监控不拍脑袋，可以先配一个很大的阈值，上线 metrics 日志，根据日志指标确定最大值最小值后再评估配置多少合适。
+
+- 入口网关已经限流了，应用层或数据库还需要限流吗。
+
+   看具体情况，在以往的教训中我们遇到了一个请求，扩大到 N 多请求的情况，这时仅有网关限流就不够了。
+
+- 注意多服务关联限流。
+
+  假设一个服务 A 一次请求需要同时调用服务 B 一次，服务 C 一次。然而服务 B 限流 100，服务 C 限流 200，总有失败的情况，服务 A 就要不停的平衡他们的关系，造成资源浪费甚至数据不一致。
+
 ## FAQ
 
 - Q：Sentinel 资源生成时如何忽略某些资源。
@@ -365,7 +381,7 @@ public void sample() {
 
 - Q：Sentinel DataSource adapter 和 XxxRuleManager.loadRules 两种加载规则的方式能不能同时使用。
 
-  A：不能。比如 Nacos DataSource adapter，远端配置有变更后自动刷新，会以远端配置为准，覆盖掉 XxxRuleManager.loadRules 主动加载的规则。
+  A：默认不能。比如 Nacos DataSource adapter，远端配置有变更后自动刷新，会以远端配置为准，覆盖掉 XxxRuleManager.loadRules 主动加载的规则。当然一种妥协的处理方式是自定义 DataSource 加载，在加载的时候集成各个 Rule，加一个自定义标记，对此标记的规则不进行覆盖。
 
 - Q：对于限流的冷启动效果，冷启动结束进入稳定状态后，还会不会重新回到冷启动阶段。
 
