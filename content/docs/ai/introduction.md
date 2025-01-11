@@ -40,6 +40,8 @@ seo:
 
 ### 对话式编程助手
 
+- {{< inline-svg src="svg/tools/cursor.svg" >}} [Cursor](https://cursor.sh/) - 基于 AI 的代码编辑器。
+- {{< inline-svg src="svg/tools/windsurf.svg" >}} [Windsurf](https://codeium.com/windsurf) - 世界首个 AI Flow 范式的编程 IDE，支持多种语言。
 - {{< inline-svg src="svg/tools/chatgpt.svg" >}} [ChatGPT](https://chat.openai.com/) - OpenAI 的 AI 对话模型，支持代码生成和解释。
 - {{< inline-svg src="svg/tools/claude.svg" >}} [Claude](https://claude.ai/) - Anthropic 的 AI 助手，支持代码分析和文件处理。
 - {{< inline-svg src="svg/tools/bard.svg" >}} [Google Gemini](https://gemini.google.com/) - Google 的 AI 助手，支持代码生成和调试。
@@ -56,11 +58,9 @@ seo:
 
 ### IDE 集成工具
 
-- {{< inline-svg src="svg/tools/windsurf.svg" >}} [Windsurf](https://codeium.com/windsurf) - 世界首个 AI Flow 范式的编程 IDE，支持多种语言。
 - {{< inline-svg src="svg/tools/jetbrains.svg" >}} [JetBrains AI](https://www.jetbrains.com/ai/) - JetBrains IDE 的 AI 助手。
 - {{< inline-svg src="svg/tools/vscode.svg" >}} [Visual Studio Code](https://code.visualstudio.com/) - 微软开源的代码编辑器，支持丰富的 AI 扩展。
 - {{< inline-svg src="svg/tools/vscode.svg" >}} [Visual Studio IntelliCode](https://visualstudio.microsoft.com/services/intellicode/) - 微软 Visual Studio 的 AI 功能。
-- {{< inline-svg src="svg/tools/cursor.svg" >}} [Cursor](https://cursor.sh/) - 基于 AI 的代码编辑器。
 
 ### AI 辅助开发平台
 
