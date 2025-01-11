@@ -19,3 +19,9 @@ seo:
 ---
 
 使用 backstage 创建开发者门户。
+
+## Backstage 插件资源
+
+- Backstage 官方插件：[https://backstage.io/plugins](https://backstage.io/plugins)
+- Backstage 社区插件：[https://github.com/backstage/community-plugins](https://github.com/backstage/community-plugins)
+- Red Hat 贡献的社区插件：[https://github.com/janus-idp/backstage-plugins](https://github.com/janus-idp/backstage-plugins)
