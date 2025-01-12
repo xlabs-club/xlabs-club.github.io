@@ -11,6 +11,7 @@ tags: [k8s, idaas]
 contributors: [l10178]
 pinned: false
 homepage: false
+type: docs
 seo:
   title: "Backstage 集成 oauth2-proxy 和 Keycloak，实现用户管理、登录认证以及 RBAC、ABAC 授权"
   description: "Backstage 集成 oauth2-proxy 和 Keycloak，实现用户管理、登录认证以及 RBAC、ABAC 授权"

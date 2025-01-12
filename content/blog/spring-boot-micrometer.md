@@ -54,7 +54,7 @@ Micrometer 中两个最核心的概念：计量器注册表 (MeterRegistry)，�
 
   Mircrometer 通过 Tag（标签）实现了多维度的度量数据收集，通过 Tag 的命名可以推断出其指向的数据代表什么维度或是什么类型的度量指标。
 
-## 当前实现方式和要求
+## 我们的实现方式和要求
 
 总体架构：Spring Boot Actuator + Micrometer + Prometheus + Granfana。
 

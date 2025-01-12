@@ -11,6 +11,7 @@ tags: [Java]
 contributors: [l10178]
 pinned: false
 homepage: false
+type: docs
 seo:
   title: "基于 Alibaba Sentinel 实现的分布式限流中间件服务以及遇到的坑和注意事项"
   description: "基于 Alibaba Sentinel 实现的分布式限流中间件服务以及遇到的坑和注意事项"

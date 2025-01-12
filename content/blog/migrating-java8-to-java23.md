@@ -11,6 +11,7 @@ tags: []
 contributors: []
 pinned: false
 homepage: false
+type: docs
 seo:
   title: "从 Java 8 升级到 Java 23，踩坑记录、变更评估方法、辅助工具介绍"
   description: "从 Java 8 升级到 Java 23，踩坑记录、变更评估方法、辅助工具介绍"
