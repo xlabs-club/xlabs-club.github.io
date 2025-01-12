@@ -27,7 +27,7 @@ one = "minute"
 other = "minutes"
 
 [on_this_page]
-other = "On this page"
+other = "目录"
 
 [reading_time]
 other = "Estimated reading time"

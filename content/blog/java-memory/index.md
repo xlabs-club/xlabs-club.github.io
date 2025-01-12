@@ -12,6 +12,7 @@ tags: [k8s, Java]
 contributors: [l10178]
 pinned: true
 homepage: false
+type: docs
 seo:
   title: "K8S Pod 容器内 Java 进程内存分析，内存虚高以及容器 OOM 或 Jave OOM 问题定位"
   description: "K8S Pod 容器内 Java 进程内存分析，内存虚高以及容器 OOM 或 Jave OOM 问题定位，不同 GC 效果对比"

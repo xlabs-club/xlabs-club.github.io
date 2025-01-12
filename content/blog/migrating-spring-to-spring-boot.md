@@ -12,6 +12,7 @@ tags: [Spring Boot, Java]
 contributors: [l10178]
 pinned: false
 homepage: false
+type: docs
 seo:
   title: ""
   description: ""

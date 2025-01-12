@@ -11,6 +11,7 @@ tags: [k8s]
 contributors: [l10178]
 pinned: false
 homepage: false
+type: docs
 seo:
   title: "容器镜像制作最佳实践，多架构编译，Dockerfile 编写小技巧和踩坑记录，镜像维护辅助工具 ORAS、skopeo 等介绍"
   description: "容器镜像制作最佳实践，多架构编译，Dockerfile 编写小技巧和踩坑记录，镜像维护辅助工具 ORAS、skopeo 等介绍"

@@ -11,6 +11,7 @@ tags: [k8s, idaas]
 contributors: [l10178]
 pinned: false
 homepage: false
+type: docs
 seo:
   title: "使用 oauth2-proxy 为任意程序增加认证鉴权，结合 K8S、traefik、keycloak 部署配置详解"
   description: "使用 oauth2-proxy 为任意程序增加认证鉴权，结合 K8S、traefik、keycloak 部署配置详解"
