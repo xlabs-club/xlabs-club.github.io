@@ -19,23 +19,31 @@ seo:
   noindex: false
 ---
 
-## 破坏性变更评估
+## 为什么要升级
+
+额，好比 iPhone 4S 很优秀，但是在 2025 年，我不会考虑买，甚至不考虑 iPhone 14 Pro Max。
+
+当然后面我们会对比收益。
+
+## 破坏性变更评估工具
 
 在升级之前，可通过 jdeps 和 jdeprscan 先评估下是否有使用内部类和废弃 API，有一个总的概览。
+
+### jdeps
 
 jdeps 是 Java 自带的命令行工具，可以用来分析依赖关系和生成模块信息文件，这里我们只借用他的其中一项功能。
 
 通过 `jdeps --jdk-internals` 检查是否有使用内部 API，以下例子显示使用了 `sun.net.util.IPAddressUtil` 这个 Java 内部工具类，会显示详细的源码类和 jar 包位置。
 
-可以继续使用 Java 中的内部 API，OpenJDK Wiki 页面 [Java Dependency Analysis Tool](https://wiki.openjdk.org/display/JDK8/Java+Dependency+Analysis+Tool) 推荐了某些常用 JDK 内部 API 的替换项。
+可以继续使用 Java 中的内部 API，另外 OpenJDK Wiki 页面 [Java Dependency Analysis Tool](https://wiki.openjdk.org/display/JDK8/Java+Dependency+Analysis+Tool) 推荐了某些常用 JDK 内部 API 的替换项，可参考这些建议替换掉。
 
 ```console
 
 $ jdeps -dotoutput <dot-file-dir> -jdkinternals <one-or-more-jar-files....>
 
-$ jdeps --jdk-internals --multi-release 21 --class-path . target/*.jar
+$ jdeps --jdk-internals --multi-release 21 --class-path . target/xxx.jar
 . -> java.base
-   com.my.package.function.SecurityChecker -> sun.net.util.IPAddressUtil                         JDK internal API (java.base)
+   com.my.SecurityChecker -> sun.net.util.IPAddressUtil  JDK internal API (java.base)
 
 Warning: JDK internal APIs are unsupported and private to JDK implementation that are
 subject to be removed or changed incompatibly and could break your application.
@@ -44,6 +52,8 @@ For the most recent update on JDK internal API replacements, please check:
 https://wiki.openjdk.org/display/JDK8/Java+Dependency+Analysis+Tool
 
 ```
+
+### jdeprscan
 
 jdeprscan 也是 Java 自带分析工具，可查看是否使用了已弃用或已删除的 API。使用已弃用的 API 不是阻塞性问题，还能接着跑，但是建议替换掉。使用已删除的 API，那就彻底跑不起来了。
 
@@ -86,7 +96,25 @@ class com/company/Util uses deprecated method java/lang/Double::<init>(D)V
 
 注意使用 jdeprscan 需要通过 --class-path 指定依赖项，可先执行 `mvn dependency:copy-dependencies` 命令，此时会 copy 依赖项到 `target/dependency` 目录。
 
-另外，可在你项目的 maven pom 文件中引入 `maven-jdeps-plugin`，如下示例，引入后如果有使用废弃 API，将在 `mvn package` 的时候直接失败报错，避免有人无意引入废弃 API。
+如果你加了 --class-path 依赖，大概率还是报错误 `error: cannot find class`，目测寻找依赖项是根据 `target/dependency` 中的名字顺序找的，不是常规的 java 进程一次性加载完，不知道这算不算 jdeprscan 的设计 Bug，具体解决办法可参考 [jdeprscan-throws-cannot-find-class-error](https://stackoverflow.com/questions/49525496/jdeprscan-throws-cannot-find-class-error)。
+
+我采用的解决方式是把所有依赖 jar 文件都接到某个文件夹，解压成 classes，然后 class-path 使用此文件。这样还有个好处，扫描报告里只有我真正要扫描的当前项目的报告，不包含第三方 jar 的。
+
+以上过程命令行参考：
+
+```bash
+mvn dependency:copy-dependencies  -Dsilent=true
+
+mkdir -p target/dependency-classes
+for jar in target/dependency/*.jar; do
+    unzip -o "$jar" -d target/dependency-classes
+done
+
+jdeprscan --class-path target/dependency-classes  target/really-project.jar
+
+```
+
+除了使用 jdeprscan 命令行以外，也可在你项目的 maven pom 文件中引入 `maven-jdeps-plugin`，如下示例，引入后如果有使用废弃 API，将在 `mvn package` 的时候直接失败报错，避免有人无意引入废弃 API。
 
 ```xml
 <project>
@@ -306,6 +334,15 @@ class com/company/Util uses deprecated method java/lang/Double::<init>(D)V
 
 一些辅助迁移到新版本的工具，仅供参考。
 
+### Maven 依赖包更新
+
+使用 maven 检查是否有最新的依赖包和插件，注意，这里给的建议仅供参考，不要一下子应用上，需要综合考虑当前的项目依赖关系。
+
+```bash
+mvn versions:display-dependency-updates
+mvn versions:display-plugin-updates
+```
+
 ### [Eclipse Migration Toolkit for Java (EMT4J)](https://github.com/adoptium/emt4j)
 
 EMT4J 也是一个静态分析工具，可输出分析报告，也可直接 apply 到 git，直接通过 maven 插件、cli 命令行、Java Agent 3 种方式分析。
@@ -402,6 +439,10 @@ Java 参数太多，到 [VM Options Explorer - Corretto JDK21](https://chriswhoc
 
 ## 遇见问题和解决办法
 
+- 一定要升级依赖包吗，不升级能编译通过，直接用 Java 21 能不能跑起来，会不会有问题。
+
+  以我们实际经验来看，确实有很多应该不升级可直接运行，也没有问题。但是遇到了一些应用，跑着跑着 OOM 了，切换回 Java 8 就没有问题，还不知道是哪个包不兼容。
+
 - TLS 不兼容问题，类似如下错误。JDK 17 是支持 TLS1.0 ~ TLS1.3 的，但是默认使用的 TLS 版本是 TLS 1.3, 老版本被禁用了，需要主动放开。
 
   ```console
@@ -476,3 +517,11 @@ Java 参数太多，到 [VM Options Explorer - Corretto JDK21](https://chriswhoc
 - 地瓜哥 JVM GC 性能测试（三）：真实流量
 
    <https://www.diguage.com/post/gc-performance-real-qps/>
+
+- jdeprscan can not find class 解决办法
+
+   <https://stackoverflow.com/questions/49525496/jdeprscan-throws-cannot-find-class-error/>
+
+- 从 Java 8 升级到 Java 17 踩坑全过程
+
+   <https://cloud.tencent.com/developer/article/2257886>
