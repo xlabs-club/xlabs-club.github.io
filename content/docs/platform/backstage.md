@@ -25,3 +25,4 @@ seo:
 - Backstage 官方插件：[https://backstage.io/plugins](https://backstage.io/plugins)
 - Backstage 社区插件：[https://github.com/backstage/community-plugins](https://github.com/backstage/community-plugins)
 - Red Hat 贡献的社区插件：[https://github.com/janus-idp/backstage-plugins](https://github.com/janus-idp/backstage-plugins)
+- [Roadie](https://roadie.io/) 贡献的插件：[https://github.com/RoadieHQ/roadie-backstage-plugins](https://github.com/RoadieHQ/roadie-backstage-plugins)
