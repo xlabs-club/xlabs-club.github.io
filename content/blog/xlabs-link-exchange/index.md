@@ -20,7 +20,7 @@ seo:
 
 在建设本博客的过程中，发现了一些优秀的开发工具、有趣原创的独立博客，以及独立发布的良心开源产品，我觉得有必要把他们展示出来。
 
-如有侵权，请提 issue，如有推荐，请到 [GitHub](https://github.com/xlabs-club/xlabs-club.github.io) 提交 PR。
+如有侵权，请提 issue，如有推荐，请到我们的 [GitHub](https://github.com/xlabs-club/xlabs-club.github.io) 仓库提交 pull requests。
 
 ## 在线工具
 
@@ -33,4 +33,4 @@ seo:
 
 ## 独立产品
 
-To DO.
+Coming Soon...
