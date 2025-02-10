@@ -145,6 +145,10 @@ jdeprscan --class-path target/dependency-classes  target/really-project.jar
 
 ```
 
+### emt4j
+
+emt4j 是 Eclipse 推出的一个静态分析工具，下面会详细介绍用法，展示效果。
+
 ## 升级兼容方法
 
 1. 利用 Maven 的 `profile` 机制，根据 JDK 版本号，自动激活不同的配置。
@@ -322,14 +326,6 @@ jdeprscan --class-path target/dependency-classes  target/really-project.jar
     --add-opens=java.base/jdk.internal.misc=ALL-UNNAMED
     ```
 
-## 推荐配置
-
-升级到 Java 21 以后以下是根据我们公司常规经验推荐的配置，非普世可用，请根据自己的应用情况臻选。
-
-- 如果在使用 ZGC，推荐启用分代 `-XX:+ZGenerational` ，对稳定性、吞吐量、内存占用都有很大优化。Java 23 默认已启用分代 ZGC。
-- 在很多场景下 G1 仍然是最稳的选择，内存占用比 ZGC 低，CPU 更稳定。大部分场景下小内存应用，并不需要 ZGC。
-- 亲测大部分应用 Java 23 比 Java 21 内存占用约少 5%-10%，GC 更稳定。
-
 ## 辅助迁移工具
 
 一些辅助迁移到新版本的工具，仅供参考。
@@ -345,7 +341,7 @@ mvn versions:display-plugin-updates
 
 ### [Eclipse Migration Toolkit for Java (EMT4J)](https://github.com/adoptium/emt4j)
 
-EMT4J 也是一个静态分析工具，可输出分析报告，也可直接 apply 到 git，直接通过 maven 插件、cli 命令行、Java Agent 3 种方式分析。
+EMT4J 也是一个静态分析工具，可输出分析报告，也可直接 apply 到 git，支持通过 maven 插件、cli 命令行、Java Agent 3 种方式分析。
 
 目前发布比较慢，只有 master 分支支持 Java 21，可以基于 master 分支自己编译构建，也可以使用已 Realease 版本只分析到 Java 17。
 
@@ -401,10 +397,14 @@ Location: refclass:file:my-java-project-dir/target/classes/com/mypackage/spring/
 不想使用 xml 配置的，可参考以下命令行直接 run plugin。
 
 ```sh
-mvn org.eclipse.emt4j:emt4j-maven-plugin:0.8.0:check -DfromVersion=8 -DtoVersion=17 -DoutputFile=emt4j-report.html
+# 官方当前发布的版本
+mvn process-test-classes org.eclipse.emt4j:emt4j-maven-plugin:0.8.0:check -DfromVersion=8 -DtoVersion=17 -DoutputFile=emt4j-report.html
+# 这个是我自己基于 master 分支编译的 0.91 版本，支持 Java21
+mvn process-test-classes org.eclipse.emt4j:emt4j-maven-plugin:0.91:process -DfromVersion=8 -DtoVersion=21 -DoutputFile=emt4j-report.html
+
 ```
 
-检查结果错误可能很多，根据优先级修改，比如我的检查结果。
+检查结果错误可能很多，根据优先级修改，比如以下我的检查结果，检查结果支持中英文展示。
 
 ```console
 
@@ -423,6 +423,15 @@ Issues Context
 
 Target: file:/Users/l10178/.m2/repository/io/netty/netty/3.10.0.Final/netty-3.10.0.Final.jar
 
+优先级：p1
+有一些 class 已经被删除了需要修改代码替换成为新的 API
+位置：file:xxx/Base64Util.class, 目标：sun.misc.BASE64Decoder
+
+优先级：p3
+通过测试已知的一些不兼容的 jar
+如何修复：
+file:/root/.m2/repository/dom4j/dom4j/1.6.1/dom4j-1.6.1.jar 不匹配规则 "Version should >= '2.0' "
+
 ```
 
 ### [OpenRewrite](https://docs.openrewrite.org/)
@@ -436,6 +445,14 @@ Target: file:/Users/l10178/.m2/repository/io/netty/netty/3.10.0.Final/netty-3.10
 ### [Java 参数查询工具](https://chriswhocodes.com/corretto_jdk21_options.html)
 
 Java 参数太多，到 [VM Options Explorer - Corretto JDK21](https://chriswhocodes.com/corretto_jdk21_options.html) 中参照，里面根据 JDK 的版本以及发行商，列出来所有的相关参数，选择好对应发行商的正确版本，就可以搜索或者查看 java 命令支持的所有参数了。
+
+## 推荐配置
+
+升级到 Java 21 以后以下是根据我们公司常规经验推荐的配置，非普世可用，请根据自己的应用情况臻选。
+
+- 如果在使用 ZGC，推荐启用分代 `-XX:+ZGenerational` ，对稳定性、吞吐量、内存占用都有很大优化。Java 23 默认已启用分代 ZGC。
+- 在很多场景下 G1 仍然是最稳的选择，内存占用比 ZGC 低，CPU 更稳定。大部分场景下小内存应用，并不需要 ZGC。
+- 亲测大部分应用 Java 23 比 Java 21 内存占用约少 5%-10%，GC 更稳定。
 
 ## 遇见问题和解决办法
 
@@ -471,8 +488,10 @@ Java 参数太多，到 [VM Options Explorer - Corretto JDK21](https://chriswhoc
   jdk.tls.disabledAlgorithms=RC4, DES, MD5withRSA, \
      DH keySize < 1024, EC keySize < 224, 3DES_EDE_CBC, anon, NULL, \
      include jdk.disabled.namedCurves
-  # 然后启动的命令行增加以下参数配置
+  # 然后启动的命令行增加以下参数配置，指定自定义的 java.security 文件覆盖文件里有的值
   -Djava.security.properties=$JAVA_HOME/conf/security/custom.java.security
+  # 注意注意，用两个等号 == 指定自定义的 java.security 文件，是覆盖整个 Java 默认的 java.security 文件，原文件全部失效，只用自定义文件里的配置
+  -Djava.security.properties==$JAVA_HOME/conf/security/custom.java.security
   ```
 
 - module jdk.proxy3 does not "opens jdk.proxy3" to unnamed module.
