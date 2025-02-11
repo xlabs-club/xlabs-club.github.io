@@ -1,11 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-        <linearGradient id="elevenLabsGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#F43F5E"/>
-            <stop offset="50%" style="stop-color:#E11D48"/>
-            <stop offset="100%" style="stop-color:#BE123C"/>
-        </linearGradient>
-    </defs>
-    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" fill="url(#elevenLabsGradient)"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <path fill="#5436DA" d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.311L20.062 8 12 11.689 3.938 8 12 4.311zM4 9.044l7 3.422v7.19l-7-3.422V9.044zm16 0v7.19l-7 3.422v-7.19l7-3.422z"/>
 </svg>
