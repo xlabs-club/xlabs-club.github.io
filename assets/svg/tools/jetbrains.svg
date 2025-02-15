@@ -1,7 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <path d="M2.5839844,2 L21.416016,2 C21.739014,2 22,2.2609863 22,2.5839844 L22,21.416016 C22,21.739014 21.739014,22 21.416016,22 L2.5839844,22 C2.2609863,22 2,21.739014 2,21.416016 L2,2.5839844 C2,2.2609863 2.2609863,2 2.5839844,2 Z" fill="#000000" fill-rule="nonzero"></path>
-        <path d="M7,7 L17,7 L17,9 L7,9 L7,7 Z M7,11 L17,11 L17,13 L7,13 L7,11 Z M7,15 L13,15 L13,17 L7,17 L7,15 Z" fill="#FFFFFF" fill-rule="nonzero"></path>
-    </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><g fill="none" fill-rule="nonzero"><path fill="#000" d="M2.584 2h18.832c.323 0 .584.261.584.584v18.832a.583.583 0 0 1-.584.584H2.584A.583.583 0 0 1 2 21.416V2.584C2 2.261 2.261 2 2.584 2"/><path fill="#FFF" d="M7 7h10v2H7zm0 4h10v2H7zm0 4h6v2H7z"/></g></svg>

@@ -1,10 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-        <linearGradient id="framer_gradient" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#0055FF"/>
-            <stop offset="100%" stop-color="#0099FF"/>
-        </linearGradient>
-    </defs>
-    <path d="M12 21L4 15V9L12 15L20 9V15L12 21ZM12 15L4 9L12 3L20 9L12 15Z" fill="url(#framer_gradient)"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"><defs><linearGradient id="a" x1="2" x2="22" y1="2" y2="22" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#05F"/><stop offset="100%" stop-color="#09F"/></linearGradient></defs><path fill="url(#a)" d="m12 21-8-6V9l8 6 8-6v6zm0-6L4 9l8-6 8 6z"/></svg>

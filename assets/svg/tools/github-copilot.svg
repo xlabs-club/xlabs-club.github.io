@@ -1,11 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-        <linearGradient id="copilotGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#7C3AED"/>
-            <stop offset="100%" style="stop-color:#2563EB"/>
-        </linearGradient>
-    </defs>
-    <path d="M12 1C5.925 1 1 5.925 1 12s4.925 11 11 11 11-4.925 11-11S18.075 1 12 1zm0 2c4.97 0 9 4.03 9 9s-4.03 9-9 9-9-4.03-9-9 4.03-9 9-9z" fill="url(#copilotGradient)"/>
-    <path d="M8 9.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm8 0a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm-7.5 4.5c-.828 0-1.5-.895-1.5-2s.672-2 1.5-2h7c.828 0 1.5.895 1.5 2s-.672 2-1.5 2h-7z" fill="url(#copilotGradient)"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"><defs><linearGradient id="a" x1="0%" x2="100%" y1="0%" y2="100%"><stop offset="0%" style="stop-color:#7c3aed"/><stop offset="100%" style="stop-color:#2563eb"/></linearGradient></defs><path fill="url(#a)" d="M12 1C5.925 1 1 5.925 1 12s4.925 11 11 11 11-4.925 11-11S18.075 1 12 1m0 2a9 9 0 1 1-.001 18.001A9 9 0 0 1 12 3"/><path fill="url(#a)" d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3m8 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3M8.5 14c-.828 0-1.5-.895-1.5-2s.672-2 1.5-2h7c.828 0 1.5.895 1.5 2s-.672 2-1.5 2z"/></svg>

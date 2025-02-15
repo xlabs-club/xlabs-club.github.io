@@ -1,10 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-        <linearGradient id="wandb_gradient" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#FFBE0B"/>
-            <stop offset="100%" stop-color="#FB5607"/>
-        </linearGradient>
-    </defs>
-    <path d="M12 2L2 7V17L12 22L22 17V7L12 2ZM12 4.5L19 8V16L12 19.5L5 16V8L12 4.5ZM11 7V13L7 15V9L11 7ZM17 9V15L13 13V7L17 9Z" fill="url(#wandb_gradient)"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"><defs><linearGradient id="a" x1="2" x2="22" y1="2" y2="22" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#FFBE0B"/><stop offset="100%" stop-color="#FB5607"/></linearGradient></defs><path fill="url(#a)" d="M12 2 2 7v10l10 5 10-5V7zm0 2.5L19 8v8l-7 3.5L5 16V8zM11 7v6l-4 2V9zm6 2v6l-4-2V7z"/></svg>

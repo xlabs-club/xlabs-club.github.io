@@ -1,11 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-        <linearGradient id="midjourneyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#FF6B6B"/>
-            <stop offset="50%" style="stop-color:#9B51E0"/>
-            <stop offset="100%" style="stop-color:#3B82F6"/>
-        </linearGradient>
-    </defs>
-    <path d="M12 2L2 19h20L12 2zm0 4l6.5 11h-13L12 6zm0 3l-3.5 6h7L12 9z" fill="url(#midjourneyGradient)"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><defs><linearGradient id="a" x1="0%" x2="100%" y1="0%" y2="100%"><stop offset="0%" style="stop-color:#ff6b6b"/><stop offset="50%" style="stop-color:#9b51e0"/><stop offset="100%" style="stop-color:#3b82f6"/></linearGradient></defs><path fill="url(#a)" d="M12 2 2 19h20zm0 4 6.5 11h-13zm0 3-3.5 6h7z"/></svg>

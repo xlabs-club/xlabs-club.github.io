@@ -1,10 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="alibabaGradient" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" style="stop-color:#f97316"/>
-      <stop offset="100%" style="stop-color:#ea580c"/>
-    </linearGradient>
-  </defs>
-  <path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.8L19.2 8 12 11.2 4.8 8 12 4.8zM4 9.5l7 3.2v5.8l-7-3.5V9.5zm9 9l7-3.5V9.5l-7 3.2v5.8z" fill="url(#alibabaGradient)"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"><defs><linearGradient id="a" x1="0" x2="24" y1="0" y2="24" gradientUnits="userSpaceOnUse"><stop offset="0%" style="stop-color:#f97316"/><stop offset="100%" style="stop-color:#ea580c"/></linearGradient></defs><path fill="url(#a)" d="M12 2 2 7v10l10 5 10-5V7zm0 2.8L19.2 8 12 11.2 4.8 8zM4 9.5l7 3.2v5.8L4 15zm9 9 7-3.5V9.5l-7 3.2z"/></svg>

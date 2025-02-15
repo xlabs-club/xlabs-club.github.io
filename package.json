@@ -12,8 +12,7 @@
     "create": "hugo new",
     "dev": "hugo server --disableFastRender --noHTTPCache",
     "format": "prettier **/** -w -c",
-    "build": "hugo --minify --gc",
-    "preview": "vite preview --outDir public"
+    "build": "hugo --minify --gc"
   },
   "dependencies": {
     "@docsearch/css": "^3.6.1",

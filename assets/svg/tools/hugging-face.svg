@@ -1,10 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="hfGradient" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" style="stop-color:#ffb01f"/>
-      <stop offset="100%" style="stop-color:#ffa000"/>
-    </linearGradient>
-  </defs>
-  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM8.5 8a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm7 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm-3.5 7c-2.03 0-3.8-1.11-4.75-2.75.3.15.6.25.93.25 1.1 0 2-.9 2-2h3.64c0 1.1.9 2 2 2 .33 0 .63-.1.93-.25A5.98 5.98 0 0 1 12 15z" fill="url(#hfGradient)"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"><defs><linearGradient id="a" x1="0" x2="24" y1="0" y2="24" gradientUnits="userSpaceOnUse"><stop offset="0%" style="stop-color:#ffb01f"/><stop offset="100%" style="stop-color:#ffa000"/></linearGradient></defs><path fill="url(#a)" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2M8.5 8a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3m7 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3M12 15c-2.03 0-3.8-1.11-4.75-2.75.3.15.6.25.93.25 1.1 0 2-.9 2-2h3.64c0 1.1.9 2 2 2 .33 0 .63-.1.93-.25A5.98 5.98 0 0 1 12 15"/></svg>

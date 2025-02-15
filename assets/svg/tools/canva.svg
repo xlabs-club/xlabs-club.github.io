@@ -1,10 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-        <linearGradient id="canva_gradient" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#7D2AE8"/>
-            <stop offset="100%" stop-color="#00C4CC"/>
-        </linearGradient>
-    </defs>
-    <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 6C13.93 6 15.5 7.57 15.5 9.5C15.5 11.43 13.93 13 12 13C10.07 13 8.5 11.43 8.5 9.5C8.5 7.57 10.07 6 12 6ZM12 20C9.97 20 8.1 19.33 6.66 18.12C7.61 16.73 9.19 15.8 11 15.8H13C14.81 15.8 16.39 16.73 17.34 18.12C15.9 19.33 14.03 20 12 20Z" fill="url(#canva_gradient)"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"><defs><linearGradient id="a" x1="2" x2="22" y1="2" y2="22" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#7D2AE8"/><stop offset="100%" stop-color="#00C4CC"/></linearGradient></defs><path fill="url(#a)" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6m0 14c-2.03 0-3.9-.67-5.34-1.88.95-1.39 2.53-2.32 4.34-2.32h2c1.81 0 3.39.93 4.34 2.32C15.9 19.33 14.03 20 12 20"/></svg>

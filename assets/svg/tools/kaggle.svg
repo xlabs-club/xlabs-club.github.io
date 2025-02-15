@@ -1,11 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-        <linearGradient id="kaggleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#20BEFF"/>
-            <stop offset="50%" style="stop-color:#0097EC"/>
-            <stop offset="100%" style="stop-color:#0082CA"/>
-        </linearGradient>
-    </defs>
-    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z" fill="url(#kaggleGradient)"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><defs><linearGradient id="a" x1="0%" x2="100%" y1="0%" y2="100%"><stop offset="0%" style="stop-color:#20beff"/><stop offset="50%" style="stop-color:#0097ec"/><stop offset="100%" style="stop-color:#0082ca"/></linearGradient></defs><path fill="url(#a)" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-1 14.5v-9l6 4.5z"/></svg>
