@@ -37,6 +37,7 @@ npm run create docs/platform/backstage.md
 npm run create blog/k8s.md
 # 编译结果
 npm run build
+
 ```
 
 ## License
