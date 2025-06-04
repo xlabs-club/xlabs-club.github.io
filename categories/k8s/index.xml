@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>K8s on XLabs</title><link>https://www.xlabs.club/categories/k8s/</link><description>Recent content in K8s on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2024 XLabs Club</copyright><lastBuildDate>Wed, 04 Jun 2025 13:36:28 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/categories/k8s/index.xml" rel="self" type="application/rss+xml"/><item><title>Backstage 集成 oauth2-proxy 和 Keycloak，实现用户管理、登录认证以及 RBAC、ABAC 授权</title><link>https://www.xlabs.club/blog/backstage-keycloak-oauth2-proxy/</link><pubDate>Sat, 16 Nov 2024 16:55:26 +0800</pubDate><guid>https://www.xlabs.club/blog/backstage-keycloak-oauth2-proxy/</guid><description>&lt;p>基于 K8S 部署 Backstage，集成 oauth2-proxy 和 Keycloak，实现用户管理、认证和授权，配置详解和原理介绍。&lt;/p>
+&lt;p>如果你遇到以下问题或诉求，可以参考此文档。&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="https://backstage.io/" target="_blank" rel="noopener">Backstage&lt;/a>
+ 接入 oauth2-proxy，登录或认证失败。&lt;/li>
+&lt;li>Backstage 实现 RBAC、ABAC 授权管理，以及如何实现自定义权限。&lt;/li>
+&lt;li>&lt;a href="https://oauth2-proxy.github.io/oauth2-proxy/" target="_blank" rel="noopener">oauth2-proxy&lt;/a>
+ 对接 keycloak，参数不理解或者配置一直错误。&lt;/li>
+&lt;/ul>
+&lt;p>在开始之前，我们先了解一个点，Backstage 官方开源有开箱即用的容器镜像，也有丰富的插件生态，然而区别于其他插件类应用，Backstage 有自己的特点：&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>Backstage 插件分为 frontend 和 backend，一个完整的插件可能包含两种，也可能只包含其中一种。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>开源发布的开箱即用的容器镜像，只包含基础插件，一般只用来作为初次学习使用。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>如果想使用其他插件，需要做一些编码工作，一般步骤如下。&lt;/p>
+&lt;ul>
+&lt;li>使用 &lt;code>npx @backstage/create-app@latest&lt;/code> 创建一个基础项目。&lt;/li>
+&lt;li>按插件要求安装插件，配置插件菜单、UI 效果、权限、认证信息等，每个插件要求不同。&lt;/li>
+&lt;li>按需开发自己的插件。&lt;/li>
+&lt;li>编译成新容器镜像，某些插件可能还需要在容器中额外安装一些依赖包，部署时使用此容器镜像。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>基本上每个插件都有自己的配置要求，需根据插件文档配置 app-config.yaml。&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;p>可以把 Backstage 类比于 Spring Boot，提供了 starter、framework、plugins，如果想真实使用，需要自己引入依赖，编译成自己的镜像发布部署，欢迎 star 我们基于 Backstage 定制的开源项目 &lt;a href="https://github.com/xlabs-club/xlabs-developer-platform" target="_blank" rel="noopener">xlabs-developer-platform&lt;/a>
+。&lt;/p>
+&lt;p>核心组件介绍：&lt;/p>
+&lt;ul>
+&lt;li>用户同步使用 Red Hat 贡献的社区开源插件 &lt;a href="https://github.com/backstage/community-plugins/tree/main/workspaces/keycloak/plugins/catalog-backend-module-keycloak" target="_blank" rel="noopener">@backstage-community/plugin-catalog-backend-module-keycloak&lt;/a>
+，将 keycloak 用户同步到 Backstage 数据库，后面我们会提到为什么需要这一步。&lt;/li>
+&lt;li>认证使用官方内置的 &lt;a href="https://backstage.io/docs/auth/oauth2-proxy/provider" target="_blank" rel="noopener">OAuth 2 Proxy Provider&lt;/a>
+.&lt;/li>
+&lt;li>授权，权限管理 Permissions，支持 RBAC、ABAC， 使用 Red Hat 贡献的社区开源插件 &lt;a href="https://github.com/backstage/community-plugins/tree/main/workspaces/rbac/plugins" target="_blank" rel="noopener">@backstage-community/plugin-rbac&lt;/a>
+，虽然插件名字叫 RBAC，但是实际上支持 ABAC。注意 Spotify 也有 &lt;a href="https://backstage.spotify.com/marketplace/spotify/plugin/rbac/" target="_blank" rel="noopener">RBAC 插件&lt;/a>
+ 需要购买 License 才能用，两个插件别弄混了。&lt;/li>
+&lt;/ul>
+&lt;p>以上认证和授权是独立的，如果你只需要认证，不需要授权，那可以不需要 RBAC 插件。&lt;/p></description></item><item><title>使用 oauth2-proxy 为任意程序增加认证鉴权，结合 K8S、traefik、keycloak 部署配置详解</title><link>https://www.xlabs.club/blog/traefik-oauth2-proxy-keycloak/</link><pubDate>Thu, 10 Oct 2024 23:30:40 +0800</pubDate><guid>https://www.xlabs.club/blog/traefik-oauth2-proxy-keycloak/</guid><description>&lt;p>作为一个程序员，在日常开发中永远避免不了认证鉴权，而我们开发的某些应用，并不需要太复杂的鉴权，比如可能只要求必须是登录用户，或者只需要根据角色进行 RBAC 鉴权。有没有方法简化此流程，让应用开发者只关注业务开发，这就是本文档要解决的问题。&lt;/p>
+&lt;p>如果你有类似以下的需求，都可以参考此文档，原理是一样的，组件也可复用。&lt;/p>
+&lt;ol>
+&lt;li>为原本没有登录验证的服务提供认证服务，比如某些开源组件不支持认证但是又因携带一些危险数据而不想公开访问。&lt;/li>
+&lt;li>实现统一的单点登录 SSO、并支持简单的 RBAC、UBAC 鉴权。&lt;/li>
+&lt;li>为 Kubernetus Traefik Nginx Ingress 提供统一的认证入口，一键实现所有入口必须登录才可访问。&lt;/li>
+&lt;li>配置 Traefik 使用 Forward Auth，Nginx 使用 auth_request 实现认证，也可以一并参考。&lt;/li>
+&lt;li>在 K8S 或应用网关，基于用户、角色等不同属性，路由到不同服务。&lt;/li>
+&lt;li>如果你凑巧也在用 &lt;a href="https://backstage.io/" target="_blank" rel="noopener">Backstage&lt;/a>
+，请参考 &lt;a href="https://www.xlabs.club/blog/backstage-oauth2-proxy-keycloak/" target="_blank" rel="noopener">另一篇博客&lt;/a>
+。&lt;/li>
+&lt;/ol>
+&lt;p>写在前面：&lt;/p>
+&lt;ol>
+&lt;li>本文档里的示例代码是以 k3s 为基础，使用 traefik 作为 ingress controller，整体完善但略显复杂，如果没有 K3S/K8S，以其他方式部署也是完全可以的，基本原理都是一样的。&lt;/li>
+&lt;li>对于某些场景下可选的配置，会单独说明，请注意分别。&lt;/li>
+&lt;li>这里提到的每个组件都是可替换的，比如 nginx 代替 traefik，Pomerium 代替 oauth2-proxy，可根据爱好选择，后面也会适当补充几种不同方式的对比和部署差异，更详细内容请参考本站另外一篇文档 &lt;a href="https://www.xlabs.club/docs/platform/iam/" target="_blank" rel="noopener">统一身份认证&lt;/a>
+。&lt;/li>
+&lt;li>示例中的代码都是从真实环境拷贝经过检验的，但为了便于理解可能裁剪无关紧要的内容，完整的安装部署源码请参考我们的部署脚本 &lt;a href="https://github.com/xlabs-club/xlabs-ops" target="_blank" rel="noopener">xlabs-club/xlabs-ops&lt;/a>
+。&lt;/li>
+&lt;li>需要懂一些 K8S、OIDC 基础知识，此处只提供链接不展开说明。&lt;/li>
+&lt;/ol>
+&lt;h2 id="组件介绍">组件介绍&lt;/h2>
+&lt;ol>
+&lt;li>
+&lt;p>Keycloak&lt;/p>
+&lt;p>Keycloak 是一个开源的身份和访问管理解决方案，支持 OAuth 2.0、OpenID Connect、SAML 等协议。它提供用户管理、角色管理、单点登录（SSO）、身份提供服务等功能，在本示例中担任 Auth Provider 角色。关于 Keycloak 的中文介绍，可参考本站单独的博客 &lt;a href="https://idaas.xlabs.club/" target="_blank" rel="noopener">IDaaS Book&lt;/a>
+。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;a href="https://oauth2-proxy.github.io/oauth2-proxy/" target="_blank" rel="noopener">oauth2-proxy&lt;/a>
+&lt;/p>
+&lt;p>顾名思义它是一个关于 oauth 反向代理，主要用来为后端服务增加身份验证层。它支持多种 OAuth 2.0 提供者（如 Google、OIDC、Keycloak 等），可以保护未提供身份验证的应用。oauth2-proxy 在请求进入后端服务之前，会先进行 OAuth 2.0 登录认证，确保请求者具有访问权限。它承担了登录的合法性校验、重定向、登录成功后的 cookie、response 设置等功能。&lt;/p></description></item><item><title>MacOS 搭建本地 K8S 开发环境方案选型，基于 multipass、lima 等不同方案优缺点介绍对比</title><link>https://www.xlabs.club/blog/easiest-k8s-on-macos/</link><pubDate>Sat, 13 Apr 2024 15:20:43 +0800</pubDate><guid>https://www.xlabs.club/blog/easiest-k8s-on-macos/</guid><description>&lt;p>因为工作经常需要用到 K8S，而且有时因网络原因不能完全依赖公司网络，或者因为测试新功能不能直接发布到公司 K8S 集群，所以就有了本地搭建 K8S 的需求。&lt;/p>
+&lt;p>另外如果你有以下需求，此文档中提到的方案也可能对你有所帮助：&lt;/p>
+&lt;ul>
+&lt;li>开发机器模拟 Arm、AMD64 等不同 CPU 架构。&lt;/li>
+&lt;li>本地搭建完全隔离的开发环境，比如为测试 docker、podman、buildkit、containd 等不同软件设置的独立环境。&lt;/li>
+&lt;li>CI/CD 流程中即用即消的轻量级虚拟机替代方案，比如单元测试、集成测试中需要虚拟机或 K8S，快速启动，用完删除。&lt;/li>
+&lt;li>有限的资源模拟大批量的 K8S 节点，测试 K8S API 能力。&lt;/li>
+&lt;/ul>
+&lt;p>以下介绍一下我用过的几种不同方案，纯属个人观点仅供参考。&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>使用 Docker Desktop 并启用 Kubernetes 功能。&lt;/p>
+&lt;p>优点：使用最简单，开箱即用。&lt;/p>
+&lt;p>缺点：只支持单节点 K8S，且 K8S 部分功能不支持，不易定制。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Docker run K3D, K3D run K3S。&lt;/p>
+&lt;p>优点：简单，任何支持 docker 的工具（Rancher Desktop、Podman） 启动一个容器即可。&lt;/p>
+&lt;p>缺点：只支持 K3S，稳定性越来越不行了，以前多优秀啊。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;a href="https://multipass.run/" target="_blank" rel="noopener">multipass&lt;/a>
+ 启动虚拟机，然后安装 K8S、K3S 或 minikube。&lt;/p>
+&lt;p>优点：multipass 可启动空白 ubuntu 虚拟机，或者启动已经安装好 minikube 的虚拟机。&lt;/p>
+&lt;p>缺点：只支持 ubuntu，虚拟机与宿主机同架构。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;a href="https://lima-vm.io/" target="_blank" rel="noopener">lima&lt;/a>
+ 启动虚拟机，然后安装 K8S、K3S 或 minikube。&lt;/p>
+&lt;p>优点：支持虚拟多种 Linux 发行版，支持异构 CPU 虚拟机，同时能代替 Docker Desktop。&lt;/p></description></item><item><title>K8S 容器 PID 限制引起的 Java OutOfMemoryError</title><link>https://www.xlabs.club/blog/k8s-pid-limiting-oom/</link><pubDate>Thu, 07 Sep 2023 16:21:44 +0800</pubDate><guid>https://www.xlabs.club/blog/k8s-pid-limiting-oom/</guid><description>&lt;p>问题描述：&lt;/p>
+&lt;p>一个 Java 应用跑在 K8S 容器内，Pod 内只有 Java 这一个进程。应用跑了一段时间后，CPU、内存占用都不高，但是却出现以下 OutOfMemoryError 错误。&lt;/p>
+
+
+
+&lt;div class="expressive-code">
+ &lt;figure class="frame not-content">
+ &lt;figcaption class="header">
+ &lt;span class="title">&lt;/span>
+ &lt;/figcaption>
+ &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-console" data-lang="console">&lt;span class="line">&lt;span class="cl">&lt;span class="go">Exception in thread &amp;#34;slow-fetch-15&amp;#34; java.lang.OutOfMemoryError: unable to create new native thread
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="go">428 at java.lang.Thread.start0(Native Method)
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="go">429 at java.lang.Thread.start(Thread.java:719)
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="go">430 at java.util.concurrent.ThreadPoolExecutor.addWorker(ThreadPoolExecutor.java:957)
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="go">431 at java.util.concurrent.ThreadPoolExecutor.processWorkerExit(ThreadPoolExecutor.java:1025)
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="go">432 at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="go">433 at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+ &lt;/figure>
+&lt;/div>
+&lt;p>进入 Pod 内，尝试执行任何操作，又会出现 &lt;code>unable to start container process&lt;/code> 错误。&lt;/p>
+&lt;p>一开始怀疑是内存不足，调大了内存，同时也缩小了 Java 的 &lt;code>xss&lt;/code>，都不起作用。&lt;/p>
+&lt;p>真实原因： K8S 容器限制了 PID 数，无法创建新的线程，在 Pod 内 &lt;code>cat /sys/fs/cgroup/pids/pids.max&lt;/code> 发现是 1024。&lt;/p>
+&lt;p>关于 K8S pid limit， 可参考此资料：&lt;a href="https://kubernetes.io/zh-cn/docs/concepts/policy/pid-limiting/" target="_blank" rel="noopener">https://kubernetes.io/zh-cn/docs/concepts/policy/pid-limiting/&lt;/a>
+.&lt;/p></description></item></channel></rss>

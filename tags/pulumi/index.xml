@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Pulumi on XLabs</title><link>https://www.xlabs.club/tags/pulumi/</link><description>Recent content in Pulumi on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2024 XLabs Club</copyright><lastBuildDate>Wed, 04 Jun 2025 13:36:28 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/pulumi/index.xml" rel="self" type="application/rss+xml"/><item><title>使用 Pulumi 部署 cert-manager 创建 K8S 自签名证书并信任证书</title><link>https://www.xlabs.club/blog/trust-cert-manager-selfsigned-tls/</link><pubDate>Mon, 29 Apr 2024 21:49:22 +0800</pubDate><guid>https://www.xlabs.club/blog/trust-cert-manager-selfsigned-tls/</guid><description>&lt;p>在搭建本地 Kubernetus 集群后，由于环境在内网，做不了域名验证，无法使用 Let&amp;rsquo;s Encrypt 颁发和自动更新证书，然而很多应用要求必须启用 HTTPS，只能用自签名 CA 证书，并由此 CA 继续颁发其他证书。&lt;/p>
+&lt;p>所以我们准备了以下工具，开始搭建。&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="https://www.pulumi.com/" target="_blank" rel="noopener">Pulumi&lt;/a>
+: 当前非常流行的 IaC 工具，值得一试。&lt;/li>
+&lt;li>&lt;a href="https://cert-manager.io/" target="_blank" rel="noopener">cert-manager&lt;/a>
+: 云原生证书管理，用于自动管理和颁发各种发行来源的 TLS 证书。它将确保证书有效并定期更新，并尝试在到期前的适当时间更新证书。&lt;/li>
+&lt;/ul>
+&lt;p>核心步骤和相关代码如下，更多源码请参考我们的 GitHub 项目 &lt;a href="https://github.com/xlabs-club/xlabs-ops" target="_blank" rel="noopener">xlabs-ops&lt;/a>
+。&lt;/p>
+&lt;p>使用 Pulumi 安装 cert-manager，生成自签名 CA 证书，根据自签名 CA 证书生成 cert-manager ClusterIssuer，都在如下代码了。&lt;/p>
+
+
+
+&lt;div class="expressive-code">
+ &lt;figure class="frame not-content">
+ &lt;figcaption class="header">
+ &lt;span class="title">&lt;/span>
+ &lt;/figcaption>
+ &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-ts" data-lang="ts">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">import&lt;/span> &lt;span class="o">*&lt;/span> &lt;span class="kr">as&lt;/span> &lt;span class="nx">pulumi&lt;/span> &lt;span class="kr">from&lt;/span> &lt;span class="s2">&amp;#34;@pulumi/pulumi&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">import&lt;/span> &lt;span class="o">*&lt;/span> &lt;span class="kr">as&lt;/span> &lt;span class="nx">kubernetes&lt;/span> &lt;span class="kr">from&lt;/span> &lt;span class="s2">&amp;#34;@pulumi/kubernetes&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">import&lt;/span> &lt;span class="o">*&lt;/span> &lt;span class="kr">as&lt;/span> &lt;span class="nx">tls&lt;/span> &lt;span class="kr">from&lt;/span> &lt;span class="s2">&amp;#34;@pulumi/tls&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 部署 cert-manager Helm chart
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kr">const&lt;/span> &lt;span class="nx">certManagerRelease&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="nx">kubernetes&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">helm&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">v3&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">Release&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;cert-manager&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">name&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s2">&amp;#34;cert-manager&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">chart&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s2">&amp;#34;cert-manager&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">version&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s2">&amp;#34;1.14.5&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">namespace&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s2">&amp;#34;cert-manager&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">createNamespace&lt;/span>: &lt;span class="kt">true&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">timeout&lt;/span>: &lt;span class="kt">600&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">repositoryOpts&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">repo&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s2">&amp;#34;https://charts.jetstack.io&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">values&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">installCRDs&lt;/span>: &lt;span class="kt">true&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">});&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 生成一个 CA private key
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kr">const&lt;/span> &lt;span class="nx">caPrivateKey&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="nx">tls&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">PrivateKey&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;caPrivateKey&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">algorithm&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s2">&amp;#34;RSA&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">});&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 生成一个 自签名 CA 证书
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kr">const&lt;/span> &lt;span class="nx">caCert&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="nx">tls&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">SelfSignedCert&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;caCert&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// keyAlgorithm: &amp;#34;RSA&amp;#34;,
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">privateKeyPem&lt;/span>: &lt;span class="kt">caPrivateKey.privateKeyPem&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">isCaCertificate&lt;/span>: &lt;span class="kt">true&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">validityPeriodHours&lt;/span>: &lt;span class="kt">87600&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// 10 year
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">allowedUses&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;cert_signing&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;crl_signing&amp;#34;&lt;/span>&lt;span class="p">],&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">subject&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">commonName&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s2">&amp;#34;your.domain.com&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">organization&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s2">&amp;#34;Xlabs Club&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">});&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 生成一个带有 CA crt 和 key 的 Kubernetes Secret
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kr">const&lt;/span> &lt;span class="nx">caSecret&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="nx">kubernetes&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">core&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">v1&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">Secret&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;caSecret&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">metadata&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">name&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s2">&amp;#34;selfsigned-cert-manager-ca&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">namespace&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s2">&amp;#34;cert-manager&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">type&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s2">&amp;#34;Opaque&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">stringData&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;tls.crt&amp;#34;&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">caCert&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">certPem&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;tls.key&amp;#34;&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">caPrivateKey&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">privateKeyPem&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">});&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 创建一个自签名的 ClusterIssuer 给 ingress 用
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kr">const&lt;/span> &lt;span class="nx">clusterIssuer&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="nx">kubernetes&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">apiextensions&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">CustomResource&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;selfsigned-issuer&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">apiVersion&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s2">&amp;#34;cert-manager.io/v1&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">kind&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s2">&amp;#34;ClusterIssuer&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">metadata&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">name&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s2">&amp;#34;selfsigned-issuer&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 注意 ClusterIssuer 和 caSecret 放在同一个 namespace，不写 namespace 时 ClusterIssuer 找不到 caSecret
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="kr">namespace&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s2">&amp;#34;cert-manager&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">spec&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">ca&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">secretName&lt;/span>: &lt;span class="kt">caSecret.metadata.name&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span> &lt;span class="nx">dependsOn&lt;/span>: &lt;span class="kt">certManagerRelease&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">export&lt;/span> &lt;span class="kr">const&lt;/span> &lt;span class="nx">certManagerVersion&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">certManagerRelease&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">version&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">export&lt;/span> &lt;span class="kr">const&lt;/span> &lt;span class="nx">clusterIssuerName&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">clusterIssuer&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">metadata&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">name&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// Export CA 证书，便于客户端导入信任证书
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kr">export&lt;/span> &lt;span class="kr">const&lt;/span> &lt;span class="nx">caCertificatePem&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">caCert&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">certPem&lt;/span>&lt;span class="p">;&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+ &lt;/figure>
+&lt;/div>
+&lt;p>以上执行 &lt;code>pulumi up&lt;/code> 后，我们就得到了一个自签名的 CA 证书、一个可用于为 ingress 自动签发 TLS 的 ClusterIssuer。&lt;/p></description></item></channel></rss>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Spring Boot on XLabs</title><link>https://www.xlabs.club/tags/spring-boot/</link><description>Recent content in Spring Boot on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2024 XLabs Club</copyright><lastBuildDate>Wed, 04 Jun 2025 13:36:28 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/spring-boot/index.xml" rel="self" type="application/rss+xml"/><item><title>Spring Boot Start 脚手架定制开发和快速入门</title><link>https://www.xlabs.club/blog/spring-boot-start-site/</link><pubDate>Sat, 09 Mar 2024 14:29:03 +0800</pubDate><guid>https://www.xlabs.club/blog/spring-boot-start-site/</guid><description>&lt;p>介绍基于 &lt;code>start.spring.io&lt;/code> 快速定制自己的 Spring Boot 脚手架，主要应用场景：&lt;/p>
+&lt;ol>
+&lt;li>规范公司自己的 parent pom，增加特定的依赖项。&lt;/li>
+&lt;li>根据公司规范生成统一的包结构，统一命名。&lt;/li>
+&lt;li>根据需要增加特定代码或文件，比如根据公司要求统一 logback.xml、 application.properties 文件。&lt;/li>
+&lt;li>提供公司自研的二方 jar 包。&lt;/li>
+&lt;/ol>
+&lt;h2 id="快速开始">快速开始&lt;/h2>
+&lt;p>基本步骤：&lt;/p>
+&lt;ol>
+&lt;li>对于 &lt;a href="https://github.com/spring-io/initializr" target="_blank" rel="noopener">spring.initializr&lt;/a>
+ 我们没有定制的需求，直接引用官方的。&lt;/li>
+&lt;li>拷贝一份 &lt;a href="https://github.com/spring-io/start.spring.io" target="_blank" rel="noopener">start.spring.io&lt;/a>
+，直接基于这个项目开发、部署、运行。以下都是关于如何修改 &lt;code>start.spring.io&lt;/code>。&lt;/li>
+&lt;/ol>
+&lt;p>&lt;code>start.spring.io&lt;/code> 主要关注两个模块：&lt;/p>
+&lt;ul>
+&lt;li>start-client：前端页面，可以定制些自己的 logo、title 等。&lt;/li>
+&lt;li>start-site：是一个标准的 spring boot 项目，实际 run 起来的服务，引用了 start-client，直接 run 这个项目的 main 方法就能看到效果。&lt;/li>
+&lt;/ul>
+&lt;p>主要配置文件：&lt;code>start-site/src/main/resources/application.yml&lt;/code>，通过修改这个配置文件可以达到的效果如下。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>修改 start 启动时默认 group，把 &lt;code>com.example&lt;/code> 改为公司自己的 group。&lt;/p>
+
+
+
+&lt;div class="expressive-code">
+ &lt;figure class="frame not-content">
+ &lt;figcaption class="header">
+ &lt;span class="title">&lt;/span>
+ &lt;/figcaption>
+ &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">initializr&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">group-id&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">value&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">com.yourgroup&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+ &lt;/figure>
+&lt;/div>
+&lt;/li>
+&lt;li>
+&lt;p>修改父 pom，使用公司自己的 pom。&lt;/p>
+
+
+
+&lt;div class="expressive-code">
+ &lt;figure class="frame not-content">
+ &lt;figcaption class="header">
+ &lt;span class="title">&lt;/span>
+ &lt;/figcaption>
+ &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">initializr&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">env&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">maven&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c"># use your parent pom&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">parent&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">groupId&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">com.yourself&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">artifactId&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">your-parent&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">version&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">1.0.0&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c"># relativePath: ../pom.xml&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">includeSpringBootBom&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">false&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+ &lt;/figure>
+&lt;/div>
+&lt;/li>
+&lt;li>
+&lt;p>限定 Java 和 Spring Boot 版：修改 languages 和 bootVersions 即可。&lt;/p></description></item><item><title>Spring Boot 使用 Micrometer 集成 Prometheus 监控，5 分钟接入自定义监控指标</title><link>https://www.xlabs.club/blog/spring-boot-micrometer/</link><pubDate>Mon, 07 Aug 2023 10:54:37 +0800</pubDate><guid>https://www.xlabs.club/blog/spring-boot-micrometer/</guid><description>&lt;p>Spring Boot 使用 Micrometer 集成 Prometheus 监控，5 分钟接入自定义监控指标，主要内容：&lt;/p>
+&lt;ol>
+&lt;li>Micrometer 介绍。&lt;/li>
+&lt;li>业务如何自定义指标，如何接入 Prometheus，实现方式和规范。&lt;/li>
+&lt;/ol>
+&lt;h2 id="micrometer-介绍">Micrometer 介绍&lt;/h2>
+&lt;p>Micrometer 为 Java 平台上的性能数据收集提供了一个通用的 API，应用程序只需要使用 Micrometer 的通用 API 来收集性能指标，Micrometer 会负责完成与不同监控系统的适配工作。&lt;/p>
+&lt;p>Micrometer 提供了多种度量指标类型（Timers、Guauges、Counters 等），同时支持接入不同的监控系统，例如 Influxdb、Graphite、Prometheus、OTLP 等。&lt;/p>
+&lt;p>从 Spring Boot 2.x 开始使用 Micrometer 作为默认的监控门面接口， &lt;code>Think SLF4J, but for observability&lt;/code> 。&lt;/p>
+&lt;h3 id="micrometer-核心概念">Micrometer 核心概念&lt;/h3>
+&lt;p>Micrometer 中两个最核心的概念：计量器注册表 (MeterRegistry)，计量器 (Meter)。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>MeterRegistry&lt;/p>
+&lt;ul>
+&lt;li>内存注册表 (SimpleMeterRegistry): 在内存中保存每一个 Meter（指标）的最新值，并且不会将数据导出到任何地方。&lt;/li>
+&lt;li>组合注册表 (CompositeMeterRegistry): 可以添加多个注册表，用于将各个注册表组合起来，可以同时将指标发布到多个监控系统。Micrometer 提供了一个全局的 MeterRegistry，&lt;code>io.micrometer.core.instrument.Metrics&lt;/code> 中持有一个静态 final 的 CompositeMeterRegistry 实例 globalRegistry。&lt;/li>
+&lt;li>普罗米修斯注册表 (PrometheusMeterRegistry): 当使用普罗米修斯监控时，引入 micrometer-registry-prometheus 依赖时会提供此种收集器，用于将指标数据转换为普罗米修斯识别的格式和导出数据等功能。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>Meter（指标）&lt;/p>
+&lt;p>监控数据的整个过程都是围绕着 Meter（指标）, 通过一个一个的 Meter（指标）数据来进行观察应用的状态。常用的指标如：&lt;/p></description></item></channel></rss>

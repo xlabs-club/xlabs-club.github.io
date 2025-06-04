@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Devops on XLabs</title><link>https://www.xlabs.club/tags/devops/</link><description>Recent content in Devops on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2024 XLabs Club</copyright><lastBuildDate>Wed, 04 Jun 2025 13:36:28 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/devops/index.xml" rel="self" type="application/rss+xml"/><item><title>使用 Visual Studio Code 搭建多用户远程 IDE</title><link>https://www.xlabs.club/blog/code-server/</link><pubDate>Wed, 07 Sep 2022 16:21:44 +0800</pubDate><guid>https://www.xlabs.club/blog/code-server/</guid><description>&lt;p>为 VS Code Web 版 &lt;a href="https://github.com/coder/code-server" target="_blank" rel="noopener">code-server&lt;/a>
+ 增加外部认证，并支持多用户，不同用户的 code-server 实例完全隔离。&lt;/p>
+&lt;p>主要为了解决问题：&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>code-server 本身只支持配置文件形式的用户名密码认证（截止目前，以后也许会改进）。所以引入了外部认证系统，Google、GitHub、 okta、CAS、Keycloak 等理论上都是支持的。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>code-server 默认没有数据隔离，所以又加了一层 auth proxy，为每个用户创建一个（或多个）code-server 实例，通过 proxy 代理到各自的实例，以实现用户间的数据隔离。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>使用开源 Auth Proxy，无需自己编码即可实现认证授权流程，比如 &lt;code>code flow with pkce&lt;/code> 对大部分人来说读懂这个协议都很困难。&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;p>此文档源码请参考：&lt;a href="https://github.com/xlabs-club/architecture-diagram" target="_blank" rel="noopener">architecture-diagram&lt;/a>
+&lt;/p>
+&lt;h2 id="使用组件">使用组件&lt;/h2>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;a href="https://github.com/keycloak/keycloak" target="_blank" rel="noopener">keycloak&lt;/a>
+&lt;/p>
+&lt;p>Redhat 开源 IAM 系统，目前也是 CNCF 项目，提供用户、组织服务，提供标准 OIDC。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;a href="https://github.com/oauth2-proxy/oauth2-proxy" target="_blank" rel="noopener">oauth2-proxy&lt;/a>
+&lt;/p>
+&lt;p>认证代理，配合 keycloak 提供完整 OAuth2 Code Flow 认证流程。也可以试试 &lt;a href="https://github.com/pomerium/pomerium" target="_blank" rel="noopener">pomerium&lt;/a>
+，看样子也不错。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>架构图如下。&lt;/p>
+&lt;p>
+
+&lt;img
+ src="https://www.xlabs.club/blog/code-server/code-server-auth-proxy_hu_9d21f682080840b4.webp"
+ width="752"
+ height="922"
+ decoding="async"
+ fetchpriority="auto"
+ loading="lazy"
+ alt="code-server-auth-proxy"id="h-rh-i-0"
+/>&lt;/p>
+&lt;h2 id="核心逻辑">核心逻辑&lt;/h2>
+&lt;p>架构图简单解读，所有过程官方文档都有详细说明，都是配置，以官方配置为准。&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>keycloak 创建 client，使用 OIDC 协议，作为 oauth2-proxy 的 provider。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>ingress(nginx) 使用 auth_request 指令拦截所有请求，从 oauth2-proxy 进行代理认证，配置可参考 &lt;a href="https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/overview/#configuring-for-use-with-the-nginx-auth_request-directive" target="_blank" rel="noopener">oauth2-proxy auth_request&lt;/a>
+ 指导。&lt;/p>
+
+
+
+&lt;div class="expressive-code">
+ &lt;figure class="frame not-content">
+ &lt;figcaption class="header">
+ &lt;span class="title">&lt;/span>
+ &lt;/figcaption>
+ &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">nginx.ingress.kubernetes.io/auth-signin&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">https://$host/oauth2/start?rd=$escaped_request_uri&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">nginx.ingress.kubernetes.io/auth-url&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">https://$host/oauth2/auth&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+ &lt;/figure>
+&lt;/div>
+&lt;/li>
+&lt;li>
+&lt;p>认证通过后，将用户名/ID 作为标识，通过 Http Header （举例如 X-Forwarded-Preferred-Username) 传入 upstream。&lt;/p></description></item></channel></rss>

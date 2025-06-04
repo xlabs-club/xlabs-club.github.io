@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>平台工程 on XLabs</title><link>https://www.xlabs.club/docs/platform/</link><description>Recent content in 平台工程 on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2024 XLabs Club</copyright><lastBuildDate>Wed, 04 Jun 2025 13:36:28 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/docs/platform/index.xml" rel="self" type="application/rss+xml"/><item><title>总体架构</title><link>https://www.xlabs.club/docs/platform/introduction/</link><pubDate>Thu, 07 Sep 2023 16:04:48 +0200</pubDate><guid>https://www.xlabs.club/docs/platform/introduction/</guid><description>&lt;p>我们的平台工程建设之路，介绍前期方案设计、中间踩坑历程。&lt;/p>
+&lt;h2 id="原则">原则&lt;/h2>
+&lt;p>分享我们平台工程建设的一些基本原则。&lt;/p>
+&lt;ol>
+&lt;li>以开发者为中心：赋能开发者，了解困难，解决问题，让开发者生活更轻松。&lt;/li>
+&lt;li>自动化：自动化手动和重复性任务，减少人为错误，提高效率。&lt;/li>
+&lt;li>标准化：标准化保持一致性，减少复杂性，减少团队认知负载，提供最佳实践和统一的编码结构。&lt;/li>
+&lt;li>模块化：松耦合且独立的模块，可独立开发、测试和部署。&lt;/li>
+&lt;li>弹性：可扩展水平扩缩容的能力，以及容错抗脆弱的能力。&lt;/li>
+&lt;li>安全：相比于微服务、云原生领域的安全，在平台工程里，更强调代码、基础设施、数据和其他资源的安全。&lt;/li>
+&lt;li>协作：平台工程师、开发人员、运维运营人员以及其他参与者之间的协作，提高生产力、促进创新并创造积极包容的工作环境。&lt;/li>
+&lt;li>持续改进：持续性反馈、评估、改进。&lt;/li>
+&lt;/ol>
+&lt;h2 id="架构概述">架构概述&lt;/h2>
+&lt;p>为便于理解，我们仍然按照惯用架构模型，将架构分为 IaaS、CaaS、PaaS、Applications 这几个层级。&lt;/p>
+&lt;p>专业的运维人员作为 platform engineer 着重于 IaaS、CaaS、PaaS 建设，开发人员作为 application engineer 更专注于 PaaS、Applications 建设，为开发和运维提供工具、协作平台、基础应用。&lt;/p>
+&lt;div class="mermaid text-center">
+C4Context
+ title 平台工程总体架构
+
+ Boundary(users, "Users", "用户接入") {
+ Person(superAdmin, "超级管理员")
+ Person(admin, "平台管理员")
+ Person(developer, "开发人员")
+ Person(maintenance, "运维人员")
+ }
+
+ Boundary(console, "Console", "开发者平台") {
+ Container(backstage, "Backstage","react","开发者门户")
+ Container(apps, "应用管理平台","Application","容器管理、应用管理、配置管理、自动化测试")
+ Container(ops, "统一运维平台","x-ops","数据库、中间件、日志、监控告警平台")
+ Container(iam, "IAM", "Keycloak", "统一用户、组织、角色权限管理")
+ }
+
+ Boundary(paas, "PaaS", "PaaS") {
+ ContainerDb(rds, "RDS", "PostgreSQL/MySQL", "PostgreSQL、MySQL 等关系型数据库")
+ ContainerDb(clickhouse, "ClickHouse", "ClickHouse", "BI、Logging、Metrics 等列式数据库")
+ ContainerDb(nosql, "NoSQL", "NoSQL", "ES、Redis、Mongo 等缓存数据库、文档数据库")
+ ContainerDb(mq, "消息队列", "Kafka", "Kafka、RocketMQ 等消息队列")
+ }
+
+ Boundary(caas, "CaaS", "CaaS") {
+ Container(k8s, "Kubernetes","k8s","K8S 容器平台")
+ Container(workflow, "编排引擎","Argo","流水线，流程、应用编排引擎")
+ Container(kms, "KMS","HashiCorp Vault","秘钥管理系统")
+ Container(harbor, "Harbor","harbor","容器镜像仓库")
+ Container(git, "IaC","GitLab","IaC、GitOps 源码仓库")
+ }
+
+ Boundary(iaas, "IaaS", "IaaS") {
+ Container(vm, "云主机","vm","云主机自带本地存储")
+ Container(cbh, "堡垒机","cbh","安全运维审计堡垒机")
+ Container(s3, "S3","S3/Minio","分布式对象存储")
+ Container(nfs, "NFS","nfs","共享文件存储")
+ }
+
+ UpdateLayoutConfig($c4ShapeInRow="4", $c4BoundaryInRow="1")
+&lt;/div>
+
+&lt;h2 id="基础设施标准化">基础设施标准化&lt;/h2>
+&lt;p>基础设施标准化是平台工程建设的第一步，通过对基础设施服务进行标准化，减少开发人员和运维团队之间的摩擦，减少运维难度，大大降低出错的概率。&lt;/p></description></item><item><title>统一身份认证</title><link>https://www.xlabs.club/docs/platform/iam/</link><pubDate>Tue, 19 Dec 2023 22:26:42 +0800</pubDate><guid>https://www.xlabs.club/docs/platform/iam/</guid><description>&lt;p>统一身份认证（Identity and Access Management，身份认证和访问控制，简称 IAM）的技术选型和实践。&lt;/p>
+&lt;h2 id="核心需求">核心需求&lt;/h2>
+&lt;ul>
+&lt;li>集中管理：从一个地方管理账户和身份。&lt;/li>
+&lt;li>单点登录：允许用户使用一组凭据访问所有集成的系统和应用，避免记忆多个用户名和密码。&lt;/li>
+&lt;li>动态访问控制：基于角色和策略动态授予或撤销访问权限。&lt;/li>
+&lt;li>审计与合规：记录和监控访问活动，以支持合规性审计。&lt;/li>
+&lt;li>无缝快速集成：作为平台工程的一部分更强调“自助”，各个应用能够无缝快速接入，甚至有些应用只需要简单的权限能够不需要开发自动接入。&lt;/li>
+&lt;li>强化认证机制：采用多因素认证（MFA：OTP 口令、指纹、短信验证码等）方法，为重要操作增加额外防护。&lt;/li>
+&lt;/ul>
+&lt;h2 id="技术选项">技术选项&lt;/h2>
+&lt;p>为满足以上需求，在初期技术选项时主要关注以下几个开源组件。&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="https://github.com/keycloak/" target="_blank" rel="noopener">keycloak&lt;/a>
+: 全面的 IAM 解决方案 ，实现用户、权限管理，单点登录、MFA 等。&lt;/li>
+&lt;li>&lt;a href="https://github.com/dexidp" target="_blank" rel="noopener">Dex&lt;/a>
+: 身份代理，连接多个身份源，仅作为 OpenID Connect。&lt;/li>
+&lt;li>&lt;a href="https://github.com/ory/" target="_blank" rel="noopener">Ory&lt;/a>
+: 包含多个独立的组件，组成一个全家桶的解决方案。&lt;/li>
+&lt;li>&lt;a href="https://github.com/oauth2-proxy" target="_blank" rel="noopener">oauth2-proxy&lt;/a>
+: 反向代理工具，专为提供 OAuth 2.0 身份验证和授权服务而设计，附带基于用户、分组、角色的权限管理。&lt;/li>
+&lt;li>&lt;a href="https://github.com/pomerium/" target="_blank" rel="noopener">Pomerium&lt;/a>
+: Pomerium 不仅仅是一个 OAuth 2.0 代理，它还提供了细粒度的访问控制，能够根据用户、组、和其他上下文属性来决定访问权限。&lt;/li>
+&lt;/ul>
+&lt;p>以下为 keycloak 和 Dex 的简单对比。为什么不把 Ory 加进来，因为没有实际用过，不便于发表意见，如果你是一个 Ory 用户欢迎补充。&lt;/p>
+&lt;table>
+ &lt;thead>
+ &lt;tr>
+ &lt;th>特性/工具&lt;/th>
+ &lt;th>Keycloak&lt;/th>
+ &lt;th>Dex&lt;/th>
+ &lt;/tr>
+ &lt;/thead>
+ &lt;tbody>
+ &lt;tr>
+ &lt;td>&lt;strong>类型&lt;/strong>&lt;/td>
+ &lt;td>全面的 IAM 解决方案&lt;/td>
+ &lt;td>身份代理&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;strong>用户管理&lt;/strong>&lt;/td>
+ &lt;td>支持内置用户管理&lt;/td>
+ &lt;td>不直接管理用户，依赖外部身份提供者&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;strong>协议支持&lt;/strong>&lt;/td>
+ &lt;td>OpenID Connect、OAuth 2.0、SAML 2.0&lt;/td>
+ &lt;td>OpenID Connect&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;strong>SSO&lt;/strong>&lt;/td>
+ &lt;td>支持&lt;/td>
+ &lt;td>依赖外部身份提供者实现&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;strong>社交登录&lt;/strong>&lt;/td>
+ &lt;td>支持多种社交登录选项&lt;/td>
+ &lt;td>不直接支持，可通过连接外部身份提供者实现&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;strong>角色管理&lt;/strong>&lt;/td>
+ &lt;td>支持复杂的角色和权限管理&lt;/td>
+ &lt;td>不直接支持&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;strong>扩展性&lt;/strong>&lt;/td>
+ &lt;td>高，适合各种规模和复杂性的需求&lt;/td>
+ &lt;td>适合将多个身份源统一到一个认证流程的环境&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;strong>使用场景&lt;/strong>&lt;/td>
+ &lt;td>需要全面、集中式身份管理的组织&lt;/td>
+ &lt;td>需要统一多个身份源认证，如在云原生环境中&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;strong>用户界面&lt;/strong>&lt;/td>
+ &lt;td>提供丰富的用户和管理员界面&lt;/td>
+ &lt;td>主要是 API，没有详细的用户界面&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;strong>适用性&lt;/strong>&lt;/td>
+ &lt;td>适用于需要完整 IAM 解决方案的组织&lt;/td>
+ &lt;td>适用于作为多个身份源代理，尤其在 Kubernetes 环境中&lt;/td>
+ &lt;/tr>
+ &lt;/tbody>
+&lt;/table>
+&lt;p>以下为 OAuth2 Proxy 和 Pomerium 的简单对比。&lt;/p></description></item><item><title>开发者门户</title><link>https://www.xlabs.club/docs/platform/backstage/</link><pubDate>Sat, 27 Jan 2024 21:56:42 +0800</pubDate><guid>https://www.xlabs.club/docs/platform/backstage/</guid><description>&lt;p>使用 backstage 创建开发者门户。&lt;/p>
+&lt;h2 id="backstage-插件资源">Backstage 插件资源&lt;/h2>
+&lt;ul>
+&lt;li>Backstage 官方插件：&lt;a href="https://backstage.io/plugins" target="_blank" rel="noopener">https://backstage.io/plugins&lt;/a>
+&lt;/li>
+&lt;li>Backstage 社区插件：&lt;a href="https://github.com/backstage/community-plugins" target="_blank" rel="noopener">https://github.com/backstage/community-plugins&lt;/a>
+&lt;/li>
+&lt;li>Red Hat 贡献的社区插件：&lt;a href="https://github.com/janus-idp/backstage-plugins" target="_blank" rel="noopener">https://github.com/janus-idp/backstage-plugins&lt;/a>
+&lt;/li>
+&lt;li>&lt;a href="https://roadie.io/" target="_blank" rel="noopener">Roadie&lt;/a>
+ 贡献的插件：&lt;a href="https://github.com/RoadieHQ/roadie-backstage-plugins" target="_blank" rel="noopener">https://github.com/RoadieHQ/roadie-backstage-plugins&lt;/a>
+&lt;/li>
+&lt;/ul></description></item><item><title>智能代码重构</title><link>https://www.xlabs.club/docs/platform/smart-code/</link><pubDate>Tue, 09 Jan 2024 22:08:54 +0800</pubDate><guid>https://www.xlabs.club/docs/platform/smart-code/</guid><description>&lt;p>作为一个以 Java 和 Spring 为主要技术栈的团队，在日常的软件开发中，我们经常会遇到一系列的组件升级和代码重构需求，在此过程我们期望能做到几个效果：&lt;/p>
+&lt;ul>
+&lt;li>项目级升级：整个项目（注此项目指 Maven Project）升级，而不是基于某个 Java 类或片段。&lt;/li>
+&lt;li>不同版本跨度变更：比如从 Spring 项目迁移到 Spring Boot，从 Spring Boot 2.x 升级到 3.x，从 Java 8 升级到 Java 21。&lt;/li>
+&lt;li>代码安全可靠：变更的代码一定是正确的，至少是逻辑正确的，至少不能像某 AI 助手一样设置一些根本不存在的属性。&lt;/li>
+&lt;li>经验产品化：最佳实践就是产品，比如我并不（想）了解 Spring Boot 3.2 具体有哪些变更，但希望能一键从 3.0 自动升级到 3.2，直接告诉有哪些变更。&lt;/li>
+&lt;li>自定义重构：对于某些自研代码，希望能自定义重构逻辑，一键自动重构。&lt;/li>
+&lt;/ul>
+&lt;p>基于以上背景，我们探索了 &lt;a href="https://docs.openrewrite.org/" target="_blank" rel="noopener">OpenRewrite&lt;/a>
+、&lt;a href="https://github.com/spring-projects-experimental/spring-boot-migrator" target="_blank" rel="noopener">Spring Boot Migrator&lt;/a>
+、&lt;a href="https://github.com/windup" target="_blank" rel="noopener">Redhat Windup&lt;/a>
+、&lt;a href="https://github.com/adoptium/emt4j" target="_blank" rel="noopener">emt4j&lt;/a>
+ 和一众不便具名的 AI 代码助手，本文将分享我们使用 OpenRewrite、Spring Boot Migrator 进行代码重构和升级的一些使用经验和体验。&lt;/p>
+&lt;h2 id="openrewrite">OpenRewrite&lt;/h2>
+&lt;p>&lt;a href="https://docs.openrewrite.org/" target="_blank" rel="noopener">OpenRewrite&lt;/a>
+ 是一个开源的代码重写工具，旨在帮助开发人员自动化大规模重构代码。&lt;/p>
+&lt;p>它提供了一套强大的 API 和插件系统，可以通过静态分析和代码转换技术来解析、修改和生成代码。OpenRewrite 支持多种编程语言，包括 Java、C#、 TypeScript、Python、Kubernetes 等。通过使用 OpenRewrite，开发人员可以轻松地进行代码重构、性能优化、代码风格调整和代码迁移等操作，从而提高代码质量和可维护性。OpenRewrite 的开源性质使得开发人员可以自由地定制和扩展其功能，以满足特定项目的需求。&lt;/p>
+&lt;p>比如 Java 领域一些热门的应用场景：&lt;/p>
+&lt;ul>
+&lt;li>Java 版本升级：从 Java 8 到 Java 21，从 Java EE 到 Jakarta EE 。&lt;/li>
+&lt;li>Spring 框架迁移：从 Spring 5 到 Spring 6，从 Spring Boot 2 到 Spring Boot 3。&lt;/li>
+&lt;li>测试框架迁移： 从 Junit 4 到 Junit 5。&lt;/li>
+&lt;li>依赖管理：自动更新 Java 项目的 Maven 或 Gradle 依赖，确保使用最新和最安全的库版本。&lt;/li>
+&lt;li>代码清理和格式化：自动清理和格式化 Java 代码，确保符合项目或组织的编码标准和风格指南。&lt;/li>
+&lt;li>修复安全漏洞：自动识别和修复 Java 代码中的已知安全漏洞，如使用了有安全问题的库或方法。&lt;/li>
+&lt;li>代码异味检测和修复：识别并自动重构 Java 代码中的“代码异味”，以提高代码可维护性。&lt;/li>
+&lt;/ul>
+&lt;p>相比于时下火热的 AI 代码工具，比如 GitHub Copilot、Amazon CodeWhisperer，我认为 OpenRewrite 的优势主要有以下几点：&lt;/p></description></item></channel></rss>

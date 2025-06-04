@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tools on XLabs</title><link>https://www.xlabs.club/tags/tools/</link><description>Recent content in Tools on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2024 XLabs Club</copyright><lastBuildDate>Wed, 04 Jun 2025 13:36:28 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/tools/index.xml" rel="self" type="application/rss+xml"/><item><title>MacOS 持久化配置，彻底解决 too many open files in system 的问题</title><link>https://www.xlabs.club/blog/macos-too-many-open-files/</link><pubDate>Tue, 19 Mar 2024 23:05:07 +0800</pubDate><guid>https://www.xlabs.club/blog/macos-too-many-open-files/</guid><description>&lt;p>作为一个开发者，经常在 MacOS 遇到 Too many open files in system 的报错，尤其是碰到黑洞 node_modules 时，如何持久化配置彻底解决，直接上代码。&lt;/p>
+&lt;p>输入 launchctl limit 即可看到当前的限制，我这里 maxfiles 是改过以后的。&lt;/p>
+
+
+
+&lt;div class="expressive-code">
+ &lt;figure class="frame not-content">
+ &lt;figcaption class="header">
+ &lt;span class="title">&lt;/span>
+ &lt;/figcaption>
+ &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-console" data-lang="console">&lt;span class="line">&lt;span class="cl">&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">&lt;/span>&lt;span class="gp">$&lt;/span> launchctl limit
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="go"> cpu unlimited unlimited
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="go"> filesize unlimited unlimited
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="go"> data unlimited unlimited
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="go"> stack 8388608 67104768
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="go"> core 0 unlimited
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="go"> rss unlimited unlimited
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="go"> memlock unlimited unlimited
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="go"> maxproc 1392 2088
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="go"> maxfiles 10240 102400
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+ &lt;/figure>
+&lt;/div>
+&lt;p>开始创建文件 &lt;code>sudo vi /Library/LaunchDaemons/limit.maxfiles.plist&lt;/code> ，内容如下，可根据自己爱好改后面的两个数字值。&lt;/p>
+
+
+
+&lt;div class="expressive-code">
+ &lt;figure class="frame not-content">
+ &lt;figcaption class="header">
+ &lt;span class="title">&lt;/span>
+ &lt;/figcaption>
+ &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="line">&lt;span class="cl">&lt;span class="cp">&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;UTF-8&amp;#34;?&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cp">&amp;lt;!DOCTYPE plist PUBLIC &amp;#34;-//Apple//DTD PLIST 1.0//EN&amp;#34;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cp"> &amp;#34;http://www.apple.com/DTDs/PropertyList-1.0.dtd&amp;#34;&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;plist&lt;/span> &lt;span class="na">version=&lt;/span>&lt;span class="s">&amp;#34;1.0&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;dict&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;key&amp;gt;&lt;/span>Label&lt;span class="nt">&amp;lt;/key&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;string&amp;gt;&lt;/span>limit.maxfiles&lt;span class="nt">&amp;lt;/string&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;key&amp;gt;&lt;/span>ProgramArguments&lt;span class="nt">&amp;lt;/key&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;array&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;string&amp;gt;&lt;/span>launchctl&lt;span class="nt">&amp;lt;/string&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;string&amp;gt;&lt;/span>limit&lt;span class="nt">&amp;lt;/string&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;string&amp;gt;&lt;/span>maxfiles&lt;span class="nt">&amp;lt;/string&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;string&amp;gt;&lt;/span>10240&lt;span class="nt">&amp;lt;/string&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;string&amp;gt;&lt;/span>102400&lt;span class="nt">&amp;lt;/string&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/array&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;key&amp;gt;&lt;/span>RunAtLoad&lt;span class="nt">&amp;lt;/key&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;true/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;key&amp;gt;&lt;/span>ServiceIPC&lt;span class="nt">&amp;lt;/key&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;false/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/dict&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;/plist&amp;gt;&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+ &lt;/figure>
+&lt;/div>
+&lt;p>验证文件格式和内容，并应用生效。&lt;/p></description></item><item><title>Windows 使用脚本提高权限以及设置环境变量</title><link>https://www.xlabs.club/blog/windows-takeown/</link><pubDate>Mon, 26 Feb 2024 23:25:29 +0800</pubDate><guid>https://www.xlabs.club/blog/windows-takeown/</guid><description>&lt;p>背景：公司 Windows 办公机受域控安全策略限制，部分文件无权直接修改，另外开发常用的设置系统环境变量也变灰无法设置。
+此问题解决方式如下。&lt;/p>
+&lt;h2 id="提升文件权限">提升文件权限&lt;/h2>
+&lt;ol>
+&lt;li>
+&lt;p>点击 Windows + X 快捷键 – 选择「命令提示符（管理员）。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>在 CDM 窗口中执行如下命令。&lt;/p>
+
+
+
+&lt;div class="expressive-code">
+ &lt;figure class="frame not-content">
+ &lt;figcaption class="header">
+ &lt;span class="title">&lt;/span>
+ &lt;/figcaption>
+ &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-cmd" data-lang="cmd">&lt;span class="line">&lt;span class="cl">takeown /f C:\要修复的文件路径&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+ &lt;/figure>
+&lt;/div>
+&lt;/li>
+&lt;li>
+&lt;p>在拿到文件所有权后，还需要使用如下命令获取文件的完全控制权限。&lt;/p>
+
+
+
+&lt;div class="expressive-code">
+ &lt;figure class="frame not-content">
+ &lt;figcaption class="header">
+ &lt;span class="title">&lt;/span>
+ &lt;/figcaption>
+ &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-cmd" data-lang="cmd">&lt;span class="line">&lt;span class="cl">icacls C:\要修复的文件路径 /Grant Administrators:F&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+ &lt;/figure>
+&lt;/div>
+&lt;/li>
+&lt;/ol>
+&lt;h2 id="命令行设置环境变量">命令行设置环境变量&lt;/h2>
+&lt;p>Windows 下命令行设置环境变量，方式为 &lt;code>setx 变量名 变量值&lt;/code>，变量值带空格等特殊符号的，用引号引起来。&lt;/p>
+
+
+
+&lt;div class="expressive-code">
+ &lt;figure class="frame not-content">
+ &lt;figcaption class="header">
+ &lt;span class="title">&lt;/span>
+ &lt;/figcaption>
+ &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-cmd" data-lang="cmd">&lt;span class="line">&lt;span class="cl"># 通过命令行设置 Java Home
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">setx JAVA_HOME &lt;span class="s2">&amp;#34;C:\Program Files\Java\jdk-11.0.2&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># 设置 GO Path
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">setx GOPATH &lt;span class="s2">&amp;#34;D:\workspace\go&amp;#34;&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+ &lt;/figure>
+&lt;/div></description></item><item><title>Git SSH 客户端同一机器多用户多仓库配置</title><link>https://www.xlabs.club/blog/git-multi-user/</link><pubDate>Mon, 26 Feb 2024 22:55:10 +0800</pubDate><guid>https://www.xlabs.club/blog/git-multi-user/</guid><description>&lt;p>Git 为不同目录配置不同的 config，比如在同一个电脑上区分个人开发账号和公司开发账号，开源项目放一个文件夹，公司项目放一个文件夹，这样在提交代码的时候就不会混乱。&lt;/p>
+&lt;p>为账户 B 准备一个单独的配置文件，比如： ~/.gitconfig-b，内容根据需要定义。&lt;/p>
+
+
+
+&lt;div class="expressive-code">
+ &lt;figure class="frame not-content">
+ &lt;figcaption class="header">
+ &lt;span class="title">&lt;/span>
+ &lt;/figcaption>
+ &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-txt" data-lang="txt">&lt;span class="line">&lt;span class="cl">[user]
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> name = userb-name
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> email = userb-email@test.com&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+ &lt;/figure>
+&lt;/div>
+&lt;p>修改 ~/.gitconfig 文件，增加以下配置，引用上面创建的配置文件，注意其中的路径用绝对路径，并且路径以 / 结尾。&lt;/p>
+
+
+
+&lt;div class="expressive-code">
+ &lt;figure class="frame not-content">
+ &lt;figcaption class="header">
+ &lt;span class="title">&lt;/span>
+ &lt;/figcaption>
+ &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-txt" data-lang="txt">&lt;span class="line">&lt;span class="cl">[includeIf &amp;#34;gitdir:/project/path-b/&amp;#34;]
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">path = /Users/xxxx/.gitconfig-b&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+ &lt;/figure>
+&lt;/div>
+&lt;p>保存后，在 /project/path-b/ 下新的仓库都会以 .gitconfig-b 中的用户名和邮箱提交了。&lt;/p>
+&lt;p>注意如果使用 ssh key 方式，在生成 key 的时候 ssh-keygen 名字指定文件名，多个 key 不要覆盖了。&lt;/p></description></item></channel></rss>
