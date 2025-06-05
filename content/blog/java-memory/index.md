@@ -143,6 +143,13 @@ thp_collapse_alloc 0
 java -XX:NativeMemoryTracking=detail -jar
 # 查看详情
 jcmd $(pgrep java) VM.native_memory detail scale=MB
+# 查看 summary
+jcmd $(pgrep java) VM.native_memory summary scale=MB
+
+# 创建基线，然后分不同时间进行 diff 查看变化
+jcmd $(pgrep java) VM.native_memory baseline
+jcmd $(pgrep java) VM.native_memory detail.diff scale=MB
+jcmd $(pgrep java) VM.native_memory summary.diff scale=MB
 
 ```
 
@@ -217,6 +224,22 @@ Total: reserved=68975MB, committed=1040MB
 
 -           Object Monitors (reserved=8MB, committed=8MB)
                             (malloc=8MB #39137)
+
+```
+
+先解释下内存参数意义：
+
+```console
+
+reserved：JVM 向操作系统预约的虚拟内存地址空间，仅是地址空间预留，不消耗物理资源，防止其他进程使用这段地址范围，类似"土地规划许可"，但尚未建房。
+committed：JVM 实际分配的物理内存（RAM + Swap），真实消耗系统内存资源。
+
+虚拟地址空间
+┌──────────────────────────────┐
+│         reserved=16MB        │  ← 整个预约区域
+├───────────────┬──────────────┤
+│ committed=13MB│ 未使用 3MB   │  ← 实际使用的物理内存
+└───────────────┴──────────────┘
 
 ```
 
@@ -438,15 +461,18 @@ vmtouch -e /dir
 ```bash
 # pmap 查看内存，先不要排序，便于找出连续的内存块（一般是 2 个一组）
 # pmap -x <pid> | sort -n -k3
-pmap -x <pid>
+pmap -x $(pgrep java)
 # 举例说明在上面发现有 7f6737dff000 开头的内存块可能异常，一般都是一个或多个一组，是连续的内存
-cat /proc/<pid>/smaps > logs/smaps.txt
-gdb attach <pid>
+cat /proc/$(pgrep java)/smaps > logs/smaps.txt
+gdb attach $(pgrep java)
 # dump 的起始地址，基于上面 smaps.txt 找到的内容，地址加上 0x 前缀
 dump memory /opt/tomcat/logs/gdb-test.dump 0x7f6737dff000 0x7f6737e03000
 # 尝试将 dump 文件内容转成可读的 string，其中 -10 是过滤长度大于 10 的，也可以不过滤
 strings -10 /opt/tomcat/logs/gdb-test.dump
 # 如果幸运，能在上面的 strings 中找到你的 Java 类或 Bean 内容，如果不幸都是一堆乱码，可以尝试扩大 dump 内存块，多找几个连续的块试试
+
+# pmap 按大小降序排序并过滤大于 1000 KB 的项
+pmap -x $(pgrep java) | awk 'NR>2 && !/total/ {print $2, $0}' | sort -k1,1nr | cut -d' ' -f2- | awk '$2 > 1000'
 
 ```
 
@@ -514,3 +540,11 @@ stat -fc %T /sys/fs/cgroup/
 - [推荐] 在线 Heap 分析工具 [HeapHero.io](https://heaphero.io/)
 - [推荐] 在线 jstack 分析工具 [jstack.review](https://jstack.review/)
 - [Beta] 可私有化部署 Online GC、Heap Dump、Thread、JFR 分析工具 [eclipse/jifa](https://github.com/eclipse/jifa)
+
+## 参考资料
+
+IOTDB 线上堆外内存泄漏问题排查：<https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=195728187>
+
+JVM 堆外内存问题定位： <https://juejin.cn/post/6844904168549777421>
+
+java 堆外内存泄漏排查： <https://javakk.com/1158.html>
