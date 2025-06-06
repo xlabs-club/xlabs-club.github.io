@@ -19,12 +19,6 @@ seo:
   noindex: false
 ---
 
-## 为什么要升级
-
-额，好比 iPhone 4S 很优秀，但是在 2025 年，我不会考虑买，甚至不考虑 iPhone 14 Pro Max。
-
-当然后面我们会对比收益。
-
 ## 破坏性变更评估工具
 
 在升级之前，可通过 jdeps 和 jdeprscan 先评估下是否有使用内部类和废弃 API，有一个总的概览。
@@ -332,7 +326,7 @@ emt4j 是 Eclipse 推出的一个静态分析工具，下面会详细介绍用�
 
 ### Maven 依赖包更新
 
-使用 maven 检查是否有最新的依赖包和插件，注意，这里给的建议仅供参考，不要一下子应用上，需要综合考虑当前的项目依赖关系。
+使用 maven 检查是否有最新的依赖包和插件，对整体项目有一个全局的了解。注意，这里给的建议仅供参考，不要一下子应用上，需要综合考虑当前的项目依赖关系。
 
 ```bash
 mvn versions:display-dependency-updates
@@ -537,6 +531,10 @@ Java 参数太多，到 [VM Options Explorer - Corretto JDK21](https://chriswhoc
 
    <https://www.diguage.com/post/gc-performance-real-qps/>
 
+- 地瓜哥 OpenJDK 21 升级指南
+
+   <https://www.diguage.com/post/upgrade-to-openjdk21/>
+
 - jdeprscan can not find class 解决办法
 
    <https://stackoverflow.com/questions/49525496/jdeprscan-throws-cannot-find-class-error/>
@@ -544,3 +542,7 @@ Java 参数太多，到 [VM Options Explorer - Corretto JDK21](https://chriswhoc
 - 从 Java 8 升级到 Java 17 踩坑全过程
 
    <https://cloud.tencent.com/developer/article/2257886>
+
+- 阿里云开发者社区 Java 升级总结
+
+   <https://www.zhihu.com/tardis/zm/art/585377119?source_id=1003>
