@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blog on XLabs</title><link>https://www.xlabs.club/blog/</link><description>Recent content in Blog on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2024 XLabs Club</copyright><lastBuildDate>Thu, 05 Jun 2025 20:15:24 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>Spring Security 集成 Keycloak 实现用户 RBAC、ABAC 授权</title><link>https://www.xlabs.club/blog/spring-security-with-keycloak-oauth2/</link><pubDate>Sun, 24 Nov 2024 16:44:35 +0800</pubDate><guid>https://www.xlabs.club/blog/spring-security-with-keycloak-oauth2/</guid><description>&lt;p>使用 Spring Security Resource Server 和 Keycloak，实现用户 RBAC、ABAC 授权，主要介绍：&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blog on XLabs</title><link>https://www.xlabs.club/blog/</link><description>Recent content in Blog on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2024 XLabs Club</copyright><lastBuildDate>Fri, 06 Jun 2025 08:44:12 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>Spring Security 集成 Keycloak 实现用户 RBAC、ABAC 授权</title><link>https://www.xlabs.club/blog/spring-security-with-keycloak-oauth2/</link><pubDate>Sun, 24 Nov 2024 16:44:35 +0800</pubDate><guid>https://www.xlabs.club/blog/spring-security-with-keycloak-oauth2/</guid><description>&lt;p>使用 Spring Security Resource Server 和 Keycloak，实现用户 RBAC、ABAC 授权，主要介绍：&lt;/p>
 &lt;ol>
 &lt;li>Spring Security Resource Server 如何与标准 OAuth2 协议集成。&lt;/li>
 &lt;li>Spring Security Resource Server 如何与 Keycloak Authorization Server 集成。&lt;/li>
@@ -189,10 +189,7 @@
 &lt;h2 id="dockerfile-编写小技巧">Dockerfile 编写小技巧&lt;/h2>
 &lt;ul>
 &lt;li>
-&lt;p>使用 Heredocs 语法代替又长又臭的字符串拼接，当然 Heredocs 支持更多功能比如 run python、多文件内容拷贝，具体请参考官方文档。&lt;/p></description></item><item><title>从 Java 8 升级到 Java 23，踩坑记录、变更评估方法、辅助工具介绍</title><link>https://www.xlabs.club/blog/migrating-java8-to-java23/</link><pubDate>Thu, 23 May 2024 21:03:11 +0800</pubDate><guid>https://www.xlabs.club/blog/migrating-java8-to-java23/</guid><description>&lt;h2 id="为什么要升级">为什么要升级&lt;/h2>
-&lt;p>额，好比 iPhone 4S 很优秀，但是在 2025 年，我不会考虑买，甚至不考虑 iPhone 14 Pro Max。&lt;/p>
-&lt;p>当然后面我们会对比收益。&lt;/p>
-&lt;h2 id="破坏性变更评估工具">破坏性变更评估工具&lt;/h2>
+&lt;p>使用 Heredocs 语法代替又长又臭的字符串拼接，当然 Heredocs 支持更多功能比如 run python、多文件内容拷贝，具体请参考官方文档。&lt;/p></description></item><item><title>从 Java 8 升级到 Java 23，踩坑记录、变更评估方法、辅助工具介绍</title><link>https://www.xlabs.club/blog/migrating-java8-to-java23/</link><pubDate>Thu, 23 May 2024 21:03:11 +0800</pubDate><guid>https://www.xlabs.club/blog/migrating-java8-to-java23/</guid><description>&lt;h2 id="破坏性变更评估工具">破坏性变更评估工具&lt;/h2>
 &lt;p>在升级之前，可通过 jdeps 和 jdeprscan 先评估下是否有使用内部类和废弃 API，有一个总的概览。&lt;/p>
 &lt;h3 id="jdeps">jdeps&lt;/h3>
 &lt;p>jdeps 是 Java 自带的命令行工具，可以用来分析依赖关系和生成模块信息文件，这里我们只借用他的其中一项功能。&lt;/p>
