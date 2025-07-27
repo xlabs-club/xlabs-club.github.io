@@ -58,8 +58,8 @@ rel  = "sitemap"
   tag = "tags"
 
 [permalinks]
-  blog = "/blog/:slugorfilename/"
-  docs = "/docs/:sections[1:]/:slugorfilename/"
+  blog = "/blog/:slugorcontentbasename/"
+  docs = "/docs/:sections[1:]/:slugorcontentbasename/"
 
 [minify.tdewolff.html]
   keepWhitespace = false
