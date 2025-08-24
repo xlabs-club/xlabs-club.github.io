@@ -24,7 +24,7 @@ copyRight = "Copyright (c) 2020-2025 XLabs Club"
   enable = true
 
 [outputs]
-  home = ["HTML", "RSS", "searchIndex"]
+  home = ["HTML", "RSS", "searchIndex", "SITEMAP"]
   section = ["HTML", "RSS", "SITEMAP"]
 
 [outputFormats.searchIndex]
