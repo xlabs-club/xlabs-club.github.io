@@ -19,15 +19,15 @@
     "@docsearch/js": "^3.9.0",
     "@tabler/icons": "^3.34.1",
     "@thulite/doks-core": "^1.8.3",
-    "@thulite/images": "^3.3.1",
-    "@thulite/inline-svg": "^1.2.0",
-    "@thulite/seo": "^2.4.1",
+    "@thulite/images": "^3.3.2",
+    "@thulite/inline-svg": "^1.2.1",
+    "@thulite/seo": "^2.4.2",
     "mermaid": "^11.9.0",
     "thulite": "^2.6.3"
   },
   "devDependencies": {
     "prettier": "^3.6.2",
-    "vite": "^7.0.6"
+    "vite": "^7.1.1"
   },
   "engines": {
     "node": ">=22.16.0"

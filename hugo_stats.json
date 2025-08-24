@@ -57,6 +57,7 @@
     "classes": [
       "about",
       "active",
+      "align-items-center",
       "anchor",
       "animation",
       "bg-dots",
@@ -84,6 +85,7 @@
       "col-lg-8",
       "col-lg-9",
       "col-md-12",
+      "col-md-16",
       "col-xl-3",
       "col-xl-4",
       "col-xl-8",
@@ -204,6 +206,7 @@
       "reading-time",
       "rounded-pill",
       "row",
+      "row-about",
       "section",
       "section-features",
       "section-md",
