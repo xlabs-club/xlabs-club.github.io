@@ -1,6 +1,6 @@
 ---
-title: "从 Java 8 升级到 Java 23，踩坑记录、变更评估方法、辅助工具介绍"
-description: "从 Java 8 升级到 Java 23，踩坑记录、变更评估方法、辅助工具介绍"
+title: "从 Java 8 升级到 Java 25，踩坑记录、变更评估方法、辅助工具介绍"
+description: "从 Java 8 升级到 Java 25，踩坑记录、变更评估方法、辅助工具介绍"
 summary: ""
 date: 2024-05-23T21:03:11+08:00
 lastmod: 2024-05-23T21:03:11+08:00
@@ -13,8 +13,8 @@ pinned: false
 homepage: false
 type: docs
 seo:
-  title: "从 Java 8 升级到 Java 23，踩坑记录、变更评估方法、辅助工具介绍"
-  description: "从 Java 8 升级到 Java 23，踩坑记录、变更评估方法、辅助工具介绍"
+  title: "从 Java 8 升级到 Java 25，踩坑记录、变更评估方法、辅助工具介绍"
+  description: "从 Java 8 升级到 Java 25，踩坑记录、变更评估方法、辅助工具介绍"
   canonical: ""
   noindex: false
 ---
