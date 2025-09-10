@@ -1,15 +1,15 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Keycloak on XLabs</title><link>https://www.xlabs.club/tags/keycloak/</link><description>Recent content in Keycloak on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Thu, 04 Sep 2025 21:33:38 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/keycloak/index.xml" rel="self" type="application/rss+xml"/><item><title>Spring Security 集成 Keycloak 实现用户 RBAC、ABAC 授权</title><link>https://www.xlabs.club/blog/spring-security-with-keycloak-oauth2/</link><pubDate>Sun, 24 Nov 2024 16:44:35 +0800</pubDate><guid>https://www.xlabs.club/blog/spring-security-with-keycloak-oauth2/</guid><description>&lt;p>使用 Spring Security Resource Server 和 Keycloak，实现用户 RBAC、ABAC 授权，主要介绍：&lt;/p>
-&lt;ol>
-&lt;li>Spring Security Resource Server 如何与标准 OAuth2 协议集成。&lt;/li>
-&lt;li>Spring Security Resource Server 如何与 Keycloak Authorization Server 集成。&lt;/li>
-&lt;li>如何校验和解析 JWT Token，获取用户详细信息。&lt;/li>
-&lt;li>如何使用 keycloak admin client 获取更多信息，执行更高级动作。&lt;/li>
-&lt;li>Spring Security JWT Token 模式下如何方便本地 Debug，如何通过 keycloak admin client 模拟用户登录。&lt;/li>
-&lt;/ol>
-&lt;p>在开始之前我们先解释几点：&lt;/p>
-&lt;ol>
-&lt;li>Keycloak 官方的 Spring Boot Starter 后续将逐渐停止维护，所以我们只用 keycloak 的 client，自己实现一部分代码，有 client sdk 实现起来很容易。&lt;/li>
-&lt;li>Spring Security &lt;a href="https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/index.html" target="_blank" rel="noopener">OAuth 2.0 Resource Server&lt;/a>
- 也有多种集成方式，这里我们只实现 &lt;code>JWT&lt;/code> 这一种，并且是 sessionless 的，也就是只负责授权不负责 &lt;code>登录认证&lt;/code>， 登录由网关通过 oauth2-proxy 实现，详情可参考另一篇博客介绍 &lt;a href="https://www.xlabs.club/blog/traefik-oauth2-proxy-keycloak/" target="_blank" rel="noopener">traefik-oauth2-proxy-keycloak&lt;/a>
-。&lt;/li>
-&lt;/ol></description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Keycloak on XLabs</title><link>https://www.xlabs.club/tags/keycloak/</link><description>Recent content in Keycloak on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Wed, 10 Sep 2025 14:56:58 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/keycloak/index.xml" rel="self" type="application/rss+xml"/><item><title>Spring Security 集成 Keycloak 实现用户 RBAC、ABAC 授权</title><link>https://www.xlabs.club/blog/spring-security-with-keycloak-oauth2/</link><pubDate>Sun, 24 Nov 2024 16:44:35 +0800</pubDate><guid>https://www.xlabs.club/blog/spring-security-with-keycloak-oauth2/</guid><description>&lt;p&gt;使用 Spring Security Resource Server 和 Keycloak，实现用户 RBAC、ABAC 授权，主要介绍：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Spring Security Resource Server 如何与标准 OAuth2 协议集成。&lt;/li&gt;
+&lt;li&gt;Spring Security Resource Server 如何与 Keycloak Authorization Server 集成。&lt;/li&gt;
+&lt;li&gt;如何校验和解析 JWT Token，获取用户详细信息。&lt;/li&gt;
+&lt;li&gt;如何使用 keycloak admin client 获取更多信息，执行更高级动作。&lt;/li&gt;
+&lt;li&gt;Spring Security JWT Token 模式下如何方便本地 Debug，如何通过 keycloak admin client 模拟用户登录。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;在开始之前我们先解释几点：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Keycloak 官方的 Spring Boot Starter 后续将逐渐停止维护，所以我们只用 keycloak 的 client，自己实现一部分代码，有 client sdk 实现起来很容易。&lt;/li&gt;
+&lt;li&gt;Spring Security &lt;a href="https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/index.html" target="_blank" rel="noopener"&gt;OAuth 2.0 Resource Server&lt;/a&gt;
+ 也有多种集成方式，这里我们只实现 &lt;code&gt;JWT&lt;/code&gt; 这一种，并且是 sessionless 的，也就是只负责授权不负责 &lt;code&gt;登录认证&lt;/code&gt;， 登录由网关通过 oauth2-proxy 实现，详情可参考另一篇博客介绍 &lt;a href="https://www.xlabs.club/blog/traefik-oauth2-proxy-keycloak/" target="_blank" rel="noopener"&gt;traefik-oauth2-proxy-keycloak&lt;/a&gt;
+。&lt;/li&gt;
+&lt;/ol&gt;</description></item></channel></rss>

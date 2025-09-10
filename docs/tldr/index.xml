@@ -1,413 +1,413 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>TL;DR on XLabs</title><link>https://www.xlabs.club/docs/tldr/</link><description>Recent content in TL;DR on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Thu, 04 Sep 2025 21:33:38 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/docs/tldr/index.xml" rel="self" type="application/rss+xml"/><item><title>Kubernetes</title><link>https://www.xlabs.club/docs/tldr/kubernetes/</link><pubDate>Thu, 07 Sep 2023 16:04:48 +0200</pubDate><guid>https://www.xlabs.club/docs/tldr/kubernetes/</guid><description>&lt;p>常用 Kubernetes 命令，复制，粘贴，这就是生活。&lt;/p>
-&lt;hr>
-&lt;ul>
-&lt;li>复制 secret 到另一个 namespace。&lt;/li>
-&lt;/ul>
-
-
-
-&lt;div class="expressive-code">
- &lt;figure class="frame is-terminal not-content">
- &lt;figcaption class="header">
- &lt;span class="title">&lt;/span>
- &lt;/figcaption>
- &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">kubectl get secret mys --namespace&lt;span class="o">=&lt;/span>na -oyaml &lt;span class="p">|&lt;/span> grep -v &lt;span class="s1">&amp;#39;^\s*namespace:\s&amp;#39;&lt;/span> &lt;span class="p">|&lt;/span> kubectl apply --namespace&lt;span class="o">=&lt;/span>nb -f -&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
- &lt;/figure>
-&lt;/div>
-&lt;ul>
-&lt;li>批量删除 pod。&lt;/li>
-&lt;/ul>
-
-
-
-&lt;div class="expressive-code">
- &lt;figure class="frame is-terminal not-content">
- &lt;figcaption class="header">
- &lt;span class="title">&lt;/span>
- &lt;/figcaption>
- &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">kubectl get pods --all-namespaces &lt;span class="p">|&lt;/span> grep Evicted &lt;span class="p">|&lt;/span> awk &lt;span class="s1">&amp;#39;{print $2 &amp;#34; --namespace=&amp;#34; $1}&amp;#39;&lt;/span> &lt;span class="p">|&lt;/span> xargs kubectl delete pod
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Delete by label&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">kubectl delete pod -n idaas-book -l app.kubernetes.io/name&lt;span class="o">=&lt;/span>idaas-book&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
- &lt;/figure>
-&lt;/div>
-&lt;ul>
-&lt;li>原地重启 Pod。&lt;/li>
-&lt;/ul>
-
-
-
-&lt;div class="expressive-code">
- &lt;figure class="frame is-terminal not-content">
- &lt;figcaption class="header">
- &lt;span class="title">&lt;/span>
- &lt;/figcaption>
- &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">kubectl rollout restart deploy/xxx -n your-namespace&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
- &lt;/figure>
-&lt;/div>
-&lt;ul>
-&lt;li>命令行快速扩缩容。&lt;/li>
-&lt;/ul>
-
-
-
-&lt;div class="expressive-code">
- &lt;figure class="frame is-terminal not-content">
- &lt;figcaption class="header">
- &lt;span class="title">&lt;/span>
- &lt;/figcaption>
- &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># kubectl scale -h&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">kubectl scale --replicas&lt;span class="o">=&lt;/span>&lt;span class="m">1&lt;/span> deploy/xxx -n your-namespace&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
- &lt;/figure>
-&lt;/div>
-&lt;ul>
-&lt;li>密钥解密。&lt;/li>
-&lt;/ul>
-
-
-
-&lt;div class="expressive-code">
- &lt;figure class="frame is-terminal not-content">
- &lt;figcaption class="header">
- &lt;span class="title">&lt;/span>
- &lt;/figcaption>
- &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl"> kubectl get secret my-creds -n mysql -o &lt;span class="nv">jsonpath&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;{.data.ADMIN_PASSWORD}&amp;#34;&lt;/span> &lt;span class="p">|&lt;/span> base64 --decode&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
- &lt;/figure>
-&lt;/div>
-&lt;ul>
-&lt;li>合并多个 kube config 文件。&lt;/li>
-&lt;/ul>
-
-
-
-&lt;div class="expressive-code">
- &lt;figure class="frame is-terminal not-content">
- &lt;figcaption class="header">
- &lt;span class="title">&lt;/span>
- &lt;/figcaption>
- &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">export&lt;/span> &lt;span class="nv">KUBECONFIG&lt;/span>&lt;span class="o">=&lt;/span>~/.kube/config:~/.kube/anotherconfig
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">kubectl config view --flatten &amp;gt; ~/.kube/config-all
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">cp ~/.kube/config-all ~/.kube/config
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 顺手把权限改了，避免 helm 或 kubectl 客户端 warning&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">chmod &lt;span class="m">600&lt;/span> ~/.kube/config&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
- &lt;/figure>
-&lt;/div>
-&lt;ul>
-&lt;li>获取某个 namespace 下的全部资源，找出你看不见的资源，常用于 webhook/CR/CRD 等资源清理，解决强制删除失败。&lt;/li>
-&lt;/ul>
-
-
-
-&lt;div class="expressive-code">
- &lt;figure class="frame is-terminal not-content">
- &lt;figcaption class="header">
- &lt;span class="title">&lt;/span>
- &lt;/figcaption>
- &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">ns&lt;/span>&lt;span class="o">=&lt;/span>your-namespace
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">for&lt;/span> resource in &lt;span class="sb">`&lt;/span>kubectl api-resources --verbs&lt;span class="o">=&lt;/span>list --namespaced -o name &lt;span class="p">|&lt;/span> xargs -n &lt;span class="m">1&lt;/span> kubectl get -o name -n &lt;span class="nv">$ns&lt;/span>&lt;span class="sb">`&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">do&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> kubectl get &lt;span class="nv">$resource&lt;/span> -n &lt;span class="nv">$ns&lt;/span>&lt;span class="p">;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># kubectl patch $resource -p &amp;#39;{&amp;#34;metadata&amp;#34;: {&amp;#34;finalizers&amp;#34;: []}}&amp;#39; --type=&amp;#39;merge&amp;#39; -n $ns;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">done&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
- &lt;/figure>
-&lt;/div>
-&lt;ul>
-&lt;li>根据特定字段排序 Pod 列表。&lt;/li>
-&lt;/ul>
-
-
-
-&lt;div class="expressive-code">
- &lt;figure class="frame is-terminal not-content">
- &lt;figcaption class="header">
- &lt;span class="title">&lt;/span>
- &lt;/figcaption>
- &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 根据重启次数排序&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">kubectl get pods --sort-by&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;.status.containerStatuses[0].restartCount&amp;#39;&lt;/span> -A&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
- &lt;/figure>
-&lt;/div></description></item><item><title>Knife</title><link>https://www.xlabs.club/docs/tldr/knife/</link><pubDate>Sat, 09 Mar 2024 14:39:50 +0800</pubDate><guid>https://www.xlabs.club/docs/tldr/knife/</guid><description>&lt;p>程序员的瑞士军刀，常用优秀命令行工具，上榜都是有理由的。&lt;/p>
-&lt;h2 id="procs">procs&lt;/h2>
-&lt;p>比 ps 好用的工具，查看路径和端口一步到位，支持过滤。&lt;/p>
-&lt;h2 id="ripgrep">ripgrep&lt;/h2>
-&lt;p>&lt;a href="https://github.com/BurntSushi/ripgrep" target="_blank" rel="noopener">ripgrep&lt;/a>
- 简称 rg，是一个面向行的搜索工具，Rust 编写，全平台支持，也是 VS Code 的默认搜索工具。它的搜索性能极高，在大项目中也有着出色的表现，并且默认可以忽略 .gitignore 文件中的内容，非常实用。&lt;/p>
-&lt;p>除了作为一个高效的命令行工具使用外，整个项目的设计也不错，另外还是一个学习 Rust 的好项目。&lt;/p>
-&lt;p>&lt;code>rg -h&lt;/code> 开启探索之旅吧。&lt;/p>
-&lt;h2 id="tldr">TL;DR&lt;/h2>
-&lt;p>Too Long; Didn’t Read.&lt;/p>
-&lt;p>tldr 根据二八原则，简化了烦琐的 man 指令帮助文档，仅列出常用的该指令的使用方法，让人一看就懂，大多数情况下，给出几个指令的使用 demo 可能正是我们想要的。&lt;/p>
-&lt;p>举个例子看下实际运行效果，如下（太长，节选）。&lt;/p>
-
-
-
-&lt;div class="expressive-code">
- &lt;figure class="frame not-content">
- &lt;figcaption class="header">
- &lt;span class="title">&lt;/span>
- &lt;/figcaption>
- &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-console" data-lang="console">&lt;span class="line">&lt;span class="cl">&lt;span class="go">➜ ~ tldr docker
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="go">&lt;/span>&lt;span class="err">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">&lt;/span>&lt;span class="go"> List all docker containers (running and stopped):
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="go">&lt;/span>&lt;span class="err">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">&lt;/span>&lt;span class="go"> docker ps -a
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="go">&lt;/span>&lt;span class="err">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">&lt;/span>&lt;span class="go"> Start a container from an image, with a custom name:
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="go">&lt;/span>&lt;span class="err">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">&lt;/span>&lt;span class="go"> docker run --name container_name image
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="go">&lt;/span>&lt;span class="err">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">&lt;/span>&lt;span class="go"> Start or stop an existing container:
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="go">&lt;/span>&lt;span class="err">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">&lt;/span>&lt;span class="go"> docker start|stop container_name
-&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
- &lt;/figure>
-&lt;/div>
-&lt;p>&lt;a href="https://github.com/tldr-pages/tldr" target="_blank" rel="noopener">tldr&lt;/a>
- 命令行有多种实现，比如官方推荐的有 npm 和 python。&lt;/p></description></item><item><title>Shell Coding</title><link>https://www.xlabs.club/docs/tldr/shell-coding/</link><pubDate>Sat, 09 Mar 2024 11:01:01 +0800</pubDate><guid>https://www.xlabs.club/docs/tldr/shell-coding/</guid><description>&lt;p>Linux Shell 日常编程实用句式速查，注意以下例子如无特殊说明都是 bash 语法。&lt;/p>
-&lt;hr>
-&lt;ul>
-&lt;li>选择执行环境。&lt;/li>
-&lt;/ul>
-
-
-
-&lt;div class="expressive-code">
- &lt;figure class="frame is-terminal not-content">
- &lt;figcaption class="header">
- &lt;span class="title">&lt;/span>
- &lt;/figcaption>
- &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">&lt;span class="cp">#!/usr/bin/env bash
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cp">&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">#!/usr/bin/bash&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
- &lt;/figure>
-&lt;/div>
-&lt;ul>
-&lt;li>指定变量默认值，取环境变量，取不到用默认值。&lt;/li>
-&lt;/ul>
-
-
-
-&lt;div class="expressive-code">
- &lt;figure class="frame is-terminal not-content">
- &lt;figcaption class="header">
- &lt;span class="title">&lt;/span>
- &lt;/figcaption>
- &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">rep&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">ENV_YOUR_KEY&lt;/span>&lt;span class="k">:-&lt;/span>&lt;span class="s2">&amp;#34;my-default-value&amp;#34;&lt;/span>&lt;span class="si">}&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
- &lt;/figure>
-&lt;/div>
-&lt;ul>
-&lt;li>获取当前执行脚本的绝对路径，注意直接用 $0 或 pwd 获取的可能都不要你想要的。&lt;/li>
-&lt;/ul>
-
-
-
-&lt;div class="expressive-code">
- &lt;figure class="frame is-terminal not-content">
- &lt;figcaption class="header">
- &lt;span class="title">&lt;/span>
- &lt;/figcaption>
- &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">current_dir&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>&lt;span class="nb">cd&lt;/span> &lt;span class="sb">`&lt;/span>dirname &lt;span class="nv">$0&lt;/span>&lt;span class="sb">`&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="nb">pwd&lt;/span>&lt;span class="k">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
- &lt;/figure>
-&lt;/div>
-&lt;ul>
-&lt;li>为当前目录包含子目录下所有 .sh 文件增加可执行权限。&lt;/li>
-&lt;/ul>
-
-
-
-&lt;div class="expressive-code">
- &lt;figure class="frame is-terminal not-content">
- &lt;figcaption class="header">
- &lt;span class="title">&lt;/span>
- &lt;/figcaption>
- &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">chmod +x &lt;span class="sb">`&lt;/span>find . -name &lt;span class="s1">&amp;#39;*.sh&amp;#39;&lt;/span>&lt;span class="sb">`&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
- &lt;/figure>
-&lt;/div>
-&lt;ul>
-&lt;li>通过 tee 将提示信息显示到终端，并同时写入到文件。&lt;/li>
-&lt;/ul>
-
-
-
-&lt;div class="expressive-code">
- &lt;figure class="frame is-terminal not-content">
- &lt;figcaption class="header">
- &lt;span class="title">&lt;/span>
- &lt;/figcaption>
- &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">log_file&lt;/span>&lt;span class="o">=&lt;/span>/var/log/test.log
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;This line will echo to console and also write to log file.&amp;#34;&lt;/span> &lt;span class="p">|&lt;/span> tee -a &lt;span class="si">${&lt;/span>&lt;span class="nv">log_file&lt;/span>&lt;span class="si">}&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
- &lt;/figure>
-&lt;/div>
-&lt;ul>
-&lt;li>类似于 Java properties 中 key=value 形式的字符串，取 key 和 value 的值。&lt;/li>
-&lt;/ul>
-
-
-
-&lt;div class="expressive-code">
- &lt;figure class="frame is-terminal not-content">
- &lt;figcaption class="header">
- &lt;span class="title">&lt;/span>
- &lt;/figcaption>
- &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">username_line&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;username=test&amp;#34;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">#key is username&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">key&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">username_line&lt;/span>&lt;span class="p">%=*&lt;/span>&lt;span class="si">}&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">#val is test&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">val&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">username_line&lt;/span>&lt;span class="p">#*=&lt;/span>&lt;span class="si">}&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
- &lt;/figure>
-&lt;/div>
-&lt;ul>
-&lt;li>实现 String trim 效果。&lt;/li>
-&lt;/ul>
-
-
-
-&lt;div class="expressive-code">
- &lt;figure class="frame is-terminal not-content">
- &lt;figcaption class="header">
- &lt;span class="title">&lt;/span>
- &lt;/figcaption>
- &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">#trim string by echo&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">val_trim&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>&lt;span class="nb">echo&lt;/span> -n &lt;span class="si">${&lt;/span>&lt;span class="nv">val&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="k">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
- &lt;/figure>
-&lt;/div>
-&lt;ul>
-&lt;li>声明和循环数组。&lt;/li>
-&lt;/ul>
-
-
-
-&lt;div class="expressive-code">
- &lt;figure class="frame is-terminal not-content">
- &lt;figcaption class="header">
- &lt;span class="title">&lt;/span>
- &lt;/figcaption>
- &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">apps&lt;/span>&lt;span class="o">=(&lt;/span>foo bar&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">for&lt;/span> app in &lt;span class="si">${&lt;/span>&lt;span class="nv">apps&lt;/span>&lt;span class="p">[@]&lt;/span>&lt;span class="si">}&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">do&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$app&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">done&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
- &lt;/figure>
-&lt;/div>
-&lt;ul>
-&lt;li>文件 ls 转数组&lt;/li>
-&lt;/ul>
-
-
-
-&lt;div class="expressive-code">
- &lt;figure class="frame is-terminal not-content">
- &lt;figcaption class="header">
- &lt;span class="title">&lt;/span>
- &lt;/figcaption>
- &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># ls 转数组，根据需要 grep&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">arrs&lt;/span>&lt;span class="o">=(&lt;/span>&lt;span class="k">$(&lt;/span>ls helmfiles/apps &lt;span class="p">|&lt;/span> grep -v .yaml&lt;span class="k">)&lt;/span>&lt;span class="o">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
- &lt;/figure>
-&lt;/div>
-&lt;ul>
-&lt;li>指定数组分割符，字符串转数组。&lt;/li>
-&lt;/ul>
-
-
-
-&lt;div class="expressive-code">
- &lt;figure class="frame is-terminal not-content">
- &lt;figcaption class="header">
- &lt;span class="title">&lt;/span>
- &lt;/figcaption>
- &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 获取当前 helm list 命令输出结果，通过换行分割成数组&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">IFS&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">$&amp;#39;\n&amp;#39;&lt;/span> &lt;span class="nv">helm_list&lt;/span>&lt;span class="o">=(&lt;/span>&lt;span class="k">$(&lt;/span>helm list --no-headers&lt;span class="k">)&lt;/span>&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">for&lt;/span> hm in &lt;span class="si">${&lt;/span>&lt;span class="nv">helm_list&lt;/span>&lt;span class="p">[@]&lt;/span>&lt;span class="si">}&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">do&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># 对每一行进行解析按 Tab 再分割成数组&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">IFS&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">$&amp;#39;\t&amp;#39;&lt;/span> &lt;span class="nv">hma&lt;/span>&lt;span class="o">=(&lt;/span>&lt;span class="nv">$hm&lt;/span>&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;helm upgrade --install &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">hma&lt;/span>&lt;span class="p">[0]&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2"> &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">hma&lt;/span>&lt;span class="p">[0]&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2"> --version &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">hma&lt;/span>&lt;span class="p">[6]&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2"> --reset-values 2&amp;gt;&amp;amp;1&amp;#34;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">done&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
- &lt;/figure>
-&lt;/div>
-&lt;ul>
-&lt;li>文件按内容排序。&lt;/li>
-&lt;/ul>
-
-
-
-&lt;div class="expressive-code">
- &lt;figure class="frame is-terminal not-content">
- &lt;figcaption class="header">
- &lt;span class="title">&lt;/span>
- &lt;/figcaption>
- &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">log&lt;/span>&lt;span class="o">=&lt;/span>my-log-file
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 原地排序覆盖原文件&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sort -o &lt;span class="si">${&lt;/span>&lt;span class="nv">log&lt;/span>&lt;span class="si">}&lt;/span> &lt;span class="si">${&lt;/span>&lt;span class="nv">log&lt;/span>&lt;span class="si">}&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
- &lt;/figure>
-&lt;/div>
-&lt;ul>
-&lt;li>判断字符串是否以某串开头，并去除指定前缀。&lt;/li>
-&lt;/ul>
-
-
-
-&lt;div class="expressive-code">
- &lt;figure class="frame is-terminal not-content">
- &lt;figcaption class="header">
- &lt;span class="title">&lt;/span>
- &lt;/figcaption>
- &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">img&lt;/span>&lt;span class="o">=&lt;/span>docker.io/nginx:1.20
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">repo&lt;/span>&lt;span class="o">=&lt;/span>docker.io
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># if 判断字符串是否以 repo 开头&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">if&lt;/span> &lt;span class="o">[[&lt;/span> &lt;span class="nv">$img&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="nv">$repo&lt;/span>* &lt;span class="o">]]&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">then&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># 注意这里 +2&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">suffix&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>&lt;span class="nb">echo&lt;/span> &lt;span class="nv">$img&lt;/span> &lt;span class="p">|&lt;/span> cut -c&lt;span class="k">$((&lt;/span>&lt;span class="si">${#&lt;/span>&lt;span class="nv">repo&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="m">2&lt;/span>&lt;span class="k">))&lt;/span>-&lt;span class="k">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># 输出 nginx:1.20&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$suffix&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">fi&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
- &lt;/figure>
-&lt;/div>
-&lt;ul>
-&lt;li>按多个关键词 &lt;code>或&lt;/code> 过滤。&lt;/li>
-&lt;/ul>
-
-
-
-&lt;div class="expressive-code">
- &lt;figure class="frame is-terminal not-content">
- &lt;figcaption class="header">
- &lt;span class="title">&lt;/span>
- &lt;/figcaption>
- &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;nginx&amp;#34;&lt;/span> &lt;span class="p">|&lt;/span> grep -E &lt;span class="s2">&amp;#34;nginx|tomcat&amp;#34;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;tomcat&amp;#34;&lt;/span> &lt;span class="p">|&lt;/span> grep -E &lt;span class="s2">&amp;#34;nginx|tomcat&amp;#34;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;envoy&amp;#34;&lt;/span> &lt;span class="p">|&lt;/span> grep -E &lt;span class="s2">&amp;#34;nginx|tomcat&amp;#34;&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
- &lt;/figure>
-&lt;/div>
-&lt;ul>
-&lt;li>获取当前时间，加减时区。&lt;/li>
-&lt;/ul>
-
-
-
-&lt;div class="expressive-code">
- &lt;figure class="frame is-terminal not-content">
- &lt;figcaption class="header">
- &lt;span class="title">&lt;/span>
- &lt;/figcaption>
- &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">ct&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>&lt;span class="nv">TZ&lt;/span>&lt;span class="o">=&lt;/span>UTC+8 date &lt;span class="s2">&amp;#34;+%Y%m%d%H%M&amp;#34;&lt;/span>&lt;span class="k">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
- &lt;/figure>
-&lt;/div>
-&lt;ul>
-&lt;li>检查是否以 root 用户执行。&lt;/li>
-&lt;/ul>
-
-
-
-&lt;div class="expressive-code">
- &lt;figure class="frame is-terminal not-content">
- &lt;figcaption class="header">
- &lt;span class="title">&lt;/span>
- &lt;/figcaption>
- &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># check if run as root user&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">if&lt;/span> &lt;span class="o">[[&lt;/span> &lt;span class="sb">`&lt;/span>id -u&lt;span class="sb">`&lt;/span> -ne &lt;span class="m">0&lt;/span> &lt;span class="o">]]&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">then&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;You need root privileges to run this script.&amp;#34;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">fi&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
- &lt;/figure>
-&lt;/div></description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>TL;DR on XLabs</title><link>https://www.xlabs.club/docs/tldr/</link><description>Recent content in TL;DR on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Wed, 10 Sep 2025 14:56:58 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/docs/tldr/index.xml" rel="self" type="application/rss+xml"/><item><title>Kubernetes</title><link>https://www.xlabs.club/docs/tldr/kubernetes/</link><pubDate>Thu, 07 Sep 2023 16:04:48 +0200</pubDate><guid>https://www.xlabs.club/docs/tldr/kubernetes/</guid><description>&lt;p&gt;常用 Kubernetes 命令，复制，粘贴，这就是生活。&lt;/p&gt;
+&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;复制 secret 到另一个 namespace。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;kubectl get secret mys --namespace&lt;span class="o"&gt;=&lt;/span&gt;na -oyaml &lt;span class="p"&gt;|&lt;/span&gt; grep -v &lt;span class="s1"&gt;&amp;#39;^\s*namespace:\s&amp;#39;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; kubectl apply --namespace&lt;span class="o"&gt;=&lt;/span&gt;nb -f -&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;批量删除 pod。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;kubectl get pods --all-namespaces &lt;span class="p"&gt;|&lt;/span&gt; grep Evicted &lt;span class="p"&gt;|&lt;/span&gt; awk &lt;span class="s1"&gt;&amp;#39;{print $2 &amp;#34; --namespace=&amp;#34; $1}&amp;#39;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; xargs kubectl delete pod
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Delete by label&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;kubectl delete pod -n idaas-book -l app.kubernetes.io/name&lt;span class="o"&gt;=&lt;/span&gt;idaas-book&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;原地重启 Pod。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;kubectl rollout restart deploy/xxx -n your-namespace&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;命令行快速扩缩容。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# kubectl scale -h&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;kubectl scale --replicas&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt; deploy/xxx -n your-namespace&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;密钥解密。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; kubectl get secret my-creds -n mysql -o &lt;span class="nv"&gt;jsonpath&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;{.data.ADMIN_PASSWORD}&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; base64 --decode&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;合并多个 kube config 文件。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;KUBECONFIG&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;~/.kube/config:~/.kube/anotherconfig
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;kubectl config view --flatten &amp;gt; ~/.kube/config-all
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;cp ~/.kube/config-all ~/.kube/config
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 顺手把权限改了，避免 helm 或 kubectl 客户端 warning&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;chmod &lt;span class="m"&gt;600&lt;/span&gt; ~/.kube/config&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;获取某个 namespace 下的全部资源，找出你看不见的资源，常用于 webhook/CR/CRD 等资源清理，解决强制删除失败。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;ns&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;your-namespace
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;for&lt;/span&gt; resource in &lt;span class="sb"&gt;`&lt;/span&gt;kubectl api-resources --verbs&lt;span class="o"&gt;=&lt;/span&gt;list --namespaced -o name &lt;span class="p"&gt;|&lt;/span&gt; xargs -n &lt;span class="m"&gt;1&lt;/span&gt; kubectl get -o name -n &lt;span class="nv"&gt;$ns&lt;/span&gt;&lt;span class="sb"&gt;`&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; kubectl get &lt;span class="nv"&gt;$resource&lt;/span&gt; -n &lt;span class="nv"&gt;$ns&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;# kubectl patch $resource -p &amp;#39;{&amp;#34;metadata&amp;#34;: {&amp;#34;finalizers&amp;#34;: []}}&amp;#39; --type=&amp;#39;merge&amp;#39; -n $ns;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;done&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;根据特定字段排序 Pod 列表。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 根据重启次数排序&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;kubectl get pods --sort-by&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;.status.containerStatuses[0].restartCount&amp;#39;&lt;/span&gt; -A&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;</description></item><item><title>Knife</title><link>https://www.xlabs.club/docs/tldr/knife/</link><pubDate>Sat, 09 Mar 2024 14:39:50 +0800</pubDate><guid>https://www.xlabs.club/docs/tldr/knife/</guid><description>&lt;p&gt;程序员的瑞士军刀，常用优秀命令行工具，上榜都是有理由的。&lt;/p&gt;
+&lt;h2 id="procs"&gt;procs&lt;/h2&gt;
+&lt;p&gt;比 ps 好用的工具，查看路径和端口一步到位，支持过滤。&lt;/p&gt;
+&lt;h2 id="ripgrep"&gt;ripgrep&lt;/h2&gt;
+&lt;p&gt;&lt;a href="https://github.com/BurntSushi/ripgrep" target="_blank" rel="noopener"&gt;ripgrep&lt;/a&gt;
+ 简称 rg，是一个面向行的搜索工具，Rust 编写，全平台支持，也是 VS Code 的默认搜索工具。它的搜索性能极高，在大项目中也有着出色的表现，并且默认可以忽略 .gitignore 文件中的内容，非常实用。&lt;/p&gt;
+&lt;p&gt;除了作为一个高效的命令行工具使用外，整个项目的设计也不错，另外还是一个学习 Rust 的好项目。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;rg -h&lt;/code&gt; 开启探索之旅吧。&lt;/p&gt;
+&lt;h2 id="tldr"&gt;TL;DR&lt;/h2&gt;
+&lt;p&gt;Too Long; Didn’t Read.&lt;/p&gt;
+&lt;p&gt;tldr 根据二八原则，简化了烦琐的 man 指令帮助文档，仅列出常用的该指令的使用方法，让人一看就懂，大多数情况下，给出几个指令的使用 demo 可能正是我们想要的。&lt;/p&gt;
+&lt;p&gt;举个例子看下实际运行效果，如下（太长，节选）。&lt;/p&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-console" data-lang="console"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;➜ ~ tldr docker
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="err"&gt;&lt;/span&gt;&lt;span class="go"&gt; List all docker containers (running and stopped):
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="err"&gt;&lt;/span&gt;&lt;span class="go"&gt; docker ps -a
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="err"&gt;&lt;/span&gt;&lt;span class="go"&gt; Start a container from an image, with a custom name:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="err"&gt;&lt;/span&gt;&lt;span class="go"&gt; docker run --name container_name image
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="err"&gt;&lt;/span&gt;&lt;span class="go"&gt; Start or stop an existing container:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="err"&gt;&lt;/span&gt;&lt;span class="go"&gt; docker start|stop container_name
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;a href="https://github.com/tldr-pages/tldr" target="_blank" rel="noopener"&gt;tldr&lt;/a&gt;
+ 命令行有多种实现，比如官方推荐的有 npm 和 python。&lt;/p&gt;</description></item><item><title>Shell Coding</title><link>https://www.xlabs.club/docs/tldr/shell-coding/</link><pubDate>Sat, 09 Mar 2024 11:01:01 +0800</pubDate><guid>https://www.xlabs.club/docs/tldr/shell-coding/</guid><description>&lt;p&gt;Linux Shell 日常编程实用句式速查，注意以下例子如无特殊说明都是 bash 语法。&lt;/p&gt;
+&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;选择执行环境。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="cp"&gt;#!/usr/bin/env bash
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="cp"&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;#!/usr/bin/bash&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;指定变量默认值，取环境变量，取不到用默认值。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;rep&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;ENV_YOUR_KEY&lt;/span&gt;&lt;span class="k"&gt;:-&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;my-default-value&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;获取当前执行脚本的绝对路径，注意直接用 $0 或 pwd 获取的可能都不要你想要的。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;current_dir&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;&lt;span class="nb"&gt;cd&lt;/span&gt; &lt;span class="sb"&gt;`&lt;/span&gt;dirname &lt;span class="nv"&gt;$0&lt;/span&gt;&lt;span class="sb"&gt;`&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="nb"&gt;pwd&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;为当前目录包含子目录下所有 .sh 文件增加可执行权限。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;chmod +x &lt;span class="sb"&gt;`&lt;/span&gt;find . -name &lt;span class="s1"&gt;&amp;#39;*.sh&amp;#39;&lt;/span&gt;&lt;span class="sb"&gt;`&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;通过 tee 将提示信息显示到终端，并同时写入到文件。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;log_file&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/var/log/test.log
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;This line will echo to console and also write to log file.&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; tee -a &lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;log_file&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;类似于 Java properties 中 key=value 形式的字符串，取 key 和 value 的值。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;username_line&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;username=test&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;#key is username&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;key&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;username_line&lt;/span&gt;&lt;span class="p"&gt;%=*&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;#val is test&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;val&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;username_line&lt;/span&gt;&lt;span class="p"&gt;#*=&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;实现 String trim 效果。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;#trim string by echo&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;val_trim&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; -n &lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;val&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;声明和循环数组。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;apps&lt;/span&gt;&lt;span class="o"&gt;=(&lt;/span&gt;foo bar&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;for&lt;/span&gt; app in &lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;apps&lt;/span&gt;&lt;span class="p"&gt;[@]&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;do&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$app&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;done&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;文件 ls 转数组&lt;/li&gt;
+&lt;/ul&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# ls 转数组，根据需要 grep&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;arrs&lt;/span&gt;&lt;span class="o"&gt;=(&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;ls helmfiles/apps &lt;span class="p"&gt;|&lt;/span&gt; grep -v .yaml&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;指定数组分割符，字符串转数组。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 获取当前 helm list 命令输出结果，通过换行分割成数组&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;IFS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;$&amp;#39;\n&amp;#39;&lt;/span&gt; &lt;span class="nv"&gt;helm_list&lt;/span&gt;&lt;span class="o"&gt;=(&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;helm list --no-headers&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;for&lt;/span&gt; hm in &lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;helm_list&lt;/span&gt;&lt;span class="p"&gt;[@]&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;do&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;# 对每一行进行解析按 Tab 再分割成数组&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;IFS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;$&amp;#39;\t&amp;#39;&lt;/span&gt; &lt;span class="nv"&gt;hma&lt;/span&gt;&lt;span class="o"&gt;=(&lt;/span&gt;&lt;span class="nv"&gt;$hm&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;helm upgrade --install &lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;hma&lt;/span&gt;&lt;span class="p"&gt;[0]&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt; &lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;hma&lt;/span&gt;&lt;span class="p"&gt;[0]&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt; --version &lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;hma&lt;/span&gt;&lt;span class="p"&gt;[6]&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt; --reset-values 2&amp;gt;&amp;amp;1&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;done&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;文件按内容排序。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;log&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;my-log-file
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 原地排序覆盖原文件&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sort -o &lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;log&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt; &lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;log&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;判断字符串是否以某串开头，并去除指定前缀。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;img&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;docker.io/nginx:1.20
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;repo&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;docker.io
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# if 判断字符串是否以 repo 开头&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[[&lt;/span&gt; &lt;span class="nv"&gt;$img&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="nv"&gt;$repo&lt;/span&gt;* &lt;span class="o"&gt;]]&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;# 注意这里 +2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;suffix&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="nv"&gt;$img&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; cut -c&lt;span class="k"&gt;$((&lt;/span&gt;&lt;span class="si"&gt;${#&lt;/span&gt;&lt;span class="nv"&gt;repo&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="m"&gt;2&lt;/span&gt;&lt;span class="k"&gt;))&lt;/span&gt;-&lt;span class="k"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;# 输出 nginx:1.20&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$suffix&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;fi&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;按多个关键词 &lt;code&gt;或&lt;/code&gt; 过滤。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;nginx&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; grep -E &lt;span class="s2"&gt;&amp;#34;nginx|tomcat&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;tomcat&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; grep -E &lt;span class="s2"&gt;&amp;#34;nginx|tomcat&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;envoy&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; grep -E &lt;span class="s2"&gt;&amp;#34;nginx|tomcat&amp;#34;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;获取当前时间，加减时区。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;ct&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;&lt;span class="nv"&gt;TZ&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;UTC+8 date &lt;span class="s2"&gt;&amp;#34;+%Y%m%d%H%M&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;检查是否以 root 用户执行。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# check if run as root user&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[[&lt;/span&gt; &lt;span class="sb"&gt;`&lt;/span&gt;id -u&lt;span class="sb"&gt;`&lt;/span&gt; -ne &lt;span class="m"&gt;0&lt;/span&gt; &lt;span class="o"&gt;]]&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;You need root privileges to run this script.&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;fi&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;</description></item></channel></rss>
