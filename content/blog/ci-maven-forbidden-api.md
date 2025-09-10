@@ -44,6 +44,17 @@ seo:
 12:40:30.850 [ERROR]   in com.tester.HomeController (HomeController.java:11)
 12:40:30.865 [ERROR] Scanned 13 class file(s) for forbidden API invocations (in 0.21s), 1 error(s).
 12:40:30.872 [INFO] ------------------------------------------------------------------------
+
+24784 [INFO] --- forbiddenapis:3.9:check (check-forbidden-apis) @ app-api ---
+24812 [INFO] Scanning for classes to check...
+24884 [INFO] Reading bundled API signatures: jdk-deprecated-1.8
+25016 [INFO] Reading API signatures: /usr/share/maven/conf/forbidden-apis.txt
+25017 [INFO] Loading classes to check...
+25106 [INFO] Scanning classes for violations...
+25984 [ERROR] Forbidden method invocation: java.net.URLEncoder#encode(java.lang.String) [Deprecated in Java 1.8]
+25984 [ERROR]   in com.tester.FormBody$FormBodyBuilder (FormBody.java:60)
+26110 [ERROR] Scanned 660 class file(s) for forbidden API invocations (in 1.31s), 2 error(s).
+26113 [INFO]
 ```
 
 ### Maven 核心配置
