@@ -266,8 +266,6 @@
       "hadolint",
       "install-keda",
       "jacoline",
-      "java-class-package-namespace-变更",
-      "java-package-namespace-变更",
       "java-分析工具",
       "java-参数查询工具",
       "java-进程内存分析",

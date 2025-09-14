@@ -141,7 +141,6 @@ aud 声明指定令牌的预期接收者，oauth2-proxy 期望与 --client-id �
 
 1. 登录 Keycloak admin 控制台，切换到你自己的 realm。
 2. 通过 `Clients -> Create client` （注： -> 连接代表 Keycloak 的菜单和按钮导航）来创建新客户端，核心参数如下，注：app.example.com 为我的应用地址。
-
    - Client type： OpenID Connect
    - Client ID：oauth2-proxy
    - Client authentication 勾选，打开
@@ -151,20 +150,18 @@ aud 声明指定令牌的预期接收者，oauth2-proxy 期望与 --client-id �
 
 3. 以上点保存后，从 `Clients -> oauth2-proxy -> Credentials` 页面，复制客户端密钥，下面会用到。
 4. 配置一个 `audience mapper`, 在 `Clients -> oauth2-proxy -> Client scopes`页签，此时在列表应该看到一个名字叫 `oauth2-proxy-dedicated`的，点击进去，通过 `Configure a new mapper` 按钮创建一个新的 mapper。
-
    - 类型选择 `Audience`
    - 名字叫 `aud-mapper-oauth2-proxy`
    - Included Client Audience：选择 oauth2-proxy
    - 勾选 `Add to ID token`、`Add to access token`、`Add to token introspection`
 
-    ![keycloak-client-scopes1](keycloak-client-scopes1.png)
-    ![keycloak-client-scopes2](keycloak-client-scopes2.png)
-    ![keycloak-client-scopes3](keycloak-client-scopes3.png)
-    ![keycloak-client-scopes4](keycloak-client-scopes4.png)
-    ![keycloak-client-scopes5](keycloak-client-scopes5.png)
+   ![keycloak-client-scopes1](keycloak-client-scopes1.png)
+   ![keycloak-client-scopes2](keycloak-client-scopes2.png)
+   ![keycloak-client-scopes3](keycloak-client-scopes3.png)
+   ![keycloak-client-scopes4](keycloak-client-scopes4.png)
+   ![keycloak-client-scopes5](keycloak-client-scopes5.png)
 
 5. 如果想使用 oauth2-proxy 的 `--allowed-group` 验证，需要在 `Client scopes -> Create client scope` 创建一个名字叫 `groups` 的 scope，下面参数是保持 groups 后才能使用，在 groups 的 detail -> mapper 里创建 `Group Membership` 类型的 mapper。
-
    - name：groups-mapper
    - Token Claim Name: groups
    - 勾选 `Add to xxx`，全勾上。

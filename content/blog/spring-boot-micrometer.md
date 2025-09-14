@@ -37,7 +37,6 @@ Micrometer 提供了多种度量指标类型（Timers、Guauges、Counters 等�
 Micrometer 中两个最核心的概念：计量器注册表 (MeterRegistry)，计量器 (Meter)。
 
 - MeterRegistry
-
   - 内存注册表 (SimpleMeterRegistry): 在内存中保存每一个 Meter（指标）的最新值，并且不会将数据导出到任何地方。
   - 组合注册表 (CompositeMeterRegistry): 可以添加多个注册表，用于将各个注册表组合起来，可以同时将指标发布到多个监控系统。Micrometer 提供了一个全局的 MeterRegistry，`io.micrometer.core.instrument.Metrics` 中持有一个静态 final 的 CompositeMeterRegistry 实例 globalRegistry。
   - 普罗米修斯注册表 (PrometheusMeterRegistry): 当使用普罗米修斯监控时，引入 micrometer-registry-prometheus 依赖时会提供此种收集器，用于将指标数据转换为普罗米修斯识别的格式和导出数据等功能。
@@ -45,7 +44,6 @@ Micrometer 中两个最核心的概念：计量器注册表 (MeterRegistry)，�
 - Meter（指标）
 
   监控数据的整个过程都是围绕着 Meter（指标）, 通过一个一个的 Meter（指标）数据来进行观察应用的状态。常用的指标如：
-
   - Counter（计数器）: 单一计数指标，允许按固定数量递增，用来统计无上限数据。只允许递增。
   - Gauge（仪表盘）: 表示单个的变化的值，例如温度，气压。用于统计有上限可增可减的数据。在每次取样时，Gauge 会返回当前值。
   - Timer（计时器）: 通常用来记录事件的持续时间。Timer 会记录两类的数据，事件的数量和总的持续时间。

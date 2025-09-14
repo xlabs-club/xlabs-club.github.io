@@ -32,7 +32,6 @@ seo:
 1. Backstage 插件分为 frontend 和 backend，一个完整的插件可能包含两种，也可能只包含其中一种。
 2. 开源发布的开箱即用的容器镜像，只包含基础插件，一般只用来作为初次学习使用。
 3. 如果想使用其他插件，需要做一些编码工作，一般步骤如下。
-
    - 使用 `npx @backstage/create-app@latest` 创建一个基础项目。
    - 按插件要求安装插件，配置插件菜单、UI 效果、权限、认证信息等，每个插件要求不同。
    - 按需开发自己的插件。
@@ -172,21 +171,20 @@ Backstage 我们区分认证和授权两部分，两部分可独立配置，但�
 
    ```yaml
    catalog:
-    providers:
-      keycloakOrg:
-        default:
-          baseUrl: https://<keycloak_host>
-          loginRealm: ${KEYCLOAK_REALM}
-          realm: ${KEYCLOAK_REALM}
-          # 这里的 client 就是我们上面说的 backstage client， 需要授权查询用户和组的权限
-          clientId: ${KEYCLOAK_CLIENTID}
-          clientSecret: ${KEYCLOAK_CLIENTSECRET}
-          schedule: # Optional (defaults to the configurations below if not provided); same options as in TaskScheduleDefinition
-            # supports cron, ISO duration, "human duration" as used in code
-            frequency: { minutes: 30 } # Customize this to fit your needs
-            # supports ISO duration, "human duration" as used in code
-            timeout: { minutes: 3 } # Customize this to fit your needs
-
+     providers:
+       keycloakOrg:
+         default:
+           baseUrl: https://<keycloak_host>
+           loginRealm: ${KEYCLOAK_REALM}
+           realm: ${KEYCLOAK_REALM}
+           # 这里的 client 就是我们上面说的 backstage client， 需要授权查询用户和组的权限
+           clientId: ${KEYCLOAK_CLIENTID}
+           clientSecret: ${KEYCLOAK_CLIENTSECRET}
+           schedule: # Optional (defaults to the configurations below if not provided); same options as in TaskScheduleDefinition
+             # supports cron, ISO duration, "human duration" as used in code
+             frequency: { minutes: 30 } # Customize this to fit your needs
+             # supports ISO duration, "human duration" as used in code
+             timeout: { minutes: 3 } # Customize this to fit your needs
    ```
 
 以上配置完成后，观察下 backstage 的运行日志，成功的话会有同步了多少个 user 和 group 的日志，失败的话会有失败原因，确保同步成功。
@@ -205,25 +203,25 @@ Backstage 我们区分认证和授权两部分，两部分可独立配置，但�
 
 2. 配置 backstage 后端代码，启用插件，在 `packages/backend/src/index.ts` 增加以下代码。
 
-    ```ts
-    # 增加这一行
-    backend.add(
-      import('@backstage/plugin-auth-backend-module-oauth2-proxy-provider'),
-    );
-    ```
+   ```ts
+   # 增加这一行
+   backend.add(
+     import('@backstage/plugin-auth-backend-module-oauth2-proxy-provider'),
+   );
+   ```
 
 3. 配置 oauth2Proxy 认证组件需要的参数，在 backstage 的 app-config.yaml 增加以下片段。
 
    ```yaml
-    auth:
-      # environment 必须定义，一般定义为 development 和 production，可根据自己的需要定义，后面代码中会有引用名字的地方
-      environment: development
-      providers:
-        oauth2Proxy:
-          signIn:
-            resolvers:
-              # See https://backstage.io/docs/auth/oauth2-proxy/provider#resolvers for more resolvers
-              - resolver: forwardedUserMatchingUserEntityName
+   auth:
+     # environment 必须定义，一般定义为 development 和 production，可根据自己的需要定义，后面代码中会有引用名字的地方
+     environment: development
+     providers:
+       oauth2Proxy:
+         signIn:
+           resolvers:
+             # See https://backstage.io/docs/auth/oauth2-proxy/provider#resolvers for more resolvers
+             - resolver: forwardedUserMatchingUserEntityName
    ```
 
 4. 改前端代码，修改登录页面，使用 oauth2Proxy 的登录组件，参考 [官方文档](https://backstage.io/docs/auth/#sign-in-with-proxy-providers). 在 `packages/app/src/App.tsx` 找到 `SignInPage` 修改为如下片段，当然，你可以根据自己的环境定制更多自己的登录页面。
@@ -274,32 +272,32 @@ RBAC 授权插件有前端和后端两个插件。
 
 2. 配置 backstage 后端代码，启用插件，在 `packages/backend/src/index.ts` 补充以下代码。
 
-    ```diff
-    // 删除原来的 permission plugin
-    - backend.add(import('@backstage/plugin-permission-backend/alpha'));
-    - backend.add(
-    -    import('@backstage/plugin-permission-backend-module-allow-all-policy'),
-    -  );
-    // 增加这一行
-    + backend.add(import('@backstage-community/plugin-rbac-backend'));
-    ```
+   ```diff
+   // 删除原来的 permission plugin
+   - backend.add(import('@backstage/plugin-permission-backend/alpha'));
+   - backend.add(
+   -    import('@backstage/plugin-permission-backend-module-allow-all-policy'),
+   -  );
+   // 增加这一行
+   + backend.add(import('@backstage-community/plugin-rbac-backend'));
+   ```
 
 3. 配置 RBAC 插件用户权限，在 backstage 的 app-config.yaml 增加以下片段。
 
    ```yaml
-    permission:
-      enabled: true
-      # see https://github.com/backstage/community-plugins/tree/main/workspaces/rbac/plugins/rbac-backend
-      rbac:
-        maxDepth: 1
-        admin:
-          superUsers:
-            # 这里的 “default” 是 backstage 的 namespace 的概念，没改默认是 default
-            - name: user:default/zhangsan
-            - name: user:default/mike
-          users:
-            - name: user:default/lisir
-            - name: group:default/admins
+   permission:
+     enabled: true
+     # see https://github.com/backstage/community-plugins/tree/main/workspaces/rbac/plugins/rbac-backend
+     rbac:
+       maxDepth: 1
+       admin:
+         superUsers:
+           # 这里的 “default” 是 backstage 的 namespace 的概念，没改默认是 default
+           - name: user:default/zhangsan
+           - name: user:default/mike
+         users:
+           - name: user:default/lisir
+           - name: group:default/admins
    ```
 
 再安装 frontend 前端插件，把 RBAC 管理界面放出来，基本步骤：
@@ -312,11 +310,11 @@ RBAC 授权插件有前端和后端两个插件。
 
 2. 配置 backstage 前端代码，在 `packages/app/src/App.tsx` 补充以下代码，增加 Route。
 
-    ```ts
-    import { RbacPage } from '@backstage-community/plugin-rbac';
+   ```ts
+   import { RbacPage } from '@backstage-community/plugin-rbac';
 
-    <Route path="/rbac" element={<RbacPage />} />;
-    ```
+   <Route path="/rbac" element={<RbacPage />} />;
+   ```
 
 3. 配置导航菜单，修改 `packages/app/src/components/Root/Root.tsx`。
 

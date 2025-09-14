@@ -52,45 +52,45 @@ Koupleless 增强了 SOFAArk 运维部署相关的功能，解决了 SOFAArk 在
 基于官方文档我们改造接入了几个应用，分享几个我们遇见的问题。
 
 1. 对 Java 17 或 21 的支持不好。
-    虽然官方已经声称支持 Java 17，但是若用了 Java 17 的语法或新特性，无法编译通过。最后只好自编译 SOFAArk plugin 修改相关依赖解决。
+   虽然官方已经声称支持 Java 17，但是若用了 Java 17 的语法或新特性，无法编译通过。最后只好自编译 SOFAArk plugin 修改相关依赖解决。
 
 2. 不支持 Arm 架构。
-    本地使用最新 MacBook 启动失败，健康检测组件不支持 Arm，奇怪的是官方有相关的 issue 且已经关闭，却并未升级相关依赖。
+   本地使用最新 MacBook 启动失败，健康检测组件不支持 Arm，奇怪的是官方有相关的 issue 且已经关闭，却并未升级相关依赖。
 
 3. 以下错误导致启动失败，根据原因是 classloader 依赖失败，没排除干净，Spring 必须全部由基座加载。
 
-    ```console
-    Caused by: java.lang.IllegalArgumentException: class org.springframework.cloud.bootstrap.RefreshBootstrapRegistryInitializer is not assignable to interface org.springframework.boot.BootstrapRegistryInitializer
-      at org.springframework.util.Assert.assignableCheckFailed(Assert.java:720)
-      at org.springframework.util.Assert.isAssignable(Assert.java:651)
-      at org.springframework.util.Assert.isAssignable(Assert.java:682)
-      at org.springframework.boot.SpringApplication.createSpringFactoriesInstances(SpringApplication.java:444)
-      ... 22 more
-    ```
+   ```console
+   Caused by: java.lang.IllegalArgumentException: class org.springframework.cloud.bootstrap.RefreshBootstrapRegistryInitializer is not assignable to interface org.springframework.boot.BootstrapRegistryInitializer
+     at org.springframework.util.Assert.assignableCheckFailed(Assert.java:720)
+     at org.springframework.util.Assert.isAssignable(Assert.java:651)
+     at org.springframework.util.Assert.isAssignable(Assert.java:682)
+     at org.springframework.boot.SpringApplication.createSpringFactoriesInstances(SpringApplication.java:444)
+     ... 22 more
+   ```
 
 4. Dubbo service 实例化失败，根据原因是 classloader 依赖失败，dubbo 由基座加载，相应的 api interface、model 也必须由基座加载。Bean 的实例化和调用可以是 biz 模块。
 
-    ```console
-    Caused by: java.lang.IllegalArgumentException: interface com.api.service.EditionService is not visible from class loader
-      at com.alibaba.dubbo.common.bytecode.Proxy.getProxy(Proxy.java:98)
-      at com.alibaba.dubbo.common.bytecode.Proxy.getProxy(Proxy.java:67)
-      at com.alibaba.dubbo.rpc.proxy.javassist.JavassistProxyFactory.getProxy(JavassistProxyFactory.java:35)
-      at com.alibaba.dubbo.rpc.proxy.AbstractProxyFactory.getProxy(AbstractProxyFactory.java:49)
-      at com.alibaba.dubbo.rpc.proxy.wrapper.StubProxyFactoryWrapper.getProxy(StubProxyFactoryWrapper.java:60)
-      at com.alibaba.dubbo.rpc.ProxyFactory$Adpative.getProxy(ProxyFactory$Adpative.java)
-    ```
+   ```console
+   Caused by: java.lang.IllegalArgumentException: interface com.api.service.EditionService is not visible from class loader
+     at com.alibaba.dubbo.common.bytecode.Proxy.getProxy(Proxy.java:98)
+     at com.alibaba.dubbo.common.bytecode.Proxy.getProxy(Proxy.java:67)
+     at com.alibaba.dubbo.rpc.proxy.javassist.JavassistProxyFactory.getProxy(JavassistProxyFactory.java:35)
+     at com.alibaba.dubbo.rpc.proxy.AbstractProxyFactory.getProxy(AbstractProxyFactory.java:49)
+     at com.alibaba.dubbo.rpc.proxy.wrapper.StubProxyFactoryWrapper.getProxy(StubProxyFactoryWrapper.java:60)
+     at com.alibaba.dubbo.rpc.ProxyFactory$Adpative.getProxy(ProxyFactory$Adpative.java)
+   ```
 
 5. Biz 模块某些 ClassNotFoundException，排除的太多了，excludeGroupIds=org.apache 把 apache 全部交给基座了，但是基座并没有 http-client。依赖包管理是一个严格的事情，多了也不行，少了也不行，有些是启动报错，有些是运行期报错。
 
-    ```console
-    Caused by: java.lang.IllegalStateException: Failed to introspect Class [org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientConfigurations$RestClientBuilderConfiguration]
-      Caused by: java.lang.ClassNotFoundException: org.apache.http.impl.nio.client.HttpAsyncClientBuilder
-        at java.base/java.net.URLClassLoader.findClass(URLClassLoader.java:445)
-        at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:593)
-        at org.springframework.boot.loader.LaunchedURLClassLoader.loadClass(LaunchedURLClassLoader.java:151)
-        at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
-        ... 52 more
-    ```
+   ```console
+   Caused by: java.lang.IllegalStateException: Failed to introspect Class [org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientConfigurations$RestClientBuilderConfiguration]
+     Caused by: java.lang.ClassNotFoundException: org.apache.http.impl.nio.client.HttpAsyncClientBuilder
+       at java.base/java.net.URLClassLoader.findClass(URLClassLoader.java:445)
+       at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:593)
+       at org.springframework.boot.loader.LaunchedURLClassLoader.loadClass(LaunchedURLClassLoader.java:151)
+       at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+       ... 52 more
+   ```
 
 6. Spring Boot AutoConfiguration 问题，可能有以下几种场景，但是排除 AutoConfiguration 后，本地 IDEA 启动联调必须依赖基座。
    - 基座只是加载 jar class，模块负责实例化 Bean，基座需要排除 AutoConfiguration。
@@ -111,7 +111,7 @@ Koupleless 增强了 SOFAArk 运维部署相关的功能，解决了 SOFAArk 在
 挑战：
 
 1. 文档不友好，功能还处于 Beta 版本，不管是 Koupleless 还是 SOFAArk。如果想真正跑起来，需要仔细去看源码和源码解析的博客，而博客很多已经过时了会把你带进坑去。当然如何能获得官方团队支持，就另说了。
-2. 关于基座和 Biz 模块 static 变量的问题，你想共享的时候，是好东西，你不想共享的时候，就需要搞明白这个变量共享了吗，谁加载的，影响范围是哪些，如何做到不共享。目前没想到如何评估 static 的影响范围，只能 case by  case 翻源码。
+2. 关于基座和 Biz 模块 static 变量的问题，你想共享的时候，是好东西，你不想共享的时候，就需要搞明白这个变量共享了吗，谁加载的，影响范围是哪些，如何做到不共享。目前没想到如何评估 static 的影响范围，只能 case by case 翻源码。
 3. 基座和 Biz 模块磨合，哪些 jar 交给基座，哪些 Bean 交给基座，都需要有严格的限制，既不能多也不能少，否则可能启动失败，可能运行期失败。花费大量的时候维护 pom.xml，需要有人很熟悉 pom 依赖。
 4. classloader 模型变更，任何有自定义 classloader 的地方都需要重新评估，可能需要变更代码。
 

@@ -128,35 +128,35 @@ forbiddenapis 插件默认已经内置了一些规则 signatures，参考：[bun
 
 主要默认规则：
 
-- `jdk-unsafe-*`: Signatures of "unsafe" methods that use default charset, default locale, or default timezone. For server applications it is very stupid to call those methods, as the results will definitely not what the user wants (for Java* = 1.7, 1.8, 9,..., 24; Ant / Maven / Gradle automatically add the compile Java version).
-- `jdk-deprecated-*`: This disallows all deprecated methods from the JDK (for Java*= 1.7, 1.8, 9,..., 24; Ant / Maven / Gradle automatically add the compile Java version).
-- `jdk-internal-*`: Lists all internal packages of the JDK as of Security.getProperty("package.access"). Calling those methods will always trigger security manager and is completely forbidden from Java 9 on (for Java*= 1.7, 1.8, 9,..., 24; Ant / Maven / Gradle automatically add the compile Java version, since forbiddenapis v2.1).
+- `jdk-unsafe-*`: Signatures of "unsafe" methods that use default charset, default locale, or default timezone. For server applications it is very stupid to call those methods, as the results will definitely not what the user wants (for Java\* = 1.7, 1.8, 9,..., 24; Ant / Maven / Gradle automatically add the compile Java version).
+- `jdk-deprecated-*`: This disallows all deprecated methods from the JDK (for Java\*= 1.7, 1.8, 9,..., 24; Ant / Maven / Gradle automatically add the compile Java version).
+- `jdk-internal-*`: Lists all internal packages of the JDK as of Security.getProperty("package.access"). Calling those methods will always trigger security manager and is completely forbidden from Java 9 on (for Java\*= 1.7, 1.8, 9,..., 24; Ant / Maven / Gradle automatically add the compile Java version, since forbiddenapis v2.1).
 - `jdk-non-portable`: Signatures of all non-portable (like com.sun.management.HotSpotDiagnosticMXBean) or internal runtime APIs (like sun.misc.Unsafe). This is a superset of jdk-internal.
-    Internally this is implemented using heuristics: Any reference to an API that is part of the Java runtime (rt.jar, extensions, Java 9+ java.*/ jdk.* core modules) and is not part of the Java SE specification packages (mainly java, javax, but also org.ietf.jgss, org.omg, org.w3c.dom, and org.xml.sax) is forbidden (any java version, no specific JDK version, since forbiddenapis v2.1).
+  Internally this is implemented using heuristics: Any reference to an API that is part of the Java runtime (rt.jar, extensions, Java 9+ java._/ jdk._ core modules) and is not part of the Java SE specification packages (mainly java, javax, but also org.ietf.jgss, org.omg, org.w3c.dom, and org.xml.sax) is forbidden (any java version, no specific JDK version, since forbiddenapis v2.1).
 - `jdk-system-out`: On server-side applications or libraries used by other programs, printing to System.out or System.err is discouraged and should be avoided (any java version, no specific JDK version).
 - `jdk-reflection`: Reflection usage to work around access flags fails with SecurityManagers and likely will not work anymore on runtime classes in Java 9 or later (any java version, no specific JDK version, since forbiddenapis v2.1).
-- `commons-io-unsafe-*`: If your application uses the famous Apache Common-IO library, this adds signatures of all methods that depend on default charset (for versions* = 1.0, 1.1, 1.2, 1.3, 1.4, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8.0, 2.9.0, 2.10.0, 2.11.0, 2.12.0, 2.13.0, 2.14.0, 2.15.0, 2.15.1, 2.16.0, 2.16.1, 2.17.0, 2.18.0).
+- `commons-io-unsafe-*`: If your application uses the famous Apache Common-IO library, this adds signatures of all methods that depend on default charset (for versions\* = 1.0, 1.1, 1.2, 1.3, 1.4, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8.0, 2.9.0, 2.10.0, 2.11.0, 2.12.0, 2.13.0, 2.14.0, 2.15.0, 2.15.1, 2.16.0, 2.16.1, 2.17.0, 2.18.0).
 
 通过 txt 文件自定义规则，规则语法：[signatures-syntax](https://jenkins.thetaphi.de/job/Forbidden-APIs/javadoc/signatures-syntax.html)。
 
 - Class reference: A binary/fully-qualified class name (including package). You may use the output of Class.getName(). Be sure to use correct name for inner classes! Example: `java.lang.String`
 - A package/class glob pattern: To forbid all classes from a package, you may use glob patterns, like `sun.misc.**`(`**` matches against package boundaries).
 - A field of a class: package.Class#fieldName
-- A method signature: It consists of a binary class name, followed by # and a method name including method parameters: java.lang.String#concat(java.lang.String) – All method parameters need to use fully qualified class names! Instead of method parameters, the special wildcard string ** may be used to add all variants of a method, regardless of their parameter types. To refer to instance constructors, use the method name `<init>`, e.g. `java.lang.Integer#<init>(int)`.
+- A method signature: It consists of a binary class name, followed by # and a method name including method parameters: java.lang.String#concat(java.lang.String) – All method parameters need to use fully qualified class names! Instead of method parameters, the special wildcard string \*\* may be used to add all variants of a method, regardless of their parameter types. To refer to instance constructors, use the method name `<init>`, e.g. `java.lang.Integer#<init>(int)`.
 
 The error message displayed when the signature matches can be given at the end of each signature line using "@" as separator:
 
-  ```console
-  java.lang.String @ You are crazy that you disallow strings
-  ```
+```console
+java.lang.String @ You are crazy that you disallow strings
+```
 
 To not repeat the same message after each signature, you can prepend signatures with a default message. Use a line starting with "@defaultMessage".
 
-  ```console
-  @defaultMessage You are crazy that you disallow substrings
-  java.lang.String#substring(int)
-  java.lang.String#substring(int,int)
-  ```
+```console
+@defaultMessage You are crazy that you disallow substrings
+java.lang.String#substring(int)
+java.lang.String#substring(int,int)
+```
 
 这里着重需要注意：
 

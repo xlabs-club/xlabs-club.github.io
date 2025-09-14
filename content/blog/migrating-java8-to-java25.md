@@ -147,178 +147,178 @@ emt4j 是 Eclipse 推出的一个静态分析工具，下面会详细介绍用�
 
 1. 利用 Maven 的 `profile` 机制，根据 JDK 版本号，自动激活不同的配置。
 
-    ```xml
-    <profiles>
-      <!-- 以下配置抄自地瓜哥博客，感谢地瓜哥    -->
-      <profile>
-        <id>Java1.8</id>
-        <activation>
-          <!-- 在 JDK 1.8 时自动激活-->
-          <jdk>1.8</jdk>
-        </activation>
-        <properties>
-          <spring.version>5.3.33</spring.version>
-        </properties>
-        <!-- 在父 POM 中使用 dependencyManagement 生命 -->
-        <!-- 在需要的子模块中可以直接使用 -->
-        <dependencyManagement>
-          <dependencies>
-            <dependency>
-              <groupId>javax.servlet</groupId>
-              <artifactId>javax.servlet-api</artifactId>
-              <version>4.0.1</version>
-              <scope>provided</scope>
-            </dependency>
-          </dependencies>
-        </dependencyManagement>
-        <build>
-          <plugins>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-surefire-plugin</artifactId>
-              <version>3.2.5</version>
-              <configuration>
-                <includes>
-                  <include>**/*Test.java</include>
-                </includes>
-              </configuration>
-            </plugin>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-compiler-plugin</artifactId>
-              <version>3.13.0</version>
-              <configuration>
-                <showWarnings>true</showWarnings>
-                <fork>true</fork>
-              </configuration>
-            </plugin>
-          </plugins>
-        </build>
-      </profile>
+   ```xml
+   <profiles>
+     <!-- 以下配置抄自地瓜哥博客，感谢地瓜哥    -->
+     <profile>
+       <id>Java1.8</id>
+       <activation>
+         <!-- 在 JDK 1.8 时自动激活-->
+         <jdk>1.8</jdk>
+       </activation>
+       <properties>
+         <spring.version>5.3.33</spring.version>
+       </properties>
+       <!-- 在父 POM 中使用 dependencyManagement 生命 -->
+       <!-- 在需要的子模块中可以直接使用 -->
+       <dependencyManagement>
+         <dependencies>
+           <dependency>
+             <groupId>javax.servlet</groupId>
+             <artifactId>javax.servlet-api</artifactId>
+             <version>4.0.1</version>
+             <scope>provided</scope>
+           </dependency>
+         </dependencies>
+       </dependencyManagement>
+       <build>
+         <plugins>
+           <plugin>
+             <groupId>org.apache.maven.plugins</groupId>
+             <artifactId>maven-surefire-plugin</artifactId>
+             <version>3.2.5</version>
+             <configuration>
+               <includes>
+                 <include>**/*Test.java</include>
+               </includes>
+             </configuration>
+           </plugin>
+           <plugin>
+             <groupId>org.apache.maven.plugins</groupId>
+             <artifactId>maven-compiler-plugin</artifactId>
+             <version>3.13.0</version>
+             <configuration>
+               <showWarnings>true</showWarnings>
+               <fork>true</fork>
+             </configuration>
+           </plugin>
+         </plugins>
+       </build>
+     </profile>
 
-      <profile>
-        <id>Java21</id>
-        <activation>
-          <!-- 在 Java 21 以上激活        -->
-          <jdk>[21,)</jdk>
-        </activation>
-        <properties>
-          <spring.version>6.0.19</spring.version>
-        </properties>
-        <!-- 在父 POM 中使用 dependencyManagement 生命 -->
-        <!-- 在需要的子模块中可以直接使用 -->
-        <dependencyManagement>
-          <dependencies>
-            <dependency>
-              <groupId>jakarta.servlet</groupId>
-              <artifactId>jakarta.servlet-api</artifactId>
-              <version>6.0.0</version>
-              <scope>provided</scope>
-            </dependency>
-            <dependency>
-              <groupId>org.openjdk.nashorn</groupId>
-              <artifactId>nashorn-core</artifactId>
-              <version>15.4</version>
-            </dependency>
-            <dependency>
-              <groupId>org.glassfish.jaxb</groupId>
-              <artifactId>jaxb-runtime</artifactId>
-              <version>2.3.9</version>
-            </dependency>
-          </dependencies>
-        </dependencyManagement>
-        <dependencies>
-          <dependency>
-            <groupId>javax.annotation</groupId>
-            <artifactId>javax.annotation-api</artifactId>
-            <version>1.3.2</version>
-          </dependency>
-        </dependencies>
-        <build>
-          <plugins>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-surefire-plugin</artifactId>
-              <version>3.2.5</version>
-              <configuration>
-                <includes>
-                  <include>**/*Test.java</include>
-                </includes>
-                <argLine>
-                  --add-opens java.base/java.lang=ALL-UNNAMED
-                  --add-opens java.base/java.util=ALL-UNNAMED
-                  --add-opens java.base/java.math=ALL-UNNAMED
-                  --add-opens java.base/java.time=ALL-UNNAMED
-                </argLine>
-              </configuration>
-            </plugin>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-compiler-plugin</artifactId>
-              <configuration>
-                <showWarnings>true</showWarnings>
-                <fork>true</fork>
-                <compilerArgs>
-                  <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
-                </compilerArgs>
-              </configuration>
-            </plugin>
-          </plugins>
-        </build>
-      </profile>
-    </profiles>
+     <profile>
+       <id>Java21</id>
+       <activation>
+         <!-- 在 Java 21 以上激活        -->
+         <jdk>[21,)</jdk>
+       </activation>
+       <properties>
+         <spring.version>6.0.19</spring.version>
+       </properties>
+       <!-- 在父 POM 中使用 dependencyManagement 生命 -->
+       <!-- 在需要的子模块中可以直接使用 -->
+       <dependencyManagement>
+         <dependencies>
+           <dependency>
+             <groupId>jakarta.servlet</groupId>
+             <artifactId>jakarta.servlet-api</artifactId>
+             <version>6.0.0</version>
+             <scope>provided</scope>
+           </dependency>
+           <dependency>
+             <groupId>org.openjdk.nashorn</groupId>
+             <artifactId>nashorn-core</artifactId>
+             <version>15.4</version>
+           </dependency>
+           <dependency>
+             <groupId>org.glassfish.jaxb</groupId>
+             <artifactId>jaxb-runtime</artifactId>
+             <version>2.3.9</version>
+           </dependency>
+         </dependencies>
+       </dependencyManagement>
+       <dependencies>
+         <dependency>
+           <groupId>javax.annotation</groupId>
+           <artifactId>javax.annotation-api</artifactId>
+           <version>1.3.2</version>
+         </dependency>
+       </dependencies>
+       <build>
+         <plugins>
+           <plugin>
+             <groupId>org.apache.maven.plugins</groupId>
+             <artifactId>maven-surefire-plugin</artifactId>
+             <version>3.2.5</version>
+             <configuration>
+               <includes>
+                 <include>**/*Test.java</include>
+               </includes>
+               <argLine>
+                 --add-opens java.base/java.lang=ALL-UNNAMED
+                 --add-opens java.base/java.util=ALL-UNNAMED
+                 --add-opens java.base/java.math=ALL-UNNAMED
+                 --add-opens java.base/java.time=ALL-UNNAMED
+               </argLine>
+             </configuration>
+           </plugin>
+           <plugin>
+             <groupId>org.apache.maven.plugins</groupId>
+             <artifactId>maven-compiler-plugin</artifactId>
+             <configuration>
+               <showWarnings>true</showWarnings>
+               <fork>true</fork>
+               <compilerArgs>
+                 <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
+               </compilerArgs>
+             </configuration>
+           </plugin>
+         </plugins>
+       </build>
+     </profile>
+   </profiles>
 
-    ```
+   ```
 
 2. Java 模块化兼容。
 
-    你一定见过这种错误。
+   你一定见过这种错误。
 
-    ```console
-    Caused by: java.lang.reflect.InaccessibleObjectException: Unable to make field protected int[] java.util.Calendar.fields accessible: module java.base does not "opens java.util" to unnamed module @21282ed8
-    ```
+   ```console
+   Caused by: java.lang.reflect.InaccessibleObjectException: Unable to make field protected int[] java.util.Calendar.fields accessible: module java.base does not "opens java.util" to unnamed module @21282ed8
+   ```
 
-    也一定知道怎么解决了，将没开放的模块强制对外开放，有两个参数选项：
-    --add-exports 导出包，意味着其中的所有公共类型和成员都可以在编译和运行时访问。
-    --add-opens 打开包，意味着其中的所有类型和成员（不仅是公共类型）都可以在运行时访问。
+   也一定知道怎么解决了，将没开放的模块强制对外开放，有两个参数选项：
+   --add-exports 导出包，意味着其中的所有公共类型和成员都可以在编译和运行时访问。
+   --add-opens 打开包，意味着其中的所有类型和成员（不仅是公共类型）都可以在运行时访问。
 
-    两者的区别在于 --add-opens 开放的更加彻底，不仅 public 类型、变量及方法可以访问，就连非 public 元素，也可以通过调用 setAccessible(true) 后也可以访问。简单起见，直接使用 --add-opens 即可。
+   两者的区别在于 --add-opens 开放的更加彻底，不仅 public 类型、变量及方法可以访问，就连非 public 元素，也可以通过调用 setAccessible(true) 后也可以访问。简单起见，直接使用 --add-opens 即可。
 
-    使用 Maven 命令时，配置 maven-surefire-plugin 插件，参考如下：
+   使用 Maven 命令时，配置 maven-surefire-plugin 插件，参考如下：
 
-    ```xml
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <argLine>
-          --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
-          --add-opens=java.base/java.math=ALL-UNNAMED
-          </argLine>
-        </configuration>
-      </plugin>
-    ```
+   ```xml
+     <plugin>
+       <groupId>org.apache.maven.plugins</groupId>
+       <artifactId>maven-surefire-plugin</artifactId>
+       <configuration>
+         <argLine>
+         --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+         --add-opens=java.base/java.math=ALL-UNNAMED
+         </argLine>
+       </configuration>
+     </plugin>
+   ```
 
-    在 IntelliJ IDEA 运行程序如果报错，可以通过在 “VM Option” 配置项中，增加 Java 模块化 `--add-opens` 相关启动参数即可正常启动。
+   在 IntelliJ IDEA 运行程序如果报错，可以通过在 “VM Option” 配置项中，增加 Java 模块化 `--add-opens` 相关启动参数即可正常启动。
 
-    完整 `add-opens` 列表。
+   完整 `add-opens` 列表。
 
-    ```sh
-    --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
-    --add-opens=java.base/java.lang=ALL-UNNAMED
-    --add-opens=java.base/java.io=ALL-UNNAMED
-    --add-opens=java.base/java.util=ALL-UNNAMED
-    --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
-    --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
-    --add-opens=java.base/java.math=ALL-UNNAMED
-    --add-opens=java.base/java.net=ALL-UNNAMED
-    --add-opens=java.base/java.nio=ALL-UNNAMED
-    --add-opens=java.base/java.security=ALL-UNNAMED
-    --add-opens=java.base/java.text=ALL-UNNAMED
-    --add-opens=java.base/java.time=ALL-UNNAMED
-    --add-opens=java.base/jdk.internal.access=ALL-UNNAMED
-    --add-opens=java.base/jdk.internal.misc=ALL-UNNAMED
-    ```
+   ```sh
+   --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+   --add-opens=java.base/java.lang=ALL-UNNAMED
+   --add-opens=java.base/java.io=ALL-UNNAMED
+   --add-opens=java.base/java.util=ALL-UNNAMED
+   --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+   --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+   --add-opens=java.base/java.math=ALL-UNNAMED
+   --add-opens=java.base/java.net=ALL-UNNAMED
+   --add-opens=java.base/java.nio=ALL-UNNAMED
+   --add-opens=java.base/java.security=ALL-UNNAMED
+   --add-opens=java.base/java.text=ALL-UNNAMED
+   --add-opens=java.base/java.time=ALL-UNNAMED
+   --add-opens=java.base/jdk.internal.access=ALL-UNNAMED
+   --add-opens=java.base/jdk.internal.misc=ALL-UNNAMED
+   ```
 
 ## 辅助迁移工具
 
@@ -513,36 +513,36 @@ Java 参数太多，到 [VM Options Explorer - Corretto JDK21](https://chriswhoc
 
 - Microsoft transition from java 8 to java 11
 
-    <https://learn.microsoft.com/en-us/java/openjdk/transition-from-java-8-to-java-11>
+  <https://learn.microsoft.com/en-us/java/openjdk/transition-from-java-8-to-java-11>
 
 - Java Dependency Analysis Tool
 
-   <https://wiki.openjdk.org/display/JDK8/Java+Dependency+Analysis+Tool>
+  <https://wiki.openjdk.org/display/JDK8/Java+Dependency+Analysis+Tool>
 
 - 什么是多版本 Jar（Multi Release Jar）
 
-   <https://docs.oracle.com/en/java/javase/11/docs/specs/jar/jar.html#multi-release-jar-files>
+  <https://docs.oracle.com/en/java/javase/11/docs/specs/jar/jar.html#multi-release-jar-files>
 
 - Java G1 重要参数设置参考
 
-   <https://gceasy.io/gc-recommendations/important-g1-gc-arguments.jsp>
+  <https://gceasy.io/gc-recommendations/important-g1-gc-arguments.jsp>
 
 - 地瓜哥 JVM GC 性能测试（三）：真实流量
 
-   <https://www.diguage.com/post/gc-performance-real-qps/>
+  <https://www.diguage.com/post/gc-performance-real-qps/>
 
 - 地瓜哥 OpenJDK 21 升级指南
 
-   <https://www.diguage.com/post/upgrade-to-openjdk21/>
+  <https://www.diguage.com/post/upgrade-to-openjdk21/>
 
 - jdeprscan can not find class 解决办法
 
-   <https://stackoverflow.com/questions/49525496/jdeprscan-throws-cannot-find-class-error/>
+  <https://stackoverflow.com/questions/49525496/jdeprscan-throws-cannot-find-class-error/>
 
 - 从 Java 8 升级到 Java 17 踩坑全过程
 
-   <https://cloud.tencent.com/developer/article/2257886>
+  <https://cloud.tencent.com/developer/article/2257886>
 
 - 阿里云开发者社区 Java 升级总结
 
-   <https://www.zhihu.com/tardis/zm/art/585377119?source_id=1003>
+  <https://www.zhihu.com/tardis/zm/art/585377119?source_id=1003>

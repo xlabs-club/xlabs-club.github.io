@@ -27,13 +27,13 @@ seo:
 
 1. 使用官方镜像作为基础镜像。官方镜像经过了充分验证并集成了最佳实践。
 
-    ```dockerfile
-    # 正例：
-        FROM node
-    # 反例：
-        FROM ubuntu
-        RUN apt-get install -y node
-    ```
+   ```dockerfile
+   # 正例：
+       FROM node
+   # 反例：
+       FROM ubuntu
+       RUN apt-get install -y node
+   ```
 
 2. 保持尽可能小的镜像大小，绝不安装无关依赖。
 3. 严格的版本化管理，使用确定性的标签，基础镜像禁用 latest。
