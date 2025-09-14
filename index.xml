@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>卫星实验室 on XLabs</title><link>https://www.xlabs.club/</link><description>Recent content in 卫星实验室 on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Wed, 10 Sep 2025 17:29:08 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/index.xml" rel="self" type="application/rss+xml"/><item><title>Introduction</title><link>https://www.xlabs.club/docs/cloud/introduction/</link><pubDate>Thu, 07 Sep 2023 16:04:48 +0200</pubDate><guid>https://www.xlabs.club/docs/cloud/introduction/</guid><description>&lt;p&gt;云原生技术探索。&lt;/p&gt;</description></item><item><title>Introduction</title><link>https://www.xlabs.club/docs/guides/introduction/</link><pubDate>Thu, 07 Sep 2023 16:04:48 +0200</pubDate><guid>https://www.xlabs.club/docs/guides/introduction/</guid><description>&lt;p&gt;卫星实验室，一个专注于技术创新的开源组织。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>卫星实验室 on XLabs</title><link>https://www.xlabs.club/</link><description>Recent content in 卫星实验室 on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Sun, 14 Sep 2025 15:47:07 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/index.xml" rel="self" type="application/rss+xml"/><item><title>Introduction</title><link>https://www.xlabs.club/docs/cloud/introduction/</link><pubDate>Thu, 07 Sep 2023 16:04:48 +0200</pubDate><guid>https://www.xlabs.club/docs/cloud/introduction/</guid><description>&lt;p&gt;云原生技术探索。&lt;/p&gt;</description></item><item><title>Introduction</title><link>https://www.xlabs.club/docs/guides/introduction/</link><pubDate>Thu, 07 Sep 2023 16:04:48 +0200</pubDate><guid>https://www.xlabs.club/docs/guides/introduction/</guid><description>&lt;p&gt;卫星实验室，一个专注于技术创新的开源组织。&lt;/p&gt;
 &lt;p&gt;此项目为卫星实验室主页 &lt;a href="https://www.xlabs.club" target="_blank" rel="noopener"&gt;xlabs.club&lt;/a&gt;
  的源码，在这里将分享我们的平台工程实践经验，介绍如何以技术驱动业务长期发展和高速增长。&lt;/p&gt;
 &lt;p&gt;欢迎提交 PR 进行开源共建。&lt;/p&gt;
@@ -288,7 +288,10 @@ C4Context
  &lt;/tr&gt;
  &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;以下为 OAuth2 Proxy 和 Pomerium 的简单对比。&lt;/p&gt;</description></item><item><title>CI: Maven 如何在编译时禁止调用某些特定 API</title><link>https://www.xlabs.club/blog/ci-maven-forbidden-api/</link><pubDate>Tue, 09 Sep 2025 22:18:59 +0800</pubDate><guid>https://www.xlabs.club/blog/ci-maven-forbidden-api/</guid><description>&lt;p&gt;在日常开发中，我们经常遇到类似如下需求：&lt;/p&gt;
+&lt;p&gt;以下为 OAuth2 Proxy 和 Pomerium 的简单对比。&lt;/p&gt;</description></item><item><title>Javax 和 Jakarta 过渡期兼容方案</title><link>https://www.xlabs.club/blog/javax-jakarta-compatibility/</link><pubDate>Sun, 14 Sep 2025 14:33:23 +0800</pubDate><guid>https://www.xlabs.club/blog/javax-jakarta-compatibility/</guid><description>&lt;h2 id="什么是-jakarta-ee为什么要切换"&gt;什么是 Jakarta EE，为什么要切换&lt;/h2&gt;
+&lt;p&gt;Jakarta EE 就是 Java EE 的新名词。这里的 EE 全称是 Enterprise Edition，它是专门为企业级 Java 应用定义的一套规范，与 Java SE (Java Platform, Standard Edition) 相对应。&lt;/p&gt;
+&lt;p&gt;Java EE 是从 Java 1.2 版本开始推出的 Java 企业级开发平台，最初的名称是 J2EE (Java 2 Platform, Enterprise Edition)。随着 Java 的发展，它的名称于 Java 1.5 版本时更改为 Java EE (Java Platform, Enterprise Edition)。2009 年 Oracle 收购了 Sun，Java EE 开始由 Oracle 通过 JCP (Java Community Process) 开发和维护。&lt;/p&gt;
+&lt;p&gt;直到 2017 年，Oracle 将 Java EE 提交给了 Eclipse 基金会，并命名为 Eclipse Enterprise for Java。然而，&lt;strong&gt;由于&amp;quot;Java&amp;quot;这个名字的商标归 Oracle 所有，Eclipse 基金会无法继续使用 &lt;code&gt;javax.*&lt;/code&gt; 和 &lt;code&gt;java.*&lt;/code&gt;，因此，项目名称改为 Jakarta EE&lt;/strong&gt;。&lt;/p&gt;</description></item><item><title>CI: Maven 如何在编译时禁止调用某些特定 API</title><link>https://www.xlabs.club/blog/ci-maven-forbidden-api/</link><pubDate>Tue, 09 Sep 2025 22:18:59 +0800</pubDate><guid>https://www.xlabs.club/blog/ci-maven-forbidden-api/</guid><description>&lt;p&gt;在日常开发中，我们经常遇到类似如下需求：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;项目组提供了 SDK，某个 API 已经被标记为废弃，但是大家迟迟不升级，项目组还需要花费时间维护已经废弃的 API。&lt;/li&gt;
 &lt;li&gt;有些项目在使用 JDK 已经废弃的 API，这些废弃 API 在更高版本 JDK 中已经删除，导致推动升级 JDK 比较困难。&lt;/li&gt;
@@ -421,20 +424,4 @@ C4Context
 &lt;li&gt;
 &lt;p&gt;&lt;a href="https://oauth2-proxy.github.io/oauth2-proxy/" target="_blank" rel="noopener"&gt;oauth2-proxy&lt;/a&gt;
 &lt;/p&gt;
-&lt;p&gt;顾名思义它是一个关于 oauth 反向代理，主要用来为后端服务增加身份验证层。它支持多种 OAuth 2.0 提供者（如 Google、OIDC、Keycloak 等），可以保护未提供身份验证的应用。oauth2-proxy 在请求进入后端服务之前，会先进行 OAuth 2.0 登录认证，确保请求者具有访问权限。它承担了登录的合法性校验、重定向、登录成功后的 cookie、response 设置等功能。&lt;/p&gt;</description></item><item><title>卫星实验室友情链接</title><link>https://www.xlabs.club/blog/xlabs-link-exchange/</link><pubDate>Thu, 26 Sep 2024 09:27:42 +0800</pubDate><guid>https://www.xlabs.club/blog/xlabs-link-exchange/</guid><description>&lt;p&gt;在建设本博客的过程中，发现了一些优秀的开发工具、有趣原创的独立博客，以及独立发布的良心开源产品，我觉得有必要把他们展示出来。&lt;/p&gt;
-&lt;p&gt;如有侵权，请提 issue，如有推荐，请到我们的 &lt;a href="https://github.com/xlabs-club/xlabs-club.github.io" target="_blank" rel="noopener"&gt;GitHub&lt;/a&gt;
- 仓库提交 pull requests。&lt;/p&gt;
-&lt;h2 id="在线工具"&gt;在线工具&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;IT Tools，研发人员常用 JSON/时间戳/数学/加密 等等各种在线生成和转换工具：&lt;a href="https://it-tools.tech" target="_blank" rel="noopener"&gt;https://it-tools.tech&lt;/a&gt;
-。&lt;/li&gt;
-&lt;li&gt;Web Tools，JWT/JSON/URL/Base64 等编解码工具，简洁：&lt;a href="https://www.jstoolset.com" target="_blank" rel="noopener"&gt;https://www.jstoolset.com&lt;/a&gt;
-。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id="独立博客"&gt;独立博客&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;地瓜哥，分享技术带来的喜悦：&lt;a href="https://www.diguage.com" target="_blank" rel="noopener"&gt;https://www.diguage.com&lt;/a&gt;
-。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id="独立产品"&gt;独立产品&lt;/h2&gt;
-&lt;p&gt;Coming Soon&amp;hellip;&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;顾名思义它是一个关于 oauth 反向代理，主要用来为后端服务增加身份验证层。它支持多种 OAuth 2.0 提供者（如 Google、OIDC、Keycloak 等），可以保护未提供身份验证的应用。oauth2-proxy 在请求进入后端服务之前，会先进行 OAuth 2.0 登录认证，确保请求者具有访问权限。它承担了登录的合法性校验、重定向、登录成功后的 cookie、response 设置等功能。&lt;/p&gt;</description></item></channel></rss>
