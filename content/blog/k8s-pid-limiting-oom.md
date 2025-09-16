@@ -32,9 +32,19 @@ Exception in thread "slow-fetch-15" java.lang.OutOfMemoryError: unable to create
 
 一开始怀疑是内存不足，调大了内存，同时也缩小了 Java 的 `xss`，都不起作用。
 
-真实原因： K8S 容器限制了 PID 数，无法创建新的线程，在 Pod 内 `cat /sys/fs/cgroup/pids/pids.max` 发现是 1024。
+真实原因： K8S 容器限制了 PID 数，无法创建新的线程。关于 K8S PID limit， 可参考此资料：<https://kubernetes.io/zh-cn/docs/concepts/policy/pid-limiting/>.
 
-关于 K8S pid limit， 可参考此资料：<https://kubernetes.io/zh-cn/docs/concepts/policy/pid-limiting/>.
+在 Pod 内查看当前 PID 限制方式：
+
+```bash
+# cgroup v1 版本，查看最大值和当前值
+cat /sys/fs/cgroup/pids/pids.max
+cat /sys/fs/cgroup/pids/pids.current
+# cgroup v2 版本
+cat /sys/fs/cgroup/$(cat /proc/self/cgroup | grep -o '[^:]*$')/pids.max
+cat /sys/fs/cgroup/$(cat /proc/self/cgroup | grep -o '[^:]*$')/pids.current
+
+```
 
 但是，PID 为什么会超呢，Pod 内只有一个 Java 进程，PID 数不应该是 1 个吗，这个 PID 限制为什么影响了`线程`。
 
