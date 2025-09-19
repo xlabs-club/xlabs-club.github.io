@@ -19,6 +19,14 @@ seo:
   noindex: false
 ---
 
+![java25-release](java25.png "java25-release")
+
+虽然 Java 界流行 **你发任你发，我用 Java 8**。但根据 Azul 组织发布关于 Java 使用的最新数据显示，Java 17 悄悄登上了使用率最高的宝座，Java 21 也紧随其后。相信在未来的几年，Java 25 将占据主流。
+
+![java-report](java-report.jpeg "java-report")
+
+## 升级收益
+
 ## 破坏性变更评估工具
 
 在升级之前，可通过 jdeps 和 jdeprscan 先评估下是否有使用内部类和废弃 API，有一个总的概览。
