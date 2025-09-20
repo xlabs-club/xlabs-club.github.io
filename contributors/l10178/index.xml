@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>L10178 on XLabs</title><link>https://www.xlabs.club/contributors/l10178/</link><description>Recent content in L10178 on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Fri, 19 Sep 2025 19:17:21 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/contributors/l10178/index.xml" rel="self" type="application/rss+xml"/><item><title>Javax 和 Jakarta 过渡期兼容方案</title><link>https://www.xlabs.club/blog/javax-jakarta-compatibility/</link><pubDate>Sun, 14 Sep 2025 14:33:23 +0800</pubDate><guid>https://www.xlabs.club/blog/javax-jakarta-compatibility/</guid><description>&lt;h2 id="什么是-jakarta-ee为什么要切换"&gt;什么是 Jakarta EE，为什么要切换&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>L10178 on XLabs</title><link>https://www.xlabs.club/contributors/l10178/</link><description>Recent content in L10178 on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Sat, 20 Sep 2025 16:12:29 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/contributors/l10178/index.xml" rel="self" type="application/rss+xml"/><item><title>Javax 和 Jakarta 过渡期兼容方案</title><link>https://www.xlabs.club/blog/javax-jakarta-compatibility/</link><pubDate>Sun, 14 Sep 2025 14:33:23 +0800</pubDate><guid>https://www.xlabs.club/blog/javax-jakarta-compatibility/</guid><description>&lt;h2 id="什么是-jakarta-ee为什么要切换"&gt;什么是 Jakarta EE，为什么要切换&lt;/h2&gt;
 &lt;p&gt;Jakarta EE 就是 Java EE 的新名词。这里的 EE 全称是 Enterprise Edition，它是专门为企业级 Java 应用定义的一套规范，与 Java SE (Java Platform, Standard Edition) 相对应。&lt;/p&gt;
 &lt;p&gt;Java EE 是从 Java 1.2 版本开始推出的 Java 企业级开发平台，最初的名称是 J2EE (Java 2 Platform, Enterprise Edition)。随着 Java 的发展，它的名称于 Java 1.5 版本时更改为 Java EE (Java Platform, Enterprise Edition)。2009 年 Oracle 收购了 Sun，Java EE 开始由 Oracle 通过 JCP (Java Community Process) 开发和维护。&lt;/p&gt;
 &lt;p&gt;直到 2017 年，Oracle 将 Java EE 提交给了 Eclipse 基金会，并命名为 Eclipse Enterprise for Java。然而，&lt;strong&gt;由于&amp;quot;Java&amp;quot;这个名字的商标归 Oracle 所有，Eclipse 基金会无法继续使用 &lt;code&gt;javax.*&lt;/code&gt; 和 &lt;code&gt;java.*&lt;/code&gt;，因此，项目名称改为 Jakarta EE&lt;/strong&gt;。&lt;/p&gt;</description></item><item><title>CI: Maven 如何在编译时禁止调用某些特定 API</title><link>https://www.xlabs.club/blog/ci-maven-forbidden-api/</link><pubDate>Tue, 09 Sep 2025 22:18:59 +0800</pubDate><guid>https://www.xlabs.club/blog/ci-maven-forbidden-api/</guid><description>&lt;p&gt;在日常开发中，我们经常遇到类似如下需求：&lt;/p&gt;
@@ -221,7 +221,67 @@
 &lt;h2 id="dockerfile-编写小技巧"&gt;Dockerfile 编写小技巧&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;使用 Heredocs 语法代替又长又臭的字符串拼接，当然 Heredocs 支持更多功能比如 run python、多文件内容拷贝，具体请参考官方文档。&lt;/p&gt;</description></item><item><title>使用 Pulumi 部署 cert-manager 创建 K8S 自签名证书并信任证书</title><link>https://www.xlabs.club/blog/trust-cert-manager-selfsigned-tls/</link><pubDate>Mon, 29 Apr 2024 21:49:22 +0800</pubDate><guid>https://www.xlabs.club/blog/trust-cert-manager-selfsigned-tls/</guid><description>&lt;p&gt;在搭建本地 Kubernetus 集群后，由于环境在内网，做不了域名验证，无法使用 Let&amp;rsquo;s Encrypt 颁发和自动更新证书，然而很多应用要求必须启用 HTTPS，只能用自签名 CA 证书，并由此 CA 继续颁发其他证书。&lt;/p&gt;
+&lt;p&gt;使用 Heredocs 语法代替又长又臭的字符串拼接，当然 Heredocs 支持更多功能比如 run python、多文件内容拷贝，具体请参考官方文档。&lt;/p&gt;</description></item><item><title>从 Java 8 升级到 Java 25，踩坑记录、变更评估方法、辅助工具介绍、新特性介绍</title><link>https://www.xlabs.club/blog/migrating-java8-to-java25/</link><pubDate>Thu, 23 May 2024 21:03:11 +0800</pubDate><guid>https://www.xlabs.club/blog/migrating-java8-to-java25/</guid><description>&lt;p&gt;
+
+&lt;img
+ src="https://www.xlabs.club/blog/migrating-java8-to-java25/java25_hu_42c3cb3c5a24a2c.webp"
+ width="770"
+ height="403"
+ decoding="async"
+ fetchpriority="auto"
+ loading="lazy"
+ alt="java25-release"title="java25-release"
+ id="h-rh-i-0"
+&gt;&lt;/p&gt;
+&lt;p&gt;虽然 Java 界流行 &lt;strong&gt;你发任你发，我用 Java 8&lt;/strong&gt;。但根据 Azul 组织发布的 &lt;a href="https://www.azul.com/newsroom/azul-2025-state-of-java-survey-report/" target="_blank" rel="noopener"&gt;2025 Java 最新使用报告&lt;/a&gt;
+ 显示，Java 17 悄悄登上了使用率最高的宝座，Java 21 也紧随其后。
+至于新发布的 Java 25， 能不能承担起 &lt;code&gt;Make Java Great Again&lt;/code&gt; 的艰巨任务，还需要时间的考验，让子弹再飞一会。&lt;/p&gt;
+&lt;p&gt;
+
+&lt;img
+ src="https://www.xlabs.club/blog/migrating-java8-to-java25/java-report_hu_cf024fc5f59d1d32.webp"
+ width="1080"
+ height="609"
+ decoding="async"
+ fetchpriority="auto"
+ loading="lazy"
+ alt="java-report"title="java-report"
+ id="h-rh-i-1"
+&gt;&lt;/p&gt;
+&lt;h2 id="令人心动的特性"&gt;令人心动的特性&lt;/h2&gt;
+&lt;p&gt;下图展示了自 Java 8 以来每个 Java 版本中的 JEP 数量，下面将摘出几个比较令人心动且使用频率较高的特性进行介绍。&lt;/p&gt;
+&lt;p&gt;
+
+&lt;img
+ src="https://www.xlabs.club/blog/migrating-java8-to-java25/java-jep_hu_4ab27b0d4e441598.webp"
+ width="1724"
+ height="970"
+ decoding="async"
+ fetchpriority="auto"
+ loading="lazy"
+ alt="java-jep"title="java-jep"
+ id="h-rh-i-2"
+&gt;&lt;/p&gt;
+&lt;h3 id="语法糖"&gt;语法糖&lt;/h3&gt;
+&lt;p&gt;语法糖特性让代码编写更加简洁优雅，提升开发体验。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;集合 &amp;amp;&amp;amp; Stream API 增强&lt;/strong&gt; - Java 8/9/12/16/21&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Java 8 引入 Stream API，支持函数式数据处理&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Java 9 新增 &lt;code&gt;dropWhile()&lt;/code&gt;、&lt;code&gt;takeWhile()&lt;/code&gt;、&lt;code&gt;iterate()&lt;/code&gt; 增强、&lt;code&gt;ofNullable()&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Java 12 新增 &lt;code&gt;Collectors.teeing()&lt;/code&gt; 方法&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Java 16 新增 &lt;code&gt;Stream.toList()&lt;/code&gt; 和 &lt;code&gt;mapMulti()&lt;/code&gt; 方法&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Java 21 顺序集合语法糖，比如 &lt;code&gt;List.getFirst()&lt;/code&gt; 和 &lt;code&gt;List.getLast()&lt;/code&gt; 方法，再也不用小心如何计算 index 了&lt;/p&gt;</description></item><item><title>使用 Pulumi 部署 cert-manager 创建 K8S 自签名证书并信任证书</title><link>https://www.xlabs.club/blog/trust-cert-manager-selfsigned-tls/</link><pubDate>Mon, 29 Apr 2024 21:49:22 +0800</pubDate><guid>https://www.xlabs.club/blog/trust-cert-manager-selfsigned-tls/</guid><description>&lt;p&gt;在搭建本地 Kubernetus 集群后，由于环境在内网，做不了域名验证，无法使用 Let&amp;rsquo;s Encrypt 颁发和自动更新证书，然而很多应用要求必须启用 HTTPS，只能用自签名 CA 证书，并由此 CA 继续颁发其他证书。&lt;/p&gt;
 &lt;p&gt;所以我们准备了以下工具，开始搭建。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href="https://www.pulumi.com/" target="_blank" rel="noopener"&gt;Pulumi&lt;/a&gt;
@@ -347,30 +407,4 @@
 &lt;li&gt;
 &lt;p&gt;&lt;a href="https://lima-vm.io/" target="_blank" rel="noopener"&gt;lima&lt;/a&gt;
  启动虚拟机，然后安装 K8S、K3S 或 minikube。&lt;/p&gt;
-&lt;p&gt;优点：支持虚拟多种 Linux 发行版，支持异构 CPU 虚拟机，同时能代替 Docker Desktop。&lt;/p&gt;</description></item><item><title>K8S Service 长连接导致负载不均衡问题分析和解决办法</title><link>https://www.xlabs.club/blog/tomcat-keepalive-load-balancer/</link><pubDate>Thu, 11 Apr 2024 21:05:46 +0800</pubDate><guid>https://www.xlabs.club/blog/tomcat-keepalive-load-balancer/</guid><description>&lt;p&gt;问题背景，我们有一个 Http 服务在 K8S 内部署了 3 个 Pod，客户端使用 Service NodePort 进行连接，发现流量几乎都集中到了一个 Pod 上，各 Pod 承载流量很不均衡。&lt;/p&gt;
-&lt;p&gt;已知的情况是：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;K8S Service 底层是 ipvs round-robin 负载均衡策略，按道理讲应该是均衡的。&lt;/li&gt;
-&lt;li&gt;客户端和服务端都启用了 Keep-Alive 长连接。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;经过抓包分析，负载较高的 Pod 保持着较多 KeepAlive 长连接。将 kube-proxy 的 ipvs 转发模式设置为 Least-Connection，即倾向转发给连接数少的 Pod，可能会有所缓解，但也不一定，因为 ipvs 的负载均衡状态是分散在各个节点的，并没有收敛到一个地方，也就无法在全局层面感知哪个 Pod 上的连接数少，并不能真正做到 Least-Connection。&lt;/p&gt;
-&lt;h2 id="服务端主动要求断开长连接"&gt;服务端主动要求断开长连接&lt;/h2&gt;
-&lt;p&gt;客户端连接我们可能无法控制，那么如何从服务端主动断开长连接。&lt;/p&gt;
-&lt;p&gt;以 Tomcat 为例，它提供了 maxKeepAliveRequests 参数，到达此参数阈值后，Tomcat 会在 Response Header 中主动加一个 &lt;code&gt;Connection: close&lt;/code&gt;，正常情况下客户端接收到此响应后会主动断开长连接。&lt;/p&gt;
-&lt;p&gt;对于其他不支持此参数的服务器，可以自定义 Filter 或者自定代码，到达某阈值后在 Response Header 中主动追加 &lt;code&gt;Connection: close&lt;/code&gt;。&lt;/p&gt;
-&lt;p&gt;对于 Spring Boot 可通过 properties 配置。&lt;/p&gt;
-
-
-
-&lt;div class="expressive-code"&gt;
- &lt;figure class="frame not-content"&gt;
- &lt;figcaption class="header"&gt;
- &lt;span class="title"&gt;&lt;/span&gt;
- &lt;/figcaption&gt;
- &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-properties" data-lang="properties"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Spring Boot Tomcat&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;server.tomcat.max-keep-alive-requests&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;100&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Spring Boot WebFlux&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;server.netty.max-keep-alive-requests&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;100&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
- &lt;/figure&gt;
-&lt;/div&gt;
-&lt;p&gt;对于独立部署 Tomcat，可在 server.xml 文件 Connector 中配置 maxKeepAliveRequests，Tomcat xml 可解析启动参数，启动时增加 &lt;code&gt;-D=server.tomcat.max-keep-alive-requests=200&lt;/code&gt; 来调整默认值大小，另外注意，Tomcat xml 不支持解析 ENV 环境变量，只支持解析 &lt;code&gt;-D&lt;/code&gt; 启动参数。&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;优点：支持虚拟多种 Linux 发行版，支持异构 CPU 虚拟机，同时能代替 Docker Desktop。&lt;/p&gt;</description></item></channel></rss>

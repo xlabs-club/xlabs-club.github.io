@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blog on XLabs</title><link>https://www.xlabs.club/blog/</link><description>Recent content in Blog on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Fri, 19 Sep 2025 19:17:21 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>Javax 和 Jakarta 过渡期兼容方案</title><link>https://www.xlabs.club/blog/javax-jakarta-compatibility/</link><pubDate>Sun, 14 Sep 2025 14:33:23 +0800</pubDate><guid>https://www.xlabs.club/blog/javax-jakarta-compatibility/</guid><description>&lt;h2 id="什么是-jakarta-ee为什么要切换"&gt;什么是 Jakarta EE，为什么要切换&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blog on XLabs</title><link>https://www.xlabs.club/blog/</link><description>Recent content in Blog on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Sat, 20 Sep 2025 16:12:29 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>Javax 和 Jakarta 过渡期兼容方案</title><link>https://www.xlabs.club/blog/javax-jakarta-compatibility/</link><pubDate>Sun, 14 Sep 2025 14:33:23 +0800</pubDate><guid>https://www.xlabs.club/blog/javax-jakarta-compatibility/</guid><description>&lt;h2 id="什么是-jakarta-ee为什么要切换"&gt;什么是 Jakarta EE，为什么要切换&lt;/h2&gt;
 &lt;p&gt;Jakarta EE 就是 Java EE 的新名词。这里的 EE 全称是 Enterprise Edition，它是专门为企业级 Java 应用定义的一套规范，与 Java SE (Java Platform, Standard Edition) 相对应。&lt;/p&gt;
 &lt;p&gt;Java EE 是从 Java 1.2 版本开始推出的 Java 企业级开发平台，最初的名称是 J2EE (Java 2 Platform, Enterprise Edition)。随着 Java 的发展，它的名称于 Java 1.5 版本时更改为 Java EE (Java Platform, Enterprise Edition)。2009 年 Oracle 收购了 Sun，Java EE 开始由 Oracle 通过 JCP (Java Community Process) 开发和维护。&lt;/p&gt;
 &lt;p&gt;直到 2017 年，Oracle 将 Java EE 提交给了 Eclipse 基金会，并命名为 Eclipse Enterprise for Java。然而，&lt;strong&gt;由于&amp;quot;Java&amp;quot;这个名字的商标归 Oracle 所有，Eclipse 基金会无法继续使用 &lt;code&gt;javax.*&lt;/code&gt; 和 &lt;code&gt;java.*&lt;/code&gt;，因此，项目名称改为 Jakarta EE&lt;/strong&gt;。&lt;/p&gt;</description></item><item><title>CI: Maven 如何在编译时禁止调用某些特定 API</title><link>https://www.xlabs.club/blog/ci-maven-forbidden-api/</link><pubDate>Tue, 09 Sep 2025 22:18:59 +0800</pubDate><guid>https://www.xlabs.club/blog/ci-maven-forbidden-api/</guid><description>&lt;p&gt;在日常开发中，我们经常遇到类似如下需求：&lt;/p&gt;
@@ -237,7 +237,7 @@
 &lt;h2 id="dockerfile-编写小技巧"&gt;Dockerfile 编写小技巧&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;使用 Heredocs 语法代替又长又臭的字符串拼接，当然 Heredocs 支持更多功能比如 run python、多文件内容拷贝，具体请参考官方文档。&lt;/p&gt;</description></item><item><title>从 Java 8 升级到 Java 25，踩坑记录、变更评估方法、辅助工具介绍</title><link>https://www.xlabs.club/blog/migrating-java8-to-java25/</link><pubDate>Thu, 23 May 2024 21:03:11 +0800</pubDate><guid>https://www.xlabs.club/blog/migrating-java8-to-java25/</guid><description>&lt;p&gt;
+&lt;p&gt;使用 Heredocs 语法代替又长又臭的字符串拼接，当然 Heredocs 支持更多功能比如 run python、多文件内容拷贝，具体请参考官方文档。&lt;/p&gt;</description></item><item><title>从 Java 8 升级到 Java 25，踩坑记录、变更评估方法、辅助工具介绍、新特性介绍</title><link>https://www.xlabs.club/blog/migrating-java8-to-java25/</link><pubDate>Thu, 23 May 2024 21:03:11 +0800</pubDate><guid>https://www.xlabs.club/blog/migrating-java8-to-java25/</guid><description>&lt;p&gt;
 
 &lt;img
  src="https://www.xlabs.club/blog/migrating-java8-to-java25/java25_hu_42c3cb3c5a24a2c.webp"
@@ -249,7 +249,9 @@
  alt="java25-release"title="java25-release"
  id="h-rh-i-0"
 &gt;&lt;/p&gt;
-&lt;p&gt;虽然 Java 界流行 &lt;strong&gt;你发任你发，我用 Java 8&lt;/strong&gt;。但根据 Azul 组织发布关于 Java 使用的最新数据显示，Java 17 悄悄登上了使用率最高的宝座，Java 21 也紧随其后。相信在未来的几年，Java 25 将占据主流。&lt;/p&gt;
+&lt;p&gt;虽然 Java 界流行 &lt;strong&gt;你发任你发，我用 Java 8&lt;/strong&gt;。但根据 Azul 组织发布的 &lt;a href="https://www.azul.com/newsroom/azul-2025-state-of-java-survey-report/" target="_blank" rel="noopener"&gt;2025 Java 最新使用报告&lt;/a&gt;
+ 显示，Java 17 悄悄登上了使用率最高的宝座，Java 21 也紧随其后。
+至于新发布的 Java 25， 能不能承担起 &lt;code&gt;Make Java Great Again&lt;/code&gt; 的艰巨任务，还需要时间的考验，让子弹再飞一会。&lt;/p&gt;
 &lt;p&gt;
 
 &lt;img
@@ -262,39 +264,40 @@
  alt="java-report"title="java-report"
  id="h-rh-i-1"
 &gt;&lt;/p&gt;
-&lt;h2 id="升级收益"&gt;升级收益&lt;/h2&gt;
-&lt;h2 id="破坏性变更评估工具"&gt;破坏性变更评估工具&lt;/h2&gt;
-&lt;p&gt;在升级之前，可通过 jdeps 和 jdeprscan 先评估下是否有使用内部类和废弃 API，有一个总的概览。&lt;/p&gt;
-&lt;h3 id="jdeps"&gt;jdeps&lt;/h3&gt;
-&lt;p&gt;jdeps 是 Java 自带的命令行工具，可以用来分析依赖关系和生成模块信息文件，这里我们只借用他的其中一项功能。&lt;/p&gt;
-&lt;p&gt;通过 &lt;code&gt;jdeps --jdk-internals&lt;/code&gt; 检查是否有使用内部 API，以下例子显示使用了 &lt;code&gt;sun.net.util.IPAddressUtil&lt;/code&gt; 这个 Java 内部工具类，会显示详细的源码类和 jar 包位置。&lt;/p&gt;
-&lt;p&gt;可以继续使用 Java 中的内部 API，另外 OpenJDK Wiki 页面 &lt;a href="https://wiki.openjdk.org/display/JDK8/Java&amp;#43;Dependency&amp;#43;Analysis&amp;#43;Tool" target="_blank" rel="noopener"&gt;Java Dependency Analysis Tool&lt;/a&gt;
- 推荐了某些常用 JDK 内部 API 的替换项，可参考这些建议替换掉。&lt;/p&gt;
+&lt;h2 id="令人心动的特性"&gt;令人心动的特性&lt;/h2&gt;
+&lt;p&gt;下图展示了自 Java 8 以来每个 Java 版本中的 JEP 数量，下面将摘出几个比较令人心动且使用频率较高的特性进行介绍。&lt;/p&gt;
+&lt;p&gt;
 
-
-
-&lt;div class="expressive-code"&gt;
- &lt;figure class="frame not-content"&gt;
- &lt;figcaption class="header"&gt;
- &lt;span class="title"&gt;&lt;/span&gt;
- &lt;/figcaption&gt;
- &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-console" data-lang="console"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="err"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="err"&gt;&lt;/span&gt;&lt;span class="gp"&gt;$&lt;/span&gt; jdeps -dotoutput &amp;lt;dot-file-dir&amp;gt; -jdkinternals &amp;lt;one-or-more-jar-files....&amp;gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="err"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="err"&gt;&lt;/span&gt;&lt;span class="gp"&gt;$&lt;/span&gt; jdeps --jdk-internals --multi-release &lt;span class="m"&gt;21&lt;/span&gt; --class-path . target/xxx.jar
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;. -&amp;gt; java.base
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt; com.my.SecurityChecker -&amp;gt; sun.net.util.IPAddressUtil JDK internal API (java.base)
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;&lt;/span&gt;&lt;span class="err"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="err"&gt;&lt;/span&gt;&lt;span class="go"&gt;Warning: JDK internal APIs are unsupported and private to JDK implementation that are
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;subject to be removed or changed incompatibly and could break your application.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;Please modify your code to eliminate dependence on any JDK internal APIs.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;For the most recent update on JDK internal API replacements, please check:
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;https://wiki.openjdk.org/display/JDK8/Java+Dependency+Analysis+Tool
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
- &lt;/figure&gt;
-&lt;/div&gt;
-&lt;h3 id="jdeprscan"&gt;jdeprscan&lt;/h3&gt;
-&lt;p&gt;jdeprscan 也是 Java 自带分析工具，可查看是否使用了已弃用或已删除的 API。使用已弃用的 API 不是阻塞性问题，还能接着跑，但是建议替换掉。使用已删除的 API，那就彻底跑不起来了。&lt;/p&gt;</description></item><item><title>使用 Pulumi 部署 cert-manager 创建 K8S 自签名证书并信任证书</title><link>https://www.xlabs.club/blog/trust-cert-manager-selfsigned-tls/</link><pubDate>Mon, 29 Apr 2024 21:49:22 +0800</pubDate><guid>https://www.xlabs.club/blog/trust-cert-manager-selfsigned-tls/</guid><description>&lt;p&gt;在搭建本地 Kubernetus 集群后，由于环境在内网，做不了域名验证，无法使用 Let&amp;rsquo;s Encrypt 颁发和自动更新证书，然而很多应用要求必须启用 HTTPS，只能用自签名 CA 证书，并由此 CA 继续颁发其他证书。&lt;/p&gt;
+&lt;img
+ src="https://www.xlabs.club/blog/migrating-java8-to-java25/java-jep_hu_4ab27b0d4e441598.webp"
+ width="1724"
+ height="970"
+ decoding="async"
+ fetchpriority="auto"
+ loading="lazy"
+ alt="java-jep"title="java-jep"
+ id="h-rh-i-2"
+&gt;&lt;/p&gt;
+&lt;h3 id="语法糖"&gt;语法糖&lt;/h3&gt;
+&lt;p&gt;语法糖特性让代码编写更加简洁优雅，提升开发体验。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;集合 &amp;amp;&amp;amp; Stream API 增强&lt;/strong&gt; - Java 8/9/12/16/21&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Java 8 引入 Stream API，支持函数式数据处理&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Java 9 新增 &lt;code&gt;dropWhile()&lt;/code&gt;、&lt;code&gt;takeWhile()&lt;/code&gt;、&lt;code&gt;iterate()&lt;/code&gt; 增强、&lt;code&gt;ofNullable()&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Java 12 新增 &lt;code&gt;Collectors.teeing()&lt;/code&gt; 方法&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Java 16 新增 &lt;code&gt;Stream.toList()&lt;/code&gt; 和 &lt;code&gt;mapMulti()&lt;/code&gt; 方法&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Java 21 顺序集合语法糖，比如 &lt;code&gt;List.getFirst()&lt;/code&gt; 和 &lt;code&gt;List.getLast()&lt;/code&gt; 方法，再也不用小心如何计算 index 了&lt;/p&gt;</description></item><item><title>使用 Pulumi 部署 cert-manager 创建 K8S 自签名证书并信任证书</title><link>https://www.xlabs.club/blog/trust-cert-manager-selfsigned-tls/</link><pubDate>Mon, 29 Apr 2024 21:49:22 +0800</pubDate><guid>https://www.xlabs.club/blog/trust-cert-manager-selfsigned-tls/</guid><description>&lt;p&gt;在搭建本地 Kubernetus 集群后，由于环境在内网，做不了域名验证，无法使用 Let&amp;rsquo;s Encrypt 颁发和自动更新证书，然而很多应用要求必须启用 HTTPS，只能用自签名 CA 证书，并由此 CA 继续颁发其他证书。&lt;/p&gt;
 &lt;p&gt;所以我们准备了以下工具，开始搭建。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href="https://www.pulumi.com/" target="_blank" rel="noopener"&gt;Pulumi&lt;/a&gt;
