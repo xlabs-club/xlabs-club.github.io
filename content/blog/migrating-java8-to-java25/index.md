@@ -572,21 +572,17 @@ String result = "Hello" + " " + "World" + "!";
 
 **紧凑对象头（JEP 519）** - Java 24/25
 
+作为 Java 24/25 **最具性价比**特性，仅需一个 JVM 启动参数，即可开启，应用无需改代码，无任何 API 变更。
+
 减少对象头大小，降低每个对象的内存开销：
 
-- 对象头从 16 字节减少到 12 字节
-- 特别有利于大量小对象的应用
-- 整体内存使用可降低 **3-5%**
-
-```java
-// 每个对象节省 4 字节对象头开销
-class User {
-    private int id;        // 4 字节
-    private String name;   // 8 字节（引用）
-}
-// Java 24: 对象总大小 = 16（头） + 12（数据） = 28 字节
-// Java 25: 对象总大小 = 12（头） + 12（数据） = 24 字节
-```
+- 将对象头从原来的 12 字节压缩成 8 字节
+- 将类指针从 32-bit 压缩为 22-bit
+- 整体内存使用可降低 **3-5%**，最多 22% 堆内存节省
+- 最高 30% CPU 减少（Amazon 线上实测）
+- GC 频率降低 15%
+- Jackson JSON 解析，执行时间减少 10%， [reddit 文档](https://www.reddit.com/r/scala/comments/1jptiv3/xxusecompactobjectheaders_is_your_new_turbo/)
+- 特别有利于大量小对象的应用，微服务、Spring Boot、JSON 解析、Map/Set 密集使用等场景
 
 **移除 32 位 x86 移植版本（JEP 503）** - Java 25
 
