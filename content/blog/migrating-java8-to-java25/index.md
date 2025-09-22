@@ -1129,10 +1129,15 @@ Java 24 的抗量子密码学支持标志着 Java 安全体系的重大升级：
 - Java 9 → Java 11（组件移除）
   - Java EE 模块移除：`java.ee.*` 模块被移除
   - JavaFX 移除：桌面应用需要单独安装，有些使用 `javafx.utils` 的代码需要寻找替代品
+  - JAXB 移除：`javax.xml.bind.*` 包被移除，需要单独添加依赖
+  - JAX-WS 移除：`javax.xml.ws.*` 包被移除，需要单独添加依赖
+  - JAX-RS 移除：`javax.ws.rs.*` 包被移除，需要单独添加依赖
 
 - Java 11 → Java 17（更多组件移除）
   - Nashorn JavaScript 引擎移除：`ScriptEngine` 执行 JavaScript 会报错
   - Pack200 工具移除：使用 Pack200 压缩的应用无法运行
+  - CORBA 模块移除：`java.corba.*` 模块被完全移除
+  - AWT Utilities 移除：`sun.awt.util.*` 工具类被移除
 
 - Java 17 → Java 21（兼容性问题）
   - 安全管理器废弃警告：Java 17 开始标记为废弃，Java 21 警告增强
@@ -1141,6 +1146,10 @@ Java 24 的抗量子密码学支持标志着 Java 安全体系的重大升级：
 - Java 21 → Java 25（安全管理器永久禁用）
   - JEP 486：安全管理器被永久禁用，无法再启用和安装，使用 SecurityManager 的应用将无法启动
   - JEP 498：使用 sun.misc.Unsafe 内存访问方法时发出运行时警告，建议迁移到 VarHandle 或外部函数与内存 API
+
+除了被移除的模块，部分 API 方法级别也有小范围的变更。
+
+推荐最安全的方式：**开发、编译、运行始终使用相同的版本**。
 
 在升级之前，可通过以下工具对总体有一个概览，心里有谱才能安全升级。
 
@@ -1556,9 +1565,9 @@ mvn versions:display-dependency-updates
 mvn versions:display-plugin-updates
 ```
 
-### [EMT4J](https://github.com/adoptium/emt4j)
+### EMT4J
 
-Eclipse Migration Toolkit for Java (EMT4J) 也是一个静态分析工具，可输出分析报告，也可直接 apply 到 git，支持通过 maven 插件、cli 命令行、Java Agent 3 种方式分析。
+[Eclipse Migration Toolkit for Java (EMT4J)](<https://github.com/adoptium/emt4j>) 也是一个静态分析工具，可输出分析报告，也可直接 apply 到 git，支持通过 maven 插件、cli 命令行、Java Agent 3 种方式分析。
 
 目前发布比较慢，已 Realease 版本只分析到 Java 17，只有 master 分支支持 Java 21，可以基于 master 分支自己编译构建。
 
@@ -1651,19 +1660,27 @@ file:/root/.m2/repository/dom4j/dom4j/1.6.1/dom4j-1.6.1.jar 不匹配规则 "Ver
 
 ```
 
-### [OpenRewrite](https://docs.openrewrite.org/)
+### OpenRewrite
 
-一键升级依赖包，重构源码，入门指导可参考我的另一篇博客：[智能代码重构](https://www.xlabs.club/docs/platform/smart-code/)。
+[OpenRewrite](https://docs.openrewrite.org/) 一键升级依赖包，重构源码。
+
+比如 BigDecimal 部分 API 标记为废弃，如 `java.math.BigDecimal.divide(Ljava/math/BigDecimal;II)`，需要替换为明确枚举类型的 RoundingMode。就可使用 [OpenRewrite bigdecimalroundingconstantstoenums](https://docs.openrewrite.org/recipes/staticanalysis/bigdecimalroundingconstantstoenums) 一键替换。
+
+入门指导可参考我的另一篇博客：[智能代码重构](https://www.xlabs.club/docs/platform/smart-code/)。
 
 相比于以上几个工具，OpenRewrite 更成熟易用，与 IDEA 业已集成，使用起来相对友好。
 
-### [JaCoLine](https://jacoline.dev/inspect)
+### JaCoLine
 
-检查 Java 命令行选项参数有没有问题，识别出已经过时不支持的参数。
+[JaCoLine](https://jacoline.dev/inspect) 检查 Java 命令行选项参数有没有问题，识别出已经过时不支持的参数。
 
-### [Java 参数查询工具](https://chriswhocodes.com/corretto_jdk21_options.html)
+### Java 参数查询工具
 
 Java 参数太多，到 [VM Options Explorer - Corretto JDK21](https://chriswhocodes.com/corretto_jdk21_options.html) 中参照，里面根据 JDK 的版本以及发行商，列出来所有的相关参数，选择好对应发行商的正确版本，就可以搜索或者查看 java 命令支持的所有参数了。
+
+### SDKMAN
+
+推荐使用 [SDKMAN](https://sdkman.io/) 安装和管理 JDK，方便不同版本切换。除了 JDK，他还提供了 Java 生态里常用的 Maven、Gradle、Groovy、Spring Boot 等很多组件的安装管理。
 
 ## 生产环境 GC 推荐配置
 
@@ -1677,15 +1694,19 @@ Java 参数太多，到 [VM Options Explorer - Corretto JDK21](https://chriswhoc
 
 - 一定要升级依赖包吗，不升级能编译通过，直接用 Java 21 能不能跑起来，会不会有问题。
 
-  以我们实际经验来看，确实有很多应用不升级可直接运行，也没有问题，取决于有没有使用已删除 API。
+  以我们实际经验来看，确实有很多应用不升级可直接运行，也没有问题，取决于有没有使用已删除 API。**开发、编译、运行始终使用相同的版本**能避免很多不必要的麻烦。
+
+- 序列化：alibaba fastjson 1.x **不支持 Java record**, 将一个 record 对象转为 String 结果是 `{}`, 而且不报错！fastjson2 才支持。
+
+- 字节码之类的工具包比如 javassist、asm、byte-buddy 一定要升级到配套的版本，否则可能出现编译期错误，设置是运行期错误比如 dubbo。
 
 - 升级到 Java 21 以后，内存占用反而更高了，运行一段时间内存递增最后 OOM，后来定位是命中了 netty 的 Bug，详细介绍参考：[jdk17 下 netty 导致堆内存疯涨原因排查](https://www.cnblogs.com/jingdongkeji/p/17678977.html)。
 
 - 升级到 Java 21 以后，再次内存占用更高，从 dump 文件里，看到了有大约 800 个 ThreadLocal 和 BufferCache 对象，最终定位命中了 [JAVA NIO 这个问题](https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=195728187)，所以我们在启动命令行增加了 `-Djdk.nio.maxCachedBufferSize=1048576` 参数后不再 OOM。
 
-— 内存占用高，与预期严重不符，最终定位是 glibc 内存不归还问题：从 trace 来看 JVM 进程本身释放了内存，但是 glibc 并没有归还操作系统，最后把 glibc 切换成 jemalloc，内存立马下降 30%。定位过程和解决办法参考：[K8S Pod 容器内 Java 进程内存分析，内存虚高以及容器 OOM 或 Jave OOM 问题定位](https://www.xlabs.club/blog/java-memory/)。
+- 内存占用高，与预期严重不符，最终定位是 glibc 内存不归还问题：从 trace 来看 JVM 进程本身释放了内存，但是 glibc 并没有归还操作系统，最后把 glibc 切换成 jemalloc，内存立马下降 30%。定位过程和解决办法参考：[K8S Pod 容器内 Java 进程内存分析，内存虚高以及容器 OOM 或 Jave OOM 问题定位](https://www.xlabs.club/blog/java-memory/)。
 
-- TLS 不兼容问题，很多老系统还是使用老版本 TLS，就会出现类似如下错误。JDK 17 是支持 TLS1.0 ~ TLS1.3 的，但是默认使用的 TLS 版本是 TLS 1.3, 老版本被禁用了，需要主动放开。
+- TLS 不兼容问题，很多老系统，比如老版本 MySQL、SQLServer，还是使用老版本 TLS，就会出现类似如下错误。JDK 17 是支持 TLS1.0 ~ TLS1.3 的，但是默认使用的 TLS 版本是 TLS 1.3, 老版本被禁用了，需要主动放开。
 
   ```console
   # 错误日志
@@ -1720,6 +1741,14 @@ Java 参数太多，到 [VM Options Explorer - Corretto JDK21](https://chriswhoc
   # 注意注意，用两个等号 == 指定自定义的 java.security 文件，是覆盖整个 Java 默认的 java.security 文件，原文件全部失效，只用自定义文件里的配置
   -Djava.security.properties==$JAVA_HOME/conf/security/custom.java.security
   ```
+
+- 使用自定义 classloader 的请关注，在 JDK 8 中 system classloader 是 URLClassLoader 的子类，但是在 JDK 11 中则不再成立。实际上它已经变成了一个内部的 class loader 如果将 system classloader 转换为 URLClassLoader 会导致抛出异常。
+
+- 从 JDK 8 到 JDK 9， Arrays.asList(x).toArray() 返回类型生发生变化。Arrays.asList(x).toArray().getClass() 根据 javadoc 应该返回的是 Object[], 但是在 JDK 8 中，如果 x 是 String[], 返回的类型也是 String[]. 下面的代码在 JDK 8 不会有异常，但是在 JDK 9 会抛出 ClassCastException 异常。解决办法：使用支持泛型的方法 T[] toArray(T[] a) 进行转换。
+
+- Java 21 虚拟线程 + synchronized 可能导致 block 的坑，在 Java 24 已解决，具体描述参考 [virtual thread synchronized](https://www.bvmem.com/archives/1408)。
+
+- 在 Java 21 公共线程池的 ContextClassLoader 是 AppClassloader，而不是从调用线程继承的。这可能会导致类加载问题。当你在使用 `java.util.concurrent.CompletableFuture.runAsync、java.util.stream.Stream.parallel()、List.parallelStream()、Thread.currentThread().getContextClassLoader().getResource()` 时，请关注。    一个典型的可能带来的 Bug 参考 [使用 CompletableFuture 时，关于 ClassLoader 引起的问题](https://juejin.cn/post/6909445190642040846)。
 
 - module jdk.proxy3 does not "opens jdk.proxy3" to unnamed module.
 
