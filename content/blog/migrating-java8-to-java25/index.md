@@ -3,7 +3,7 @@ title: "从 Java 8 升级到 Java 25，踩坑记录、变更评估方法、辅�
 description: "从 Java 8 升级到 Java 25，踩坑记录、变更评估方法、辅助工具介绍、新特性介绍"
 summary: ""
 date: 2024-05-23T21:03:11+08:00
-lastmod: 2025-09-20T10:03:11+08:00
+lastmod: 2025-09-22T10:03:11+08:00
 draft: false
 weight: 50
 categories: ["Java", "Spring Boot"]
@@ -1664,7 +1664,35 @@ file:/root/.m2/repository/dom4j/dom4j/1.6.1/dom4j-1.6.1.jar 不匹配规则 "Ver
 
 [OpenRewrite](https://docs.openrewrite.org/) 一键升级依赖包，重构源码。
 
-比如 BigDecimal 部分 API 标记为废弃，如 `java.math.BigDecimal.divide(Ljava/math/BigDecimal;II)`，需要替换为明确枚举类型的 RoundingMode。就可使用 [OpenRewrite bigdecimalroundingconstantstoenums](https://docs.openrewrite.org/recipes/staticanalysis/bigdecimalroundingconstantstoenums) 一键替换。
+比如 BigDecimal 部分 API 标记为废弃，如 `java.math.BigDecimal.divide(Ljava/math/BigDecimal;II)`，需要替换为明确枚举类型的 `RoundingMode`, 就可使用 [OpenRewrite bigdecimalroundingconstantstoenums](https://docs.openrewrite.org/recipes/staticanalysis/bigdecimalroundingconstantstoenums) 一键替换。
+
+OpenRewrite 除了作为一个强大的工具使用外，还有一个我特别喜欢的地方，就是它实际上是一个丰富的经验总结输出。
+
+比如通过查看 `Migrate to Java 25` 的列表定义，就能知道 Java 25 有哪些主要的变更。
+
+```yaml
+
+type: specs.openrewrite.org/v1beta/recipe
+name: org.openrewrite.java.migrate.UpgradeToJava25
+displayName: Migrate to Java 25
+description: |
+  This recipe will apply changes commonly needed when migrating to Java 25. This recipe will also replace deprecated API with equivalents when there is a clear migration strategy. Build files will also be updated to use Java 25 as the target/source and plugins will be also be upgraded to versions that are compatible with Java 25.
+tags:
+  - java25
+recipeList:
+  - org.openrewrite.java.migrate.UpgradeToJava21
+  - org.openrewrite.java.migrate.UpgradeJavaVersion:
+      version: 25
+  - org.openrewrite.java.migrate.lang.MigrateProcessWaitForDuration
+  - org.openrewrite.java.migrate.lang.ReplaceUnusedVariablesWithUnderscore
+  - org.openrewrite.java.migrate.util.MigrateInflaterDeflaterToClose
+  - org.openrewrite.java.migrate.AccessController
+  - org.openrewrite.java.migrate.RemoveSecurityPolicy
+  - org.openrewrite.java.migrate.RemoveSecurityManager
+  - org.openrewrite.java.migrate.SystemGetSecurityManagerToNull
+  - org.openrewrite.java.migrate.MigrateZipErrorToZipException
+
+```
 
 入门指导可参考我的另一篇博客：[智能代码重构](https://www.xlabs.club/docs/platform/smart-code/)。
 
