@@ -26,9 +26,11 @@ seo:
 
 ![java-report](java-report.jpeg "java-report")
 
+今天我们将介绍下，从 Java 8 到 Java 25，有哪些新特性，有什么工具可协助升级，以及在升级过程中遇到的问题和解决办法。
+
 ## 令人心动的特性
 
-下图展示了自 Java 8 以来每个 Java 版本中的 JEP 数量，下面将摘出几个比较令人心动且使用频率较高的特性进行介绍。
+下图展示了自 Java 8 以来每个 Java 版本中的 JEP（JDK Enhancement Proposal，即 JDK 增强提案） 数量，下面将摘出几个比较令人心动且使用频率较高的特性进行介绍。
 
 ![java-jep](java-jep.png "java-jep")
 
@@ -51,15 +53,15 @@ seo:
     Set<String> set = Set.of("x", "y", "z");
     Map<String, Integer> map = Map.of("key1", 1, "key2", 2);
 
-    // Java 16+ 简化列表收集
-    List<String> result = list.stream()
-        .filter(s -> s.length() > 5)
-        .toList();
-
     // Java 9 条件过滤
     List<Integer> numbers = List.of(1, 2, 3, 4, 5, 6);
     List<Integer> taken = numbers.stream()
         .takeWhile(n -> n < 4)  // [1, 2, 3]
+        .toList();
+
+    // Java 16+ 简化列表收集
+    List<String> result = list.stream()
+        .filter(s -> s.length() > 5)
         .toList();
 
     // Java 9 有限迭代
@@ -152,6 +154,11 @@ seo:
     // 使用示例
     Person person = new Person("张三", 25);
     System.out.println(person.name());
+
+    // 注意：fastjson 1.x 不支持序列化，此处输出 {}
+    System.out.println(com.alibaba.fastjson.JSON.toJSONString(person));
+    // fastjson 2.x 才支持序列化，此处输出 {"age":25,"name":"张三"}
+    System.out.println(com.alibaba.fastjson2.JSON.toJSONString(person));
     ```
 
 - **Switch 表达式（JEP 361）** - Java 14
@@ -211,7 +218,7 @@ seo:
 
     // Java 25 简化写法
     void main() {
-        System.out.println("Hello, World!");
+         IO.println("Hello, World!");
     }
 
     // 支持带参数的主方法
@@ -356,7 +363,7 @@ G1 能够主动归还未使用的堆内存给操作系统：
 
 **NUMA 感知内存分配（JEP 345）** - Java 14
 
-针对 NUMA 架构优化内存分配策略：
+针对 NUMA（现代的多路服务器几乎都采用 NUMA 架构） 架构优化内存分配策略：
 
 - 就近分配原则，减少跨 NUMA 节点访问
 - 在 NUMA 系统上性能提升 **10-20%**
@@ -786,7 +793,7 @@ native-image --no-fallback \
 ./myapp-native
 ```
 
-**Java Flight Recorder（JFR）性能监控革命** - Java 8 到 25
+**性能监控革命：Java Flight Recorder（JFR）** - Java 8 到 25
 
 Java Flight Recorder（JFR）是 Java 平台的性能监控革命，提供了生产级低开销的事件收集和分析能力。它在生产环境中的开销通常低于 1%，可以长期运行而不影响应用性能，覆盖操作系统、JVM、应用程序级别的详细监控，与 Java Mission Control 集成提供可视化分析，实现内存泄漏、性能瓶颈、GC 问题的一站式诊断。
 
@@ -1114,172 +1121,6 @@ Java 24 的抗量子密码学支持标志着 Java 安全体系的重大升级：
 
 这些安全革新确保了 Java 平台能够在量子计算威胁面前保持强大的安全防护能力，为开发者在未来构建安全可靠的应用系统提供了坚实的技术基础。
 
-## 破坏性变更评估工具
-
-从 Java 8 升级到 25，总体风险还是很大，总结起来可能有几个比较关键的节点：
-
-- Java 8 → Java 9（模块系统强制封装）
-  - 内部 API 访问限制：`sun.*`、`com.sun.*` 包访问受限
-  - 反射访问受限：`setAccessible()` 对模块私有成员失效
-
-- Java 9 → Java 11（组件移除）
-  - Java EE 模块移除：`java.ee.*` 模块被移除
-  - JavaFX 移除：桌面应用需要单独安装，有些使用 `javafx.utils` 的代码需要寻找替代品
-  - JAXB 移除：`javax.xml.bind.*` 包被移除，需要单独添加依赖
-  - JAX-WS 移除：`javax.xml.ws.*` 包被移除，需要单独添加依赖
-  - JAX-RS 移除：`javax.ws.rs.*` 包被移除，需要单独添加依赖
-
-- Java 11 → Java 17（更多组件移除）
-  - Nashorn JavaScript 引擎移除：`ScriptEngine` 执行 JavaScript 会报错
-  - Pack200 工具移除：使用 Pack200 压缩的应用无法运行
-  - CORBA 模块移除：`java.corba.*` 模块被完全移除
-  - AWT Utilities 移除：`sun.awt.util.*` 工具类被移除
-
-- Java 17 → Java 21（兼容性问题）
-  - 安全管理器废弃警告：Java 17 开始标记为废弃，Java 21 警告增强
-  - 部分反射、Agent 相关 API 变更，需要仔细测试
-
-- Java 21 → Java 25（安全管理器永久禁用）
-  - JEP 486：安全管理器被永久禁用，无法再启用和安装，使用 SecurityManager 的应用将无法启动
-  - JEP 498：使用 sun.misc.Unsafe 内存访问方法时发出运行时警告，建议迁移到 VarHandle 或外部函数与内存 API
-
-除了被移除的模块，部分 API 方法级别也有小范围的变更。
-
-推荐最安全的方式：**开发、编译、运行始终使用相同的版本**。
-
-在升级之前，可通过以下工具对总体有一个概览，心里有谱才能安全升级。
-
-### jdeps
-
-jdeps 是 Java 自带的命令行工具，可以用来分析依赖关系和生成模块信息文件，这里我们只借用他的其中一项功能。
-
-通过 `jdeps --jdk-internals` 检查是否有使用内部 API，以下例子显示使用了 `sun.net.util.IPAddressUtil` 这个 Java 内部工具类，会显示详细的源码类和 jar 包位置。
-
-可以继续使用 Java 中的内部 API，另外 OpenJDK Wiki 页面 [Java Dependency Analysis Tool](https://wiki.openjdk.org/display/JDK8/Java+Dependency+Analysis+Tool) 推荐了某些常用 JDK 内部 API 的替换项，可参考这些建议替换掉。
-
-```console
-
-$ jdeps -dotoutput <dot-file-dir> -jdkinternals <one-or-more-jar-files....>
-
-$ jdeps --jdk-internals --multi-release 21 --class-path . target/xxx.jar
-. -> java.base
-   com.my.SecurityChecker -> sun.net.util.IPAddressUtil  JDK internal API (java.base)
-
-Warning: JDK internal APIs are unsupported and private to JDK implementation that are
-subject to be removed or changed incompatibly and could break your application.
-Please modify your code to eliminate dependence on any JDK internal APIs.
-For the most recent update on JDK internal API replacements, please check:
-https://wiki.openjdk.org/display/JDK8/Java+Dependency+Analysis+Tool
-
-```
-
-### jdeprscan
-
-jdeprscan 也是 Java 自带分析工具，可查看是否使用了已弃用或已删除的 API。使用已弃用的 API 不是阻塞性问题，还能接着跑，但是建议替换掉。使用已删除的 API，那就彻底跑不起来了。
-
-```console
-
-# 了解自 Java 8 到 25 废弃的具体 API
-$ jdeprscan --release 25 --list
-
-# 如果只想看一删除的，加上 --for-removal ，列出已删除的 API
-$ jdeprscan --release 25 --list --for-removal
-
-@Deprecated(since="9", forRemoval=true) class javax.security.cert.Certificate
-@Deprecated(since="9", forRemoval=true) class javax.security.cert.CertificateEncodingException
-
-……
-
-@Deprecated(since="18", forRemoval=true) void java.lang.Enum.finalize()
-
-@Deprecated(since="17", forRemoval=true) void java.lang.System.setSecurityManager(java.lang.SecurityManager)
-@Deprecated(since="17", forRemoval=true) java.lang.SecurityManager java.lang.System.getSecurityManager()
-
-@Deprecated(since="21", forRemoval=true) javax.management.MBeanServerConnection javax.management.remote.JMXConnector.getMBeanServerConnection(javax.security.auth.Subject)
-
-@Deprecated(since="25", forRemoval=true) class java.net.URLPermission
-@Deprecated(since="25", forRemoval=true) class java.net.NetPermission
-
-```
-
-扫描自己的代码中是否有使用废弃 API：
-
-```console
-
-# 注意通过 --class-path 增加依赖的 jar 包
-
-$ jdeprscan --release 21 --class-path log4j-api-2.13.0.jar my-application.jar
-
-error: cannot find class sun/misc/BASE64Encoder
-class com/company/Util uses deprecated method java/lang/Double::<init>(D)V
-
-```
-
-以上例子，com.company.Util 类在调用 java.lang.Double 类的已弃用构造函数。 javadoc 会建议用来代替已弃用 API 的 API。 但是无法解决“error: cannot find class sun/misc/BASE64Encoder”问题，因为它是已删除的 API， 自 Java 8 发布以来，应使用 java.util.Base64。
-
-注意使用 jdeprscan 需要通过 --class-path 指定依赖项，可先执行 `mvn dependency:copy-dependencies` 命令，此时会 copy 依赖项到 `target/dependency` 目录。
-
-如果你加了 --class-path 依赖，大概率还是报错误 `error: cannot find class`，目测寻找依赖项是根据 `target/dependency` 中的名字顺序找的，不是常规的 java 进程一次性加载完，不知道这算不算 jdeprscan 的设计 Bug，具体解决办法可参考 [jdeprscan-throws-cannot-find-class-error](https://stackoverflow.com/questions/49525496/jdeprscan-throws-cannot-find-class-error)。
-
-我采用的解决方式是把所有依赖 jar 文件都接到某个文件夹，解压成 classes，然后 class-path 使用此文件。这样还有个好处，扫描报告里只有我真正要扫描的当前项目的报告，不包含第三方 jar 的。
-
-以上过程命令行参考：
-
-```bash
-mvn dependency:copy-dependencies  -Dsilent=true
-
-mkdir -p target/dependency-classes
-for jar in target/dependency/*.jar; do
-    unzip -o "$jar" -d target/dependency-classes
-done
-
-jdeprscan --class-path target/dependency-classes  target/really-project.jar
-
-```
-
-除了使用 jdeprscan 命令行以外，也可在你项目的 maven pom 文件中引入 `maven-jdeps-plugin`，如下示例，引入后如果有使用废弃 API，将在 `mvn package` 的时候直接失败报错，避免有人无意引入废弃 API。
-
-```xml
-<project>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jdeps-plugin</artifactId>
-        <version>3.1.2</version>
-        <executions>
-          <execution>
-            <goals>
-              <!-- verify main classes -->
-              <goal>jdkinternals</goal>
-              <!-- verify test classes -->
-              <goal>test-jdkinternals</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <multiRelease>21</multiRelease>
-          <!-- 其他参数按需配置 -->
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
-</project>
-
-```
-
-### emt4j
-
-emt4j 是 Eclipse 推出的一个静态分析工具，下面会详细介绍用法，展示效果。
-
-### forbiddenapis
-
-maven forbiddenapis 除了提供自定义 API 检查以外，其实还内置了一些 jdk-unsafe、jdk-deprecated、jdk-internal 检查规则。
-
-另外与以上 jdeps、jdeprscan 的主要区别是，forbiddenapis 能做到在编译期就直接禁止报错，确保只要编译成功就能安全运行。
-
-更详细使用参考 [Maven 如何在编译时禁止调用某些特定 API](/blog/ci-maven-forbidden-api/)。
-
 ## 升级兼容方法措施
 
 下面介绍几种在升级过程中非常有用的方法措施。
@@ -1550,16 +1391,169 @@ Caused by: java.lang.reflect.InaccessibleObjectException: Unable to make field p
 
 ## 辅助迁移工具
 
-一些辅助迁移到新版本的工具，仅供参考。
+从 Java 8 升级到 25，总体风险还是很大，总结起来可能有几个比较关键的节点：
 
-### Maven 依赖包更新
+- Java 8 → Java 9（模块系统强制封装）
+  - 内部 API 访问限制：`sun.*`、`com.sun.*` 包访问受限
+  - 反射访问受限：`setAccessible()` 对模块私有成员失效
 
-使用 maven 检查是否有最新的依赖包和插件，对整体项目有一个全局的了解。注意，这里给的建议仅供参考，不要一下子应用上，需要综合考虑当前的项目依赖关系。
+- Java 9 → Java 11（组件移除）
+  - Java EE 模块移除：`java.ee.*` 模块被移除
+  - JavaFX 移除：桌面应用需要单独安装，有些使用 `javafx.utils` 的代码需要寻找替代品
+  - JAXB 移除：`javax.xml.bind.*` 包被移除，需要单独添加依赖
+  - JAX-WS 移除：`javax.xml.ws.*` 包被移除，需要单独添加依赖
+  - JAX-RS 移除：`javax.ws.rs.*` 包被移除，需要单独添加依赖
+
+- Java 11 → Java 17（更多组件移除）
+  - Nashorn JavaScript 引擎移除：`ScriptEngine` 执行 JavaScript 会报错
+  - Pack200 工具移除：使用 Pack200 压缩的应用无法运行
+  - CORBA 模块移除：`java.corba.*` 模块被完全移除
+  - AWT Utilities 移除：`sun.awt.util.*` 工具类被移除
+
+- Java 17 → Java 21（兼容性问题）
+  - 安全管理器废弃警告：Java 17 开始标记为废弃，Java 21 警告增强
+  - 部分反射、Agent 相关 API 变更，需要仔细测试
+
+- Java 21 → Java 25（安全管理器永久禁用）
+  - JEP 486：安全管理器被永久禁用，无法再启用和安装，使用 SecurityManager 的应用将无法启动
+  - JEP 498：使用 sun.misc.Unsafe 内存访问方法时发出运行时警告，建议迁移到 VarHandle 或外部函数与内存 API
+
+除了被移除的模块，部分 API 方法级别也有小范围的变更。
+
+推荐最安全的方式：**开发、编译、运行始终使用相同的版本**。
+
+在升级之前，可通过以下工具对总体有一个概览，心里有谱才能安全升级，另外提供一些辅助迁移到新版本的工具，仅供参考。
+
+### SDKMAN
+
+推荐使用 [SDKMAN](https://sdkman.io/) 安装和管理 JDK，方便不同版本切换。除了 JDK，他还提供了 Java 生态里常用的 Maven、Gradle、Groovy、Spring Boot 等很多组件的安装管理。
+
+### jdeps
+
+jdeps 是 Java 自带的命令行工具，可以用来分析依赖关系和生成模块信息文件，这里我们只借用他的其中一项功能。
+
+通过 `jdeps --jdk-internals` 检查是否有使用内部 API，以下例子显示使用了 `sun.net.util.IPAddressUtil` 这个 Java 内部工具类，会显示详细的源码类和 jar 包位置。
+
+可以继续使用 Java 中的内部 API，另外 OpenJDK Wiki 页面 [Java Dependency Analysis Tool](https://wiki.openjdk.org/display/JDK8/Java+Dependency+Analysis+Tool) 推荐了某些常用 JDK 内部 API 的替换项，可参考这些建议替换掉。
+
+```console
+
+$ jdeps -dotoutput <dot-file-dir> -jdkinternals <one-or-more-jar-files....>
+
+$ jdeps --jdk-internals --multi-release 21 --class-path . target/xxx.jar
+. -> java.base
+   com.my.SecurityChecker -> sun.net.util.IPAddressUtil  JDK internal API (java.base)
+
+Warning: JDK internal APIs are unsupported and private to JDK implementation that are
+subject to be removed or changed incompatibly and could break your application.
+Please modify your code to eliminate dependence on any JDK internal APIs.
+For the most recent update on JDK internal API replacements, please check:
+https://wiki.openjdk.org/display/JDK8/Java+Dependency+Analysis+Tool
+
+```
+
+### jdeprscan
+
+jdeprscan 也是 Java 自带分析工具，可查看是否使用了已弃用或已删除的 API。使用已弃用的 API 不是阻塞性问题，还能接着跑，但是建议替换掉。使用已删除的 API，那就彻底跑不起来了。
+
+```console
+
+# 了解自 Java 8 到 25 废弃的具体 API
+$ jdeprscan --release 25 --list
+
+# 如果只想看一删除的，加上 --for-removal ，列出已删除的 API
+$ jdeprscan --release 25 --list --for-removal
+
+@Deprecated(since="9", forRemoval=true) class javax.security.cert.Certificate
+@Deprecated(since="9", forRemoval=true) class javax.security.cert.CertificateEncodingException
+
+……
+
+@Deprecated(since="18", forRemoval=true) void java.lang.Enum.finalize()
+
+@Deprecated(since="17", forRemoval=true) void java.lang.System.setSecurityManager(java.lang.SecurityManager)
+@Deprecated(since="17", forRemoval=true) java.lang.SecurityManager java.lang.System.getSecurityManager()
+
+@Deprecated(since="21", forRemoval=true) javax.management.MBeanServerConnection javax.management.remote.JMXConnector.getMBeanServerConnection(javax.security.auth.Subject)
+
+@Deprecated(since="25", forRemoval=true) class java.net.URLPermission
+@Deprecated(since="25", forRemoval=true) class java.net.NetPermission
+
+```
+
+扫描自己的代码中是否有使用废弃 API：
+
+```console
+
+# 注意通过 --class-path 增加依赖的 jar 包
+
+$ jdeprscan --release 21 --class-path log4j-api-2.13.0.jar my-application.jar
+
+error: cannot find class sun/misc/BASE64Encoder
+class com/company/Util uses deprecated method java/lang/Double::<init>(D)V
+
+```
+
+以上例子，com.company.Util 类在调用 java.lang.Double 类的已弃用构造函数。 javadoc 会建议用来代替已弃用 API 的 API。 但是无法解决"error: cannot find class sun/misc/BASE64Encoder"问题，因为它是已删除的 API， 自 Java 8 发布以来，应使用 java.util.Base64。
+
+注意使用 jdeprscan 需要通过 --class-path 指定依赖项，可先执行 `mvn dependency:copy-dependencies` 命令，此时会 copy 依赖项到 `target/dependency` 目录。
+
+如果你加了 --class-path 依赖，大概率还是报错误 `error: cannot find class`，目测寻找依赖项是根据 `target/dependency` 中的名字顺序找的，不是常规的 java 进程一次性加载完，不知道这算不算 jdeprscan 的设计 Bug，具体解决办法可参考 [jdeprscan-throws-cannot-find-class-error](https://stackoverflow.com/questions/49525496/jdeprscan-throws-cannot-find-class-error)。
+
+我采用的解决方式是把所有依赖 jar 文件都接到某个文件夹，解压成 classes，然后 class-path 使用此文件。这样还有个好处，扫描报告里只有我真正要扫描的当前项目的报告，不包含第三方 jar 的。
+
+以上过程命令行参考：
 
 ```bash
-mvn versions:display-dependency-updates
-mvn versions:display-plugin-updates
+mvn dependency:copy-dependencies  -Dsilent=true
+
+mkdir -p target/dependency-classes
+for jar in target/dependency/*.jar; do
+    unzip -o "$jar" -d target/dependency-classes
+done
+
+jdeprscan --class-path target/dependency-classes  target/really-project.jar
+
 ```
+
+除了使用 jdeprscan 命令行以外，也可在你项目的 maven pom 文件中引入 `maven-jdeps-plugin`，如下示例，引入后如果有使用废弃 API，将在 `mvn package` 的时候直接失败报错，避免有人无意引入废弃 API。
+
+```xml
+<project>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jdeps-plugin</artifactId>
+        <version>3.1.2</version>
+        <executions>
+          <execution>
+            <goals>
+              <!-- verify main classes -->
+              <goal>jdkinternals</goal>
+              <!-- verify test classes -->
+              <goal>test-jdkinternals</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <multiRelease>21</multiRelease>
+          <!-- 其他参数按需配置 -->
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
+
+```
+
+### forbiddenapis
+
+maven forbiddenapis 除了提供自定义 API 检查以外，其实还内置了一些 jdk-unsafe、jdk-deprecated、jdk-internal 检查规则。
+
+另外与以上 jdeps、jdeprscan 的主要区别是，forbiddenapis 能做到在编译期就直接禁止，确保只要编译成功就能安全运行。
+
+更详细使用参考 [Maven 如何在编译时禁止调用某些特定 API](/blog/ci-maven-forbidden-api/)。
 
 ### EMT4J
 
@@ -1658,11 +1652,15 @@ file:/root/.m2/repository/dom4j/dom4j/1.6.1/dom4j-1.6.1.jar 不匹配规则 "Ver
 
 ### OpenRewrite
 
-[OpenRewrite](https://docs.openrewrite.org/) 一键升级依赖包，重构源码。
+[OpenRewrite](https://docs.openrewrite.org/) 一键升级依赖包，直接修改重构源码。
 
 比如 BigDecimal 部分 API 标记为废弃，如 `java.math.BigDecimal.divide(Ljava/math/BigDecimal;II)`，需要替换为明确枚举类型的 `RoundingMode`, 就可使用 [OpenRewrite bigdecimalroundingconstantstoenums](https://docs.openrewrite.org/recipes/staticanalysis/bigdecimalroundingconstantstoenums) 一键替换。
 
-OpenRewrite 除了作为一个强大的工具使用外，还有一个我特别喜欢的地方，就是它实际上是一个丰富的经验总结输出。
+```bash
+mvn -U org.openrewrite.maven:rewrite-maven-plugin:run -Drewrite.recipeArtifactCoordinates=org.openrewrite.recipe:rewrite-static-analysis:RELEASE -Drewrite.activeRecipes=org.openrewrite.staticanalysis.BigDecimalRoundingConstantsToEnums -Drewrite.exportDatatables=true
+```
+
+OpenRewrite 除了作为一个强大的工具使用外，还有一个我特别喜欢的地方，就是它实际上是一个丰富的经验输出，其实他本身已经演变成了一个 SaaS 产品。
 
 比如通过查看 `Migrate to Java 25` 的列表定义，就能知道 Java 25 有哪些主要的变更。
 
@@ -1702,19 +1700,108 @@ recipeList:
 
 Java 参数太多，到 [VM Options Explorer - Corretto JDK21](https://chriswhocodes.com/corretto_jdk21_options.html) 中参照，里面根据 JDK 的版本以及发行商，列出来所有的相关参数，选择好对应发行商的正确版本，就可以搜索或者查看 java 命令支持的所有参数了。
 
-### SDKMAN
+## 生产环境参数配置
 
-推荐使用 [SDKMAN](https://sdkman.io/) 安装和管理 JDK，方便不同版本切换。除了 JDK，他还提供了 Java 生态里常用的 Maven、Gradle、Groovy、Spring Boot 等很多组件的安装管理。
+查看当前 Java 版本支持的参数和系统默认值：
 
-## 生产环境 GC 推荐配置
+```console
+
+$ java -XX:+PrintFlagsFinal -version
+
+   size_t MinMetaspaceExpansion                    = 327680                                    {product} {default}
+     uint MinMetaspaceFreeRatio                    = 40                                        {product} {default}
+   double MinRAMPercentage                         = 50.000000                                 {product} {default}
+    uintx MinSurvivorRatio                         = 3                                         {product} {default}
+   size_t MinTLABSize                              = 2048                                      {product} {default}
+     intx MultiArrayExpandLimit                    = 6                                      {C2 product} {default}
+    uintx NUMAChunkResizeWeight                    = 20                                        {product} {default}
+   size_t NUMAInterleaveGranularity                = 2097152                                   {product} {default}
+   size_t NUMASpaceResizeRate                      = 1073741824                                {product} {default}
+     bool NUMAStats                                = false                                     {product} {default}
+    ccstr NativeMemoryTracking                     = off                                       {product} {default}
+     bool NeverActAsServerClassMachine             = false                                  {pd product} {default}
+     bool NeverTenure                              = false                                     {product} {default}
+    uintx NewRatio                                 = 2                                         {product} {default}
+   size_t NewSize                                  = 5570560                                   {product} {ergonomic}
+
+```
+
+查看当前运行 Java 程序最终生效的参数配置，可通过以下命令行：
+
+```console
+
+$ jcmd $(pgrep java) VM.flags | tr ' ' '\n'
+
+-XX:MaxRAM=1073741824
+-XX:MaxRAMPercentage=75.000000
+-XX:+UseCompressedOops
+-XX:+UseG1GC
+-XX:+UseStringDeduplication
+
+// 省略……
+
+```
 
 升级到 Java 25 以后以下是根据我们公司常规经验推荐的配置，非普世可用，请根据自己的应用情况臻选。
 
-- 如果是 Java 21 在使用 ZGC，推荐启用分代 `-XX:+ZGenerational` ，对稳定性、吞吐量、内存占用都有很大优化。Java 23 默认启用分代 ZGC，Java 24 已废弃非分代 ZGC。
+- 如果是 Java 21 在使用 ZGC，推荐启用分代 `-XX:+ZGenerational` ，对稳定性、吞吐量、内存占用都有很大优化。Java 23 默认启用分代 ZGC，Java 24 已废弃非分代 ZGC，默认就已经是分代 ZGC。
 - 在很多场景下 G1 仍然是最稳的选择，内存占用比 ZGC 低，CPU 更稳定。大部分场景下小内存应用，并不需要 ZGC。
 - 亲测大部分应用 Java 25 比 Java 21 内存占用约少 5%-10%，GC 更稳定。
 
+基础参数：
+
+- `-server` - 使用服务器模式 JVM
+- `-XX:+UnlockExperimentalVMOptions` - 解锁实验性 VM 选项
+- `-XX:+UseStringDeduplication` - 启用字符串去重优化
+- `-XX:+UseCompactObjectHeaders` - 使用紧凑对象头，Java 24 以后
+- `-XX:ParallelGCThreads=4` - 并行 GC 线程数为 4
+- `-XX:ConcGCThreads=4` - 并发 GC 线程数为 4
+- `-XX:InitialRAMPercentage=20.0` - 初始堆内存占物理内存 20%
+- `-XX:MaxRAMPercentage=50.0` - 最大堆内存占物理内存 50%
+- `-XX:+ExitOnOutOfMemoryError` - OOM 时退出 JVM
+- `-Djava.security.egd=file:/dev/./urandom` - 使用非阻塞随机数生成器
+- `-Dfile.encoding=UTF-8` - 设置文件编码为 UTF-8
+- `-Dsun.jnu.encoding=UTF-8` - 设置 JNU 编码为 UTF-8
+- `-Dio.netty.tryReflectionSetAccessible=true` - Netty 反射访问设置
+- `-Djdk.nio.maxCachedBufferSize=1048576` - NIO 缓存缓冲区大小限制为 1MB
+
+G1 相关参数：
+
+- `-XX:MaxGCPauseMillis=500` - 设置 GC 的目标最大停顿时间为 500 毫秒，默认值：200 毫秒，降低停顿目标会降低吞吐量，反之亦然。作为**智能的现代化 GC**，G1 会尝试自动调整各种 GC 行为（控制年轻代大小、混合 GC 次数等）来满足这个停顿时间目标，如果无法达到目标，会记录在 GC 日志中。
+- `-XX:InitiatingHeapOccupancyPercent=25` - 当堆内存使用率达到 25% 时启动并发 GC 周期，默认值：45%，提前启动 GC 避免 STW。
+
+MaxGCPauseMillis 调整策略：
+
+- 如果你的应用对延迟非常敏感，可以设置一个较小的值，比如 50 或 100 毫秒，以减少每次 GC 的停顿时间。
+- 如果应用更注重吞吐量而不是延迟，可以适当增加这个值，比如 200 或 300 毫秒，以提高垃圾回收的效率。
+- 设置太小的值可能导致系统花费更多的时间进行垃圾回收，因为 JVM 会为了满足最大暂停时间而频繁触发 GC，这可能会导致更高频率的 GC 。
+- 设置较大的值可能会增加停顿时间，但可以减少 GC 的频率，从而提高应用的整体吞吐量。
+
+ZGC 相关参数：
+
+- `-XX:+UseZGC` - 使用 ZGC
+- `-XX:+ZUncommit` - 归还未使用的内存
+- `-XX:ZUncommitDelay=300` - 设置 ZGC 归还延迟为 300 秒
+
+可选参数：
+
+- `-Xss512k` - 设置每个线程的栈大小为 512KB，减少内存占用。默认 1MB 太大了。
+- `-XX:MinHeapFreeRatio=10` - 设置 GC 后堆内存最小**空闲比例** 10%，当堆内存空闲比例低于 20%时，JVM 会扩展堆大小。默认 40%。
+- `-XX:MaxHeapFreeRatio=30` - 设置 GC 后堆内存最大空闲比例 30%，当堆内存空闲比例高于 30%时，JVM 会收缩堆大小。促进 Java 内存更快交还给操作系统，但同时 CPU 可能偏高。默认 70%。
+- `-XX:+AlwaysPreTouch` - JVM 启动时立即为所有堆内存分配物理内存并写入零值，启动时间变长，但运行时性能更稳定。避免因内存分配导致的 GC 停顿波动，操作系统更容易分配连续物理内存页，减少内存碎片。
+
+堆空间的空闲百分比计算公式为：`HeapFreeRatio =(CurrentFreeHeapSize/CurrentTotalHeapSize) * 100`，值的区间为 0 到 100。如果 `HeapFreeRatio < MinHeapFreeRatio`，则需要进行堆扩容，如果 `HeapFreeRatio > MaxHeapFreeRatio`，则需要进行堆缩容，扩缩容的时机应该在每次垃圾回收之后。
+
+所以如果 `Xmx==Xms InitialRAMPercentage==MaxRAMPercentage` 这两个 Free 参数就失去了意义，因为他怎么扩缩都不会突破 Xms 和 Xmx 的限制。
+
 ## 遇见问题和解决办法
+
+- Java 目标版本不匹配：有些项目设置 `<java.version>21</java.version>` 运行同时给别人提供了 SDK，但是 SDK 使用者还是 Java 8。此时就需要明确设置编译目标版本为 Java 8，否者使用者就会报错。而且这个报错可能会延迟到运行期，比如 MQ 反序列化的时候才触发，这样就很危险。
+
+  ```xml
+  <java.version>21</java.version>
+  <maven.compiler.release>8</maven.compiler.release>
+  ```
 
 - 一定要升级依赖包吗，不升级能编译通过，直接用 Java 21 能不能跑起来，会不会有问题。
 

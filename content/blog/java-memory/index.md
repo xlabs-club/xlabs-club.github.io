@@ -528,7 +528,7 @@ stat -fc %T /sys/fs/cgroup/
 - -XX:+UseZGC -XX:+ZUncommit -XX:ZUncommitDelay=300 -XX:MinHeapFreeRatio=10 -XX:MaxHeapFreeRatio=30：促进 Java 内存更快交还给操作系统，但同时 CPU 可能偏高。
 - -XX:+ZGenerational：启用分代 ZGC，能降低内存占用。
 - -XX:+UseStringDeduplication：启用 String 去重，可能降低内存占用。
-- -Xss256k：降低线程内存占用，默认 1Mb，线程比较多的情况下这个占用还是很多的。谨慎设置。
+- -Xss512k：降低线程内存占用，默认 1Mb，线程比较多的情况下这个占用还是很多的。谨慎设置。
 - -XX:+ParallelRefProcEnabled：多线程并行处理 Reference，减少 GC 的 Reference 数量，减少 Young GC 时间。
 
 关于 Java 8、17 和 21 不同 GC 更多维度的对比效果可参考： [JDK 21: The GCs keep getting better](https://kstefanj.github.io/2023/12/13/jdk-21-the-gcs-keep-getting-better.html)。
