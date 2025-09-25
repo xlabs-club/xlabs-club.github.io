@@ -1396,6 +1396,7 @@ Caused by: java.lang.reflect.InaccessibleObjectException: Unable to make field p
 - Java 8 → Java 9（模块系统强制封装）
   - 内部 API 访问限制：`sun.*`、`com.sun.*` 包访问受限
   - 反射访问受限：`setAccessible()` 对模块私有成员失效
+  - 正则表达式默认行为变更：如果你使用 `java.util.regex.Pattern`，请一定要关注 Java 9 此特性变更，默认匹配结果有变化，篇幅太长详情请参考 [Behavior Change in Regular Expression Matching](https://docs.oracle.com/en/java/javase/21/migrate/migrating-jdk-8-later-jdk-releases.html#GUID-7DACC239-E71D-4B89-B582-201EA7CEBC38)。
 
 - Java 9 → Java 11（组件移除）
   - Java EE 模块移除：`java.ee.*` 模块被移除
