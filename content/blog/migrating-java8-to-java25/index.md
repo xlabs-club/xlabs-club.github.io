@@ -1789,7 +1789,7 @@ ZGC 相关参数：
 - `-Xss512k` - 设置每个线程的栈大小为 512KB，减少内存占用。默认 1MB 太大了。
 - `-XX:MinHeapFreeRatio=10` - 设置 GC 后堆内存最小**空闲比例** 10%，当堆内存空闲比例低于 20%时，JVM 会扩展堆大小。默认 40%。
 - `-XX:MaxHeapFreeRatio=30` - 设置 GC 后堆内存最大空闲比例 30%，当堆内存空闲比例高于 30%时，JVM 会收缩堆大小。促进 Java 内存更快交还给操作系统，但同时 CPU 可能偏高。默认 70%。
-- `-XX:+AlwaysPreTouch` - JVM 启动时立即为所有堆内存分配物理内存并写入零值，启动时间变长，但运行时性能更稳定。避免因内存分配导致的 GC 停顿波动，操作系统更容易分配连续物理内存页，减少内存碎片。
+- `-XX:+AlwaysPreTouch` - JVM 启动时立即为所有堆内存（按照 Xms 大小）分配物理内存并写入零值，启动时间变长，但运行时性能更稳定。避免因内存分配导致的 GC 停顿波动，操作系统更容易分配连续物理内存页，减少内存碎片。
 
 堆空间的空闲百分比计算公式为：`HeapFreeRatio =(CurrentFreeHeapSize/CurrentTotalHeapSize) * 100`，值的区间为 0 到 100。如果 `HeapFreeRatio < MinHeapFreeRatio`，则需要进行堆扩容，如果 `HeapFreeRatio > MaxHeapFreeRatio`，则需要进行堆缩容，扩缩容的时机应该在每次垃圾回收之后。
 
