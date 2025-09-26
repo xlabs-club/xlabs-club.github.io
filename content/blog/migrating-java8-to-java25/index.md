@@ -1745,7 +1745,7 @@ $ jcmd $(pgrep java) VM.flags | tr ' ' '\n'
 
 升级到 Java 25 以后以下是根据我们公司常规经验推荐的配置，非普世可用，请根据自己的应用情况臻选。
 
-- 如果是 Java 21 在使用 ZGC，推荐启用分代 `-XX:+ZGenerational` ，对稳定性、吞吐量、内存占用都有很大优化。Java 23 默认启用分代 ZGC，Java 24 已废弃非分代 ZGC，默认就已经是分代 ZGC。
+- 如果是 Java 21 在使用 ZGC，推荐启用分代 `-XX:+ZGenerational` ，对稳定性、吞吐量、内存占用都有很大优化。Java 23 默认启用分代 ZGC，Java 24 已废弃非分代 ZGC，以后就只有分代 ZGC。
 - 在很多场景下 G1 仍然是最稳的选择，内存占用比 ZGC 低，CPU 更稳定。大部分场景下小内存应用，并不需要 ZGC。
 - 亲测大部分应用 Java 25 比 Java 21 内存占用约少 5%-10%，GC 更稳定。
 
@@ -1755,10 +1755,10 @@ $ jcmd $(pgrep java) VM.flags | tr ' ' '\n'
 - `-XX:+UnlockExperimentalVMOptions` - 解锁实验性 VM 选项
 - `-XX:+UseStringDeduplication` - 启用字符串去重优化
 - `-XX:+UseCompactObjectHeaders` - 使用紧凑对象头，Java 24 以后
-- `-XX:ParallelGCThreads=4` - 并行 GC 线程数为 4
-- `-XX:ConcGCThreads=4` - 并发 GC 线程数为 4
-- `-XX:InitialRAMPercentage=20.0` - 初始堆内存占物理内存 20%
-- `-XX:MaxRAMPercentage=50.0` - 最大堆内存占物理内存 50%
+- `-XX:ParallelGCThreads=4` - STW 期间，并行 GC 线程数为 4
+- `-XX:ConcGCThreads=4` - 并发标记阶段，并发 GC 线程数为 4
+- `-XX:InitialRAMPercentage=20.0` - 初始堆内存占物理内存 20%，作用等效于 Xms，Xms 优先级更
+- `-XX:MaxRAMPercentage=50.0` - 最大堆内存占物理内存 50%，作用等效于 Xmx
 - `-XX:+ExitOnOutOfMemoryError` - OOM 时退出 JVM
 - `-Djava.security.egd=file:/dev/./urandom` - 使用非阻塞随机数生成器
 - `-Dfile.encoding=UTF-8` - 设置文件编码为 UTF-8
@@ -1793,7 +1793,7 @@ ZGC 相关参数：
 
 堆空间的空闲百分比计算公式为：`HeapFreeRatio =(CurrentFreeHeapSize/CurrentTotalHeapSize) * 100`，值的区间为 0 到 100。如果 `HeapFreeRatio < MinHeapFreeRatio`，则需要进行堆扩容，如果 `HeapFreeRatio > MaxHeapFreeRatio`，则需要进行堆缩容，扩缩容的时机应该在每次垃圾回收之后。
 
-所以如果 `Xmx==Xms InitialRAMPercentage==MaxRAMPercentage` 这两个 Free 参数就失去了意义，因为他怎么扩缩都不会突破 Xms 和 Xmx 的限制。
+如果 `Xmx==Xms InitialRAMPercentage==MaxRAMPercentage` 这两个 HeapFreeRatio 参数就失去了意义，他怎么扩缩都不会突破 Xms 和 Xmx 的限制。
 
 ## 遇见问题和解决办法
 
