@@ -19,4 +19,5 @@ package-lock.json
 .idea
 .impl
 *.log
+.claude/
 .claude.json
