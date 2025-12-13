@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Jakarta EE on XLabs</title><link>https://www.xlabs.club/tags/jakarta-ee/</link><description>Recent content in Jakarta EE on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Sat, 13 Dec 2025 15:47:38 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/jakarta-ee/index.xml" rel="self" type="application/rss+xml"/><item><title>Spring Boot 3 到 4 迁移完全指南：新特性、废弃功能与实战踩坑经验</title><link>https://www.xlabs.club/blog/migration-spring-boot-3-to-4/</link><pubDate>Tue, 25 Nov 2025 23:20:22 +0800</pubDate><guid>https://www.xlabs.club/blog/migration-spring-boot-3-to-4/</guid><description>&lt;p&gt;2025 年 11 月，Spring Boot 4.0 正式发布，这次升级被业界称为&lt;strong&gt;爆炸性升级&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;本文基于 Spring Boot 官方文档和实际生产环境迁移经验，为你提供一份&lt;strong&gt;完整、实用、可执行&lt;/strong&gt;的 Spring Boot 3 到 4 迁移指南。主要包括：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;✅ &lt;strong&gt;全面的新特性解析&lt;/strong&gt;：模块化架构、虚拟线程、Spring Framework 7.0 增强等核心变更深度解读&lt;/li&gt;
+&lt;li&gt;✅ &lt;strong&gt;详细的迁移步骤&lt;/strong&gt;：从评估到部署的完整流程，包含分阶段迁移策略和检查清单&lt;/li&gt;
+&lt;li&gt;✅ &lt;strong&gt;实战踩坑经验&lt;/strong&gt;：HTTP Header 大小写、Jackson 序列化、Spring Batch 元数据等常见问题的解决方案&lt;/li&gt;
+&lt;li&gt;✅ &lt;strong&gt;自动化工具指南&lt;/strong&gt;：OpenRewrite、Spring Boot Migrator 等工具的使用方法和最佳实践&lt;/li&gt;
+&lt;li&gt;✅ &lt;strong&gt;性能优化建议&lt;/strong&gt;：虚拟线程配置、多线程异步启动、数据库连接池调优等性能提升技巧&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;让我们开始这场 Spring Boot 4.0 的迁移之旅！&lt;/p&gt;
+&lt;h2 id="spring-boot-40-核心新特性"&gt;Spring Boot 4.0 核心新特性&lt;/h2&gt;
+&lt;p&gt;作为 Spring Boot 3.x 之后的首个大版本更新，Spring Boot 4.0 基于 Spring Framework 7.0、Jakarta EE 11 和 Java 17+（推荐 Java 21 或 25），带来了模块化架构重构、虚拟线程原生支持、HTTP 服务客户端自动配置等重大变化。&lt;/p&gt;
+&lt;p&gt;Spring Boot 4.0 配套使用 &lt;strong&gt;Spring Cloud 2025.1.x&lt;/strong&gt;。虽然版本号看起来只是中号版本变更，但实际上这是一次&lt;strong&gt;大版本变更&lt;/strong&gt;，包含了大量破坏性变更和重要更新。&lt;/p&gt;</description></item></channel></rss>
