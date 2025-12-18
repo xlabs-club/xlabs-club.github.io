@@ -4,13 +4,17 @@ description: "企业级代码重构实战指南，探索 OpenRewrite、Spring Bo
 date: 2024-01-09T22:08:54+08:00
 lastmod: 2025-12-18T22:08:54+08:00
 draft: false
-toc: true
+categories: ["Java", "AI Code", "Spring Boot"]
+tags: [Java]
+contributors: [l10178]
+pinned: false
+homepage: false
+type: docs
 seo:
   title: "企业级智能代码重构探索：大规模自动化迁移实践与工具选型"
   description: "企业级代码重构实战指南，探索 OpenRewrite、Spring Boot Migrator 等自动化重构工具，涵盖 Spring Boot 2 到 4 升级、Java 8 到 21 迁移、Jakarta EE 转换、CI/CD 集成、自定义 Recipe 开发等最佳实践"
   canonical: ""
   noindex: false
-keywords: ["智能代码重构", "自动化代码迁移", "OpenRewrite", "Spring Boot 升级", "Java 迁移", "企业级代码重构", "Jakarta EE", "CI/CD 集成"]
 ---
 
 作为一个以 Java 和 Spring 为主要技术栈的团队，在日常的软件开发中，我们经常会遇到一系列的组件升级和代码重构需求，在此过程我们期望能做到几个效果：
@@ -587,8 +591,6 @@ pom.xml 文件中增加以下配置，然后执行 `mvn rewrite:run`。
 2. 执行过程中可能会报错，比如 maven 插件升级后某些属性可能变更或失效，需要手动解决错误后，再执行 `mvn rewrite:run`，
 3. 可重复执行 `mvn rewrite:run` 命令，可随时加入新的 recipe 再执行，所以为了观察变更和保证执行成功，可分批次加入 recipe 多次执行。
 4. OpenRewrite 不解析依赖的第三方 jar 包内容，所以第三方 jar 的问题需要自行识别，比如从 Java EE 到 Jakarta EE，只是替换规则中知道的 jar 包版本和当前项目的源代码，不会自动把 jar 包内的 `javax.` 替换为 `jakarta.`。
-
-## 遇见问题和解决办法
 
 [OpenRewrite]: https://docs.openrewrite.org/
 [Spring Boot Migrator]: https://github.com/spring-projects-experimental/spring-boot-migrator
