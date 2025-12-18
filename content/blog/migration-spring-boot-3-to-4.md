@@ -2,7 +2,7 @@
 title: "Spring Boot 3 到 4 迁移完全指南：新特性、废弃功能与实战踩坑经验"
 description: "深度解析 Spring Boot 4.0 新特性，包含 Spring Framework 7、Tomcat 11、虚拟线程支持、模块化改造等核心变更，提供完整的迁移步骤、常见问题解决方案和自动化迁移工具使用指南"
 date: 2025-11-25T23:20:22+08:00
-lastmod: 2025-12-13T10:30:00+08:00
+lastmod: 2025-12-18T22:30:00+08:00
 draft: false
 weight: 50
 categories: [Spring Boot, Java]
@@ -18,17 +18,14 @@ seo:
   noindex: false
 ---
 
-2025 年 11 月，Spring Boot 4.0 正式发布，这次升级被业界称为**爆炸性升级**。
+2025 年 11 月，Spring Boot 4.0 正式发布，这次升级被业界称为**爆炸性升级**。同时对于云原生应用而言，这是一次**不可错过的性能与效率跃迁**：
 
-本文基于 Spring Boot 官方文档和实际生产环境迁移经验，为你提供一份**完整、实用、可执行**的 Spring Boot 3 到 4 迁移指南。主要包括：
+- 🐳 **容器化友好**：模块化架构减少 30-50% 运行时占用，镜像更小、启动更快
+- ⚡ **启动速度提升 30-50%**：多线程异步启动机制，容器冷启动时间显著缩短，更适合 Kubernetes 快速扩缩容
+- 🚀 **2-3 倍吞吐量提升**：虚拟线程原生支持，I/O 密集型微服务资源利用率大幅提升，单实例可承载更高并发
+- 🎯 **云原生特性增强**：内置弹性功能（重试、限流）、HTTP 接口客户端自动配置，简化微服务间通信
 
-- ✅ **全面的新特性解析**：模块化架构、虚拟线程、Spring Framework 7.0 增强等核心变更深度解读
-- ✅ **详细的迁移步骤**：从评估到部署的完整流程，包含分阶段迁移策略和检查清单
-- ✅ **实战踩坑经验**：HTTP Header 大小写、Jackson 序列化、Spring Batch 元数据等常见问题的解决方案
-- ✅ **自动化工具指南**：OpenRewrite、Spring Boot Migrator 等工具的使用方法和最佳实践
-- ✅ **性能优化建议**：虚拟线程配置、多线程异步启动、数据库连接池调优等性能提升技巧
-
-让我们开始这场 Spring Boot 4.0 的迁移之旅！
+但这次升级也带来了 36 个废弃 API 移除、模块化架构重构、Tomcat 11 变更等挑战。本文基于 Spring Boot 官方文档和生产环境迁移经验，从原理到踩坑，提供**完整、实用的迁移指南**，助你平稳完成云原生应用的升级。
 
 ## Spring Boot 4.0 核心新特性
 
@@ -64,14 +61,14 @@ Spring Boot 4 将 `spring-boot-autoconfigure` 拆分为多个专注的模块，�
 
 **主要废弃 Starter 和替代方案：**
 
-| 废弃 Starter | 替代 |
-|------------|------------|
-| `spring-boot-starter-web` | `spring-boot-starter-webmvc` |
-| `spring-boot-starter-aop` | `spring-boot-starter-aspectj` |
+| 废弃 Starter                                      | 替代                                                       |
+| ------------------------------------------------- | ---------------------------------------------------------- |
+| `spring-boot-starter-web`                         | `spring-boot-starter-webmvc`                               |
+| `spring-boot-starter-aop`                         | `spring-boot-starter-aspectj`                              |
 | `spring-boot-starter-oauth2-authorization-server` | `spring-boot-starter-security-oauth2-authorization-server` |
-| `spring-boot-starter-oauth2-client` | `spring-boot-starter-security-oauth2-client` |
-| `spring-boot-starter-oauth2-resource-server` | `spring-boot-starter-security-oauth2-resource-server` |
-| `spring-boot-starter-web-services` | `spring-boot-starter-webservices` |
+| `spring-boot-starter-oauth2-client`               | `spring-boot-starter-security-oauth2-client`               |
+| `spring-boot-starter-oauth2-resource-server`      | `spring-boot-starter-security-oauth2-resource-server`      |
+| `spring-boot-starter-web-services`                | `spring-boot-starter-webservices`                          |
 
 **其他迁移要点：**
 
@@ -82,92 +79,92 @@ Spring Boot 4 将 `spring-boot-autoconfigure` 拆分为多个专注的模块，�
 
 Spring Boot 4.0 统一了 starter 的使用方式：大多数技术都有专门的 starter，每个 starter 都有对应的 test starter。以下是完整的列表（参考 [官方迁移指南](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-4.0-Migration-Guide#starters)）：
 
-| Technology | Main Dependency | Test Dependency |
-|------------|----------------|-----------------|
-| **Core Starters** | | |
-| AspectJ | `spring-boot-starter-aspectj` | `spring-boot-starter-aspectj-test` |
-| Cloud Foundry Support | `spring-boot-starter-cloudfoundry` | `spring-boot-starter-cloudfoundry-test` |
-| Jakarta Validation | `spring-boot-starter-validation` | `spring-boot-starter-validation-test` |
-| Kotlin Serialization | `spring-boot-starter-kotlin-serialization` | `spring-boot-starter-kotlin-serialization-test` |
-| Reactor | `spring-boot-starter-reactor` | `spring-boot-starter-reactor-test` |
-| **Web Server Starters** | | |
-| Jetty | `spring-boot-starter-jetty` | *none* |
-| Reactor Netty | `spring-boot-starter-reactor-netty` | *none* |
-| Tomcat | `spring-boot-starter-tomcat` | *none* |
-| **Web Client Starters** | | |
-| Spring's Imperative `RestClient` and `RestTemplate` | `spring-boot-starter-restclient` | `spring-boot-starter-restclient-test` |
-| Spring's Reactive `WebClient` | `spring-boot-starter-webclient` | `spring-boot-starter-webclient-test` |
-| **Web Starters** | | |
-| Jersey | `spring-boot-starter-jersey` | `spring-boot-starter-jersey-test` |
-| Spring GraphQL | `spring-boot-starter-graphql` | `spring-boot-starter-graphql-test` |
-| Spring HATEOAS | `spring-boot-starter-hateoas` | `spring-boot-starter-hateoas-test` |
-| Spring Session Data Redis | `spring-boot-starter-session-data-redis` | `spring-boot-starter-session-data-redis-test` |
-| Spring Session JDBC | `spring-boot-starter-session-jdbc` | `spring-boot-starter-session-jdbc-test` |
-| Spring Web MVC | `spring-boot-starter-webmvc` | `spring-boot-starter-webmvc-test` |
-| Spring WebFlux | `spring-boot-starter-webflux` | `spring-boot-starter-webflux-test` |
-| Spring Webservices | `spring-boot-starter-webservices` | `spring-boot-starter-webservices-test` |
-| **Database Starters** | | |
-| Cassandra | `spring-boot-starter-cassandra` | `spring-boot-starter-cassandra-test` |
-| Couchbase | `spring-boot-starter-couchbase` | `spring-boot-starter-couchbase-test` |
-| Elasticsearch | `spring-boot-starter-elasticsearch` | `spring-boot-starter-elasticsearch-test` |
-| Flyway | `spring-boot-starter-flyway` | `spring-boot-starter-flyway-test` |
-| JDBC | `spring-boot-starter-jdbc` | `spring-boot-starter-jdbc-test` |
-| jOOQ | `spring-boot-starter-jooq` | `spring-boot-starter-jooq-test` |
-| Liquibase | `spring-boot-starter-liquibase` | `spring-boot-starter-liquibase-test` |
-| LDAP | `spring-boot-starter-ldap` | `spring-boot-starter-ldap-test` |
-| MongoDB | `spring-boot-starter-mongodb` | `spring-boot-starter-mongodb-test` |
-| Neo4J | `spring-boot-starter-neo4j` | `spring-boot-starter-neo4j-test` |
-| R2DBC | `spring-boot-starter-r2dbc` | `spring-boot-starter-r2dbc-test` |
-| **Spring Data Starters** | | |
-| Spring Data Cassandra | `spring-boot-starter-data-cassandra` 或 `spring-boot-starter-data-cassandra-reactive` | `spring-boot-starter-data-cassandra-test` 或 `spring-boot-starter-data-cassandra-reactive-test` |
-| Spring Data Couchbase | `spring-boot-starter-data-couchbase` 或 `spring-boot-starter-data-couchbase-reactive` | `spring-boot-starter-data-couchbase-test` 或 `spring-boot-starter-data-couchbase-reactive-test` |
-| Spring Data Elasticsearch | `spring-boot-starter-data-elasticsearch` | `spring-boot-starter-data-elasticsearch-test` |
-| Spring Data JDBC | `spring-boot-starter-data-jdbc` | `spring-boot-starter-data-jdbc-test` |
-| Spring Data JPA (using Hibernate) | `spring-boot-starter-data-jpa` | `spring-boot-starter-data-jpa-test` |
-| Spring Data LDAP | `spring-boot-starter-data-ldap` | `spring-boot-starter-data-ldap-test` |
-| Spring Data MongoDB | `spring-boot-starter-data-mongodb` 或 `spring-boot-starter-data-mongodb-reactive` | `spring-boot-starter-data-mongodb-test` 或 `spring-boot-starter-data-mongodb-reactive-test` |
-| Spring Data Neo4J | `spring-boot-starter-data-neo4j` | `spring-boot-starter-data-neo4j-test` |
-| Spring Data R2DBC | `spring-boot-starter-data-r2dbc` | `spring-boot-starter-data-r2dbc-test` |
-| Spring Data Redis | `spring-boot-starter-data-redis` 或 `spring-boot-starter-data-redis-reactive` | `spring-boot-starter-data-redis-test` 或 `spring-boot-starter-data-redis-reactive-test` |
-| Spring Data REST | `spring-boot-starter-data-rest` | `spring-boot-starter-data-rest-test` |
-| **IO Starters** | | |
-| Hazelcast | `spring-boot-starter-hazelcast` | `spring-boot-starter-hazelcast-test` |
-| Mail | `spring-boot-starter-mail` | `spring-boot-starter-mail-test` |
-| Quartz | `spring-boot-starter-quartz` | `spring-boot-starter-quartz-test` |
-| SendGrid | `spring-boot-starter-sendgrid` | `spring-boot-starter-sendgrid-test` |
-| Spring Caching Support | `spring-boot-starter-cache` | `spring-boot-starter-cache-test` |
-| Spring Batch (with JDBC) | `spring-boot-starter-batch-jdbc` | `spring-boot-starter-batch-jdbc-test` |
-| Spring Batch (without JDBC) | `spring-boot-starter-batch` | `spring-boot-starter-batch-test` |
-| **JSON Starters** | | |
-| GSON | `spring-boot-starter-gson` | `spring-boot-starter-gson-test` |
-| Jackson | `spring-boot-starter-jackson` | `spring-boot-starter-jackson-test` |
-| JSONB | `spring-boot-starter-jsonb` | `spring-boot-starter-jsonb-test` |
-| **Messaging Starters** | | |
-| ActiveMQ | `spring-boot-starter-activemq` | `spring-boot-starter-activemq-test` |
-| Artemis | `spring-boot-starter-artemis` | `spring-boot-starter-artemis-test` |
-| JMS | `spring-boot-starter-jms` | `spring-boot-starter-jms-test` |
-| RSocket | `spring-boot-starter-rsocket` | `spring-boot-starter-rsocket-test` |
-| Spring AMQP | `spring-boot-starter-amqp` | `spring-boot-starter-amqp-test` |
-| Spring Integration | `spring-boot-starter-integration` | `spring-boot-starter-integration-test` |
-| Spring for Apache Kafka | `spring-boot-starter-kafka` | `spring-boot-starter-kafka-test` |
-| Spring for Apache Pulsar | `spring-boot-starter-pulsar` | `spring-boot-starter-pulsar-test` |
-| Websockets | `spring-boot-starter-websocket` | `spring-boot-starter-websocket-test` |
-| **Security Starters** | | |
-| Spring Security | `spring-boot-starter-security` | `spring-boot-starter-security-test` |
-| Spring Security OAuth Authorization Server | `spring-boot-starter-security-oauth2-authorization-server` | `spring-boot-starter-security-oauth2-authorization-server-test` |
-| Spring Security OAuth Client | `spring-boot-starter-security-oauth2-client` | `spring-boot-starter-security-oauth2-client-test` |
-| Spring Security OAuth Resource Server | `spring-boot-starter-security-oauth2-resource-server` | `spring-boot-starter-security-oauth2-resource-server-test` |
-| Spring Security SAML | `spring-boot-starter-security-saml2` | `spring-boot-starter-security-saml2-test` |
-| **Templating Starters** | | |
-| Freemarker | `spring-boot-starter-freemarker` | `spring-boot-starter-freemarker-test` |
-| Groovy Templates | `spring-boot-starter-groovy-templates` | `spring-boot-starter-groovy-templates-test` |
-| Mustache | `spring-boot-starter-mustache` | `spring-boot-starter-mustache-test` |
-| Thymeleaf | `spring-boot-starter-thymeleaf` | `spring-boot-starter-thymeleaf-test` |
-| **Production-Ready Starters** | | |
-| Actuator | `spring-boot-starter-actuator` | `spring-boot-starter-actuator-test` |
-| Micrometer Metrics | `spring-boot-starter-micrometer-metrics` | `spring-boot-starter-micrometer-metrics-test` |
-| OpenTelemetry | `spring-boot-starter-opentelemetry` | `spring-boot-starter-opentelemetry-test` |
-| Zipkin | `spring-boot-starter-zipkin` | `spring-boot-starter-zipkin-test` |
+| Technology                                          | Main Dependency                                                                       | Test Dependency                                                                                 |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| **Core Starters**                                   |                                                                                       |                                                                                                 |
+| AspectJ                                             | `spring-boot-starter-aspectj`                                                         | `spring-boot-starter-aspectj-test`                                                              |
+| Cloud Foundry Support                               | `spring-boot-starter-cloudfoundry`                                                    | `spring-boot-starter-cloudfoundry-test`                                                         |
+| Jakarta Validation                                  | `spring-boot-starter-validation`                                                      | `spring-boot-starter-validation-test`                                                           |
+| Kotlin Serialization                                | `spring-boot-starter-kotlin-serialization`                                            | `spring-boot-starter-kotlin-serialization-test`                                                 |
+| Reactor                                             | `spring-boot-starter-reactor`                                                         | `spring-boot-starter-reactor-test`                                                              |
+| **Web Server Starters**                             |                                                                                       |                                                                                                 |
+| Jetty                                               | `spring-boot-starter-jetty`                                                           | _none_                                                                                          |
+| Reactor Netty                                       | `spring-boot-starter-reactor-netty`                                                   | _none_                                                                                          |
+| Tomcat                                              | `spring-boot-starter-tomcat`                                                          | _none_                                                                                          |
+| **Web Client Starters**                             |                                                                                       |                                                                                                 |
+| Spring's Imperative `RestClient` and `RestTemplate` | `spring-boot-starter-restclient`                                                      | `spring-boot-starter-restclient-test`                                                           |
+| Spring's Reactive `WebClient`                       | `spring-boot-starter-webclient`                                                       | `spring-boot-starter-webclient-test`                                                            |
+| **Web Starters**                                    |                                                                                       |                                                                                                 |
+| Jersey                                              | `spring-boot-starter-jersey`                                                          | `spring-boot-starter-jersey-test`                                                               |
+| Spring GraphQL                                      | `spring-boot-starter-graphql`                                                         | `spring-boot-starter-graphql-test`                                                              |
+| Spring HATEOAS                                      | `spring-boot-starter-hateoas`                                                         | `spring-boot-starter-hateoas-test`                                                              |
+| Spring Session Data Redis                           | `spring-boot-starter-session-data-redis`                                              | `spring-boot-starter-session-data-redis-test`                                                   |
+| Spring Session JDBC                                 | `spring-boot-starter-session-jdbc`                                                    | `spring-boot-starter-session-jdbc-test`                                                         |
+| Spring Web MVC                                      | `spring-boot-starter-webmvc`                                                          | `spring-boot-starter-webmvc-test`                                                               |
+| Spring WebFlux                                      | `spring-boot-starter-webflux`                                                         | `spring-boot-starter-webflux-test`                                                              |
+| Spring Webservices                                  | `spring-boot-starter-webservices`                                                     | `spring-boot-starter-webservices-test`                                                          |
+| **Database Starters**                               |                                                                                       |                                                                                                 |
+| Cassandra                                           | `spring-boot-starter-cassandra`                                                       | `spring-boot-starter-cassandra-test`                                                            |
+| Couchbase                                           | `spring-boot-starter-couchbase`                                                       | `spring-boot-starter-couchbase-test`                                                            |
+| Elasticsearch                                       | `spring-boot-starter-elasticsearch`                                                   | `spring-boot-starter-elasticsearch-test`                                                        |
+| Flyway                                              | `spring-boot-starter-flyway`                                                          | `spring-boot-starter-flyway-test`                                                               |
+| JDBC                                                | `spring-boot-starter-jdbc`                                                            | `spring-boot-starter-jdbc-test`                                                                 |
+| jOOQ                                                | `spring-boot-starter-jooq`                                                            | `spring-boot-starter-jooq-test`                                                                 |
+| Liquibase                                           | `spring-boot-starter-liquibase`                                                       | `spring-boot-starter-liquibase-test`                                                            |
+| LDAP                                                | `spring-boot-starter-ldap`                                                            | `spring-boot-starter-ldap-test`                                                                 |
+| MongoDB                                             | `spring-boot-starter-mongodb`                                                         | `spring-boot-starter-mongodb-test`                                                              |
+| Neo4J                                               | `spring-boot-starter-neo4j`                                                           | `spring-boot-starter-neo4j-test`                                                                |
+| R2DBC                                               | `spring-boot-starter-r2dbc`                                                           | `spring-boot-starter-r2dbc-test`                                                                |
+| **Spring Data Starters**                            |                                                                                       |                                                                                                 |
+| Spring Data Cassandra                               | `spring-boot-starter-data-cassandra` 或 `spring-boot-starter-data-cassandra-reactive` | `spring-boot-starter-data-cassandra-test` 或 `spring-boot-starter-data-cassandra-reactive-test` |
+| Spring Data Couchbase                               | `spring-boot-starter-data-couchbase` 或 `spring-boot-starter-data-couchbase-reactive` | `spring-boot-starter-data-couchbase-test` 或 `spring-boot-starter-data-couchbase-reactive-test` |
+| Spring Data Elasticsearch                           | `spring-boot-starter-data-elasticsearch`                                              | `spring-boot-starter-data-elasticsearch-test`                                                   |
+| Spring Data JDBC                                    | `spring-boot-starter-data-jdbc`                                                       | `spring-boot-starter-data-jdbc-test`                                                            |
+| Spring Data JPA (using Hibernate)                   | `spring-boot-starter-data-jpa`                                                        | `spring-boot-starter-data-jpa-test`                                                             |
+| Spring Data LDAP                                    | `spring-boot-starter-data-ldap`                                                       | `spring-boot-starter-data-ldap-test`                                                            |
+| Spring Data MongoDB                                 | `spring-boot-starter-data-mongodb` 或 `spring-boot-starter-data-mongodb-reactive`     | `spring-boot-starter-data-mongodb-test` 或 `spring-boot-starter-data-mongodb-reactive-test`     |
+| Spring Data Neo4J                                   | `spring-boot-starter-data-neo4j`                                                      | `spring-boot-starter-data-neo4j-test`                                                           |
+| Spring Data R2DBC                                   | `spring-boot-starter-data-r2dbc`                                                      | `spring-boot-starter-data-r2dbc-test`                                                           |
+| Spring Data Redis                                   | `spring-boot-starter-data-redis` 或 `spring-boot-starter-data-redis-reactive`         | `spring-boot-starter-data-redis-test` 或 `spring-boot-starter-data-redis-reactive-test`         |
+| Spring Data REST                                    | `spring-boot-starter-data-rest`                                                       | `spring-boot-starter-data-rest-test`                                                            |
+| **IO Starters**                                     |                                                                                       |                                                                                                 |
+| Hazelcast                                           | `spring-boot-starter-hazelcast`                                                       | `spring-boot-starter-hazelcast-test`                                                            |
+| Mail                                                | `spring-boot-starter-mail`                                                            | `spring-boot-starter-mail-test`                                                                 |
+| Quartz                                              | `spring-boot-starter-quartz`                                                          | `spring-boot-starter-quartz-test`                                                               |
+| SendGrid                                            | `spring-boot-starter-sendgrid`                                                        | `spring-boot-starter-sendgrid-test`                                                             |
+| Spring Caching Support                              | `spring-boot-starter-cache`                                                           | `spring-boot-starter-cache-test`                                                                |
+| Spring Batch (with JDBC)                            | `spring-boot-starter-batch-jdbc`                                                      | `spring-boot-starter-batch-jdbc-test`                                                           |
+| Spring Batch (without JDBC)                         | `spring-boot-starter-batch`                                                           | `spring-boot-starter-batch-test`                                                                |
+| **JSON Starters**                                   |                                                                                       |                                                                                                 |
+| GSON                                                | `spring-boot-starter-gson`                                                            | `spring-boot-starter-gson-test`                                                                 |
+| Jackson                                             | `spring-boot-starter-jackson`                                                         | `spring-boot-starter-jackson-test`                                                              |
+| JSONB                                               | `spring-boot-starter-jsonb`                                                           | `spring-boot-starter-jsonb-test`                                                                |
+| **Messaging Starters**                              |                                                                                       |                                                                                                 |
+| ActiveMQ                                            | `spring-boot-starter-activemq`                                                        | `spring-boot-starter-activemq-test`                                                             |
+| Artemis                                             | `spring-boot-starter-artemis`                                                         | `spring-boot-starter-artemis-test`                                                              |
+| JMS                                                 | `spring-boot-starter-jms`                                                             | `spring-boot-starter-jms-test`                                                                  |
+| RSocket                                             | `spring-boot-starter-rsocket`                                                         | `spring-boot-starter-rsocket-test`                                                              |
+| Spring AMQP                                         | `spring-boot-starter-amqp`                                                            | `spring-boot-starter-amqp-test`                                                                 |
+| Spring Integration                                  | `spring-boot-starter-integration`                                                     | `spring-boot-starter-integration-test`                                                          |
+| Spring for Apache Kafka                             | `spring-boot-starter-kafka`                                                           | `spring-boot-starter-kafka-test`                                                                |
+| Spring for Apache Pulsar                            | `spring-boot-starter-pulsar`                                                          | `spring-boot-starter-pulsar-test`                                                               |
+| Websockets                                          | `spring-boot-starter-websocket`                                                       | `spring-boot-starter-websocket-test`                                                            |
+| **Security Starters**                               |                                                                                       |                                                                                                 |
+| Spring Security                                     | `spring-boot-starter-security`                                                        | `spring-boot-starter-security-test`                                                             |
+| Spring Security OAuth Authorization Server          | `spring-boot-starter-security-oauth2-authorization-server`                            | `spring-boot-starter-security-oauth2-authorization-server-test`                                 |
+| Spring Security OAuth Client                        | `spring-boot-starter-security-oauth2-client`                                          | `spring-boot-starter-security-oauth2-client-test`                                               |
+| Spring Security OAuth Resource Server               | `spring-boot-starter-security-oauth2-resource-server`                                 | `spring-boot-starter-security-oauth2-resource-server-test`                                      |
+| Spring Security SAML                                | `spring-boot-starter-security-saml2`                                                  | `spring-boot-starter-security-saml2-test`                                                       |
+| **Templating Starters**                             |                                                                                       |                                                                                                 |
+| Freemarker                                          | `spring-boot-starter-freemarker`                                                      | `spring-boot-starter-freemarker-test`                                                           |
+| Groovy Templates                                    | `spring-boot-starter-groovy-templates`                                                | `spring-boot-starter-groovy-templates-test`                                                     |
+| Mustache                                            | `spring-boot-starter-mustache`                                                        | `spring-boot-starter-mustache-test`                                                             |
+| Thymeleaf                                           | `spring-boot-starter-thymeleaf`                                                       | `spring-boot-starter-thymeleaf-test`                                                            |
+| **Production-Ready Starters**                       |                                                                                       |                                                                                                 |
+| Actuator                                            | `spring-boot-starter-actuator`                                                        | `spring-boot-starter-actuator-test`                                                             |
+| Micrometer Metrics                                  | `spring-boot-starter-micrometer-metrics`                                              | `spring-boot-starter-micrometer-metrics-test`                                                   |
+| OpenTelemetry                                       | `spring-boot-starter-opentelemetry`                                                   | `spring-boot-starter-opentelemetry-test`                                                        |
+| Zipkin                                              | `spring-boot-starter-zipkin`                                                          | `spring-boot-starter-zipkin-test`                                                               |
 
 > **提示：** 所有 test starter 都会传递性地引入 `spring-boot-starter-test`，因此不需要再单独声明 `spring-boot-starter-test`。只需要列出被测试技术对应的 test starter 即可。
 
@@ -835,13 +832,13 @@ Tomcat 11 是 Apache Tomcat 项目第九个主要版本，标志着从传统 Jav
 
 根据 Fast Thread 和 Java Code Geeks 的性能基准测试：
 
-| 场景 | 平台线程 | 虚拟线程 | 性能提升 |
-|------|---------|---------|---------|
-| **I/O 密集型应用**（数据库查询、HTTP 调用） | 基准 | 2-3x 吞吐量 | +100-200% |
-| **高并发 Web 请求**（1000+ 并发） | 基准 | 2-3x 吞吐量 | +100-200% |
-| **CPU 密集型应用** | 基准 | 无明显提升 | 0% |
-| **内存占用** | 基准 | -30-50%（线程栈） | -30-50% |
-| **响应时间（P99）** | 基准 | -20-40% | -20-40% |
+| 场景                                        | 平台线程 | 虚拟线程          | 性能提升  |
+| ------------------------------------------- | -------- | ----------------- | --------- |
+| **I/O 密集型应用**（数据库查询、HTTP 调用） | 基准     | 2-3x 吞吐量       | +100-200% |
+| **高并发 Web 请求**（1000+ 并发）           | 基准     | 2-3x 吞吐量       | +100-200% |
+| **CPU 密集型应用**                          | 基准     | 无明显提升        | 0%        |
+| **内存占用**                                | 基准     | -30-50%（线程栈） | -30-50%   |
+| **响应时间（P99）**                         | 基准     | -20-40%           | -20-40%   |
 
 **适用场景：**
 
@@ -927,7 +924,7 @@ Tomcat 11 要求至少 **Java SE 17**，这个和 Spring Boot 4 的要求一致�
 
 如果你用的是 Java 22+，Tomcat 11 支持通过 FFM（Foreign Function & Memory API）使用 OpenSSL，性能会更好。
 
-### javax. *到 jakarta.* 命名空间迁移
+### javax. _到 jakarta._ 命名空间迁移
 
 **重要提醒：** 迁移到 Tomcat 11 的一个挑战性方面是需要重构应用以适应从 `javax.*` 到 `jakarta.*` 命名空间的切换。
 
