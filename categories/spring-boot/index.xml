@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Spring Boot on XLabs</title><link>https://www.xlabs.club/categories/spring-boot/</link><description>Recent content in Spring Boot on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Thu, 18 Dec 2025 23:16:43 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/categories/spring-boot/index.xml" rel="self" type="application/rss+xml"/><item><title>Spring Boot 3 到 4 迁移完全指南：新特性、废弃功能与实战踩坑经验</title><link>https://www.xlabs.club/blog/migration-spring-boot-3-to-4/</link><pubDate>Tue, 25 Nov 2025 23:20:22 +0800</pubDate><guid>https://www.xlabs.club/blog/migration-spring-boot-3-to-4/</guid><description>&lt;p&gt;2025 年 11 月，Spring Boot 4.0 正式发布，这次升级被业界称为&lt;strong&gt;爆炸性升级&lt;/strong&gt;。同时对于云原生应用而言，这是一次&lt;strong&gt;不可错过的性能与效率跃迁&lt;/strong&gt;：&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Spring Boot on XLabs</title><link>https://www.xlabs.club/categories/spring-boot/</link><description>Recent content in Spring Boot on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Fri, 19 Dec 2025 00:27:01 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/categories/spring-boot/index.xml" rel="self" type="application/rss+xml"/><item><title>Spring Boot 3 到 4 迁移完全指南：新特性、废弃功能与实战踩坑经验</title><link>https://www.xlabs.club/blog/migration-spring-boot-3-to-4/</link><pubDate>Tue, 25 Nov 2025 23:20:22 +0800</pubDate><guid>https://www.xlabs.club/blog/migration-spring-boot-3-to-4/</guid><description>&lt;p&gt;2025 年 11 月，Spring Boot 4.0 正式发布，这次升级被业界称为&lt;strong&gt;爆炸性升级&lt;/strong&gt;。同时对于云原生应用而言，这是一次&lt;strong&gt;不可错过的性能与效率跃迁&lt;/strong&gt;：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;🐳 &lt;strong&gt;容器化友好&lt;/strong&gt;：模块化架构减少 30-50% 运行时占用，镜像更小、启动更快&lt;/li&gt;
 &lt;li&gt;⚡ &lt;strong&gt;启动速度提升 30-50%&lt;/strong&gt;：多线程异步启动机制，容器冷启动时间显著缩短，更适合 Kubernetes 快速扩缩容&lt;/li&gt;
@@ -97,4 +97,31 @@
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;Meter（指标）&lt;/p&gt;
-&lt;p&gt;监控数据的整个过程都是围绕着 Meter（指标）, 通过一个一个的 Meter（指标）数据来进行观察应用的状态。常用的指标如：&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;监控数据的整个过程都是围绕着 Meter（指标）, 通过一个一个的 Meter（指标）数据来进行观察应用的状态。常用的指标如：&lt;/p&gt;</description></item><item><title>企业级智能代码重构探索：大规模自动化迁移实践与工具选型</title><link>https://www.xlabs.club/blog/smart-code/</link><pubDate>Tue, 09 Jan 2024 22:08:54 +0800</pubDate><guid>https://www.xlabs.club/blog/smart-code/</guid><description>&lt;p&gt;作为一个以 Java 和 Spring 为主要技术栈的团队，在日常的软件开发中，我们经常会遇到一系列的组件升级和代码重构需求，在此过程我们期望能做到几个效果：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;项目级升级：整个项目（注此项目指 Maven Project）升级，而不是基于某个 Java 类或片段。&lt;/li&gt;
+&lt;li&gt;不同版本跨度变更：比如从 Spring 项目迁移到 Spring Boot，从 Spring Boot 2.x 升级到 3.x，从 Java 8 升级到 Java 21。&lt;/li&gt;
+&lt;li&gt;代码安全可靠：变更的代码一定是正确的，至少是逻辑正确的，至少不能像某 AI 助手一样设置一些根本不存在的属性。&lt;/li&gt;
+&lt;li&gt;经验产品化：最佳实践就是产品，比如我并不（想）了解 Spring Boot 3.2 具体有哪些变更，但希望能一键从 3.0 自动升级到 3.2，直接告诉有哪些变更。&lt;/li&gt;
+&lt;li&gt;自定义重构：对于某些自研代码，希望能自定义重构逻辑，一键自动重构。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;基于以上背景，我们探索了 &lt;a href="https://docs.openrewrite.org/" target="_blank" rel="noopener"&gt;OpenRewrite&lt;/a&gt;
+、&lt;a href="https://github.com/spring-projects-experimental/spring-boot-migrator" target="_blank" rel="noopener"&gt;Spring Boot Migrator&lt;/a&gt;
+、&lt;a href="https://github.com/windup" target="_blank" rel="noopener"&gt;Redhat Windup&lt;/a&gt;
+、&lt;a href="https://github.com/adoptium/emt4j" target="_blank" rel="noopener"&gt;emt4j&lt;/a&gt;
+ 和一众不便具名的 AI 代码助手，本文将分享我们使用 OpenRewrite、Spring Boot Migrator 进行代码重构和升级的一些使用经验和体验。&lt;/p&gt;
+&lt;h2 id="openrewrite"&gt;OpenRewrite&lt;/h2&gt;
+&lt;p&gt;&lt;a href="https://docs.openrewrite.org/" target="_blank" rel="noopener"&gt;OpenRewrite&lt;/a&gt;
+ 是一个开源的代码重写工具，旨在帮助开发人员自动化大规模重构代码。&lt;/p&gt;
+&lt;p&gt;它提供了一套强大的 API 和插件系统，可以通过静态分析和代码转换技术来解析、修改和生成代码。OpenRewrite 支持多种编程语言，包括 Java、C#、 TypeScript、Python、Kubernetes 等。通过使用 OpenRewrite，开发人员可以轻松地进行代码重构、性能优化、代码风格调整和代码迁移等操作，从而提高代码质量和可维护性。OpenRewrite 的开源性质使得开发人员可以自由地定制和扩展其功能，以满足特定项目的需求。&lt;/p&gt;
+&lt;p&gt;比如 Java 领域一些热门的应用场景：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Java 版本升级：从 Java 8 到 Java 21，从 Java EE 到 Jakarta EE 。&lt;/li&gt;
+&lt;li&gt;Spring 框架迁移：从 Spring 5 到 Spring 6，从 Spring Boot 2 到 Spring Boot 3。&lt;/li&gt;
+&lt;li&gt;测试框架迁移： 从 Junit 4 到 Junit 5。&lt;/li&gt;
+&lt;li&gt;依赖管理：自动更新 Java 项目的 Maven 或 Gradle 依赖，确保使用最新和最安全的库版本。&lt;/li&gt;
+&lt;li&gt;代码清理和格式化：自动清理和格式化 Java 代码，确保符合项目或组织的编码标准和风格指南。&lt;/li&gt;
+&lt;li&gt;修复安全漏洞：自动识别和修复 Java 代码中的已知安全漏洞，如使用了有安全问题的库或方法。&lt;/li&gt;
+&lt;li&gt;代码异味检测和修复：识别并自动重构 Java 代码中的“代码异味”，以提高代码可维护性。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;相比于时下火热的 AI 代码工具，比如 GitHub Copilot、Amazon CodeWhisperer，我认为 OpenRewrite 的优势主要有以下几点：&lt;/p&gt;</description></item></channel></rss>
