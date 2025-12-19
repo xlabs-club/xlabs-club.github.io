@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>认证 on XLabs</title><link>https://www.xlabs.club/tags/%E8%AE%A4%E8%AF%81/</link><description>Recent content in 认证 on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Fri, 19 Dec 2025 09:07:31 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/%E8%AE%A4%E8%AF%81/index.xml" rel="self" type="application/rss+xml"/><item><title>备考 CKA 过程，CKA 真题分享</title><link>https://www.xlabs.club/blog/kubernetes-cka/</link><pubDate>Sat, 26 Feb 2022 23:42:48 +0800</pubDate><guid>https://www.xlabs.club/blog/kubernetes-cka/</guid><description>&lt;p&gt;备考 CKA （Certified Kubernetes Administrator）过程，心得，遇见问题，CKA 真题。&lt;/p&gt;
+&lt;p&gt;一句话总结：按照教程多练习，把控好时间就能通过，期望通过刷题通过考试的年代已经过去了，而且多练习对平时工作真的有用。&lt;/p&gt;
+&lt;h2 id="备考环境"&gt;备考环境&lt;/h2&gt;
+&lt;p&gt;备考使用的系统和软件版本如下。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Ubuntu：20.04 Focal Fossa&lt;/li&gt;
+&lt;li&gt;Kubernetes：1.20.7&lt;/li&gt;
+&lt;li&gt;kubeadm：1.20.7&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="安装和使用问题记录"&gt;安装和使用问题记录&lt;/h2&gt;
+&lt;h3 id="kubeadm-安装问题"&gt;kubeadm 安装问题&lt;/h3&gt;
+&lt;p&gt;安装 kubeadm，国内安装使用阿里镜像源。&lt;/p&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-console" data-lang="console"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gp"&gt;$&lt;/span&gt; cat /etc/apt/sources.list.d/kubernetes.list
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;deb https://mirrors.aliyun.com/kubernetes/apt kubernetes-xenial main
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;p&gt;踩坑：因为使用的是 ubuntu 20.04，代号 &lt;code&gt;focal&lt;/code&gt;，专门去各个代理镜像源找&lt;code&gt;kubernetes-focal&lt;/code&gt;都没有找到，后来发现 google 官方根本没发布对应的版本，只有&lt;code&gt;kubernetes-xenial&lt;/code&gt;， k8s 官方文档里 ubuntu 也是用的这一个版本。可以用，就用他吧。&lt;/p&gt;
+&lt;p&gt;kubeadm init 时指定使用阿里镜像源（解决国内连不上 k8s.gcr.io 的问题）、指定版本号（安装考试对应的版本，不一定是最新版本）。
+通过指定&lt;code&gt;--image-repository&lt;/code&gt;，不需要手动下载镜像重新打 tag，kubeadm 自动使用指定的 repository。&lt;/p&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;kubeadm init --image-repository&lt;span class="o"&gt;=&lt;/span&gt;registry.aliyuncs.com/google_containers &lt;span class="se"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="se"&gt;&lt;/span&gt; --pod-network-cidr&lt;span class="o"&gt;=&lt;/span&gt;10.244.0.0/16 &lt;span class="se"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="se"&gt;&lt;/span&gt; --kubernetes-version&lt;span class="o"&gt;=&lt;/span&gt;v1.20.7&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;h3 id="解决-scheduler-unhealthycontroller-manager-unhealthy"&gt;解决 scheduler Unhealthy，controller-manager Unhealthy&lt;/h3&gt;
+&lt;p&gt;第一次安装完成后通过 &lt;code&gt;kubectl get cs&lt;/code&gt;命令，发现 scheduler Unhealthy，controller-manager Unhealthy。&lt;/p&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-console" data-lang="console"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gp"&gt;$&lt;/span&gt; kubectl get cs
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;NAME STATUS MESSAGE
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;scheduler Unhealthy Get &amp;#34;http://127.0.0.1:10251/healthz&amp;#34;: dial tcp 127.0.0.1:10
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;controller-manager Unhealthy Get &amp;#34;http://127.0.0.1:10252/healthz&amp;#34;: dial tcp 127.0.0.1:10
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;p&gt;查看本机端口，10251 和 10252 都没有启动。&lt;/p&gt;</description></item></channel></rss>

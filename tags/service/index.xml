@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Service on XLabs</title><link>https://www.xlabs.club/tags/service/</link><description>Recent content in Service on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Fri, 19 Dec 2025 09:07:31 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/service/index.xml" rel="self" type="application/rss+xml"/><item><title>K8S Service 长连接导致负载不均衡问题分析和解决办法</title><link>https://www.xlabs.club/blog/tomcat-keepalive-load-balancer/</link><pubDate>Thu, 11 Apr 2024 21:05:46 +0800</pubDate><guid>https://www.xlabs.club/blog/tomcat-keepalive-load-balancer/</guid><description>&lt;p&gt;问题背景，我们有一个 Http 服务在 K8S 内部署了 3 个 Pod，客户端使用 Service NodePort 进行连接，发现流量几乎都集中到了一个 Pod 上，各 Pod 承载流量很不均衡。&lt;/p&gt;
+&lt;p&gt;已知的情况是：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;K8S Service 底层是 ipvs round-robin 负载均衡策略，按道理讲应该是均衡的。&lt;/li&gt;
+&lt;li&gt;客户端和服务端都启用了 Keep-Alive 长连接。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;经过抓包分析，负载较高的 Pod 保持着较多 KeepAlive 长连接。将 kube-proxy 的 ipvs 转发模式设置为 Least-Connection，即倾向转发给连接数少的 Pod，可能会有所缓解，但也不一定，因为 ipvs 的负载均衡状态是分散在各个节点的，并没有收敛到一个地方，也就无法在全局层面感知哪个 Pod 上的连接数少，并不能真正做到 Least-Connection。&lt;/p&gt;
+&lt;h2 id="服务端主动要求断开长连接"&gt;服务端主动要求断开长连接&lt;/h2&gt;
+&lt;p&gt;客户端连接我们可能无法控制，那么如何从服务端主动断开长连接。&lt;/p&gt;
+&lt;p&gt;以 Tomcat 为例，它提供了 maxKeepAliveRequests 参数，到达此参数阈值后，Tomcat 会在 Response Header 中主动加一个 &lt;code&gt;Connection: close&lt;/code&gt;，正常情况下客户端接收到此响应后会主动断开长连接。&lt;/p&gt;
+&lt;p&gt;对于其他不支持此参数的服务器，可以自定义 Filter 或者自定代码，到达某阈值后在 Response Header 中主动追加 &lt;code&gt;Connection: close&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;对于 Spring Boot 可通过 properties 配置。&lt;/p&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-properties" data-lang="properties"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Spring Boot Tomcat&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;server.tomcat.max-keep-alive-requests&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;100&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Spring Boot WebFlux&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;server.netty.max-keep-alive-requests&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;100&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;p&gt;对于独立部署 Tomcat，可在 server.xml 文件 Connector 中配置 maxKeepAliveRequests，Tomcat xml 可解析启动参数，启动时增加 &lt;code&gt;-D=server.tomcat.max-keep-alive-requests=200&lt;/code&gt; 来调整默认值大小，另外注意，Tomcat xml 不支持解析 ENV 环境变量，只支持解析 &lt;code&gt;-D&lt;/code&gt; 启动参数。&lt;/p&gt;</description></item></channel></rss>

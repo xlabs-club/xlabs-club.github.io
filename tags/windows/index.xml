@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Windows on XLabs</title><link>https://www.xlabs.club/tags/windows/</link><description>Recent content in Windows on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Fri, 19 Dec 2025 09:07:31 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/windows/index.xml" rel="self" type="application/rss+xml"/><item><title>Windows 使用脚本提高权限以及设置环境变量</title><link>https://www.xlabs.club/blog/windows-takeown/</link><pubDate>Mon, 26 Feb 2024 23:25:29 +0800</pubDate><guid>https://www.xlabs.club/blog/windows-takeown/</guid><description>&lt;p&gt;背景：公司 Windows 办公机受域控安全策略限制，部分文件无权直接修改，另外开发常用的设置系统环境变量也变灰无法设置。
+此问题解决方式如下。&lt;/p&gt;
+&lt;h2 id="提升文件权限"&gt;提升文件权限&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;点击 Windows + X 快捷键 – 选择「命令提示符（管理员）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在 CDM 窗口中执行如下命令。&lt;/p&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-cmd" data-lang="cmd"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;takeown /f C:\要修复的文件路径&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在拿到文件所有权后，还需要使用如下命令获取文件的完全控制权限。&lt;/p&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-cmd" data-lang="cmd"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;icacls C:\要修复的文件路径 /Grant Administrators:F&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="命令行设置环境变量"&gt;命令行设置环境变量&lt;/h2&gt;
+&lt;p&gt;Windows 下命令行设置环境变量，方式为 &lt;code&gt;setx 变量名 变量值&lt;/code&gt;，变量值带空格等特殊符号的，用引号引起来。&lt;/p&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-cmd" data-lang="cmd"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;# 通过命令行设置 Java Home
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;setx JAVA_HOME &lt;span class="s2"&gt;&amp;#34;C:\Program Files\Java\jdk-11.0.2&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;# 设置 GO Path
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;setx GOPATH &lt;span class="s2"&gt;&amp;#34;D:\workspace\go&amp;#34;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;</description></item></channel></rss>

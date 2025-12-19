@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>K8s on XLabs</title><link>https://www.xlabs.club/tags/k8s/</link><description>Recent content in K8s on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Fri, 19 Dec 2025 00:27:01 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/k8s/index.xml" rel="self" type="application/rss+xml"/><item><title>Backstage 集成 oauth2-proxy 和 Keycloak，实现用户管理、登录认证以及 RBAC、ABAC 授权</title><link>https://www.xlabs.club/blog/backstage-keycloak-oauth2-proxy/</link><pubDate>Sat, 16 Nov 2024 16:55:26 +0800</pubDate><guid>https://www.xlabs.club/blog/backstage-keycloak-oauth2-proxy/</guid><description>&lt;p&gt;基于 K8S 部署 Backstage，集成 oauth2-proxy 和 Keycloak，实现用户管理、认证和授权，配置详解和原理介绍。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>K8s on XLabs</title><link>https://www.xlabs.club/tags/k8s/</link><description>Recent content in K8s on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Fri, 19 Dec 2025 09:07:31 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/k8s/index.xml" rel="self" type="application/rss+xml"/><item><title>Backstage 集成 oauth2-proxy 和 Keycloak，实现用户管理、登录认证以及 RBAC、ABAC 授权</title><link>https://www.xlabs.club/blog/backstage-keycloak-oauth2-proxy/</link><pubDate>Sat, 16 Nov 2024 16:55:26 +0800</pubDate><guid>https://www.xlabs.club/blog/backstage-keycloak-oauth2-proxy/</guid><description>&lt;p&gt;基于 K8S 部署 Backstage，集成 oauth2-proxy 和 Keycloak，实现用户管理、认证和授权，配置详解和原理介绍。&lt;/p&gt;
 &lt;p&gt;如果你遇到以下问题或诉求，可以参考此文档。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href="https://backstage.io/" target="_blank" rel="noopener"&gt;Backstage&lt;/a&gt;
@@ -285,7 +285,40 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;server.netty.max-keep-alive-requests&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;100&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
  &lt;/figure&gt;
 &lt;/div&gt;
-&lt;p&gt;对于独立部署 Tomcat，可在 server.xml 文件 Connector 中配置 maxKeepAliveRequests，Tomcat xml 可解析启动参数，启动时增加 &lt;code&gt;-D=server.tomcat.max-keep-alive-requests=200&lt;/code&gt; 来调整默认值大小，另外注意，Tomcat xml 不支持解析 ENV 环境变量，只支持解析 &lt;code&gt;-D&lt;/code&gt; 启动参数。&lt;/p&gt;</description></item><item><title>K8S 容器 PID 限制引起的 Java OutOfMemoryError</title><link>https://www.xlabs.club/blog/k8s-pid-limiting-oom/</link><pubDate>Thu, 07 Sep 2023 16:21:44 +0800</pubDate><guid>https://www.xlabs.club/blog/k8s-pid-limiting-oom/</guid><description>&lt;p&gt;问题描述：&lt;/p&gt;
+&lt;p&gt;对于独立部署 Tomcat，可在 server.xml 文件 Connector 中配置 maxKeepAliveRequests，Tomcat xml 可解析启动参数，启动时增加 &lt;code&gt;-D=server.tomcat.max-keep-alive-requests=200&lt;/code&gt; 来调整默认值大小，另外注意，Tomcat xml 不支持解析 ENV 环境变量，只支持解析 &lt;code&gt;-D&lt;/code&gt; 启动参数。&lt;/p&gt;</description></item><item><title>K8S StatefulSet 应用 PV/PVC 平滑扩容</title><link>https://www.xlabs.club/blog/statefulset-resize-pvc/</link><pubDate>Sun, 31 Mar 2024 21:29:52 +0800</pubDate><guid>https://www.xlabs.club/blog/statefulset-resize-pvc/</guid><description>&lt;p&gt;在 K8S 中使用 Helm 部署了一些有状态应用，并通过 Helm 自动生成了 PV 和 PVC，某天想扩容，竟然报错了。&lt;/p&gt;
+&lt;p&gt;以下以 bitnami zookeeper 为例，其他 StatefulSet 同理。&lt;/p&gt;
+&lt;p&gt;为了实现磁盘扩容，改大 &lt;code&gt;persistence.size&lt;/code&gt;，比如由 8Gi 改为 10Gi，然后执行 helm upgrade，出现错误。&lt;/p&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-console" data-lang="console"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;Error: UPGRADE FAILED: cannot patch &amp;#34;zookeeper&amp;#34; with kind StatefulSet: StatefulSet.apps &amp;#34;zookeeper&amp;#34; is invalid: spec: Forbidden: updates to statefulset spec for fields other than &amp;#39;replicas&amp;#39;, &amp;#39;template&amp;#39;, &amp;#39;updateStrategy&amp;#39;, &amp;#39;persistentVolumeClaimRetentionPolicy&amp;#39; and &amp;#39;minReadySeconds&amp;#39; are forbidden
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;p&gt;实际上我们想更新的是 StatefulSet 的 spec.volumeClaimTemplates 中的 storage 大小，根据提示信息，StatefulSet 竟然不允许。&lt;/p&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;spec&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;volumeClaimTemplates&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;apiVersion&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;v1&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;spec&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;resources&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;requests&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;storage&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;8Gi&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;p&gt;查看 K8S 官方说明，果然当前版本 (1.29) 还不支持，参考链接如下。&lt;/p&gt;</description></item><item><title>K8S 容器 PID 限制引起的 Java OutOfMemoryError</title><link>https://www.xlabs.club/blog/k8s-pid-limiting-oom/</link><pubDate>Thu, 07 Sep 2023 16:21:44 +0800</pubDate><guid>https://www.xlabs.club/blog/k8s-pid-limiting-oom/</guid><description>&lt;p&gt;问题描述：&lt;/p&gt;
 &lt;p&gt;一个 Java 应用跑在 K8S 容器内，Pod 内只有 Java 这一个进程。应用跑了一段时间后，CPU、内存占用都不高，但是却出现以下 OutOfMemoryError 错误。&lt;/p&gt;
 
 
@@ -332,4 +365,62 @@
  alt="Grafana 监控图"
  id="h-rh-i-0"
 &gt;&lt;/a&gt;
-&lt;/p&gt;</description></item></channel></rss>
+&lt;/p&gt;</description></item><item><title>备考 CKA 过程，CKA 真题分享</title><link>https://www.xlabs.club/blog/kubernetes-cka/</link><pubDate>Sat, 26 Feb 2022 23:42:48 +0800</pubDate><guid>https://www.xlabs.club/blog/kubernetes-cka/</guid><description>&lt;p&gt;备考 CKA （Certified Kubernetes Administrator）过程，心得，遇见问题，CKA 真题。&lt;/p&gt;
+&lt;p&gt;一句话总结：按照教程多练习，把控好时间就能通过，期望通过刷题通过考试的年代已经过去了，而且多练习对平时工作真的有用。&lt;/p&gt;
+&lt;h2 id="备考环境"&gt;备考环境&lt;/h2&gt;
+&lt;p&gt;备考使用的系统和软件版本如下。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Ubuntu：20.04 Focal Fossa&lt;/li&gt;
+&lt;li&gt;Kubernetes：1.20.7&lt;/li&gt;
+&lt;li&gt;kubeadm：1.20.7&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="安装和使用问题记录"&gt;安装和使用问题记录&lt;/h2&gt;
+&lt;h3 id="kubeadm-安装问题"&gt;kubeadm 安装问题&lt;/h3&gt;
+&lt;p&gt;安装 kubeadm，国内安装使用阿里镜像源。&lt;/p&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-console" data-lang="console"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gp"&gt;$&lt;/span&gt; cat /etc/apt/sources.list.d/kubernetes.list
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;deb https://mirrors.aliyun.com/kubernetes/apt kubernetes-xenial main
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;p&gt;踩坑：因为使用的是 ubuntu 20.04，代号 &lt;code&gt;focal&lt;/code&gt;，专门去各个代理镜像源找&lt;code&gt;kubernetes-focal&lt;/code&gt;都没有找到，后来发现 google 官方根本没发布对应的版本，只有&lt;code&gt;kubernetes-xenial&lt;/code&gt;， k8s 官方文档里 ubuntu 也是用的这一个版本。可以用，就用他吧。&lt;/p&gt;
+&lt;p&gt;kubeadm init 时指定使用阿里镜像源（解决国内连不上 k8s.gcr.io 的问题）、指定版本号（安装考试对应的版本，不一定是最新版本）。
+通过指定&lt;code&gt;--image-repository&lt;/code&gt;，不需要手动下载镜像重新打 tag，kubeadm 自动使用指定的 repository。&lt;/p&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;kubeadm init --image-repository&lt;span class="o"&gt;=&lt;/span&gt;registry.aliyuncs.com/google_containers &lt;span class="se"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="se"&gt;&lt;/span&gt; --pod-network-cidr&lt;span class="o"&gt;=&lt;/span&gt;10.244.0.0/16 &lt;span class="se"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="se"&gt;&lt;/span&gt; --kubernetes-version&lt;span class="o"&gt;=&lt;/span&gt;v1.20.7&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;h3 id="解决-scheduler-unhealthycontroller-manager-unhealthy"&gt;解决 scheduler Unhealthy，controller-manager Unhealthy&lt;/h3&gt;
+&lt;p&gt;第一次安装完成后通过 &lt;code&gt;kubectl get cs&lt;/code&gt;命令，发现 scheduler Unhealthy，controller-manager Unhealthy。&lt;/p&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-console" data-lang="console"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gp"&gt;$&lt;/span&gt; kubectl get cs
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;NAME STATUS MESSAGE
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;scheduler Unhealthy Get &amp;#34;http://127.0.0.1:10251/healthz&amp;#34;: dial tcp 127.0.0.1:10
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;controller-manager Unhealthy Get &amp;#34;http://127.0.0.1:10252/healthz&amp;#34;: dial tcp 127.0.0.1:10
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;p&gt;查看本机端口，10251 和 10252 都没有启动。&lt;/p&gt;</description></item></channel></rss>

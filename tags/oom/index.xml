@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>OOM on XLabs</title><link>https://www.xlabs.club/tags/oom/</link><description>Recent content in OOM on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Fri, 19 Dec 2025 09:07:31 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/oom/index.xml" rel="self" type="application/rss+xml"/><item><title>K8S 容器 PID 限制引起的 Java OutOfMemoryError</title><link>https://www.xlabs.club/blog/k8s-pid-limiting-oom/</link><pubDate>Thu, 07 Sep 2023 16:21:44 +0800</pubDate><guid>https://www.xlabs.club/blog/k8s-pid-limiting-oom/</guid><description>&lt;p&gt;问题描述：&lt;/p&gt;
+&lt;p&gt;一个 Java 应用跑在 K8S 容器内，Pod 内只有 Java 这一个进程。应用跑了一段时间后，CPU、内存占用都不高，但是却出现以下 OutOfMemoryError 错误。&lt;/p&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-console" data-lang="console"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;Exception in thread &amp;#34;slow-fetch-15&amp;#34; java.lang.OutOfMemoryError: unable to create new native thread
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;428 at java.lang.Thread.start0(Native Method)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;429 at java.lang.Thread.start(Thread.java:719)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;430 at java.util.concurrent.ThreadPoolExecutor.addWorker(ThreadPoolExecutor.java:957)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;431 at java.util.concurrent.ThreadPoolExecutor.processWorkerExit(ThreadPoolExecutor.java:1025)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;432 at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;433 at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;p&gt;进入 Pod 内，尝试执行任何操作，又会出现 &lt;code&gt;unable to start container process&lt;/code&gt; 错误。&lt;/p&gt;
+&lt;p&gt;一开始怀疑是内存不足，调大了内存，同时也缩小了 Java 的 &lt;code&gt;xss&lt;/code&gt;，都不起作用。&lt;/p&gt;
+&lt;p&gt;真实原因： K8S 容器限制了 PID 数，无法创建新的线程。关于 K8S PID limit， 可参考此资料：&lt;a href="https://kubernetes.io/zh-cn/docs/concepts/policy/pid-limiting/" target="_blank" rel="noopener"&gt;https://kubernetes.io/zh-cn/docs/concepts/policy/pid-limiting/&lt;/a&gt;
+.&lt;/p&gt;
+&lt;p&gt;在 Pod 内查看当前 PID 限制方式：&lt;/p&gt;</description></item><item><title>K8S Pod 容器内 Java 进程内存分析，内存虚高以及容器 OOM 或 Jave OOM 问题定位</title><link>https://www.xlabs.club/blog/java-memory/</link><pubDate>Sat, 07 Jan 2023 10:54:37 +0800</pubDate><guid>https://www.xlabs.club/blog/java-memory/</guid><description>&lt;p&gt;故事背景：&lt;/p&gt;
+&lt;p&gt;一个 K8S Pod，里面只有一个 Java 进程，K8S request 和 limit memory 都是 2G，Java 进程核心参数包括：&lt;code&gt;-XX:+UseZGC -Xmx1024m -Xms768m&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;服务启动一段时间后，查看 Grafana 监控数据，Pod 内存使用量约 1.5G，JVM 内存使用量约 500M，通过 jvm dump 分析没有任何大对象，运行三五天后出现 K8S Container OOM。&lt;/p&gt;
+&lt;p&gt;首先区分下 Container OOM 和 Jvm OOM，Container OOM 是 Pod 内进程申请内存大约 K8S Limit 所致。&lt;/p&gt;
+&lt;p&gt;问题来了：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Pod 2G 内存，JVM 设置了 &lt;code&gt;Xmx 1G&lt;/code&gt;，已经预留了 1G 内存，为什么还会 Container OOM，这预留的 1G 内存被谁吃了。&lt;/li&gt;
+&lt;li&gt;正常情况下（无 Container OOM），Grafana 看到的监控数据，Pod 内存使用量 1.5G， JVM 内存使用量 500M，差别为什么这么大。&lt;/li&gt;
+&lt;li&gt;Pod 内存使用量为什么超过 Xmx 限制。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Grafana 监控图。&lt;/p&gt;
+&lt;p&gt;&lt;a href="./grafana-pod-jvm.png"&gt;
+
+&lt;img
+ src="https://www.xlabs.club/blog/java-memory/grafana-pod-jvm_hu_f3e003bf88afca3a.webp"
+ width="1920"
+ height="3600"
+ decoding="async"
+ fetchpriority="auto"
+ loading="lazy"
+ alt="Grafana 监控图"
+ id="h-rh-i-0"
+&gt;&lt;/a&gt;
+&lt;/p&gt;</description></item></channel></rss>

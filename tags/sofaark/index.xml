@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>SOFAArk on XLabs</title><link>https://www.xlabs.club/tags/sofaark/</link><description>Recent content in SOFAArk on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Fri, 19 Dec 2025 09:07:31 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/sofaark/index.xml" rel="self" type="application/rss+xml"/><item><title>Koupleless 试用报告总结，踩坑记录分享</title><link>https://www.xlabs.club/blog/koupleless-first-boot/</link><pubDate>Mon, 27 May 2024 14:20:24 +0800</pubDate><guid>https://www.xlabs.club/blog/koupleless-first-boot/</guid><description>&lt;p&gt;我们公司的主要应用都是以 Java 作为开发语言，这几年随着业务的高速增长，应用数目越来越多，CPU 内存资源占用越来越多，项目组之间开发合作效率也越来越低。&lt;/p&gt;
+&lt;p&gt;顺应这个时代降本增效的目的，我们希望寻找一个能解决当前几个核心问题的框架：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;模块化开发、部署、资源共享的能力，减少 Cache、Class 等资源占用，有效降低内存占用。&lt;/li&gt;
+&lt;li&gt;更快更轻的依赖，应用能够更快的启动。&lt;/li&gt;
+&lt;li&gt;能够让各个项目组不改代码或少改代码即可接入，控制开发迁移的成本，毕竟很多历史老应用不是那么容易迁移。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;基于以上背景，我们在 2022 年基于 SOFAArk 运行了一个版本，效果不太理想暂时搁置。今年 Koupleless 重新开源后做了一些增强和变更，开源社区活跃度有所提升，看宣传效果很好，我们决定重新评估是否可在公司内推广。&lt;/p&gt;
+&lt;h2 id="什么是-koupleless"&gt;什么是 Koupleless&lt;/h2&gt;
+&lt;p&gt;&lt;a href="https://koupleless.io/home/" target="_blank" rel="noopener"&gt;Koupleless&lt;/a&gt;
+ 是一种模块化 Serverless 技术解决方案，它能让普通应用低成本演进为 Serverless 研发模式，让代码与资源解耦，轻松独立维护， 与此同时支持秒级构建部署、合并部署、动态伸缩等能力为用户提供极致的研发运维体验，最终帮助企业实现降本增效。&lt;/p&gt;
+&lt;p&gt;Koupleless 是蚂蚁集团内部经过 5 年打磨成熟的研发框架和运维调度平台能力，相较于传统镜像化的应用模式研发、运维、运行阶段都有 10 倍左右的提升，总结起来 5 大特点：快、省、灵活部署、平滑演进、生产规模化验证。&lt;/p&gt;
+&lt;p&gt;以上都是官网的宣传，更多介绍请链接到官网查看。&lt;/p&gt;
+&lt;p&gt;在整个 Koupleless 平台里，需要四个组件：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;研发工具 Arkctl, 提供模块创建、快速联调测试等能力。&lt;/li&gt;
+&lt;li&gt;运行组件 SOFAArk, Arklet，提供模块运维、模块生命周期管理，多模块运行环境。（这算两个组件？）&lt;/li&gt;
+&lt;li&gt;控制面组件 ModuleController，本质上是一个 K8S Operator，提供模块发布与运维能力。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;我们公司有自己的发布系统、应用管理平台，很少允许运行额外的控制面组件，那么除去 ModuleController，我个人认为，Koupleless 约等于 SOFAArk。&lt;/p&gt;
+&lt;p&gt;Koupleless 增强了 SOFAArk 运维部署相关的功能，解决了 SOFAArk 在企业内无法开箱即用的问题。&lt;/p&gt;
+&lt;h2 id="应用接入遇见问题"&gt;应用接入遇见问题&lt;/h2&gt;
+&lt;p&gt;基于官方文档我们改造接入了几个应用，分享几个我们遇见的问题。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;对 Java 17 或 21 的支持不好。
+虽然官方已经声称支持 Java 17，但是若用了 Java 17 的语法或新特性，无法编译通过。最后只好自编译 SOFAArk plugin 修改相关依赖解决。&lt;/p&gt;</description></item></channel></rss>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Code-Server on XLabs</title><link>https://www.xlabs.club/tags/code-server/</link><description>Recent content in Code-Server on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Fri, 19 Dec 2025 09:07:31 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/code-server/index.xml" rel="self" type="application/rss+xml"/><item><title>使用 Visual Studio Code 搭建多用户远程 IDE</title><link>https://www.xlabs.club/blog/code-server/</link><pubDate>Wed, 07 Sep 2022 16:21:44 +0800</pubDate><guid>https://www.xlabs.club/blog/code-server/</guid><description>&lt;p&gt;为 VS Code Web 版 &lt;a href="https://github.com/coder/code-server" target="_blank" rel="noopener"&gt;code-server&lt;/a&gt;
+ 增加外部认证，并支持多用户，不同用户的 code-server 实例完全隔离。&lt;/p&gt;
+&lt;p&gt;主要为了解决问题：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;code-server 本身只支持配置文件形式的用户名密码认证（截止目前，以后也许会改进）。所以引入了外部认证系统，Google、GitHub、 okta、CAS、Keycloak 等理论上都是支持的。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;code-server 默认没有数据隔离，所以又加了一层 auth proxy，为每个用户创建一个（或多个）code-server 实例，通过 proxy 代理到各自的实例，以实现用户间的数据隔离。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;使用开源 Auth Proxy，无需自己编码即可实现认证授权流程，比如 &lt;code&gt;code flow with pkce&lt;/code&gt; 对大部分人来说读懂这个协议都很困难。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;此文档源码请参考：&lt;a href="https://github.com/xlabs-club/architecture-diagram" target="_blank" rel="noopener"&gt;architecture-diagram&lt;/a&gt;
+&lt;/p&gt;
+&lt;h2 id="使用组件"&gt;使用组件&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href="https://github.com/keycloak/keycloak" target="_blank" rel="noopener"&gt;keycloak&lt;/a&gt;
+&lt;/p&gt;
+&lt;p&gt;Redhat 开源 IAM 系统，目前也是 CNCF 项目，提供用户、组织服务，提供标准 OIDC。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href="https://github.com/oauth2-proxy/oauth2-proxy" target="_blank" rel="noopener"&gt;oauth2-proxy&lt;/a&gt;
+&lt;/p&gt;
+&lt;p&gt;认证代理，配合 keycloak 提供完整 OAuth2 Code Flow 认证流程。也可以试试 &lt;a href="https://github.com/pomerium/pomerium" target="_blank" rel="noopener"&gt;pomerium&lt;/a&gt;
+，看样子也不错。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;架构图如下。&lt;/p&gt;
+&lt;p&gt;
+
+&lt;img
+ src="https://www.xlabs.club/blog/code-server/code-server-auth-proxy_hu_9d21f682080840b4.webp"
+ width="752"
+ height="922"
+ decoding="async"
+ fetchpriority="auto"
+ loading="lazy"
+ alt="code-server-auth-proxy"
+ id="h-rh-i-0"
+&gt;&lt;/p&gt;
+&lt;h2 id="核心逻辑"&gt;核心逻辑&lt;/h2&gt;
+&lt;p&gt;架构图简单解读，所有过程官方文档都有详细说明，都是配置，以官方配置为准。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;keycloak 创建 client，使用 OIDC 协议，作为 oauth2-proxy 的 provider。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;ingress(nginx) 使用 auth_request 指令拦截所有请求，从 oauth2-proxy 进行代理认证，配置可参考 &lt;a href="https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/overview/#configuring-for-use-with-the-nginx-auth_request-directive" target="_blank" rel="noopener"&gt;oauth2-proxy auth_request&lt;/a&gt;
+ 指导。&lt;/p&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;nginx.ingress.kubernetes.io/auth-signin&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;https://$host/oauth2/start?rd=$escaped_request_uri&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;&lt;/span&gt;&lt;span class="nt"&gt;nginx.ingress.kubernetes.io/auth-url&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;https://$host/oauth2/auth&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;认证通过后，将用户名/ID 作为标识，通过 Http Header （举例如 X-Forwarded-Preferred-Username) 传入 upstream。&lt;/p&gt;</description></item></channel></rss>

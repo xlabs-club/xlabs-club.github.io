@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tar on XLabs</title><link>https://www.xlabs.club/tags/tar/</link><description>Recent content in Tar on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Fri, 19 Dec 2025 09:07:31 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/tar/index.xml" rel="self" type="application/rss+xml"/><item><title>文件压缩解压缩快速参考</title><link>https://www.xlabs.club/blog/tar-gz/</link><pubDate>Sun, 10 Mar 2024 15:22:20 +0800</pubDate><guid>https://www.xlabs.club/blog/tar-gz/</guid><description>&lt;p&gt;文件压缩解压缩快速参考。&lt;/p&gt;
+&lt;h2 id="常用文件格式"&gt;常用文件格式&lt;/h2&gt;
+&lt;p&gt;.tar：tar 其实打包（或翻译为归档）文件，本身并没有压缩。在 Linux 里 man tar 可以看到它的描述也是“manipulate tape archives”（tar 最初被用来在磁带上创建档案，现在，用户可以在任何设备上创建档案，只是它的描述还没有改）。&lt;/p&gt;
+&lt;p&gt;.gz：gzip 是 GNU 组织开发的一个压缩程序，.gz 结尾的文件就是 gzip 压缩的结果。&lt;/p&gt;
+&lt;p&gt;.bz2：bzip2 是一个压缩能力更强的压缩程序，.bz2 结尾的文件就是 bzip2 压缩的结果。&lt;/p&gt;
+&lt;p&gt;.Z：compress 也是一个压缩程序。.Z 结尾的文件就是 compress 压缩的结果。&lt;/p&gt;
+&lt;p&gt;.zip：使用 zip 软件压缩的文件。&lt;/p&gt;
+&lt;p&gt;.tar.gz、.tar.bz2、.tar.xz 等可以理解为打包+压缩的效果，用软件解压可以发现比。gz 多了一层包。gzip 和 bzip2，不能同时压缩多个文件，tar 相当于开个挂加上同时压缩的特效，tar 先归档为一个大文件，而归档为大文件的速度是很快的，测试了一下几乎可以忽略不计。&lt;/p&gt;
+&lt;p&gt;除了这些格式外，常见的 deb、exe、msi、rpm、dmg、iso 等安装软件，其实都是经过压缩的，一般情况下没有必要再压缩。而 rar 基本认为是 Windows 平台专属的压缩算法了，各个 Linux 发行版都不自带 rar 压缩解压缩软件，所以可以看到很多软件发行的格式都是 .tar.gz 或 .zip。&lt;/p&gt;
+&lt;h2 id="解压缩"&gt;解压缩&lt;/h2&gt;
+&lt;p&gt;根据文件名后缀自行选择解压缩命令。&lt;/p&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tar -xf test.tar
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;gzip -d test.gz
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;gunzip test.gz
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# -C 直接解压到指定目录&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tar -xzf test.tar.gz -C /home
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;bzip2 -d test.bz2
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;bunzip2 test.bz2
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tar -xjf test.tar.bz2
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tar -xvJf test.tar.xz&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;h2 id="压缩"&gt;压缩&lt;/h2&gt;
+&lt;p&gt;请根据需要选择压缩算法。&lt;/p&gt;</description></item></channel></rss>

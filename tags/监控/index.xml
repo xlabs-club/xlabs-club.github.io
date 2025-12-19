@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>监控 on XLabs</title><link>https://www.xlabs.club/tags/%E7%9B%91%E6%8E%A7/</link><description>Recent content in 监控 on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Fri, 19 Dec 2025 09:07:31 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/%E7%9B%91%E6%8E%A7/index.xml" rel="self" type="application/rss+xml"/><item><title>Spring Boot 使用 Micrometer 集成 Prometheus 监控，5 分钟接入自定义监控指标</title><link>https://www.xlabs.club/blog/spring-boot-micrometer/</link><pubDate>Mon, 07 Aug 2023 10:54:37 +0800</pubDate><guid>https://www.xlabs.club/blog/spring-boot-micrometer/</guid><description>&lt;p&gt;Spring Boot 使用 Micrometer 集成 Prometheus 监控，5 分钟接入自定义监控指标，主要内容：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Micrometer 介绍。&lt;/li&gt;
+&lt;li&gt;业务如何自定义指标，如何接入 Prometheus，实现方式和规范。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="micrometer-介绍"&gt;Micrometer 介绍&lt;/h2&gt;
+&lt;p&gt;Micrometer 为 Java 平台上的性能数据收集提供了一个通用的 API，应用程序只需要使用 Micrometer 的通用 API 来收集性能指标，Micrometer 会负责完成与不同监控系统的适配工作。&lt;/p&gt;
+&lt;p&gt;Micrometer 提供了多种度量指标类型（Timers、Guauges、Counters 等），同时支持接入不同的监控系统，例如 Influxdb、Graphite、Prometheus、OTLP 等。&lt;/p&gt;
+&lt;p&gt;从 Spring Boot 2.x 开始使用 Micrometer 作为默认的监控门面接口， &lt;code&gt;Think SLF4J, but for observability&lt;/code&gt; 。&lt;/p&gt;
+&lt;h3 id="micrometer-核心概念"&gt;Micrometer 核心概念&lt;/h3&gt;
+&lt;p&gt;Micrometer 中两个最核心的概念：计量器注册表 (MeterRegistry)，计量器 (Meter)。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;MeterRegistry&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;内存注册表 (SimpleMeterRegistry): 在内存中保存每一个 Meter（指标）的最新值，并且不会将数据导出到任何地方。&lt;/li&gt;
+&lt;li&gt;组合注册表 (CompositeMeterRegistry): 可以添加多个注册表，用于将各个注册表组合起来，可以同时将指标发布到多个监控系统。Micrometer 提供了一个全局的 MeterRegistry，&lt;code&gt;io.micrometer.core.instrument.Metrics&lt;/code&gt; 中持有一个静态 final 的 CompositeMeterRegistry 实例 globalRegistry。&lt;/li&gt;
+&lt;li&gt;普罗米修斯注册表 (PrometheusMeterRegistry): 当使用普罗米修斯监控时，引入 micrometer-registry-prometheus 依赖时会提供此种收集器，用于将指标数据转换为普罗米修斯识别的格式和导出数据等功能。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Meter（指标）&lt;/p&gt;
+&lt;p&gt;监控数据的整个过程都是围绕着 Meter（指标）, 通过一个一个的 Meter（指标）数据来进行观察应用的状态。常用的指标如：&lt;/p&gt;</description></item></channel></rss>
