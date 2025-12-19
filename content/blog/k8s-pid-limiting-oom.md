@@ -1,17 +1,22 @@
 ---
 title: "K8S 容器 PID 限制引起的 Java OutOfMemoryError"
-description: "K8S 容器 PID 限制引起的 Java OutOfMemoryError"
+description: "K8S 容器 PID 限制引起的 Java OutOfMemoryError 问题分析与解决方案，包含 PID 限制配置和排查方法"
 summary: ""
 date: 2023-09-07T16:21:44+08:00
-lastmod: 2023-09-07T16:21:44+08:00
+lastmod: 2025-12-18T22:37:18+08:00
 draft: false
 weight: 50
 images: []
 categories: [k8s]
-tags: [k8s, Java]
+tags: [k8s, Java, OOM, PID限制]
 contributors: [l10178]
 pinned: false
 homepage: false
+seo:
+  title: "K8S 容器 PID 限制引起的 Java OutOfMemoryError 问题排查"
+  description: "K8S 容器 PID 限制引起的 Java OutOfMemoryError 问题分析与解决方案，包含 PID 限制配置和排查方法"
+  canonical: ""
+  noindex: false
 ---
 
 问题描述：

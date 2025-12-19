@@ -1,19 +1,19 @@
 ---
 title: "备考 CKA 过程，CKA 真题分享"
-description: "备考 CKA 过程，CKA 真题分享"
+description: "备考 CKA（Certified Kubernetes Administrator）过程，心得，遇见问题，CKA 真题分享，包含备考环境、学习资源和实战经验"
 summary: ""
 date: 2022-02-26T23:42:48+08:00
-lastmod: 2022-02-26T23:42:48+08:00
+lastmod: 2025-12-18T22:35:07+08:00
 draft: false
 weight: 50
-categories: []
-tags: []
+categories: [K8S]
+tags: [k8s, CKA, Kubernetes, 认证]
 contributors: []
 pinned: false
 homepage: false
 seo:
-  title: ""
-  description: ""
+  title: "CKA 认证备考指南：Kubernetes 管理员认证真题与实战经验"
+  description: "备考 CKA（Certified Kubernetes Administrator）过程，心得，遇见问题，CKA 真题分享，包含备考环境、学习资源和实战经验"
   canonical: ""
   noindex: false
 ---

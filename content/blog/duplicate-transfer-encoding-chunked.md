@@ -1,20 +1,20 @@
 ---
 title: "重复 Transfer-Encoding Response Header 引起的 Traefik 代理服务 500 问题"
-description: "重复 Transfer-Encoding Response Header 引起的 Traefik 代理服务 500 问题"
+description: "重复 Transfer-Encoding Response Header 引起的 Traefik 代理服务 500 问题，包含 Spring Boot 应用 Header 重复问题排查和解决方案"
 summary: ""
 date: 2023-11-26T10:21:44+08:00
-lastmod: 2023-11-26T10:21:44+08:00
+lastmod: 2025-12-18T22:55:02+08:00
 draft: false
 weight: 50
 images: []
-categories: []
-tags: [Java]
+categories: [Java]
+tags: [Java, Traefik, Spring Boot, HTTP Header]
 contributors: [l10178]
 pinned: false
 homepage: false
 seo:
-  title: "重复 Transfer-Encoding Response Header 引起的 Traefik 代理服务 500 问题"
-  description: "重复 Transfer-Encoding Response Header 引起的 Traefik 代理服务 500 问题"
+  title: "Traefik 代理 500 错误：重复 Transfer-Encoding Header 问题排查"
+  description: "重复 Transfer-Encoding Response Header 引起的 Traefik 代理服务 500 问题，包含 Spring Boot 应用 Header 重复问题排查和解决方案"
   canonical: ""
   noindex: false
 ---

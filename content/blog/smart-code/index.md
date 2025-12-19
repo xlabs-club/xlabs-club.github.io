@@ -2,17 +2,17 @@
 title: "企业级智能代码重构探索：大规模自动化迁移实践与工具选型"
 description: "企业级代码重构实战指南，探索 OpenRewrite、Spring Boot Migrator 等自动化重构工具，涵盖 Spring Boot 升级、Java 版本迁移、Jakarta EE 转换、CI/CD 集成、自定义 Recipe 开发等最佳实践，帮助企业实现大规模自动化代码迁移"
 date: 2025-12-09T22:08:54+08:00
-lastmod: 2025-12-18T22:08:54+08:00
+lastmod: 2025-12-18T22:47:23+08:00
 draft: false
 categories: ["Java", "AI Code", "Spring Boot"]
-tags: [Java]
+tags: [Java, OpenRewrite, Spring Boot Migrator, 代码重构, 自动化迁移]
 contributors: [l10178]
 pinned: false
 homepage: false
 type: docs
 seo:
-  title: "企业级智能代码重构探索：大规模自动化迁移实践与工具选型"
-  description: "企业级代码重构实战指南，探索 OpenRewrite、Spring Boot Migrator 等自动化重构工具，涵盖 Spring Boot 2 到 4 升级、Java 8 到 21 迁移、Jakarta EE 转换、CI/CD 集成、自定义 Recipe 开发等最佳实践"
+  title: "企业级智能代码重构：OpenRewrite 与 Spring Boot Migrator 自动化迁移实战"
+  description: "深度解析 OpenRewrite 和 Spring Boot Migrator 在企业级代码重构中的应用，涵盖 Spring Boot 2 到 4 升级、Java 8 到 21 迁移、Jakarta EE 转换、CI/CD 集成、自定义 Recipe 开发等实战经验与最佳实践"
   canonical: ""
   noindex: false
 ---

@@ -1,19 +1,19 @@
 ---
 title: "MacOS 持久化配置，彻底解决 too many open files in system 的问题"
-description: "MacOS 持久化配置，彻底解决 too many open files in system 的问题"
+description: "MacOS 持久化配置，彻底解决 too many open files in system 的问题，包含 launchctl limit 配置和系统级限制调整方法"
 summary: ""
 date: 2024-03-19T23:05:07+08:00
-lastmod: 2024-04-16T23:05:07+08:00
+lastmod: 2025-12-18T22:46:38+08:00
 draft: false
 weight: 50
-categories: []
-tags: [Tools]
+categories: [Tools]
+tags: [Tools, MacOS, 系统配置]
 contributors: [l10178]
 pinned: false
 homepage: false
 seo:
-  title: "MacOS 持久化配置，彻底解决 too many open files in system 的问题"
-  description: "MacOS 持久化配置，彻底解决 too many open files in system 的问题"
+  title: "MacOS 彻底解决 too many open files 问题：持久化配置指南"
+  description: "MacOS 持久化配置，彻底解决 too many open files in system 的问题，包含 launchctl limit 配置和系统级限制调整方法"
   canonical: ""
   noindex: false
 ---

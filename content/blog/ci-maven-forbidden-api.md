@@ -1,21 +1,21 @@
 ---
 title: "CI: Maven 如何在编译时禁止调用某些特定 API"
-description: "CI: Maven 如何在编译时禁止调用某些特定 API"
+description: "Maven 编译时禁止调用某些特定 API 的实现方案，包含废弃 API 检测、跨版本编译问题和 Forbidden API 插件使用"
 summary: ""
 date: 2025-09-09T22:18:59+08:00
-lastmod: 2025-09-09T22:18:59+08:00
+lastmod: 2025-12-18T22:54:15+08:00
 draft: false
 weight: 50
 categories: [Java]
-tags: [CICD, Java]
+tags: [CICD, Java, Maven, 编译检查]
 contributors: [l10178]
 pinned: false
 homepage: false
 seo:
-  title: "CI: Maven 如何在编译时禁止调用某些特定 API"
-  description: "CI: Maven 如何在编译时禁止调用某些特定 API"
-  canonical: "" # custom canonical URL (optional)
-  noindex: false # false (default) or true
+  title: "Maven 编译时禁止调用特定 API：Forbidden API 插件与废弃 API 检测"
+  description: "Maven 编译时禁止调用某些特定 API 的实现方案，包含废弃 API 检测、跨版本编译问题和 Forbidden API 插件使用"
+  canonical: ""
+  noindex: false
 ---
 
 在日常开发中，我们经常遇到类似如下需求：

@@ -1,19 +1,19 @@
 ---
 title: "K8S Service 长连接导致负载不均衡问题分析和解决办法"
-description: "K8S Service 长连接导致负载不均衡问题分析和解决办法"
+description: "K8S Service 长连接导致负载不均衡问题分析和解决办法，包含 Keep-Alive 连接管理和 ipvs 负载均衡策略调整"
 summary: ""
 date: 2024-04-11T21:05:46+08:00
-lastmod: 2024-04-11T21:05:46+08:00
+lastmod: 2025-12-18T22:52:41+08:00
 draft: false
 weight: 50
-categories: []
-tags: [k8s]
+categories: [K8S]
+tags: [k8s, Service, 负载均衡, Keep-Alive]
 contributors: [l10178]
 pinned: false
 homepage: false
 seo:
-  title: "K8S Service 长连接导致负载不均衡问题分析和解决办法"
-  description: "K8S Service 长连接导致负载不均衡问题分析和解决办法"
+  title: "K8S Service 长连接负载不均衡问题：Keep-Alive 与 ipvs 策略优化"
+  description: "K8S Service 长连接导致负载不均衡问题分析和解决办法，包含 Keep-Alive 连接管理和 ipvs 负载均衡策略调整"
   canonical: ""
   noindex: false
 ---

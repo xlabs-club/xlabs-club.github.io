@@ -1,19 +1,19 @@
 ---
 title: "Git SSH 客户端同一机器多用户多仓库配置"
-description: "Git SSH 客户端在同一机器上为不同目录配置不同的用户"
+description: "Git SSH 客户端在同一机器上为不同目录配置不同的用户，实现个人账号和公司账号分离管理"
 summary: ""
 date: 2024-02-26T22:55:10+08:00
-lastmod: 2024-02-26T22:55:10+08:00
+lastmod: 2025-12-18T22:56:18+08:00
 draft: false
 weight: 50
-categories: []
-tags: [Tools]
+categories: [Tools]
+tags: [Tools, Git, SSH, 多用户配置]
 contributors: [l10178]
 pinned: false
 homepage: false
 seo:
-  title: "Git SSH 客户端同一机器多用户多仓库配置"
-  description: "Git SSH 客户端在同一机器上为不同目录配置不同的用户"
+  title: "Git SSH 多用户配置：同一机器多账号多仓库管理方案"
+  description: "Git SSH 客户端在同一机器上为不同目录配置不同的用户，实现个人账号和公司账号分离管理"
   canonical: ""
   noindex: false
 ---

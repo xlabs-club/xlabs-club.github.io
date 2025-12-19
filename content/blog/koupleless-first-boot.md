@@ -1,20 +1,20 @@
 ---
 title: "Koupleless 试用报告总结，踩坑记录分享"
-description: "Koupleless 试用报告总结，踩坑记录分享"
+description: "Koupleless 试用报告总结，踩坑记录分享，包含模块化开发部署、资源共享和迁移成本评估"
 summary: ""
 date: 2024-05-27T14:20:24+08:00
-lastmod: 2024-05-27T14:20:24+08:00
+lastmod: 2025-12-18T22:57:09+08:00
 draft: false
 weight: 50
-categories: []
-tags: [Java]
+categories: [Java]
+tags: [Java, Koupleless, 模块化, SOFAArk]
 contributors: [l10178]
 pinned: false
 homepage: false
 type: docs
 seo:
-  title: ""
-  description: ""
+  title: "Koupleless 试用报告：模块化开发部署与踩坑记录"
+  description: "Koupleless 试用报告总结，踩坑记录分享，包含模块化开发部署、资源共享和迁移成本评估"
   canonical: ""
   noindex: false
 ---

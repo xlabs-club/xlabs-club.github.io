@@ -1,20 +1,20 @@
 ---
 title: "Spring Boot 使用 Micrometer 集成 Prometheus 监控，5 分钟接入自定义监控指标"
-description: "Spring Boot 使用 Micrometer 集成 Prometheus 监控，5 分钟接入自定义监控指标"
+description: "Spring Boot 使用 Micrometer 集成 Prometheus 监控，5 分钟接入自定义监控指标，包含 Micrometer 介绍、业务自定义指标实现方式和规范"
 summary: ""
 date: 2023-08-07T10:54:37+08:00
-lastmod: 2024-03-09T14:29:03+08:00
+lastmod: 2025-12-18T22:44:19+08:00
 draft: false
 weight: 200
 images: []
 categories: [Spring Boot, Java]
-tags: [Spring Boot, Java]
+tags: [Spring Boot, Java, Micrometer, Prometheus, 监控]
 contributors: [l10178]
 pinned: false
 homepage: false
 seo:
-  title: ""
-  description: ""
+  title: "Spring Boot Micrometer 集成 Prometheus：5 分钟接入自定义监控指标"
+  description: "Spring Boot 使用 Micrometer 集成 Prometheus 监控，5 分钟接入自定义监控指标，包含 Micrometer 介绍、业务自定义指标实现方式和规范"
   canonical: ""
   noindex: false
 ---

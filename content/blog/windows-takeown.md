@@ -1,19 +1,19 @@
 ---
 title: "Windows 使用脚本提高权限以及设置环境变量"
-description: "Windows 使用脚本提高权限以及设置环境变量"
+description: "Windows 使用脚本提高权限以及设置环境变量，解决域控安全策略限制下的文件修改和环境变量配置问题"
 summary: ""
 date: 2024-02-26T23:25:29+08:00
-lastmod: 2024-09-26T23:25:29+08:00
+lastmod: 2025-12-18T22:59:15+08:00
 draft: false
 weight: 50
-categories: []
-tags: [Tools]
+categories: [Tools]
+tags: [Tools, Windows, 权限管理, 环境变量]
 contributors: [l10178]
 pinned: false
 homepage: false
 seo:
-  title: ""
-  description: ""
+  title: "Windows 权限提升与环境变量配置：域控环境下的解决方案"
+  description: "Windows 使用脚本提高权限以及设置环境变量，解决域控安全策略限制下的文件修改和环境变量配置问题"
   canonical: ""
   noindex: false
 ---

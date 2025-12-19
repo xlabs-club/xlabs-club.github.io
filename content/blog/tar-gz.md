@@ -1,19 +1,19 @@
 ---
 title: "文件压缩解压缩快速参考"
-description: "文件压缩解压缩快速参考"
+description: "文件压缩解压缩快速参考，包含 tar、gz、bz2、zip 等常用格式的命令和使用方法"
 summary: ""
 date: 2024-03-10T15:22:20+08:00
-lastmod: 2024-03-10T15:22:20+08:00
+lastmod: 2025-12-18T22:58:27+08:00
 draft: false
 weight: 50
-categories: []
-tags: []
+categories: [Tools]
+tags: [Tools, 文件压缩, tar, gzip]
 contributors: []
 pinned: false
 homepage: false
 seo:
-  title: ""
-  description: ""
+  title: "文件压缩解压缩快速参考：tar、gz、bz2、zip 命令大全"
+  description: "文件压缩解压缩快速参考，包含 tar、gz、bz2、zip 等常用格式的命令和使用方法"
   canonical: ""
   noindex: false
 ---

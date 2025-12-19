@@ -1,20 +1,20 @@
 ---
 title: "使用 Visual Studio Code 搭建多用户远程 IDE"
-description: "为 Visual Studio Code 增加外部认证，并支持多用户，不同用户的 code-server 实例完全隔离"
+description: "为 Visual Studio Code 增加外部认证，并支持多用户，不同用户的 code-server 实例完全隔离，实现多用户远程开发环境"
 summary: ""
 date: 2022-09-07T16:21:44+08:00
-lastmod: 2022-09-07T16:21:44+08:00
+lastmod: 2025-12-18T22:43:05+08:00
 draft: false
 weight: 50
 images: []
-categories: []
-tags: [devops]
+categories: [DevOps]
+tags: [devops, code-server, VS Code, 远程IDE]
 contributors: [l10178]
 pinned: false
 homepage: false
 seo:
-  title: "使用 Visual Studio Code 搭建多用户远程 IDE"
-  description: "为 Visual Studio Code 增加外部认证，并支持多用户，不同用户的 code-server 实例完全隔离"
+  title: "使用 Visual Studio Code 搭建多用户远程 IDE：code-server 多用户隔离方案"
+  description: "为 Visual Studio Code 增加外部认证，并支持多用户，不同用户的 code-server 实例完全隔离，实现多用户远程开发环境"
   canonical: ""
   noindex: false
 ---

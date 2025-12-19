@@ -1,19 +1,19 @@
 ---
 title: "MacOS 搭建本地 K8S 开发环境方案选型，基于 multipass、lima 等不同方案优缺点介绍对比"
-description: "MacOS 搭建本地 K8S 开发环境方案选型，基于 multipass、lima 等不同方案优缺点介绍对比"
+description: "MacOS 搭建本地 K8S 开发环境方案选型，基于 multipass、lima 等不同方案优缺点介绍对比，包含多架构模拟和 CI/CD 场景应用"
 summary: ""
 date: 2024-04-13T15:20:43+08:00
-lastmod: 2024-10-10T22:20:43+08:00
+lastmod: 2025-12-18T22:45:52+08:00
 draft: false
 weight: 50
 categories: [k8s]
-tags: [k8s]
+tags: [k8s, MacOS, multipass, lima, 本地开发环境]
 contributors: [l10178]
 pinned: false
 homepage: false
 seo:
-  title: "MacOS 搭建本地 K8S 开发环境方案选型，基于 multipass、lima 等不同方案优缺点介绍对比"
-  description: "MacOS 搭建本地 K8S 开发环境方案选型，基于 multipass、lima 等不同方案优缺点介绍对比"
+  title: "MacOS 搭建本地 K8S 开发环境：multipass、lima 方案对比与选型"
+  description: "MacOS 搭建本地 K8S 开发环境方案选型，基于 multipass、lima 等不同方案优缺点介绍对比，包含多架构模拟和 CI/CD 场景应用"
   canonical: ""
   noindex: false
 ---

@@ -1,20 +1,20 @@
 ---
 title: "容器镜像制作最佳实践，多架构编译，Dockerfile 编写小技巧和踩坑记录，镜像维护辅助工具 ORAS、skopeo 等介绍"
-description: "容器镜像制作最佳实践，多架构编译，Dockerfile 编写小技巧和踩坑记录，镜像维护辅助工具 ORAS、skopeo 等介绍"
+description: "容器镜像制作最佳实践、多架构编译方案、Dockerfile 编写技巧和常见问题解决方案，包含 ORAS、skopeo 等镜像维护工具的使用指南"
 summary: ""
 date: 2024-05-24T20:56:08+08:00
-lastmod: 2024-09-24T20:56:08+08:00
+lastmod: 2025-12-18T22:39:12+08:00
 draft: false
 weight: 50
-categories: []
-tags: [k8s]
+categories: [Docker, K8S]
+tags: [k8s, Docker, Dockerfile, 容器镜像，多架构编译，ORAS, skopeo]
 contributors: [l10178]
 pinned: false
 homepage: false
 type: docs
 seo:
-  title: "容器镜像制作最佳实践，多架构编译，Dockerfile 编写小技巧和踩坑记录，镜像维护辅助工具 ORAS、skopeo 等介绍"
-  description: "容器镜像制作最佳实践，多架构编译，Dockerfile 编写小技巧和踩坑记录，镜像维护辅助工具 ORAS、skopeo 等介绍"
+  title: "容器镜像制作最佳实践：Dockerfile 编写技巧与多架构编译实战"
+  description: "容器镜像制作最佳实践、多架构编译方案、Dockerfile 编写技巧和常见问题解决方案，包含 ORAS、skopeo 等镜像维护工具的使用指南"
   canonical: ""
   noindex: false
 ---

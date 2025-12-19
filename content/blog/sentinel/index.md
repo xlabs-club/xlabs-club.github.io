@@ -1,20 +1,20 @@
 ---
 title: "基于 Alibaba Sentinel 实现的分布式限流中间件服务以及遇到的坑和注意事项"
-description: "基于 Alibaba Sentinel 实现的分布式限流中间件服务以及遇到的坑和注意事项"
+description: "基于 Alibaba Sentinel 实现的分布式限流中间件服务以及遇到的坑和注意事项，包含限流、熔断降级、服务预热和自适应规则配置"
 summary: ""
 date: 2024-03-07T21:06:10+08:00
-lastmod: 2024-04-10T21:06:10+08:00
+lastmod: 2025-12-18T22:49:14+08:00
 draft: false
 weight: 50
-categories: []
-tags: [Java]
+categories: [Java]
+tags: [Java, Sentinel, 限流, 熔断, 分布式中间件]
 contributors: [l10178]
 pinned: false
 homepage: false
 type: docs
 seo:
-  title: "基于 Alibaba Sentinel 实现的分布式限流中间件服务以及遇到的坑和注意事项"
-  description: "基于 Alibaba Sentinel 实现的分布式限流中间件服务以及遇到的坑和注意事项"
+  title: "Alibaba Sentinel 分布式限流中间件实战：限流熔断与服务保护"
+  description: "基于 Alibaba Sentinel 实现的分布式限流中间件服务以及遇到的坑和注意事项，包含限流、熔断降级、服务预热和自适应规则配置"
   canonical: ""
   noindex: false
 ---

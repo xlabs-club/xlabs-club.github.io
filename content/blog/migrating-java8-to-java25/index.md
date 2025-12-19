@@ -3,7 +3,7 @@ title: "Java 25 完整升级指南：从 Java 8 到 Java 25 新特性、性能�
 description: "Java 25 深度指南：涵盖 Java 25 核心新特性（虚拟线程、向量 API、紧凑对象头）、性能优化 (G1/ZGC 增强）、从 Java 8 平滑升级的完整方案、踩坑记录与最佳实践。助你快速掌握 Java 25, 提升应用性能。"
 summary: "全面解析 Java 25 新特性与升级实战，包含性能优化、迁移工具、避坑指南"
 date: 2024-05-23T21:03:11+08:00
-lastmod: 2025-12-13T10:03:11+08:00
+lastmod: 2025-12-18T22:48:36+08:00
 draft: false
 weight: 50
 categories: ["Java", "Spring Boot", "JVM"]

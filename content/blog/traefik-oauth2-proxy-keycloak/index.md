@@ -1,20 +1,20 @@
 ---
 title: "使用 oauth2-proxy 为任意程序增加认证鉴权，结合 K8S、traefik、keycloak 部署配置详解"
-description: "使用 oauth2-proxy 为任意程序增加认证鉴权，结合 K8S、traefik、keycloak 部署配置详解"
+description: "使用 oauth2-proxy 为任意程序增加认证鉴权，结合 K8S、traefik、keycloak 部署配置详解，实现统一单点登录 SSO 和 RBAC/UBAC 鉴权"
 summary: ""
 date: 2024-10-10T23:30:40+08:00
-lastmod: 2024-10-10T23:30:40+08:00
+lastmod: 2025-12-18T22:34:22+08:00
 draft: false
 weight: 50
 categories: [k8s, idaas]
-tags: [k8s, idaas]
+tags: [k8s, idaas, oauth2-proxy, Traefik, Keycloak, SSO, RBAC]
 contributors: [l10178]
 pinned: false
 homepage: false
 type: docs
 seo:
-  title: "使用 oauth2-proxy 为任意程序增加认证鉴权，结合 K8S、traefik、keycloak 部署配置详解"
-  description: "使用 oauth2-proxy 为任意程序增加认证鉴权，结合 K8S、traefik、keycloak 部署配置详解"
+  title: "oauth2-proxy 集成 Traefik 和 Keycloak：K8S 统一认证鉴权实战"
+  description: "使用 oauth2-proxy 为任意程序增加认证鉴权，结合 K8S、traefik、keycloak 部署配置详解，实现统一单点登录 SSO 和 RBAC/UBAC 鉴权"
   canonical: ""
   noindex: false
 ---

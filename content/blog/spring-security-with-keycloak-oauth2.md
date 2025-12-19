@@ -1,19 +1,19 @@
 ---
 title: "Spring Security 集成 Keycloak 实现用户 RBAC、ABAC 授权"
-description: "Spring Security 集成 Keycloak 实现用户 RBAC、ABAC 授权"
+description: "Spring Security Resource Server 集成 Keycloak 实现用户 RBAC、ABAC 授权，包含 OAuth2 协议集成、JWT Token 校验解析、Keycloak Admin Client 使用和本地调试方法"
 summary: ""
 date: 2024-11-24T16:44:35+08:00
-lastmod: 2024-11-24T16:44:35+08:00
+lastmod: 2025-12-18T22:36:51+08:00
 draft: false
 weight: 50
 categories: [spring, idaas]
-tags: [spring, idaas, oauth2, keycloak]
+tags: [spring, idaas, oauth2, keycloak, Spring Security, RBAC, ABAC]
 contributors: [l10178]
 pinned: false
 homepage: false
 seo:
-  title: "Spring Security 集成 Keycloak 实现用户 RBAC、ABAC 授权"
-  description: "Spring Security 集成 Keycloak 实现用户 RBAC、ABAC 授权"
+  title: "Spring Security 集成 Keycloak：RBAC/ABAC 授权与 JWT Token 解析实战"
+  description: "Spring Security Resource Server 集成 Keycloak 实现用户 RBAC、ABAC 授权，包含 OAuth2 协议集成、JWT Token 校验解析、Keycloak Admin Client 使用和本地调试方法"
   canonical: ""
   noindex: false
 ---
