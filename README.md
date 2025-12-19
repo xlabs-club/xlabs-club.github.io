@@ -5,7 +5,7 @@
 [![GitHub contributors](https://img.shields.io/github/contributors/xlabs-club/xlabs-club.github.io)](https://github.com/xlabs-club/xlabs-club.github.io/graphs/contributors)
 [![Commit Activity](https://img.shields.io/github/commit-activity/m/xlabs-club/xlabs-club.github.io)](https://github.com/xlabs-club/xlabs-club.github.io)
 
-卫星实验室，一个专注于技术创新的开源组织。
+卫星实验室，用开源探索边界，用分享传递价值。
 
 此项目为卫星实验室主页 [xlabs.club][] 的源码，在这里将分享我们的平台工程实践经验，介绍如何以技术驱动业务长期发展和高速增长。
 

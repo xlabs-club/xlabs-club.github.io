@@ -12,7 +12,7 @@ seo:
   noindex: false
 ---
 
-卫星实验室，一个专注于技术创新的开源组织，此项目为卫星实验室主页 [xlabs.club][] 的源码，合作交流请到我们的 [GitHub](https://github.com/xlabs-club) 主页。
+卫星实验室，用开源探索边界，用分享传递价值。此项目为卫星实验室主页 [xlabs.club][] 的源码，合作交流请到我们的 [GitHub](https://github.com/xlabs-club) 主页。
 
 ## 卫星实验室账号
 
