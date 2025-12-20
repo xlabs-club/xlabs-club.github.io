@@ -7,15 +7,31 @@
     text-transform: none;
 }
 
+@keyframes rotateOnce {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
 .animation {
-    border-radius: 64px;
     height: 320px;
     width: 320px;
+    border-radius: 15%;
+        overflow: hidden;
+        transition: filter 0.3s ease;
+        object-fit: cover;
+        object-position: center;
+        background: transparent;
+        display: block;
+        margin: 0 auto;
+        clip-path: circle(85% at center);
 }
 
 .animation:hover {
-    transform: scale(1.25);
-    border-radius: 200px;
+    animation: rotateOnce 2s ease-in-out forwards;
 }
 
 // DocSearch
