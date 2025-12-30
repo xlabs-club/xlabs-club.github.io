@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>远程IDE on XLabs</title><link>https://www.xlabs.club/tags/%E8%BF%9C%E7%A8%8Bide/</link><description>Recent content in 远程IDE on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Sun, 28 Dec 2025 11:59:43 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/%E8%BF%9C%E7%A8%8Bide/index.xml" rel="self" type="application/rss+xml"/><item><title>使用 Visual Studio Code 搭建多用户远程 IDE</title><link>https://www.xlabs.club/blog/code-server/</link><pubDate>Wed, 07 Sep 2022 16:21:44 +0800</pubDate><guid>https://www.xlabs.club/blog/code-server/</guid><description>&lt;p&gt;为 VS Code Web 版 &lt;a href="https://github.com/coder/code-server" target="_blank" rel="noopener"&gt;code-server&lt;/a&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>远程IDE on XLabs</title><link>https://www.xlabs.club/tags/%E8%BF%9C%E7%A8%8Bide/</link><description>Recent content in 远程IDE on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Tue, 30 Dec 2025 08:55:17 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/%E8%BF%9C%E7%A8%8Bide/index.xml" rel="self" type="application/rss+xml"/><item><title>使用 Visual Studio Code 搭建多用户远程 IDE</title><link>https://www.xlabs.club/blog/code-server/</link><pubDate>Wed, 07 Sep 2022 16:21:44 +0800</pubDate><guid>https://www.xlabs.club/blog/code-server/</guid><description>&lt;p&gt;为 VS Code Web 版 &lt;a href="https://github.com/coder/code-server" target="_blank" rel="noopener"&gt;code-server&lt;/a&gt;
  增加外部认证，并支持多用户，不同用户的 code-server 实例完全隔离。&lt;/p&gt;
 &lt;p&gt;主要为了解决问题：&lt;/p&gt;
 &lt;ol&gt;
@@ -32,7 +32,7 @@
 &lt;p&gt;
 
 &lt;img
- src="https://www.xlabs.club/blog/code-server/code-server-auth-proxy_hu_9d21f682080840b4.webp"
+ src="https://www.xlabs.club/blog/code-server/code-server-auth-proxy_hu_5a84cfcbd8fa9680.webp"
  width="752"
  height="922"
  decoding="async"
@@ -59,7 +59,7 @@
  &lt;span class="title"&gt;&lt;/span&gt;
  &lt;/figcaption&gt;
  &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;nginx.ingress.kubernetes.io/auth-signin&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;https://$host/oauth2/start?rd=$escaped_request_uri&lt;/span&gt;&lt;span class="w"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;&lt;/span&gt;&lt;span class="nt"&gt;nginx.ingress.kubernetes.io/auth-url&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;https://$host/oauth2/auth&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;nginx.ingress.kubernetes.io/auth-url&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;https://$host/oauth2/auth&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
  &lt;/figure&gt;
 &lt;/div&gt;
 &lt;/li&gt;

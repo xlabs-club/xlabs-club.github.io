@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Kubernetes on XLabs</title><link>https://www.xlabs.club/tags/kubernetes/</link><description>Recent content in Kubernetes on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Sun, 28 Dec 2025 11:59:43 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/kubernetes/index.xml" rel="self" type="application/rss+xml"/><item><title>备考 CKA 过程，CKA 真题分享</title><link>https://www.xlabs.club/blog/kubernetes-cka/</link><pubDate>Sat, 26 Feb 2022 23:42:48 +0800</pubDate><guid>https://www.xlabs.club/blog/kubernetes-cka/</guid><description>&lt;p&gt;备考 CKA （Certified Kubernetes Administrator）过程，心得，遇见问题，CKA 真题。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Kubernetes on XLabs</title><link>https://www.xlabs.club/tags/kubernetes/</link><description>Recent content in Kubernetes on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Tue, 30 Dec 2025 08:55:17 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/kubernetes/index.xml" rel="self" type="application/rss+xml"/><item><title>备考 CKA 过程，CKA 真题分享</title><link>https://www.xlabs.club/blog/kubernetes-cka/</link><pubDate>Sat, 26 Feb 2022 23:42:48 +0800</pubDate><guid>https://www.xlabs.club/blog/kubernetes-cka/</guid><description>&lt;p&gt;备考 CKA （Certified Kubernetes Administrator）过程，心得，遇见问题，CKA 真题。&lt;/p&gt;
 &lt;p&gt;一句话总结：按照教程多练习，把控好时间就能通过，期望通过刷题通过考试的年代已经过去了，而且多练习对平时工作真的有用。&lt;/p&gt;
 &lt;h2 id="备考环境"&gt;备考环境&lt;/h2&gt;
 &lt;p&gt;备考使用的系统和软件版本如下。&lt;/p&gt;
@@ -35,8 +35,8 @@
  &lt;span class="title"&gt;&lt;/span&gt;
  &lt;/figcaption&gt;
  &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;kubeadm init --image-repository&lt;span class="o"&gt;=&lt;/span&gt;registry.aliyuncs.com/google_containers &lt;span class="se"&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="se"&gt;&lt;/span&gt; --pod-network-cidr&lt;span class="o"&gt;=&lt;/span&gt;10.244.0.0/16 &lt;span class="se"&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="se"&gt;&lt;/span&gt; --kubernetes-version&lt;span class="o"&gt;=&lt;/span&gt;v1.20.7&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; --pod-network-cidr&lt;span class="o"&gt;=&lt;/span&gt;10.244.0.0/16 &lt;span class="se"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; --kubernetes-version&lt;span class="o"&gt;=&lt;/span&gt;v1.20.7&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
  &lt;/figure&gt;
 &lt;/div&gt;
 &lt;h3 id="解决-scheduler-unhealthycontroller-manager-unhealthy"&gt;解决 scheduler Unhealthy，controller-manager Unhealthy&lt;/h3&gt;
