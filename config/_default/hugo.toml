@@ -43,7 +43,7 @@ copyRight = "Copyright (c) 2020-2025 XLabs Club"
   rel  = "sitemap"
 
 [sitemap]
-  changefreq = "monthly"
+  changefreq = "daily"
   filename = "sitemap.xml"
   priority = 0.5
 
