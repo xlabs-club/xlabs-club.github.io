@@ -20,14 +20,14 @@
     height: 320px;
     width: 320px;
     border-radius: 15%;
-        overflow: hidden;
-        transition: filter 0.3s ease;
-        object-fit: cover;
-        object-position: center;
-        background: transparent;
-        display: block;
-        margin: 0 auto;
-        clip-path: circle(85% at center);
+    overflow: hidden;
+    transition: filter 0.3s ease;
+    object-fit: cover;
+    object-position: center;
+    background: transparent;
+    display: block;
+    margin: 0 auto;
+    clip-path: circle(85% at center);
 }
 
 .animation:hover {

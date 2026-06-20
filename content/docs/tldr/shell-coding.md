@@ -1,6 +1,6 @@
 ---
 title: "Shell Coding"
-description: "Linux Shell 编程实用句式速查"
+description: "整理 Linux Shell 编程中的常用句式、变量处理与脚本技巧，适合日常脚本开发快速查阅。"
 summary: ""
 date: 2024-03-09T11:01:01+08:00
 lastmod: 2024-03-09T11:01:01+08:00
@@ -9,7 +9,7 @@ weight: 999
 toc: true
 seo:
   title: "Linux Shell 编程实用句式速查"
-  description: "Linux Shell 编程实用句式速查"
+  description: "整理 Linux Shell 编程中的常用句式、变量处理与脚本技巧，适合日常脚本开发快速查阅。"
   canonical: ""
   noindex: false
 ---

@@ -1,7 +1,7 @@
 ---
 title: "平台工程"
-description: "Platform Engineering"
-summary: ""
+description: "聚焦平台工程实践，介绍开发者平台、观测性、工程效能与自动化治理等主题，帮助团队持续提效。"
+summary: "聚焦平台工程实践，介绍开发者平台、观测性、工程效能与自动化治理等主题。"
 date: 2023-09-07T16:12:37+02:00
 lastmod: 2023-09-07T16:12:37+02:00
 draft: false

@@ -1,6 +1,6 @@
 ---
 title: "Knife"
-description: "程序员的瑞士军刀，常用优秀命令行工具"
+description: "收录程序员常用命令行工具与使用心得，帮助你快速找到高效替代方案与上手入口。"
 summary: ""
 date: 2024-03-09T14:39:50+08:00
 lastmod: 2024-03-09T14:39:50+08:00
@@ -9,7 +9,7 @@ weight: 999
 toc: true
 seo:
   title: "程序员的瑞士军刀，常用优秀命令行工具"
-  description: "程序员的瑞士军刀，常用优秀命令行工具"
+  description: "收录程序员常用命令行工具与使用心得，帮助你快速找到高效替代方案与上手入口。"
   canonical: ""
   noindex: false
 ---

@@ -15,19 +15,20 @@
     "build": "hugo --minify --gc"
   },
   "dependencies": {
-    "@docsearch/css": "^3.9.0",
-    "@docsearch/js": "^3.9.0",
-    "@tabler/icons": "^3.34.1",
-    "@thulite/doks-core": "^1.8.3",
-    "@thulite/images": "^3.3.2",
-    "@thulite/inline-svg": "^1.2.1",
-    "@thulite/seo": "^2.4.2",
-    "mermaid": "^11.9.0",
-    "thulite": "^2.6.3"
+    "@docsearch/css": "^4.6.3",
+    "@docsearch/js": "^4.6.3",
+    "@tabler/icons": "^3.44.0",
+    "@thulite/doks-core": "^1.9.3",
+    "@thulite/images": "^3.3.4",
+    "@thulite/inline-svg": "^1.2.2",
+    "@thulite/seo": "^2.4.3",
+    "mermaid": "^11.15.0",
+    "purgecss-whitelister": "^2.4.0",
+    "thulite": "^2.6.5"
   },
   "devDependencies": {
-    "prettier": "^3.6.2",
-    "vite": "^7.1.1"
+    "prettier": "^3.8.4",
+    "vite": "^8.0.16"
   },
   "engines": {
     "node": ">=22.16.0"

@@ -1,6 +1,6 @@
 ---
 title: "开发者门户"
-description: "使用 backstage 创建开发者门户"
+description: "介绍使用 Backstage 搭建开发者门户的思路，并整理常用插件资源、集成方向与扩展参考。"
 summary: ""
 date: 2024-01-27T21:56:42+08:00
 lastmod: 2024-01-27T21:56:42+08:00
@@ -13,7 +13,7 @@ weight: 999
 toc: true
 seo:
   title: ""
-  description: ""
+  description: "介绍使用 Backstage 搭建开发者门户的思路，并整理常用插件资源、集成方向与扩展参考。"
   canonical: ""
   noindex: false
 ---

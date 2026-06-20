@@ -16,14 +16,14 @@ jobs:
     - name: Setup node
       uses: actions/setup-node@v4
       with:
-        node-version: 22
+        node-version: 26
         cache: 'npm'
         cache-dependency-path: 'package-lock.json'
 
     - name: Setup Hugo
       uses: peaceiris/actions-hugo@v3
       with:
-        hugo-version: '0.153.4'
+        hugo-version: '0.163.2'
         extended: true
 
     - name: Install dependencies

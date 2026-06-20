@@ -1,6 +1,6 @@
 ---
 title: "Backstage 集成 oauth2-proxy 和 Keycloak，实现用户管理、登录认证以及 RBAC、ABAC 授权"
-description: "基于 K8S 部署 Backstage，集成 oauth2-proxy 和 Keycloak 实现用户管理、登录认证以及 RBAC、ABAC 授权，包含配置详解、原理分析和常见问题解决方案"
+description: "基于 K8S 部署 Backstage，集成 oauth2-proxy 与 Keycloak，实现登录认证、用户同步及 RBAC、ABAC 授权配置。"
 summary: ""
 date: 2024-11-16T16:55:26+08:00
 lastmod: 2025-12-18T22:33:45+08:00
@@ -14,7 +14,7 @@ homepage: false
 type: docs
 seo:
   title: "Backstage 集成 Keycloak 和 oauth2-proxy：K8S 部署与 RBAC/ABAC 授权实战"
-  description: "基于 K8S 部署 Backstage，集成 oauth2-proxy 和 Keycloak 实现用户管理、登录认证以及 RBAC、ABAC 授权，包含配置详解、原理分析和常见问题解决方案"
+  description: "基于 K8S 部署 Backstage，集成 oauth2-proxy 与 Keycloak，实现登录认证、用户同步及 RBAC、ABAC 授权配置。"
   canonical: ""
   noindex: false
 ---

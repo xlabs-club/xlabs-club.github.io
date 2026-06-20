@@ -1,1 +1,13 @@
 // Put your custom SCSS variables here
+
+$primary: #5d2f86;
+$link-color: $primary;
+$link-hover-color: darken($primary, 7.5%);
+$btn-link-color: $link-color;
+$btn-link-hover-color: $link-hover-color;
+
+$link-color-dark: lighten($primary, 42%);
+$button-color-dark: $link-color-dark;
+$focus-color-dark: lighten($link-color-dark, 2.5%);
+$navbar-dark-hover-color: $link-color-dark;
+$navbar-dark-active-color: $link-color-dark;

@@ -130,6 +130,10 @@ footer = "Give Me a <a class=\"text-muted\" href=\"https://github.com/xlabs-club
 
 # SEO (@thulite/seo)
 [seo]
+  [seo.description]
+    summaryFallback = false
+    siteParamsFallback = false
+    lengthIgnores = ["^/tags(?:/|$)", "^/categories(?:/|$)", "^/contributors(?:/|$)"]
   [seo.title]
     separator = " — "
     suffix = ""

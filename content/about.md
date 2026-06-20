@@ -7,7 +7,7 @@ lastmod: 2024-09-28T11:27:33+08:00
 draft: false
 seo:
   title: "关于卫星实验室的自我介绍"
-  description: "关于卫星实验室，官方账号列表和联系方式"
+  description: "了解卫星实验室的定位、开源项目、官方账号与联系方式，快速找到平台工程、云原生和技术博客相关内容。"
   canonical: ""
   noindex: false
 ---

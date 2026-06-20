@@ -7,7 +7,7 @@ disableHugoGeneratorInject = true
 enableEmoji = true
 enableGitInfo = true
 enableRobotsTXT = true
-languageCode = "zh-CN"
+locale = "zh-CN"
 # paginate = 10
 pagination.pagerSize = 10
 rssLimit = 10
@@ -46,11 +46,6 @@ copyRight = "Copyright (c) 2020-2025 XLabs Club"
   changefreq = "daily"
   filename = "sitemap.xml"
   priority = 0.5
-
-[caches]
-  [caches.getjson]
-    dir = ":cacheDir/:project"
-    maxAge = "30m"
 
 [taxonomies]
   contributor = "contributors"

@@ -1,6 +1,6 @@
 ---
 title: "Introduction"
-description: ""
+description: "云原生专题导航，整理 Kubernetes、弹性伸缩、应用交付与工程实践内容，便于快速了解与继续深入。"
 summary: ""
 date: 2023-09-07T16:04:48+02:00
 lastmod: 2023-09-07T16:04:48+02:00

@@ -1,6 +1,6 @@
 ---
 title: "智能代码重构"
-description: "使用 OpenRewrite 进行大规模自动化代码重构，搭建私有化企业智能代码重构平台"
+description: "介绍使用 OpenRewrite 推进大规模自动化代码重构，并搭建适合企业内部的智能迁移平台。"
 summary: ""
 date: 2024-01-09T22:08:54+08:00
 lastmod: 2025-12-18T22:08:54+08:00
@@ -13,7 +13,7 @@ weight: 999
 toc: true
 seo:
   title: "使用 OpenRewrite 进行大规模自动化代码重构，搭建私有化企业智能代码重构平台"
-  description: ""
+  description: "介绍使用 OpenRewrite 推进大规模自动化代码重构，并搭建适合企业内部的智能迁移平台。"
   canonical: ""
   noindex: false
 ---

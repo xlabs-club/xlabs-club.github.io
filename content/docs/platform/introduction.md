@@ -1,6 +1,6 @@
 ---
 title: "总体架构"
-description: "平台工程架构概述和架构演进"
+description: "概览平台工程总体架构、设计原则与演进思路，帮助读者快速理解平台建设的核心脉络。"
 summary: ""
 date: 2023-09-07T16:04:48+02:00
 lastmod: 2023-09-07T16:04:48+02:00
@@ -14,7 +14,7 @@ weight: 10
 toc: true
 seo:
   title: "平台工程架构概述和架构演进"
-  description: "平台工程架构概述和架构演进"
+  description: "概览平台工程总体架构、设计原则与演进思路，帮助读者快速理解平台建设的核心脉络。"
   canonical: ""
   noindex: false
 ---

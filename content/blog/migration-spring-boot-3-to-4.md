@@ -1,6 +1,6 @@
 ---
 title: "Spring Boot 3 到 4 迁移完全指南：新特性、废弃功能与实战踩坑经验"
-description: "深度解析 Spring Boot 4.0 新特性，包含 Spring Framework 7、Tomcat 11、虚拟线程支持、模块化改造等核心变更，提供完整的迁移步骤、常见问题解决方案和自动化迁移工具使用指南"
+description: "梳理 Spring Boot 4 关键特性、迁移步骤与常见问题，帮助团队从 3.x 平稳升级到 4.0 并完成验证。"
 date: 2025-11-25T23:20:22+08:00
 lastmod: 2025-12-18T22:51:17+08:00
 draft: false
@@ -13,7 +13,7 @@ homepage: true
 type: docs
 seo:
   title: "Spring Boot 4 迁移指南：从 3.x 升级到 4.0 完整教程与踩坑实战"
-  description: "Spring Boot 4.0 迁移实战指南，涵盖新特性解析、废弃 API 处理、Spring Framework 7/Tomcat 11 变更、虚拟线程配置、常见问题与 OpenRewrite 自动化迁移工具"
+  description: "梳理 Spring Boot 4 关键特性、迁移步骤与常见问题，帮助团队从 3.x 平稳升级到 4.0 并完成验证。"
   canonical: ""
   noindex: false
 ---

@@ -1,6 +1,6 @@
 ---
 title: "预防和消灭技术债：Maven CI 如何在编译时禁止调用某些特定 API"
-description: "Maven 编译时禁止调用某些特定 API 的实现方案，通过编译期检查预防废弃 API 使用、跨版本兼容问题等技术债，包含 Forbidden API 插件配置和使用指南"
+description: "介绍 Maven CI 中禁止调用特定 API 的实现方式，借助 Forbidden APIs 在编译期拦截技术债。"
 summary: ""
 date: 2025-09-09T22:18:59+08:00
 lastmod: 2025-12-18T22:54:15+08:00
@@ -13,7 +13,7 @@ pinned: false
 homepage: false
 seo:
   title: "预防和消灭技术债：Maven CI 如何在编译时禁止调用某些特定 API"
-  description: "Maven 编译时禁止调用某些特定 API 的实现方案，通过编译期检查预防废弃 API 使用、跨版本兼容问题等技术债，包含 Forbidden API 插件配置和使用指南"
+  description: "介绍 Maven CI 中禁止调用特定 API 的实现方式，借助 Forbidden APIs 在编译期拦截技术债。"
   canonical: ""
   noindex: false
 ---

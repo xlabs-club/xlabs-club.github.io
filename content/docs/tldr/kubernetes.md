@@ -1,6 +1,6 @@
 ---
 title: "Kubernetes"
-description: "Kubernetes 常用命令速查"
+description: "汇总 Kubernetes 日常运维与排障常用命令，便于快速复制复用并处理集群中的常见操作场景。"
 summary: ""
 date: 2023-09-07T16:04:48+02:00
 lastmod: 2023-09-07T16:04:48+02:00
