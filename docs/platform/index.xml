@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>平台工程 on XLabs</title><link>https://www.xlabs.club/docs/platform/</link><description>Recent content in 平台工程 on XLabs</description><generator>Hugo</generator><language>zh</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Tue, 30 Dec 2025 08:55:17 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/docs/platform/index.xml" rel="self" type="application/rss+xml"/><item><title>总体架构</title><link>https://www.xlabs.club/docs/platform/introduction/</link><pubDate>Thu, 07 Sep 2023 16:04:48 +0200</pubDate><guid>https://www.xlabs.club/docs/platform/introduction/</guid><description>&lt;p&gt;我们的平台工程建设之路，介绍前期方案设计、中间踩坑历程。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>平台工程 on XLabs</title><link>https://www.xlabs.club/docs/platform/</link><description>Recent content in 平台工程 on XLabs</description><generator>Hugo</generator><language>zh-CN</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Sat, 20 Jun 2026 17:15:49 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/docs/platform/index.xml" rel="self" type="application/rss+xml"/><item><title>总体架构</title><link>https://www.xlabs.club/docs/platform/introduction/</link><pubDate>Thu, 07 Sep 2023 16:04:48 +0200</pubDate><guid>https://www.xlabs.club/docs/platform/introduction/</guid><description>&lt;p&gt;我们的平台工程建设之路，介绍前期方案设计、中间踩坑历程。&lt;/p&gt;
 &lt;h2 id="原则"&gt;原则&lt;/h2&gt;
 &lt;p&gt;分享我们平台工程建设的一些基本原则。&lt;/p&gt;
 &lt;ol&gt;
@@ -14,48 +14,49 @@
 &lt;h2 id="架构概述"&gt;架构概述&lt;/h2&gt;
 &lt;p&gt;为便于理解，我们仍然按照惯用架构模型，将架构分为 IaaS、CaaS、PaaS、Applications 这几个层级。&lt;/p&gt;
 &lt;p&gt;专业的运维人员作为 platform engineer 着重于 IaaS、CaaS、PaaS 建设，开发人员作为 application engineer 更专注于 PaaS、Applications 建设，为开发和运维提供工具、协作平台、基础应用。&lt;/p&gt;
-&lt;div class="mermaid text-center"&gt;
+&lt;pre class="mermaid"&gt;
+ 
 C4Context
  title 平台工程总体架构
 
- Boundary(users, "Users", "用户接入") {
- Person(superAdmin, "超级管理员")
- Person(admin, "平台管理员")
- Person(developer, "开发人员")
- Person(maintenance, "运维人员")
+ Boundary(users, &amp;#34;Users&amp;#34;, &amp;#34;用户接入&amp;#34;) {
+ Person(superAdmin, &amp;#34;超级管理员&amp;#34;)
+ Person(admin, &amp;#34;平台管理员&amp;#34;)
+ Person(developer, &amp;#34;开发人员&amp;#34;)
+ Person(maintenance, &amp;#34;运维人员&amp;#34;)
  }
 
- Boundary(console, "Console", "开发者平台") {
- Container(backstage, "Backstage","react","开发者门户")
- Container(apps, "应用管理平台","Application","容器管理、应用管理、配置管理、自动化测试")
- Container(ops, "统一运维平台","x-ops","数据库、中间件、日志、监控告警平台")
- Container(iam, "IAM", "Keycloak", "统一用户、组织、角色权限管理")
+ Boundary(console, &amp;#34;Console&amp;#34;, &amp;#34;开发者平台&amp;#34;) {
+ Container(backstage, &amp;#34;Backstage&amp;#34;,&amp;#34;react&amp;#34;,&amp;#34;开发者门户&amp;#34;)
+ Container(apps, &amp;#34;应用管理平台&amp;#34;,&amp;#34;Application&amp;#34;,&amp;#34;容器管理、应用管理、配置管理、自动化测试&amp;#34;)
+ Container(ops, &amp;#34;统一运维平台&amp;#34;,&amp;#34;x-ops&amp;#34;,&amp;#34;数据库、中间件、日志、监控告警平台&amp;#34;)
+ Container(iam, &amp;#34;IAM&amp;#34;, &amp;#34;Keycloak&amp;#34;, &amp;#34;统一用户、组织、角色权限管理&amp;#34;)
  }
 
- Boundary(paas, "PaaS", "PaaS") {
- ContainerDb(rds, "RDS", "PostgreSQL/MySQL", "PostgreSQL、MySQL 等关系型数据库")
- ContainerDb(clickhouse, "ClickHouse", "ClickHouse", "BI、Logging、Metrics 等列式数据库")
- ContainerDb(nosql, "NoSQL", "NoSQL", "ES、Redis、Mongo 等缓存数据库、文档数据库")
- ContainerDb(mq, "消息队列", "Kafka", "Kafka、RocketMQ 等消息队列")
+ Boundary(paas, &amp;#34;PaaS&amp;#34;, &amp;#34;PaaS&amp;#34;) {
+ ContainerDb(rds, &amp;#34;RDS&amp;#34;, &amp;#34;PostgreSQL/MySQL&amp;#34;, &amp;#34;PostgreSQL、MySQL 等关系型数据库&amp;#34;)
+ ContainerDb(clickhouse, &amp;#34;ClickHouse&amp;#34;, &amp;#34;ClickHouse&amp;#34;, &amp;#34;BI、Logging、Metrics 等列式数据库&amp;#34;)
+ ContainerDb(nosql, &amp;#34;NoSQL&amp;#34;, &amp;#34;NoSQL&amp;#34;, &amp;#34;ES、Redis、Mongo 等缓存数据库、文档数据库&amp;#34;)
+ ContainerDb(mq, &amp;#34;消息队列&amp;#34;, &amp;#34;Kafka&amp;#34;, &amp;#34;Kafka、RocketMQ 等消息队列&amp;#34;)
  }
 
- Boundary(caas, "CaaS", "CaaS") {
- Container(k8s, "Kubernetes","k8s","K8S 容器平台")
- Container(workflow, "编排引擎","Argo","流水线，流程、应用编排引擎")
- Container(kms, "KMS","HashiCorp Vault","秘钥管理系统")
- Container(harbor, "Harbor","harbor","容器镜像仓库")
- Container(git, "IaC","GitLab","IaC、GitOps 源码仓库")
+ Boundary(caas, &amp;#34;CaaS&amp;#34;, &amp;#34;CaaS&amp;#34;) {
+ Container(k8s, &amp;#34;Kubernetes&amp;#34;,&amp;#34;k8s&amp;#34;,&amp;#34;K8S 容器平台&amp;#34;)
+ Container(workflow, &amp;#34;编排引擎&amp;#34;,&amp;#34;Argo&amp;#34;,&amp;#34;流水线，流程、应用编排引擎&amp;#34;)
+ Container(kms, &amp;#34;KMS&amp;#34;,&amp;#34;HashiCorp Vault&amp;#34;,&amp;#34;秘钥管理系统&amp;#34;)
+ Container(harbor, &amp;#34;Harbor&amp;#34;,&amp;#34;harbor&amp;#34;,&amp;#34;容器镜像仓库&amp;#34;)
+ Container(git, &amp;#34;IaC&amp;#34;,&amp;#34;GitLab&amp;#34;,&amp;#34;IaC、GitOps 源码仓库&amp;#34;)
  }
 
- Boundary(iaas, "IaaS", "IaaS") {
- Container(vm, "云主机","vm","云主机自带本地存储")
- Container(cbh, "堡垒机","cbh","安全运维审计堡垒机")
- Container(s3, "S3","S3/Minio","分布式对象存储")
- Container(nfs, "NFS","nfs","共享文件存储")
+ Boundary(iaas, &amp;#34;IaaS&amp;#34;, &amp;#34;IaaS&amp;#34;) {
+ Container(vm, &amp;#34;云主机&amp;#34;,&amp;#34;vm&amp;#34;,&amp;#34;云主机自带本地存储&amp;#34;)
+ Container(cbh, &amp;#34;堡垒机&amp;#34;,&amp;#34;cbh&amp;#34;,&amp;#34;安全运维审计堡垒机&amp;#34;)
+ Container(s3, &amp;#34;S3&amp;#34;,&amp;#34;S3/Minio&amp;#34;,&amp;#34;分布式对象存储&amp;#34;)
+ Container(nfs, &amp;#34;NFS&amp;#34;,&amp;#34;nfs&amp;#34;,&amp;#34;共享文件存储&amp;#34;)
  }
 
- UpdateLayoutConfig($c4ShapeInRow="4", $c4BoundaryInRow="1")
-&lt;/div&gt;
+ UpdateLayoutConfig($c4ShapeInRow=&amp;#34;4&amp;#34;, $c4BoundaryInRow=&amp;#34;1&amp;#34;)
+&lt;/pre&gt;
 
 &lt;h2 id="基础设施标准化"&gt;基础设施标准化&lt;/h2&gt;
 &lt;p&gt;基础设施标准化是平台工程建设的第一步，通过对基础设施服务进行标准化，减少开发人员和运维团队之间的摩擦，减少运维难度，大大降低出错的概率。&lt;/p&gt;</description></item><item><title>统一身份认证</title><link>https://www.xlabs.club/docs/platform/iam/</link><pubDate>Tue, 19 Dec 2023 22:26:42 +0800</pubDate><guid>https://www.xlabs.club/docs/platform/iam/</guid><description>&lt;p&gt;统一身份认证（Identity and Access Management，身份认证和访问控制，简称 IAM）的技术选型和实践。&lt;/p&gt;
@@ -84,65 +85,65 @@ C4Context
 &lt;/ul&gt;
 &lt;p&gt;以下为 keycloak 和 Dex 的简单对比。为什么不把 Ory 加进来，因为没有实际用过，不便于发表意见，如果你是一个 Ory 用户欢迎补充。&lt;/p&gt;
 &lt;table&gt;
- &lt;thead&gt;
- &lt;tr&gt;
- &lt;th&gt;特性/工具&lt;/th&gt;
- &lt;th&gt;Keycloak&lt;/th&gt;
- &lt;th&gt;Dex&lt;/th&gt;
- &lt;/tr&gt;
- &lt;/thead&gt;
- &lt;tbody&gt;
- &lt;tr&gt;
- &lt;td&gt;&lt;strong&gt;类型&lt;/strong&gt;&lt;/td&gt;
- &lt;td&gt;全面的 IAM 解决方案&lt;/td&gt;
- &lt;td&gt;身份代理&lt;/td&gt;
- &lt;/tr&gt;
- &lt;tr&gt;
- &lt;td&gt;&lt;strong&gt;用户管理&lt;/strong&gt;&lt;/td&gt;
- &lt;td&gt;支持内置用户管理&lt;/td&gt;
- &lt;td&gt;不直接管理用户，依赖外部身份提供者&lt;/td&gt;
- &lt;/tr&gt;
- &lt;tr&gt;
- &lt;td&gt;&lt;strong&gt;协议支持&lt;/strong&gt;&lt;/td&gt;
- &lt;td&gt;OpenID Connect、OAuth 2.0、SAML 2.0&lt;/td&gt;
- &lt;td&gt;OpenID Connect&lt;/td&gt;
- &lt;/tr&gt;
- &lt;tr&gt;
- &lt;td&gt;&lt;strong&gt;SSO&lt;/strong&gt;&lt;/td&gt;
- &lt;td&gt;支持&lt;/td&gt;
- &lt;td&gt;依赖外部身份提供者实现&lt;/td&gt;
- &lt;/tr&gt;
- &lt;tr&gt;
- &lt;td&gt;&lt;strong&gt;社交登录&lt;/strong&gt;&lt;/td&gt;
- &lt;td&gt;支持多种社交登录选项&lt;/td&gt;
- &lt;td&gt;不直接支持，可通过连接外部身份提供者实现&lt;/td&gt;
- &lt;/tr&gt;
- &lt;tr&gt;
- &lt;td&gt;&lt;strong&gt;角色管理&lt;/strong&gt;&lt;/td&gt;
- &lt;td&gt;支持复杂的角色和权限管理&lt;/td&gt;
- &lt;td&gt;不直接支持&lt;/td&gt;
- &lt;/tr&gt;
- &lt;tr&gt;
- &lt;td&gt;&lt;strong&gt;扩展性&lt;/strong&gt;&lt;/td&gt;
- &lt;td&gt;高，适合各种规模和复杂性的需求&lt;/td&gt;
- &lt;td&gt;适合将多个身份源统一到一个认证流程的环境&lt;/td&gt;
- &lt;/tr&gt;
- &lt;tr&gt;
- &lt;td&gt;&lt;strong&gt;使用场景&lt;/strong&gt;&lt;/td&gt;
- &lt;td&gt;需要全面、集中式身份管理的组织&lt;/td&gt;
- &lt;td&gt;需要统一多个身份源认证，如在云原生环境中&lt;/td&gt;
- &lt;/tr&gt;
- &lt;tr&gt;
- &lt;td&gt;&lt;strong&gt;用户界面&lt;/strong&gt;&lt;/td&gt;
- &lt;td&gt;提供丰富的用户和管理员界面&lt;/td&gt;
- &lt;td&gt;主要是 API，没有详细的用户界面&lt;/td&gt;
- &lt;/tr&gt;
- &lt;tr&gt;
- &lt;td&gt;&lt;strong&gt;适用性&lt;/strong&gt;&lt;/td&gt;
- &lt;td&gt;适用于需要完整 IAM 解决方案的组织&lt;/td&gt;
- &lt;td&gt;适用于作为多个身份源代理，尤其在 Kubernetes 环境中&lt;/td&gt;
- &lt;/tr&gt;
- &lt;/tbody&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;特性/工具&lt;/th&gt;
+					&lt;th&gt;Keycloak&lt;/th&gt;
+					&lt;th&gt;Dex&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;类型&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;全面的 IAM 解决方案&lt;/td&gt;
+					&lt;td&gt;身份代理&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;用户管理&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;支持内置用户管理&lt;/td&gt;
+					&lt;td&gt;不直接管理用户，依赖外部身份提供者&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;协议支持&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;OpenID Connect、OAuth 2.0、SAML 2.0&lt;/td&gt;
+					&lt;td&gt;OpenID Connect&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;SSO&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;支持&lt;/td&gt;
+					&lt;td&gt;依赖外部身份提供者实现&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;社交登录&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;支持多种社交登录选项&lt;/td&gt;
+					&lt;td&gt;不直接支持，可通过连接外部身份提供者实现&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;角色管理&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;支持复杂的角色和权限管理&lt;/td&gt;
+					&lt;td&gt;不直接支持&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;扩展性&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;高，适合各种规模和复杂性的需求&lt;/td&gt;
+					&lt;td&gt;适合将多个身份源统一到一个认证流程的环境&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;使用场景&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;需要全面、集中式身份管理的组织&lt;/td&gt;
+					&lt;td&gt;需要统一多个身份源认证，如在云原生环境中&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;用户界面&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;提供丰富的用户和管理员界面&lt;/td&gt;
+					&lt;td&gt;主要是 API，没有详细的用户界面&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;适用性&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;适用于需要完整 IAM 解决方案的组织&lt;/td&gt;
+					&lt;td&gt;适用于作为多个身份源代理，尤其在 Kubernetes 环境中&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
 &lt;/table&gt;
 &lt;p&gt;以下为 OAuth2 Proxy 和 Pomerium 的简单对比。&lt;/p&gt;</description></item><item><title>开发者门户</title><link>https://www.xlabs.club/docs/platform/backstage/</link><pubDate>Sat, 27 Jan 2024 21:56:42 +0800</pubDate><guid>https://www.xlabs.club/docs/platform/backstage/</guid><description>&lt;p&gt;使用 backstage 创建开发者门户。&lt;/p&gt;
 &lt;h2 id="backstage-插件资源"&gt;Backstage 插件资源&lt;/h2&gt;
