@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>数据库优化 on XLabs</title><link>https://www.xlabs.club/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BC%98%E5%8C%96/</link><description>Recent content in 数据库优化 on XLabs</description><generator>Hugo</generator><language>zh-CN</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Sat, 20 Jun 2026 17:15:49 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BC%98%E5%8C%96/index.xml" rel="self" type="application/rss+xml"/><item><title>MySQL 大文件导入优化，提高速度，提升性能</title><link>https://www.xlabs.club/blog/mysql-large-import/</link><pubDate>Sun, 10 Mar 2024 15:18:22 +0800</pubDate><guid>https://www.xlabs.club/blog/mysql-large-import/</guid><description>&lt;p&gt;项目中需要根据 SQL 文件导入数据，文件大约 20G，正常导入约需要 2 小时，如何提高导入速度。&lt;/p&gt;
-&lt;p&gt;经过实验测试，如果一个 SQL 文件只有一个表的数据，可以直接使用 mysql load data infile 语法，速度比较快。&lt;/p&gt;
-&lt;p&gt;我们是一个 SQL 文件包含了很多表，mysql load data infile 就不支持了，可考虑在导入过程中设置如下参数，经过测试 20G 大约需要 40 分钟，比之前快了很多。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>数据库优化 on XLabs</title><link>https://www.xlabs.club/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BC%98%E5%8C%96/</link><description>Recent content in 数据库优化 on XLabs</description><generator>Hugo</generator><language>zh-CN</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Sat, 27 Jun 2026 16:35:54 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BC%98%E5%8C%96/index.xml" rel="self" type="application/rss+xml"/><item><title>MySQL 大文件导入优化，提高速度，提升性能</title><link>https://www.xlabs.club/blog/mysql-large-import/</link><pubDate>Sun, 10 Mar 2024 15:18:22 +0800</pubDate><guid>https://www.xlabs.club/blog/mysql-large-import/</guid><description>&lt;p&gt;项目中需要根据 SQL 文件导入数据，文件大约 20G，正常导入约需要 2 小时，如何提高导入速度。&lt;/p&gt;
+&lt;h2 id="方案一session-参数调优"&gt;方案一：Session 参数调优&lt;/h2&gt;
+&lt;p&gt;如果一个 SQL 文件包含了很多表，&lt;code&gt;mysql load data infile&lt;/code&gt; 就不支持了，可考虑在导入过程中设置如下参数，经过测试 20G 大约需要 40 分钟，比之前快了很多。&lt;/p&gt;
 
 
 
@@ -29,4 +29,36 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 导入 SQL 文件并 COMMIT（因为导入比较耗时，导入和 COMMIT 一行命令，这样不用盯着屏幕等提交了）&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;source&lt;/span&gt; /xxx.sql；COMMIT&lt;span class="p"&gt;;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
  &lt;/figure&gt;
-&lt;/div&gt;</description></item></channel></rss>
+&lt;/div&gt;
+&lt;p&gt;各参数作用详解：&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;参数&lt;/th&gt;
+					&lt;th&gt;默认值&lt;/th&gt;
+					&lt;th&gt;作用&lt;/th&gt;
+					&lt;th&gt;影响&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;sql_log_bin&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;ON&lt;/td&gt;
+					&lt;td&gt;关闭 Binlog 写入&lt;/td&gt;
+					&lt;td&gt;减少磁盘 IO，导入内容不会写入 Binlog（注意对从库复制的影响）&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;autocommit&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;ON (1)&lt;/td&gt;
+					&lt;td&gt;关闭自动提交&lt;/td&gt;
+					&lt;td&gt;将每条 INSERT 包装在一个大事务中，减少 fsync 次数，性能提升最明显&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;max_allowed_packet&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;64M&lt;/td&gt;
+					&lt;td&gt;增大单次通信包大小&lt;/td&gt;
+					&lt;td&gt;允许一次性传输更大的 SQL 语句块，减少客户端-服务端往返&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;额外可调整的 Session 参数：&lt;/p&gt;</description></item></channel></rss>

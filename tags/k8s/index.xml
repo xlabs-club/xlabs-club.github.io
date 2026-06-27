@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>K8s on XLabs</title><link>https://www.xlabs.club/tags/k8s/</link><description>Recent content in K8s on XLabs</description><generator>Hugo</generator><language>zh-CN</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Sat, 20 Jun 2026 17:15:49 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/k8s/index.xml" rel="self" type="application/rss+xml"/><item><title>Backstage 集成 oauth2-proxy 和 Keycloak，实现用户管理、登录认证以及 RBAC、ABAC 授权</title><link>https://www.xlabs.club/blog/backstage-keycloak-oauth2-proxy/</link><pubDate>Sat, 16 Nov 2024 16:55:26 +0800</pubDate><guid>https://www.xlabs.club/blog/backstage-keycloak-oauth2-proxy/</guid><description>&lt;p&gt;基于 K8S 部署 Backstage，集成 oauth2-proxy 和 Keycloak，实现用户管理、认证和授权，配置详解和原理介绍。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>K8s on XLabs</title><link>https://www.xlabs.club/tags/k8s/</link><description>Recent content in K8s on XLabs</description><generator>Hugo</generator><language>zh-CN</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Sat, 27 Jun 2026 16:35:54 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/k8s/index.xml" rel="self" type="application/rss+xml"/><item><title>Backstage 集成 oauth2-proxy 和 Keycloak，实现用户管理、登录认证以及 RBAC、ABAC 授权</title><link>https://www.xlabs.club/blog/backstage-keycloak-oauth2-proxy/</link><pubDate>Sat, 16 Nov 2024 16:55:26 +0800</pubDate><guid>https://www.xlabs.club/blog/backstage-keycloak-oauth2-proxy/</guid><description>&lt;p&gt;基于 K8S 部署 Backstage，集成 oauth2-proxy 和 Keycloak，实现用户管理、认证和授权，配置详解和原理介绍。&lt;/p&gt;
 &lt;p&gt;如果你遇到以下问题或诉求，可以参考此文档。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href="https://backstage.io/" target="_blank" rel="noopener"&gt;Backstage&lt;/a&gt;
@@ -266,26 +266,14 @@
 &lt;li&gt;客户端和服务端都启用了 Keep-Alive 长连接。&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;经过抓包分析，负载较高的 Pod 保持着较多 KeepAlive 长连接。将 kube-proxy 的 ipvs 转发模式设置为 Least-Connection，即倾向转发给连接数少的 Pod，可能会有所缓解，但也不一定，因为 ipvs 的负载均衡状态是分散在各个节点的，并没有收敛到一个地方，也就无法在全局层面感知哪个 Pod 上的连接数少，并不能真正做到 Least-Connection。&lt;/p&gt;
-&lt;h2 id="服务端主动要求断开长连接"&gt;服务端主动要求断开长连接&lt;/h2&gt;
-&lt;p&gt;客户端连接我们可能无法控制，那么如何从服务端主动断开长连接。&lt;/p&gt;
-&lt;p&gt;以 Tomcat 为例，它提供了 maxKeepAliveRequests 参数，到达此参数阈值后，Tomcat 会在 Response Header 中主动加一个 &lt;code&gt;Connection: close&lt;/code&gt;，正常情况下客户端接收到此响应后会主动断开长连接。&lt;/p&gt;
-&lt;p&gt;对于其他不支持此参数的服务器，可以自定义 Filter 或者自定代码，到达某阈值后在 Response Header 中主动追加 &lt;code&gt;Connection: close&lt;/code&gt;。&lt;/p&gt;
-&lt;p&gt;对于 Spring Boot 可通过 properties 配置。&lt;/p&gt;
-
-
-
-&lt;div class="expressive-code"&gt;
- &lt;figure class="frame not-content"&gt;
- &lt;figcaption class="header"&gt;
- &lt;span class="title"&gt;&lt;/span&gt;
- &lt;/figcaption&gt;
- &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-properties" data-lang="properties"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Spring Boot Tomcat&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;server.tomcat.max-keep-alive-requests&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;100&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Spring Boot WebFlux&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;server.netty.max-keep-alive-requests&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;100&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
- &lt;/figure&gt;
-&lt;/div&gt;
-&lt;p&gt;对于独立部署 Tomcat，可在 server.xml 文件 Connector 中配置 maxKeepAliveRequests，Tomcat xml 可解析启动参数，启动时增加 &lt;code&gt;-D=server.tomcat.max-keep-alive-requests=200&lt;/code&gt; 来调整默认值大小，另外注意，Tomcat xml 不支持解析 ENV 环境变量，只支持解析 &lt;code&gt;-D&lt;/code&gt; 启动参数。&lt;/p&gt;</description></item><item><title>K8S StatefulSet 应用 PV/PVC 平滑扩容</title><link>https://www.xlabs.club/blog/statefulset-resize-pvc/</link><pubDate>Sun, 31 Mar 2024 21:29:52 +0800</pubDate><guid>https://www.xlabs.club/blog/statefulset-resize-pvc/</guid><description>&lt;p&gt;在 K8S 中使用 Helm 部署了一些有状态应用，并通过 Helm 自动生成了 PV 和 PVC，某天想扩容，竟然报错了。&lt;/p&gt;
+&lt;h2 id="为什么-round-robin-对长连接失效"&gt;为什么 Round-Robin 对长连接失效&lt;/h2&gt;
+&lt;p&gt;ipvs 的 round-robin 作用在连接（TCP Connection）层面，而非请求（Request）层面。流程如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;客户端与服务端建立 TCP 连接 1 → ipvs 调度到 Pod A。&lt;/li&gt;
+&lt;li&gt;客户端保持此连接（Keep-Alive），后续所有 HTTP 请求均复用连接 1 → 全部落在 Pod A。&lt;/li&gt;
+&lt;li&gt;即便有新的 Pod C 加入，只要连接 1 未断开，Pod C 收不到任何来自该客户端的请求。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;所以长连接场景下，连接的分布决定了流量的分布，而非请求数。&lt;/p&gt;</description></item><item><title>K8S StatefulSet 应用 PV/PVC 平滑扩容</title><link>https://www.xlabs.club/blog/statefulset-resize-pvc/</link><pubDate>Sun, 31 Mar 2024 21:29:52 +0800</pubDate><guid>https://www.xlabs.club/blog/statefulset-resize-pvc/</guid><description>&lt;p&gt;在 K8S 中使用 Helm 部署了一些有状态应用，并通过 Helm 自动生成了 PV 和 PVC，某天想扩容，竟然报错了。&lt;/p&gt;
 &lt;p&gt;以下以 bitnami zookeeper 为例，其他 StatefulSet 同理。&lt;/p&gt;
 &lt;p&gt;为了实现磁盘扩容，改大 &lt;code&gt;persistence.size&lt;/code&gt;，比如由 8Gi 改为 10Gi，然后执行 helm upgrade，出现错误。&lt;/p&gt;
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Spring on XLabs</title><link>https://www.xlabs.club/tags/spring/</link><description>Recent content in Spring on XLabs</description><generator>Hugo</generator><language>zh-CN</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Sat, 20 Jun 2026 17:15:49 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/spring/index.xml" rel="self" type="application/rss+xml"/><item><title>Spring Security 集成 Keycloak 实现用户 RBAC、ABAC 授权</title><link>https://www.xlabs.club/blog/spring-security-with-keycloak-oauth2/</link><pubDate>Sun, 24 Nov 2024 16:44:35 +0800</pubDate><guid>https://www.xlabs.club/blog/spring-security-with-keycloak-oauth2/</guid><description>&lt;p&gt;使用 Spring Security Resource Server 和 Keycloak，实现用户 RBAC、ABAC 授权，主要介绍：&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Spring on XLabs</title><link>https://www.xlabs.club/tags/spring/</link><description>Recent content in Spring on XLabs</description><generator>Hugo</generator><language>zh-CN</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Sat, 27 Jun 2026 16:35:54 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/spring/index.xml" rel="self" type="application/rss+xml"/><item><title>Spring Security 集成 Keycloak 实现用户 RBAC、ABAC 授权</title><link>https://www.xlabs.club/blog/spring-security-with-keycloak-oauth2/</link><pubDate>Sun, 24 Nov 2024 16:44:35 +0800</pubDate><guid>https://www.xlabs.club/blog/spring-security-with-keycloak-oauth2/</guid><description>&lt;p&gt;使用 Spring Security Resource Server 和 Keycloak，实现用户 RBAC、ABAC 授权，主要介绍：&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Spring Security Resource Server 如何与标准 OAuth2 协议集成。&lt;/li&gt;
 &lt;li&gt;Spring Security Resource Server 如何与 Keycloak Authorization Server 集成。&lt;/li&gt;
@@ -12,4 +12,6 @@
 &lt;li&gt;Spring Security &lt;a href="https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/index.html" target="_blank" rel="noopener"&gt;OAuth 2.0 Resource Server&lt;/a&gt;
  也有多种集成方式，这里我们只实现 &lt;code&gt;JWT&lt;/code&gt; 这一种，并且是 sessionless 的，也就是只负责授权不负责 &lt;code&gt;登录认证&lt;/code&gt;， 登录由网关通过 oauth2-proxy 实现，详情可参考另一篇博客介绍 &lt;a href="https://www.xlabs.club/blog/traefik-oauth2-proxy-keycloak/" target="_blank" rel="noopener"&gt;traefik-oauth2-proxy-keycloak&lt;/a&gt;
 。&lt;/li&gt;
-&lt;/ol&gt;</description></item></channel></rss>
+&lt;/ol&gt;
+&lt;h2 id="依赖配置"&gt;依赖配置&lt;/h2&gt;
+&lt;p&gt;核心依赖如下（Gradle 格式，Maven 同理）：&lt;/p&gt;</description></item></channel></rss>
