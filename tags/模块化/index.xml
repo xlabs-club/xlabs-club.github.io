@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>模块化 on XLabs</title><link>https://www.xlabs.club/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/</link><description>Recent content in 模块化 on XLabs</description><generator>Hugo</generator><language>zh-CN</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Sat, 27 Jun 2026 16:35:54 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/index.xml" rel="self" type="application/rss+xml"/><item><title>Koupleless 试用报告总结，踩坑记录分享</title><link>https://www.xlabs.club/blog/koupleless-first-boot/</link><pubDate>Mon, 27 May 2024 14:20:24 +0800</pubDate><guid>https://www.xlabs.club/blog/koupleless-first-boot/</guid><description>&lt;p&gt;我们公司的主要应用都是以 Java 作为开发语言，这几年随着业务的高速增长，应用数目越来越多，CPU 内存资源占用越来越多，项目组之间开发合作效率也越来越低。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>模块化 on XLabs</title><link>https://www.xlabs.club/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/</link><description>Recent content in 模块化 on XLabs</description><generator>Hugo</generator><language>zh-CN</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Sat, 27 Jun 2026 17:07:30 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/index.xml" rel="self" type="application/rss+xml"/><item><title>Koupleless 试用报告总结，踩坑记录分享</title><link>https://www.xlabs.club/blog/koupleless-first-boot/</link><pubDate>Mon, 27 May 2024 14:20:24 +0800</pubDate><guid>https://www.xlabs.club/blog/koupleless-first-boot/</guid><description>&lt;p&gt;我们公司的主要应用都是以 Java 作为开发语言，这几年随着业务的高速增长，应用数目越来越多，CPU 内存资源占用越来越多，项目组之间开发合作效率也越来越低。&lt;/p&gt;
 &lt;p&gt;顺应这个时代降本增效的目的，我们希望寻找一个能解决当前几个核心问题的框架：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;模块化开发、部署、资源共享的能力，减少 Cache、Class 等资源占用，有效降低内存占用。&lt;/li&gt;
@@ -24,4 +24,54 @@
 &lt;ol&gt;
 &lt;li&gt;
 &lt;p&gt;对 Java 17 或 21 的支持不好。
-虽然官方已经声称支持 Java 17，但是若用了 Java 17 的语法或新特性，无法编译通过。最后只好自编译 SOFAArk plugin 修改相关依赖解决。&lt;/p&gt;</description></item></channel></rss>
+虽然官方已经声称支持 Java 17，但是若用了 Java 17 的语法或新特性，无法编译通过。最后只好自编译 SOFAArk plugin 修改相关依赖解决。&lt;/p&gt;</description></item><item><title>Spring Modulith 模块化试验报告：构建可演进的模块化单体架构</title><link>https://www.xlabs.club/blog/spring-modulith/</link><pubDate>Fri, 08 Mar 2024 19:21:26 +0800</pubDate><guid>https://www.xlabs.club/blog/spring-modulith/</guid><description>&lt;p&gt;Spring Modulith 是 Spring 团队推出的模块化单体（Modular Monolith）支持库，旨在帮助开发者在单体应用中实现清晰的模块边界、依赖约束和集成测试，避免单体应用随着业务增长退化为&amp;quot;大泥球&amp;quot;。&lt;/p&gt;
+&lt;h2 id="为什么关注模块化单体"&gt;为什么关注模块化单体&lt;/h2&gt;
+&lt;p&gt;微服务架构并非银弹。对于中小规模团队和项目，微服务的成本（运维复杂度、分布式事务、网络延迟）往往超过其收益。模块化单体是一种折中方案：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;清晰的内部边界&lt;/strong&gt;：通过包结构和依赖约束强制执行模块隔离。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;单体部署&lt;/strong&gt;：避免分布式系统的大多数复杂性。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;可演进&lt;/strong&gt;：当某个模块确实需要独立部署时，提取为微服务的成本很低。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="核心功能"&gt;核心功能&lt;/h2&gt;
+&lt;h3 id="1-模块定义"&gt;1. 模块定义&lt;/h3&gt;
+&lt;p&gt;模块是应用包（Application Module Package），通常是一个顶层包：&lt;/p&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;pre tabindex="0"&gt;&lt;code&gt;com.example.app
+├── order/ ← 模块
+│ ├── Order.java
+│ ├── OrderService.java
+│ └── OrderRepository.java
+├── inventory/ ← 模块
+│ ├── InventoryService.java
+│ └── InventoryRepository.java
+└── Application.java&lt;/code&gt;&lt;/pre&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;h3 id="2-依赖验证"&gt;2. 依赖验证&lt;/h3&gt;
+&lt;p&gt;Spring Modulith 提供了 &lt;code&gt;ModulithicTest&lt;/code&gt; 来自动验证模块间的依赖是否符合预期：&lt;/p&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-java" data-lang="java"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nd"&gt;@ModulithicTest&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;ModularityTest&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nd"&gt;@Test&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nf"&gt;verifyModularity&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ApplicationModules&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;modules&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;modules&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;verify&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;p&gt;如果 &lt;code&gt;order&lt;/code&gt; 模块直接引用了 &lt;code&gt;inventory&lt;/code&gt; 的内部类（而非暴露的 API），测试会失败并给出具体原因。&lt;/p&gt;</description></item></channel></rss>

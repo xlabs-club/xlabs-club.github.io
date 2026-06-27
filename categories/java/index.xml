@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Java on XLabs</title><link>https://www.xlabs.club/categories/java/</link><description>Recent content in Java on XLabs</description><generator>Hugo</generator><language>zh-CN</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Sat, 27 Jun 2026 16:35:54 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/categories/java/index.xml" rel="self" type="application/rss+xml"/><item><title>Spring Boot 3 到 4 迁移完全指南：新特性、废弃功能与实战踩坑经验</title><link>https://www.xlabs.club/blog/migration-spring-boot-3-to-4/</link><pubDate>Tue, 25 Nov 2025 23:20:22 +0800</pubDate><guid>https://www.xlabs.club/blog/migration-spring-boot-3-to-4/</guid><description>&lt;p&gt;2025 年 11 月，Spring Boot 4.0 正式发布，这次升级被业界称为&lt;strong&gt;爆炸性升级&lt;/strong&gt;。同时对于云原生应用而言，这是一次&lt;strong&gt;不可错过的性能与效率跃迁&lt;/strong&gt;：&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Java on XLabs</title><link>https://www.xlabs.club/categories/java/</link><description>Recent content in Java on XLabs</description><generator>Hugo</generator><language>zh-CN</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Sat, 27 Jun 2026 17:07:30 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/categories/java/index.xml" rel="self" type="application/rss+xml"/><item><title>Spring Boot 3 到 4 迁移完全指南：新特性、废弃功能与实战踩坑经验</title><link>https://www.xlabs.club/blog/migration-spring-boot-3-to-4/</link><pubDate>Tue, 25 Nov 2025 23:20:22 +0800</pubDate><guid>https://www.xlabs.club/blog/migration-spring-boot-3-to-4/</guid><description>&lt;p&gt;2025 年 11 月，Spring Boot 4.0 正式发布，这次升级被业界称为&lt;strong&gt;爆炸性升级&lt;/strong&gt;。同时对于云原生应用而言，这是一次&lt;strong&gt;不可错过的性能与效率跃迁&lt;/strong&gt;：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;🐳 &lt;strong&gt;容器化友好&lt;/strong&gt;：模块化架构减少 30-50% 运行时占用，镜像更小、启动更快&lt;/li&gt;
 &lt;li&gt;⚡ &lt;strong&gt;启动速度提升 30-50%&lt;/strong&gt;：多线程异步启动机制，容器冷启动时间显著缩短，更适合 Kubernetes 快速扩缩容&lt;/li&gt;
@@ -58,7 +58,113 @@
  &lt;/figure&gt;
 &lt;/div&gt;
 &lt;h3 id="maven-核心配置"&gt;Maven 核心配置&lt;/h3&gt;
-&lt;p&gt;首先，在父 pom 里增加了以下片段，此内容主要含义：&lt;/p&gt;</description></item><item><title>Koupleless 试用报告总结，踩坑记录分享</title><link>https://www.xlabs.club/blog/koupleless-first-boot/</link><pubDate>Mon, 27 May 2024 14:20:24 +0800</pubDate><guid>https://www.xlabs.club/blog/koupleless-first-boot/</guid><description>&lt;p&gt;我们公司的主要应用都是以 Java 作为开发语言，这几年随着业务的高速增长，应用数目越来越多，CPU 内存资源占用越来越多，项目组之间开发合作效率也越来越低。&lt;/p&gt;
+&lt;p&gt;首先，在父 pom 里增加了以下片段，此内容主要含义：&lt;/p&gt;</description></item><item><title>Keycloak 自定义 User Federation SPI 实现：对接企业已有用户系统</title><link>https://www.xlabs.club/blog/keycloak-user-federation-spi/</link><pubDate>Sat, 11 Jan 2025 17:37:14 +0800</pubDate><guid>https://www.xlabs.club/blog/keycloak-user-federation-spi/</guid><description>&lt;p&gt;企业引入 Keycloak 作为统一认证平台时，通常面临已有用户系统（LDAP、AD、自建用户中心）的对接问题。Keycloak 内置了 LDAP/AD Federation Provider，但对于非标准用户存储（如 REST API 用户中心、自研数据库用户表），需要实现自定义 &lt;code&gt;UserStorageProvider&lt;/code&gt;。&lt;/p&gt;
+&lt;h2 id="spi-核心接口"&gt;SPI 核心接口&lt;/h2&gt;
+&lt;p&gt;Keycloak SPI 相关接口定义在 &lt;code&gt;org.keycloak.storage&lt;/code&gt; 包下，核心接口如下：&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;接口&lt;/th&gt;
+					&lt;th&gt;职责&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;UserStorageProviderFactory&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;创建 Provider 实例的工厂&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;UserStorageProvider&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;基础 Provider 接口，管理生命周期&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;UserLookupProvider&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;按 ID / username / email 查询用户&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;UserQueryProvider&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;搜索用户（分页、条件过滤）&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;CredentialInputValidator&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;验证用户密码等凭据&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;CredentialInputUpdater&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;更新用户密码&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;按需实现即可：只读用户仅需 &lt;code&gt;UserLookupProvider&lt;/code&gt;，如要支持登录需实现 &lt;code&gt;CredentialInputValidator&lt;/code&gt;。&lt;/p&gt;
+&lt;h2 id="实现步骤"&gt;实现步骤&lt;/h2&gt;
+&lt;h3 id="1-添加依赖"&gt;1. 添加依赖&lt;/h3&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-xml" data-lang="xml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.keycloak&lt;span class="nt"&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;keycloak-server-spi&lt;span class="nt"&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;lt;version&amp;gt;&lt;/span&gt;${keycloak.version}&lt;span class="nt"&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;lt;scope&amp;gt;&lt;/span&gt;provided&lt;span class="nt"&gt;&amp;lt;/scope&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.keycloak&lt;span class="nt"&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;keycloak-server-spi-private&lt;span class="nt"&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;lt;version&amp;gt;&lt;/span&gt;${keycloak.version}&lt;span class="nt"&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;lt;scope&amp;gt;&lt;/span&gt;provided&lt;span class="nt"&gt;&amp;lt;/scope&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.keycloak&lt;span class="nt"&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;keycloak-services&lt;span class="nt"&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;lt;version&amp;gt;&lt;/span&gt;${keycloak.version}&lt;span class="nt"&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;lt;scope&amp;gt;&lt;/span&gt;provided&lt;span class="nt"&gt;&amp;lt;/scope&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;h3 id="2-实现-provider-factory"&gt;2. 实现 Provider Factory&lt;/h3&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-java" data-lang="java"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;package&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;com.example.keycloak.federation&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;org.keycloak.component.ComponentModel&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;org.keycloak.models.KeycloakSession&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;org.keycloak.storage.UserStorageProviderFactory&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;CustomUserStorageProviderFactory&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;implements&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;UserStorageProviderFactory&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;CustomUserStorageProvider&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;static&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;final&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;PROVIDER_ID&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;#34;custom-user-storage&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nd"&gt;@Override&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;CustomUserStorageProvider&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nf"&gt;create&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;KeycloakSession&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;session&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;ComponentModel&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;return&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;new&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;CustomUserStorageProvider&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;session&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nd"&gt;@Override&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nf"&gt;getId&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;return&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;PROVIDER_ID&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nd"&gt;@Override&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nf"&gt;getHelpText&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;return&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;#34;Custom User Storage Provider for legacy user system&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;h3 id="3-实现-provider"&gt;3. 实现 Provider&lt;/h3&gt;
+&lt;p&gt;只读用户联合的最小实现（支持按 username 登录）：&lt;/p&gt;</description></item><item><title>Koupleless 试用报告总结，踩坑记录分享</title><link>https://www.xlabs.club/blog/koupleless-first-boot/</link><pubDate>Mon, 27 May 2024 14:20:24 +0800</pubDate><guid>https://www.xlabs.club/blog/koupleless-first-boot/</guid><description>&lt;p&gt;我们公司的主要应用都是以 Java 作为开发语言，这几年随着业务的高速增长，应用数目越来越多，CPU 内存资源占用越来越多，项目组之间开发合作效率也越来越低。&lt;/p&gt;
 &lt;p&gt;顺应这个时代降本增效的目的，我们希望寻找一个能解决当前几个核心问题的框架：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;模块化开发、部署、资源共享的能力，减少 Cache、Class 等资源占用，有效降低内存占用。&lt;/li&gt;
@@ -146,7 +252,114 @@
 &lt;/div&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;限定 Java 和 Spring Boot 版：修改 languages 和 bootVersions 即可。&lt;/p&gt;</description></item><item><title>基于 Alibaba Sentinel 实现的分布式限流中间件服务以及遇到的坑和注意事项</title><link>https://www.xlabs.club/blog/sentinel/</link><pubDate>Thu, 07 Mar 2024 21:06:10 +0800</pubDate><guid>https://www.xlabs.club/blog/sentinel/</guid><description>&lt;p&gt;基于 Alibaba Sentinel 实现的分布式限流中间件服务。主要对服务提供者提供限流、系统保护，对服务调用者提供熔断降级、限流排队等待效果。&lt;/p&gt;
+&lt;p&gt;限定 Java 和 Spring Boot 版：修改 languages 和 bootVersions 即可。&lt;/p&gt;</description></item><item><title>Spring Modulith 模块化试验报告：构建可演进的模块化单体架构</title><link>https://www.xlabs.club/blog/spring-modulith/</link><pubDate>Fri, 08 Mar 2024 19:21:26 +0800</pubDate><guid>https://www.xlabs.club/blog/spring-modulith/</guid><description>&lt;p&gt;Spring Modulith 是 Spring 团队推出的模块化单体（Modular Monolith）支持库，旨在帮助开发者在单体应用中实现清晰的模块边界、依赖约束和集成测试，避免单体应用随着业务增长退化为&amp;quot;大泥球&amp;quot;。&lt;/p&gt;
+&lt;h2 id="为什么关注模块化单体"&gt;为什么关注模块化单体&lt;/h2&gt;
+&lt;p&gt;微服务架构并非银弹。对于中小规模团队和项目，微服务的成本（运维复杂度、分布式事务、网络延迟）往往超过其收益。模块化单体是一种折中方案：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;清晰的内部边界&lt;/strong&gt;：通过包结构和依赖约束强制执行模块隔离。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;单体部署&lt;/strong&gt;：避免分布式系统的大多数复杂性。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;可演进&lt;/strong&gt;：当某个模块确实需要独立部署时，提取为微服务的成本很低。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="核心功能"&gt;核心功能&lt;/h2&gt;
+&lt;h3 id="1-模块定义"&gt;1. 模块定义&lt;/h3&gt;
+&lt;p&gt;模块是应用包（Application Module Package），通常是一个顶层包：&lt;/p&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;pre tabindex="0"&gt;&lt;code&gt;com.example.app
+├── order/ ← 模块
+│ ├── Order.java
+│ ├── OrderService.java
+│ └── OrderRepository.java
+├── inventory/ ← 模块
+│ ├── InventoryService.java
+│ └── InventoryRepository.java
+└── Application.java&lt;/code&gt;&lt;/pre&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;h3 id="2-依赖验证"&gt;2. 依赖验证&lt;/h3&gt;
+&lt;p&gt;Spring Modulith 提供了 &lt;code&gt;ModulithicTest&lt;/code&gt; 来自动验证模块间的依赖是否符合预期：&lt;/p&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-java" data-lang="java"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nd"&gt;@ModulithicTest&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;ModularityTest&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nd"&gt;@Test&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nf"&gt;verifyModularity&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ApplicationModules&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;modules&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;modules&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;verify&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;p&gt;如果 &lt;code&gt;order&lt;/code&gt; 模块直接引用了 &lt;code&gt;inventory&lt;/code&gt; 的内部类（而非暴露的 API），测试会失败并给出具体原因。&lt;/p&gt;</description></item><item><title>GraalVM 入门与实践：Native Image 编译和性能对比</title><link>https://www.xlabs.club/blog/graalvm/</link><pubDate>Fri, 08 Mar 2024 16:46:12 +0800</pubDate><guid>https://www.xlabs.club/blog/graalvm/</guid><description>&lt;p&gt;GraalVM 是 Oracle 开发的高性能 JDK 发行版，除了替代标准 JDK 外，其核心亮点是 &lt;strong&gt;Native Image&lt;/strong&gt;——将 Java 应用提前编译（AOT）为独立的原生可执行文件，实现毫秒级启动和极低内存占用。&lt;/p&gt;
+&lt;h2 id="graalvm-核心特性"&gt;GraalVM 核心特性&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Native Image (AOT 编译)&lt;/strong&gt;：将 Java 字节码编译为原生二进制，启动时间从秒级降至毫秒级。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;JIT 编译器 (Graal JIT)&lt;/strong&gt;：可作为 HotSpot 的替代 JIT 编译器，在某些场景下性能优于 C2。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;多语言支持 (Truffle Framework)&lt;/strong&gt;：在同一运行时中运行 JavaScript、Python、Ruby、R 等语言。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;GC 性能&lt;/strong&gt;：GraalVM CE 使用 Serial GC / G1 GC；GraalVM EE 提供更优的 GC 算法。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="native-image-快速入门"&gt;Native Image 快速入门&lt;/h2&gt;
+&lt;h3 id="安装-graalvm"&gt;安装 GraalVM&lt;/h3&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# SDKMAN 安装（推荐）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sdk install java 23-graal
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 安装 native-image 工具&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;gu install native-image&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;h3 id="编译一个简单应用"&gt;编译一个简单应用&lt;/h3&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-java" data-lang="java"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// HelloWorld.java&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;HelloWorld&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;static&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nf"&gt;main&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="o"&gt;[]&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;args&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;System&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;out&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;println&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;Hello, GraalVM Native Image!&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;javac HelloWorld.java
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;native-image HelloWorld
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;./helloworld
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 输出: Hello, GraalVM Native Image!&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;h3 id="spring-boot-集成"&gt;Spring Boot 集成&lt;/h3&gt;
+&lt;p&gt;Spring Boot 3.x 原生支持 GraalVM Native Image：&lt;/p&gt;</description></item><item><title>基于 Alibaba Sentinel 实现的分布式限流中间件服务以及遇到的坑和注意事项</title><link>https://www.xlabs.club/blog/sentinel/</link><pubDate>Thu, 07 Mar 2024 21:06:10 +0800</pubDate><guid>https://www.xlabs.club/blog/sentinel/</guid><description>&lt;p&gt;基于 Alibaba Sentinel 实现的分布式限流中间件服务。主要对服务提供者提供限流、系统保护，对服务调用者提供熔断降级、限流排队等待效果。&lt;/p&gt;
 &lt;p&gt;实现目标：&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;作为服务提供者，保护自己不被打死，服务可以慢不可以挂。&lt;/li&gt;
@@ -176,63 +389,4 @@
 &lt;li&gt;sentinel-web-servlet 和 sentinel-spring-webmvc-adapter 会将每个到来的不同的 URL 都作为不同的资源处理，因此对于 REST 风格的 API，需要自行实现 UrlCleaner 接口清洗一下资源（比如将满足 /foo/:id 的 URL 都归到 /foo/* 资源下）。否则会导致资源数量过多，超出资源数量阈值（目前是 6000）时多出的资源的规则将不会生效。&lt;/li&gt;
 &lt;li&gt;Java 中 &lt;code&gt;sentinel-time-tick-thread&lt;/code&gt; 线程会额外多占用约 1-2% CPU，详细代码参考 &lt;code&gt;com.alibaba.csp.sentinel.util.TimeUtil&lt;/code&gt;。&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;一些文档中尚未更新但是大家可能关心的内容：&lt;/p&gt;</description></item><item><title>重复 Transfer-Encoding Response Header 引起的 Traefik 代理服务 500 问题</title><link>https://www.xlabs.club/blog/duplicate-transfer-encoding-chunked/</link><pubDate>Sun, 26 Nov 2023 10:21:44 +0800</pubDate><guid>https://www.xlabs.club/blog/duplicate-transfer-encoding-chunked/</guid><description>&lt;p&gt;我有一个 Spring Boot 应用服务，提供了一些简单的查询接口，本身运行很正常，通过 curl 或其他 http 客户端 localhost 请求都没有问题。&lt;/p&gt;
-&lt;p&gt;某天通过 Traefik 代理了此服务，经过代理后再访问，某个接口一直都是 &lt;code&gt;500 internal server error&lt;/code&gt;，其他接口都没有问题。通过 tcpdump 抓包发现，应用服务并没有返回任何 500 错误，而且响应时间和 Body 体大小都很正常。&lt;/p&gt;
-&lt;p&gt;根据网上经验排查了 Traefik SSL 证书问题、路径问题、消息体太大问题、请求 Header 不合规问题，都一一否定。最后无意间看了一眼 Response Header，发现 Spring Boot 应用返回了两个 &lt;code&gt;Transfer-Encoding: chunked&lt;/code&gt; Header。&lt;/p&gt;
-&lt;p&gt;再根据此 Header 搜索，发现果然有人遇到过类似问题，请参考这几个链接。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="https://github.com/traefik/traefik/issues/7741" target="_blank" rel="noopener"&gt;https://github.com/traefik/traefik/issues/7741&lt;/a&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://github.com/spring-projects/spring-framework/issues/21523" target="_blank" rel="noopener"&gt;https://github.com/spring-projects/spring-framework/issues/21523&lt;/a&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://github.com/spring-projects/spring-boot/issues/37646" target="_blank" rel="noopener"&gt;https://github.com/spring-projects/spring-boot/issues/37646&lt;/a&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://stackoverflow.com/questions/77042701/nginx-upstream-sent-duplicate-header-line-transfer-encoding-chunked-previo" target="_blank" rel="noopener"&gt;https://stackoverflow.com/questions/77042701/nginx-upstream-sent-duplicate-header-line-transfer-encoding-chunked-previo&lt;/a&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;从上面链接描述中可知，不仅 Traefik 会出现此问题，nginx 包含以 nginx 为基础的 ingress 也会出现同样问题，不过 nginx 返回错误信息类似 &lt;code&gt;Nginx: upstream sent duplicate header line: &amp;quot;Transfer-Encoding: chunked&amp;quot;, previous value: &amp;quot;Transfer-Encoding: chunked&amp;quot;&lt;/code&gt; ，返回错误码一般是 502 Bad Gateway。&lt;/p&gt;</description></item><item><title>K8S Pod 容器内 Java 进程内存分析，内存虚高以及容器 OOM 或 Jave OOM 问题定位</title><link>https://www.xlabs.club/blog/java-memory/</link><pubDate>Sat, 07 Jan 2023 10:54:37 +0800</pubDate><guid>https://www.xlabs.club/blog/java-memory/</guid><description>&lt;p&gt;故事背景：&lt;/p&gt;
-&lt;p&gt;一个 K8S Pod，里面只有一个 Java 进程，K8S request 和 limit memory 都是 2G，Java 进程核心参数包括：&lt;code&gt;-XX:+UseZGC -Xmx1024m -Xms768m&lt;/code&gt;。&lt;/p&gt;
-&lt;p&gt;服务启动一段时间后，查看 Grafana 监控数据，Pod 内存使用量约 1.5G，JVM 内存使用量约 500M，通过 jvm dump 分析没有任何大对象，运行三五天后出现 K8S Container OOM。&lt;/p&gt;
-&lt;p&gt;首先区分下 Container OOM 和 Jvm OOM，Container OOM 是 Pod 内进程申请内存大约 K8S Limit 所致。&lt;/p&gt;
-&lt;p&gt;问题来了：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Pod 2G 内存，JVM 设置了 &lt;code&gt;Xmx 1G&lt;/code&gt;，已经预留了 1G 内存，为什么还会 Container OOM，这预留的 1G 内存被谁吃了。&lt;/li&gt;
-&lt;li&gt;正常情况下（无 Container OOM），Grafana 看到的监控数据，Pod 内存使用量 1.5G， JVM 内存使用量 500M，差别为什么这么大。&lt;/li&gt;
-&lt;li&gt;Pod 内存使用量为什么超过 Xmx 限制。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;Grafana 监控图。&lt;/p&gt;
-&lt;p&gt;&lt;a href="./grafana-pod-jvm.png"&gt;
-
-&lt;img
- src="https://www.xlabs.club/blog/java-memory/grafana-pod-jvm_hu_b54f00158419a44a.webp"
- width="1920"
- height="3600"
- decoding="async"
- fetchpriority="auto"
- loading="lazy"
- alt="Grafana 监控图"
- id="h-rh-i-0"
-&gt;&lt;/a&gt;
-&lt;/p&gt;</description></item><item><title>Spring Boot 使用 Micrometer 集成 Prometheus 监控，5 分钟接入自定义监控指标</title><link>https://www.xlabs.club/blog/spring-boot-micrometer/</link><pubDate>Mon, 07 Aug 2023 10:54:37 +0800</pubDate><guid>https://www.xlabs.club/blog/spring-boot-micrometer/</guid><description>&lt;p&gt;Spring Boot 使用 Micrometer 集成 Prometheus 监控，5 分钟接入自定义监控指标，主要内容：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Micrometer 介绍。&lt;/li&gt;
-&lt;li&gt;业务如何自定义指标，如何接入 Prometheus，实现方式和规范。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2 id="micrometer-介绍"&gt;Micrometer 介绍&lt;/h2&gt;
-&lt;p&gt;Micrometer 为 Java 平台上的性能数据收集提供了一个通用的 API，应用程序只需要使用 Micrometer 的通用 API 来收集性能指标，Micrometer 会负责完成与不同监控系统的适配工作。&lt;/p&gt;
-&lt;p&gt;Micrometer 提供了多种度量指标类型（Timers、Guauges、Counters 等），同时支持接入不同的监控系统，例如 Influxdb、Graphite、Prometheus、OTLP 等。&lt;/p&gt;
-&lt;p&gt;从 Spring Boot 2.x 开始使用 Micrometer 作为默认的监控门面接口， &lt;code&gt;Think SLF4J, but for observability&lt;/code&gt; 。&lt;/p&gt;
-&lt;h3 id="micrometer-核心概念"&gt;Micrometer 核心概念&lt;/h3&gt;
-&lt;p&gt;Micrometer 中两个最核心的概念：计量器注册表 (MeterRegistry)，计量器 (Meter)。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;MeterRegistry&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;内存注册表 (SimpleMeterRegistry): 在内存中保存每一个 Meter（指标）的最新值，并且不会将数据导出到任何地方。&lt;/li&gt;
-&lt;li&gt;组合注册表 (CompositeMeterRegistry): 可以添加多个注册表，用于将各个注册表组合起来，可以同时将指标发布到多个监控系统。Micrometer 提供了一个全局的 MeterRegistry，&lt;code&gt;io.micrometer.core.instrument.Metrics&lt;/code&gt; 中持有一个静态 final 的 CompositeMeterRegistry 实例 globalRegistry。&lt;/li&gt;
-&lt;li&gt;普罗米修斯注册表 (PrometheusMeterRegistry): 当使用普罗米修斯监控时，引入 micrometer-registry-prometheus 依赖时会提供此种收集器，用于将指标数据转换为普罗米修斯识别的格式和导出数据等功能。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Meter（指标）&lt;/p&gt;
-&lt;p&gt;监控数据的整个过程都是围绕着 Meter（指标）, 通过一个一个的 Meter（指标）数据来进行观察应用的状态。常用的指标如：&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;一些文档中尚未更新但是大家可能关心的内容：&lt;/p&gt;</description></item></channel></rss>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>平台工程 on XLabs</title><link>https://www.xlabs.club/docs/platform/</link><description>Recent content in 平台工程 on XLabs</description><generator>Hugo</generator><language>zh-CN</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Sat, 27 Jun 2026 16:35:54 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/docs/platform/index.xml" rel="self" type="application/rss+xml"/><item><title>总体架构</title><link>https://www.xlabs.club/docs/platform/introduction/</link><pubDate>Thu, 07 Sep 2023 16:04:48 +0200</pubDate><guid>https://www.xlabs.club/docs/platform/introduction/</guid><description>&lt;p&gt;我们的平台工程建设之路，介绍前期方案设计、中间踩坑历程。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>平台工程 on XLabs</title><link>https://www.xlabs.club/docs/platform/</link><description>Recent content in 平台工程 on XLabs</description><generator>Hugo</generator><language>zh-CN</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Sat, 27 Jun 2026 17:07:30 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/docs/platform/index.xml" rel="self" type="application/rss+xml"/><item><title>总体架构</title><link>https://www.xlabs.club/docs/platform/introduction/</link><pubDate>Thu, 07 Sep 2023 16:04:48 +0200</pubDate><guid>https://www.xlabs.club/docs/platform/introduction/</guid><description>&lt;p&gt;我们的平台工程建设之路，介绍前期方案设计、中间踩坑历程。&lt;/p&gt;
 &lt;h2 id="原则"&gt;原则&lt;/h2&gt;
 &lt;p&gt;分享我们平台工程建设的一些基本原则。&lt;/p&gt;
 &lt;ol&gt;
@@ -145,7 +145,188 @@ C4Context
 			&lt;/tr&gt;
 	&lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;以下为 OAuth2 Proxy 和 Pomerium 的简单对比。&lt;/p&gt;</description></item><item><title>开发者门户</title><link>https://www.xlabs.club/docs/platform/backstage/</link><pubDate>Sat, 27 Jan 2024 21:56:42 +0800</pubDate><guid>https://www.xlabs.club/docs/platform/backstage/</guid><description>&lt;p&gt;使用 backstage 创建开发者门户。&lt;/p&gt;
+&lt;p&gt;以下为 OAuth2 Proxy 和 Pomerium 的简单对比。&lt;/p&gt;</description></item><item><title>Pulumi：用编程语言管理云基础设施</title><link>https://www.xlabs.club/docs/platform/pulumi/</link><pubDate>Sat, 13 Apr 2024 18:01:15 +0800</pubDate><guid>https://www.xlabs.club/docs/platform/pulumi/</guid><description>&lt;p&gt;&lt;a href="https://www.pulumi.com/" target="_blank" rel="noopener"&gt;Pulumi&lt;/a&gt;
+ 是 Infrastructure as Code（IaC）领域的新一代工具，允许开发者使用通用编程语言（TypeScript、Python、Go、C#、Java）而不是 DSL（如 HCL）来管理云基础设施。&lt;/p&gt;
+&lt;h2 id="pulumi-vs-terraform"&gt;Pulumi vs Terraform&lt;/h2&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;维度&lt;/th&gt;
+					&lt;th&gt;Terraform&lt;/th&gt;
+					&lt;th&gt;Pulumi&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;配置语言&lt;/td&gt;
+					&lt;td&gt;HCL（专用 DSL）&lt;/td&gt;
+					&lt;td&gt;TypeScript/Python/Go 等通用语言&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;状态管理&lt;/td&gt;
+					&lt;td&gt;本地文件 / Terraform Cloud / S3&lt;/td&gt;
+					&lt;td&gt;Pulumi Cloud / S3 / Azure Blob / GCS&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;抽象能力&lt;/td&gt;
+					&lt;td&gt;Modules&lt;/td&gt;
+					&lt;td&gt;函数、类、循环、条件等编程语言原生能力&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;测试&lt;/td&gt;
+					&lt;td&gt;需 &lt;code&gt;terraform test&lt;/code&gt; 或第三方&lt;/td&gt;
+					&lt;td&gt;标准测试框架（Jest、pytest 等）&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;多云支持&lt;/td&gt;
+					&lt;td&gt;通过 Provider&lt;/td&gt;
+					&lt;td&gt;通过 Provider&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;开发生态&lt;/td&gt;
+					&lt;td&gt;HCL 专用 IDE 插件&lt;/td&gt;
+					&lt;td&gt;VS Code/IntelliJ 的标准语言支持&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;CLI 体验&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;terraform plan/apply&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;pulumi preview/up&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;核心差异：Pulumi 用你已熟悉的编程语言来定义基础设施。循环、条件、函数复用都是语言原生能力，不需要学 DSL 的语法糖。&lt;/p&gt;
+&lt;h2 id="安装"&gt;安装&lt;/h2&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# macOS&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;brew install pulumi
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Linux&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl -fsSL https://get.pulumi.com &lt;span class="p"&gt;|&lt;/span&gt; sh
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 验证&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;pulumi version&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;h2 id="快速示例typescript"&gt;快速示例（TypeScript）&lt;/h2&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-typescript" data-lang="typescript"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;import&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="kr"&gt;as&lt;/span&gt; &lt;span class="nx"&gt;pulumi&lt;/span&gt; &lt;span class="kr"&gt;from&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;@pulumi/pulumi&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;import&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="kr"&gt;as&lt;/span&gt; &lt;span class="nx"&gt;kubernetes&lt;/span&gt; &lt;span class="kr"&gt;from&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;@pulumi/kubernetes&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// 部署 Nginx
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;appLabels&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="nx"&gt;app&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;nginx&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;deployment&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nx"&gt;kubernetes&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;apps&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;v1&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;Deployment&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;nginx&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;spec&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;selector&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="nx"&gt;matchLabels&lt;/span&gt;: &lt;span class="kt"&gt;appLabels&lt;/span&gt; &lt;span class="p"&gt;},&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;replicas&lt;/span&gt;: &lt;span class="kt"&gt;3&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;template&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;metadata&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="nx"&gt;labels&lt;/span&gt;: &lt;span class="kt"&gt;appLabels&lt;/span&gt; &lt;span class="p"&gt;},&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;spec&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;containers&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;name&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;nginx&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;image&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;nginx:1.25&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;ports&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[{&lt;/span&gt; &lt;span class="nx"&gt;containerPort&lt;/span&gt;: &lt;span class="kt"&gt;80&lt;/span&gt; &lt;span class="p"&gt;}],&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}],&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;},&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;},&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;},&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;});&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;service&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nx"&gt;kubernetes&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;core&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;v1&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;Service&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;nginx&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;spec&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kr"&gt;type&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;ClusterIP&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;selector&lt;/span&gt;: &lt;span class="kt"&gt;appLabels&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;ports&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[{&lt;/span&gt; &lt;span class="nx"&gt;port&lt;/span&gt;: &lt;span class="kt"&gt;80&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;targetPort&lt;/span&gt;: &lt;span class="kt"&gt;80&lt;/span&gt; &lt;span class="p"&gt;}],&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;},&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;});&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;export&lt;/span&gt; &lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;serviceName&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;service&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;metadata&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;name&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;p&gt;执行：&lt;/p&gt;</description></item><item><title>Grafana k6 性能测试入门：编写、运行和分析负载测试</title><link>https://www.xlabs.club/docs/platform/grafana-k6/</link><pubDate>Wed, 06 Mar 2024 14:07:29 +0800</pubDate><guid>https://www.xlabs.club/docs/platform/grafana-k6/</guid><description>&lt;p&gt;&lt;a href="https://k6.io/" target="_blank" rel="noopener"&gt;k6&lt;/a&gt;
+ 是 Grafana 旗下开源的性能测试工具，使用 JavaScript 编写测试脚本，轻量、CLI 友好、易于集成 CI/CD。它专注于开发者体验和自动化测试，相比 JMeter 更现代化。&lt;/p&gt;
+&lt;h2 id="安装"&gt;安装&lt;/h2&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# macOS&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;brew install k6
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Linux&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo gpg -k &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; sudo tee /etc/apt/sources.list.d/k6.list
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt-get update &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo apt-get install k6
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Docker&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker run --rm -i grafana/k6 run - &amp;lt;script.js&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;h2 id="编写测试脚本"&gt;编写测试脚本&lt;/h2&gt;
+&lt;p&gt;k6 脚本就是一个 JavaScript 文件，包含 &lt;code&gt;export default function()&lt;/code&gt; 作为每个 VU（Virtual User）的执行体：&lt;/p&gt;</description></item><item><title>Atlas：现代化的数据库 Schema 管理工具</title><link>https://www.xlabs.club/docs/platform/atlas/</link><pubDate>Sat, 24 Feb 2024 10:51:27 +0800</pubDate><guid>https://www.xlabs.club/docs/platform/atlas/</guid><description>&lt;p&gt;&lt;a href="https://atlasgo.io/" target="_blank" rel="noopener"&gt;Atlas&lt;/a&gt;
+ 是 Ariga 公司开源的数据库 Schema 管理工具，支持声明式地管理数据库结构，类似 Terraform 管理基础设施的思路。它解决了传统迁移工具（如 Flyway、Liquibase）中手动编写 SQL 迁移脚本的痛点。&lt;/p&gt;
+&lt;h2 id="核心能力"&gt;核心能力&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;声明式 Schema 管理&lt;/strong&gt;：定义期望的数据库状态，Atlas 自动计算并执行差异化的 DDL。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;版本化迁移&lt;/strong&gt;：自动生成版本化的 SQL 迁移文件，兼容 Flyway/Liquibase 的工作流。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;CI/CD 集成&lt;/strong&gt;：在 CI 中自动检测 Schema 变更、生成迁移脚本，并可作为 PR Comment 展示。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;多数据库支持&lt;/strong&gt;：MySQL、PostgreSQL、SQLite、MariaDB、SQL Server、TiDB 等。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="安装"&gt;安装&lt;/h2&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# macOS&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;brew install ariga/tap/atlas
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Linux&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl -sSf https://atlasgo.sh &lt;span class="p"&gt;|&lt;/span&gt; sh
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Docker&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker run --rm arigaio/atlas --help&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;h2 id="基本用法"&gt;基本用法&lt;/h2&gt;
+&lt;h3 id="声明式迁移"&gt;声明式迁移&lt;/h3&gt;
+&lt;p&gt;直接告诉 Atlas 你想要什么样的 Schema，它会计算出到达该状态需要的 DDL：&lt;/p&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 将 MySQL 数据库的当前 Schema 与目标 HCL 文件对比&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;atlas schema apply &lt;span class="se"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; --url &lt;span class="s2"&gt;&amp;#34;mysql://root:pass@localhost:3306/mydb&amp;#34;&lt;/span&gt; &lt;span class="se"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; --to file://schema.hcl &lt;span class="se"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; --dev-url &lt;span class="s2"&gt;&amp;#34;docker://mysql/8/mydb&amp;#34;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;p&gt;Atlas 会输出计划执行的 DDL 并等待确认，然后执行。&lt;/p&gt;</description></item><item><title>开发者门户</title><link>https://www.xlabs.club/docs/platform/backstage/</link><pubDate>Sat, 27 Jan 2024 21:56:42 +0800</pubDate><guid>https://www.xlabs.club/docs/platform/backstage/</guid><description>&lt;p&gt;使用 backstage 创建开发者门户。&lt;/p&gt;
 &lt;h2 id="backstage-插件资源"&gt;Backstage 插件资源&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;Backstage 官方插件：&lt;a href="https://backstage.io/plugins" target="_blank" rel="noopener"&gt;https://backstage.io/plugins&lt;/a&gt;
@@ -157,5 +338,106 @@ C4Context
 &lt;li&gt;&lt;a href="https://roadie.io/" target="_blank" rel="noopener"&gt;Roadie&lt;/a&gt;
  贡献的插件：&lt;a href="https://github.com/RoadieHQ/roadie-backstage-plugins" target="_blank" rel="noopener"&gt;https://github.com/RoadieHQ/roadie-backstage-plugins&lt;/a&gt;
 &lt;/li&gt;
-&lt;/ul&gt;</description></item><item><title>智能代码重构</title><link>https://www.xlabs.club/docs/platform/smart-code/</link><pubDate>Tue, 09 Jan 2024 22:08:54 +0800</pubDate><guid>https://www.xlabs.club/docs/platform/smart-code/</guid><description>&lt;p&gt;本文已迁移到 Blog 目录下，详情参考 &lt;a href="https://www.xlabs.club/blog/smart-code/"&gt;智能代码重构&lt;/a&gt;
+&lt;/ul&gt;</description></item><item><title>云原生工作流引擎技术选型</title><link>https://www.xlabs.club/docs/platform/workflows/</link><pubDate>Wed, 24 Jan 2024 18:28:13 +0800</pubDate><guid>https://www.xlabs.club/docs/platform/workflows/</guid><description>&lt;p&gt;工作流引擎是平台工程的核心组件之一，负责编排 CI/CD Pipeline、数据处理任务、基础设施变更等复杂流程。本文对比几款主流云原生工作流引擎，给出选型建议。&lt;/p&gt;
+&lt;h2 id="候选引擎"&gt;候选引擎&lt;/h2&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;引擎&lt;/th&gt;
+					&lt;th&gt;定位&lt;/th&gt;
+					&lt;th&gt;语言&lt;/th&gt;
+					&lt;th&gt;架构&lt;/th&gt;
+					&lt;th&gt;社区&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;a href="https://argoproj.github.io/workflows/" target="_blank" rel="noopener"&gt;Argo Workflows&lt;/a&gt;
+&lt;/td&gt;
+					&lt;td&gt;K8S 原生工作流引擎&lt;/td&gt;
+					&lt;td&gt;Go&lt;/td&gt;
+					&lt;td&gt;CRD + Controller，每个步骤一个 Pod&lt;/td&gt;
+					&lt;td&gt;CNCF 孵化项目&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;a href="https://temporal.io/" target="_blank" rel="noopener"&gt;Temporal&lt;/a&gt;
+&lt;/td&gt;
+					&lt;td&gt;通用工作流引擎&lt;/td&gt;
+					&lt;td&gt;Go/Java/Python/TS SDK&lt;/td&gt;
+					&lt;td&gt;Client-Server，独立部署&lt;/td&gt;
+					&lt;td&gt;企业级开源&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;a href="https://airflow.apache.org/" target="_blank" rel="noopener"&gt;Apache Airflow&lt;/a&gt;
+&lt;/td&gt;
+					&lt;td&gt;数据管道调度&lt;/td&gt;
+					&lt;td&gt;Python&lt;/td&gt;
+					&lt;td&gt;Scheduler + Worker + Web&lt;/td&gt;
+					&lt;td&gt;Apache 顶级项目&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;a href="https://www.prefect.io/" target="_blank" rel="noopener"&gt;Prefect&lt;/a&gt;
+&lt;/td&gt;
+					&lt;td&gt;现代数据工作流&lt;/td&gt;
+					&lt;td&gt;Python&lt;/td&gt;
+					&lt;td&gt;Server + Agent&lt;/td&gt;
+					&lt;td&gt;开源 + 商业版&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;a href="https://tekton.dev/" target="_blank" rel="noopener"&gt;Tekton&lt;/a&gt;
+&lt;/td&gt;
+					&lt;td&gt;K8S CI/CD Pipeline&lt;/td&gt;
+					&lt;td&gt;Go&lt;/td&gt;
+					&lt;td&gt;CRD + Controller&lt;/td&gt;
+					&lt;td&gt;CDF (CD Foundation)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;a href="https://temporal.io/" target="_blank" rel="noopener"&gt;Temporal (Cadence 分支)&lt;/a&gt;
+&lt;/td&gt;
+					&lt;td&gt;长时间运行工作流&lt;/td&gt;
+					&lt;td&gt;多语言 SDK&lt;/td&gt;
+					&lt;td&gt;Client-Server&lt;/td&gt;
+					&lt;td&gt;Uber → Temporal Inc&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="核心对比"&gt;核心对比&lt;/h2&gt;
+&lt;h3 id="1-部署与运维"&gt;1. 部署与运维&lt;/h3&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;引擎&lt;/th&gt;
+					&lt;th&gt;部署复杂度&lt;/th&gt;
+					&lt;th&gt;依赖&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Argo Workflows&lt;/td&gt;
+					&lt;td&gt;低（K8S 内一条 &lt;code&gt;kubectl apply&lt;/code&gt;）&lt;/td&gt;
+					&lt;td&gt;仅 Kubernetes&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Temporal&lt;/td&gt;
+					&lt;td&gt;中（需数据库 + Temporal Server）&lt;/td&gt;
+					&lt;td&gt;MySQL/PostgreSQL + Elasticsearch&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Airflow&lt;/td&gt;
+					&lt;td&gt;中-高（Scheduler、Worker、Web、DB、Redis/Celery）&lt;/td&gt;
+					&lt;td&gt;PostgreSQL + Redis&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Prefect&lt;/td&gt;
+					&lt;td&gt;低（Prefect Server 或 Prefect Cloud）&lt;/td&gt;
+					&lt;td&gt;PostgreSQL（Server 模式）&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Tekton&lt;/td&gt;
+					&lt;td&gt;低（同 Argo）&lt;/td&gt;
+					&lt;td&gt;仅 Kubernetes&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;如果团队已全面运行在 Kubernetes 上，Argo Workflows 和 Tekton 的部署成本最低——无需额外维护数据库和独立服务。&lt;/p&gt;</description></item><item><title>智能代码重构</title><link>https://www.xlabs.club/docs/platform/smart-code/</link><pubDate>Tue, 09 Jan 2024 22:08:54 +0800</pubDate><guid>https://www.xlabs.club/docs/platform/smart-code/</guid><description>&lt;p&gt;本文已迁移到 Blog 目录下，详情参考 &lt;a href="https://www.xlabs.club/blog/smart-code/"&gt;智能代码重构&lt;/a&gt;
 。&lt;/p&gt;</description></item></channel></rss>

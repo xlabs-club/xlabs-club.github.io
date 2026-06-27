@@ -1,4 +1,122 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>K8S on XLabs</title><link>https://www.xlabs.club/categories/k8s/</link><description>Recent content in K8S on XLabs</description><generator>Hugo</generator><language>zh-CN</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Sat, 27 Jun 2026 16:35:54 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/categories/k8s/index.xml" rel="self" type="application/rss+xml"/><item><title>Backstage 集成 oauth2-proxy 和 Keycloak，实现用户管理、登录认证以及 RBAC、ABAC 授权</title><link>https://www.xlabs.club/blog/backstage-keycloak-oauth2-proxy/</link><pubDate>Sat, 16 Nov 2024 16:55:26 +0800</pubDate><guid>https://www.xlabs.club/blog/backstage-keycloak-oauth2-proxy/</guid><description>&lt;p&gt;基于 K8S 部署 Backstage，集成 oauth2-proxy 和 Keycloak，实现用户管理、认证和授权，配置详解和原理介绍。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>K8S on XLabs</title><link>https://www.xlabs.club/categories/k8s/</link><description>Recent content in K8S on XLabs</description><generator>Hugo</generator><language>zh-CN</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Sat, 27 Jun 2026 17:07:30 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/categories/k8s/index.xml" rel="self" type="application/rss+xml"/><item><title>Awesome Alternatives Bitnami：寻找 Bitnami Charts 的替代方案</title><link>https://www.xlabs.club/blog/awesome-alternatives-bitnami/</link><pubDate>Mon, 03 Nov 2025 22:03:42 +0800</pubDate><guid>https://www.xlabs.club/blog/awesome-alternatives-bitnami/</guid><description>&lt;p&gt;Bitnami 曾是最受欢迎的 Helm Charts 和容器镜像提供商之一，但其维护策略调整后，很多 Charts 已停止更新或更新严重滞后。本文整理了常用中间件的替代 Helm Charts 和镜像来源，供团队迁移参考。&lt;/p&gt;
+&lt;h2 id="为什么要从-bitnami-迁移"&gt;为什么要从 Bitnami 迁移&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;更新滞后&lt;/strong&gt;：部分 Charts 长期未更新，Kubernetes 新版 API 不兼容。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;镜像安全&lt;/strong&gt;：老旧镜像可能存在已知 CVE 漏洞。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;社区活跃度&lt;/strong&gt;：官方维护的资源更有保障。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="替代方案汇总"&gt;替代方案汇总&lt;/h2&gt;
+&lt;h3 id="数据库"&gt;数据库&lt;/h3&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;中间件&lt;/th&gt;
+					&lt;th&gt;Bitnami Chart&lt;/th&gt;
+					&lt;th&gt;推荐替代&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;PostgreSQL&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;bitnami/postgresql&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;a href="https://github.com/CrunchyData/postgres-operator" target="_blank" rel="noopener"&gt;CrunchyData Postgres Operator&lt;/a&gt;
+ 或 &lt;a href="https://cloudnative-pg.io/" target="_blank" rel="noopener"&gt;CloudNativePG&lt;/a&gt;
+&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;MySQL&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;bitnami/mysql&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;a href="https://github.com/mysql/mysql-operator" target="_blank" rel="noopener"&gt;mysql-operator&lt;/a&gt;
+ 或官方 Docker 镜像&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Redis&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;bitnami/redis&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;a href="https://github.com/ot-container-kit/redis-operator" target="_blank" rel="noopener"&gt;redis-operator&lt;/a&gt;
+ 或直接使用官方 Helm Chart&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;MongoDB&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;bitnami/mongodb&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;a href="https://github.com/mongodb/mongodb-kubernetes-operator" target="_blank" rel="noopener"&gt;MongoDB Community Operator&lt;/a&gt;
+&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;ClickHouse&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;bitnami/clickhouse&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;a href="https://github.com/Altinity/clickhouse-operator" target="_blank" rel="noopener"&gt;clickhouse-operator&lt;/a&gt;
+（Altinity 维护）&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="消息队列"&gt;消息队列&lt;/h3&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;中间件&lt;/th&gt;
+					&lt;th&gt;Bitnami Chart&lt;/th&gt;
+					&lt;th&gt;推荐替代&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Kafka&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;bitnami/kafka&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;a href="https://strimzi.io/" target="_blank" rel="noopener"&gt;Strimzi&lt;/a&gt;
+ Operator&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;RabbitMQ&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;bitnami/rabbitmq&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;a href="https://github.com/rabbitmq/cluster-operator" target="_blank" rel="noopener"&gt;RabbitMQ Cluster Operator&lt;/a&gt;
+&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;NATS&lt;/td&gt;
+					&lt;td&gt;—&lt;/td&gt;
+					&lt;td&gt;官方 &lt;a href="https://github.com/nats-io/k8s" target="_blank" rel="noopener"&gt;nats-io/k8s&lt;/a&gt;
+ Helm Chart&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="基础组件"&gt;基础组件&lt;/h3&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;中间件&lt;/th&gt;
+					&lt;th&gt;Bitnami Chart&lt;/th&gt;
+					&lt;th&gt;推荐替代&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Nginx&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;bitnami/nginx&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;官方 Docker 镜像 + 自编 Helm Chart，或用 &lt;a href="https://github.com/kubernetes/ingress-nginx" target="_blank" rel="noopener"&gt;ingress-nginx&lt;/a&gt;
+&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;cert-manager&lt;/td&gt;
+					&lt;td&gt;—&lt;/td&gt;
+					&lt;td&gt;官方 &lt;a href="https://cert-manager.io/" target="_blank" rel="noopener"&gt;jetstack/cert-manager&lt;/a&gt;
+ Helm Chart&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Keycloak&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;bitnami/keycloak&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;官方 &lt;a href="https://github.com/keycloak/keycloak" target="_blank" rel="noopener"&gt;keycloak/keycloak&lt;/a&gt;
+ Helm Chart（Quarkus 版）&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Harbor&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;bitnami/harbor&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;官方 &lt;a href="https://github.com/goharbor/harbor-helm" target="_blank" rel="noopener"&gt;goharbor/harbor-helm&lt;/a&gt;
+&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="容器镜像替代来源"&gt;容器镜像替代来源&lt;/h3&gt;
+&lt;p&gt;如果仅使用 Bitnami 的容器镜像（而非完整 Chart），可考虑的替代来源：&lt;/p&gt;</description></item><item><title>Backstage 集成 oauth2-proxy 和 Keycloak，实现用户管理、登录认证以及 RBAC、ABAC 授权</title><link>https://www.xlabs.club/blog/backstage-keycloak-oauth2-proxy/</link><pubDate>Sat, 16 Nov 2024 16:55:26 +0800</pubDate><guid>https://www.xlabs.club/blog/backstage-keycloak-oauth2-proxy/</guid><description>&lt;p&gt;基于 K8S 部署 Backstage，集成 oauth2-proxy 和 Keycloak，实现用户管理、认证和授权，配置详解和原理介绍。&lt;/p&gt;
 &lt;p&gt;如果你遇到以下问题或诉求，可以参考此文档。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href="https://backstage.io/" target="_blank" rel="noopener"&gt;Backstage&lt;/a&gt;
@@ -133,7 +251,64 @@
 &lt;h2 id="dockerfile-编写小技巧"&gt;Dockerfile 编写小技巧&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;使用 Heredocs 语法代替又长又臭的字符串拼接，当然 Heredocs 支持更多功能比如 run python、多文件内容拷贝，具体请参考官方文档。&lt;/p&gt;</description></item><item><title>使用 Pulumi 部署 cert-manager 创建 K8S 自签名证书并信任证书</title><link>https://www.xlabs.club/blog/trust-cert-manager-selfsigned-tls/</link><pubDate>Mon, 29 Apr 2024 21:49:22 +0800</pubDate><guid>https://www.xlabs.club/blog/trust-cert-manager-selfsigned-tls/</guid><description>&lt;p&gt;在搭建本地 Kubernetus 集群后，由于环境在内网，做不了域名验证，无法使用 Let&amp;rsquo;s Encrypt 颁发和自动更新证书，然而很多应用要求必须启用 HTTPS，只能用自签名 CA 证书，并由此 CA 继续颁发其他证书。&lt;/p&gt;
+&lt;p&gt;使用 Heredocs 语法代替又长又臭的字符串拼接，当然 Heredocs 支持更多功能比如 run python、多文件内容拷贝，具体请参考官方文档。&lt;/p&gt;</description></item><item><title>GitOps 中的 Kubernetes Secret 管理：方案对比与最佳实践</title><link>https://www.xlabs.club/blog/gitops-secrets-in-k8s/</link><pubDate>Fri, 17 May 2024 21:41:08 +0800</pubDate><guid>https://www.xlabs.club/blog/gitops-secrets-in-k8s/</guid><description>&lt;p&gt;GitOps 的核心原则是将所有配置以声明式方式存储在 Git 仓库中。但 Kubernetes Secret 包含敏感数据（密码、Token、证书），不能直接以明文存入 Git。本文对比几种主流方案，帮助团队选择适合的 Secret 管理策略。&lt;/p&gt;
+&lt;h2 id="方案对比总览"&gt;方案对比总览&lt;/h2&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;方案&lt;/th&gt;
+					&lt;th&gt;原理&lt;/th&gt;
+					&lt;th&gt;加密位置&lt;/th&gt;
+					&lt;th&gt;Git 存储内容&lt;/th&gt;
+					&lt;th&gt;学习成本&lt;/th&gt;
+					&lt;th&gt;适用场景&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;Sealed Secrets&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;非对称加密&lt;/td&gt;
+					&lt;td&gt;集群侧&lt;/td&gt;
+					&lt;td&gt;加密后的密文&lt;/td&gt;
+					&lt;td&gt;低&lt;/td&gt;
+					&lt;td&gt;中小规模、简单直接&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;External Secrets Operator&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;同步外部 Secret Store&lt;/td&gt;
+					&lt;td&gt;外部&lt;/td&gt;
+					&lt;td&gt;仅存 SecretStore 引用&lt;/td&gt;
+					&lt;td&gt;中&lt;/td&gt;
+					&lt;td&gt;已有 AWS/GCP/Azure 基础设施&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;SOPS&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;文件级加解密&lt;/td&gt;
+					&lt;td&gt;客户端&lt;/td&gt;
+					&lt;td&gt;Age/PGP 加密文件&lt;/td&gt;
+					&lt;td&gt;中&lt;/td&gt;
+					&lt;td&gt;多环境、CI 友好&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;HashiCorp Vault&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;集中式 Secret 管理&lt;/td&gt;
+					&lt;td&gt;Vault 服务器&lt;/td&gt;
+					&lt;td&gt;仅存 Vault 路径引用&lt;/td&gt;
+					&lt;td&gt;高&lt;/td&gt;
+					&lt;td&gt;企业级统一 Secret 管理&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;CSI Secret Store&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;挂载外部 Secret 到 Pod&lt;/td&gt;
+					&lt;td&gt;外部 Provider&lt;/td&gt;
+					&lt;td&gt;仅存 SecretProviderClass&lt;/td&gt;
+					&lt;td&gt;中&lt;/td&gt;
+					&lt;td&gt;云平台深度集成&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="sealed-secrets"&gt;Sealed Secrets&lt;/h2&gt;
+&lt;p&gt;由 Bitnami 开源，将 Secret 加密后存于 Git，只有集群内的 Controller 能解密。&lt;/p&gt;</description></item><item><title>使用 Pulumi 部署 cert-manager 创建 K8S 自签名证书并信任证书</title><link>https://www.xlabs.club/blog/trust-cert-manager-selfsigned-tls/</link><pubDate>Mon, 29 Apr 2024 21:49:22 +0800</pubDate><guid>https://www.xlabs.club/blog/trust-cert-manager-selfsigned-tls/</guid><description>&lt;p&gt;在搭建本地 Kubernetus 集群后，由于环境在内网，做不了域名验证，无法使用 Let&amp;rsquo;s Encrypt 颁发和自动更新证书，然而很多应用要求必须启用 HTTPS，只能用自签名 CA 证书，并由此 CA 继续颁发其他证书。&lt;/p&gt;
 &lt;p&gt;所以我们准备了以下工具，开始搭建。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href="https://www.pulumi.com/" target="_blank" rel="noopener"&gt;Pulumi&lt;/a&gt;
@@ -259,7 +434,93 @@
 &lt;li&gt;
 &lt;p&gt;&lt;a href="https://lima-vm.io/" target="_blank" rel="noopener"&gt;lima&lt;/a&gt;
  启动虚拟机，然后安装 K8S、K3S 或 minikube。&lt;/p&gt;
-&lt;p&gt;优点：支持虚拟多种 Linux 发行版，支持异构 CPU 虚拟机，同时能代替 Docker Desktop。&lt;/p&gt;</description></item><item><title>K8S Service 长连接导致负载不均衡问题分析和解决办法</title><link>https://www.xlabs.club/blog/tomcat-keepalive-load-balancer/</link><pubDate>Thu, 11 Apr 2024 21:05:46 +0800</pubDate><guid>https://www.xlabs.club/blog/tomcat-keepalive-load-balancer/</guid><description>&lt;p&gt;问题背景，我们有一个 Http 服务在 K8S 内部署了 3 个 Pod，客户端使用 Service NodePort 进行连接，发现流量几乎都集中到了一个 Pod 上，各 Pod 承载流量很不均衡。&lt;/p&gt;
+&lt;p&gt;优点：支持虚拟多种 Linux 发行版，支持异构 CPU 虚拟机，同时能代替 Docker Desktop。&lt;/p&gt;</description></item><item><title>使用 OCI Artifacts 和 ORAS 标准化软件交付</title><link>https://www.xlabs.club/blog/oras/</link><pubDate>Fri, 12 Apr 2024 10:13:01 +0800</pubDate><guid>https://www.xlabs.club/blog/oras/</guid><description>&lt;p&gt;传统软件交付中，容器镜像存储在 OCI Registry（如 Harbor），而 Helm Charts、制品包、配置文件等分散在不同系统。ORAS（OCI Registry As Storage）将 OCI Registry 作为通用的制品存储方案，统一管理所有类型的软件制品。&lt;/p&gt;
+&lt;h2 id="核心概念"&gt;核心概念&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;OCI Artifacts&lt;/strong&gt; 是 OCI 规范的扩展，允许在 OCI Registry 中存储任意类型的制品，不限于容器镜像。每个制品由一个 Manifest 和若干 Blob（层）组成。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;ORAS&lt;/strong&gt; 是 OCI Artifacts 的 CLI 客户端，提供类似 &lt;code&gt;docker push/pull&lt;/code&gt; 的体验来管理非容器制品。&lt;/p&gt;
+&lt;h2 id="安装"&gt;安装&lt;/h2&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# macOS&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;brew install oras
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Linux&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl -LO https://github.com/oras-project/oras/releases/latest/download/oras_linux_amd64.tar.gz
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tar xzf oras_linux_amd64.tar.gz -C /usr/local/bin oras
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 验证&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;oras version&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;h2 id="基本用法"&gt;基本用法&lt;/h2&gt;
+&lt;h3 id="推送制品"&gt;推送制品&lt;/h3&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 推送单个文件&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;oras push harbor.example.com/artifacts/my-config:v1 config.yaml
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 推送多个文件&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;oras push harbor.example.com/artifacts/my-chart:v1 &lt;span class="se"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Chart.yaml values.yaml templates/
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 推送 Helm Chart（OCI 格式）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;helm package mychart/
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;helm push mychart-0.1.0.tgz oci://harbor.example.com/helm-charts&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;h3 id="拉取制品"&gt;拉取制品&lt;/h3&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 拉取到当前目录&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;oras pull harbor.example.com/artifacts/my-config:v1
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 仅下载特定文件&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;oras pull harbor.example.com/artifacts/my-config:v1 --output config.yaml
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 拉取 Helm Chart&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;helm pull oci://harbor.example.com/helm-charts/mychart --version 0.1.0&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;h3 id="查看和删除"&gt;查看和删除&lt;/h3&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 查看制品信息&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;oras manifest fetch harbor.example.com/artifacts/my-config:v1
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 查看仓库中的 Tags&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;oras repo tags harbor.example.com/artifacts/my-config
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 删除 Tag&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;oras manifest delete harbor.example.com/artifacts/my-config:v1&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;h2 id="实际应用场景"&gt;实际应用场景&lt;/h2&gt;
+&lt;h3 id="场景-1helm-charts-统一管理"&gt;场景 1：Helm Charts 统一管理&lt;/h3&gt;
+&lt;p&gt;将 Helm Charts 以 OCI 格式推送到 Harbor，与容器镜像共用同一 Registry：&lt;/p&gt;</description></item><item><title>K8S Service 长连接导致负载不均衡问题分析和解决办法</title><link>https://www.xlabs.club/blog/tomcat-keepalive-load-balancer/</link><pubDate>Thu, 11 Apr 2024 21:05:46 +0800</pubDate><guid>https://www.xlabs.club/blog/tomcat-keepalive-load-balancer/</guid><description>&lt;p&gt;问题背景，我们有一个 Http 服务在 K8S 内部署了 3 个 Pod，客户端使用 Service NodePort 进行连接，发现流量几乎都集中到了一个 Pod 上，各 Pod 承载流量很不均衡。&lt;/p&gt;
 &lt;p&gt;已知的情况是：&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;K8S Service 底层是 ipvs round-robin 负载均衡策略，按道理讲应该是均衡的。&lt;/li&gt;
@@ -306,86 +567,4 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;storage&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;8Gi&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
  &lt;/figure&gt;
 &lt;/div&gt;
-&lt;p&gt;查看 K8S 官方说明，果然当前版本 (1.29) 还不支持，参考链接如下。&lt;/p&gt;</description></item><item><title>K8S 容器 PID 限制引起的 Java OutOfMemoryError</title><link>https://www.xlabs.club/blog/k8s-pid-limiting-oom/</link><pubDate>Thu, 07 Sep 2023 16:21:44 +0800</pubDate><guid>https://www.xlabs.club/blog/k8s-pid-limiting-oom/</guid><description>&lt;p&gt;问题描述：&lt;/p&gt;
-&lt;p&gt;一个 Java 应用跑在 K8S 容器内，Pod 内只有 Java 这一个进程。应用跑了一段时间后，CPU、内存占用都不高，但是却出现以下 OutOfMemoryError 错误。&lt;/p&gt;
-
-
-
-&lt;div class="expressive-code"&gt;
- &lt;figure class="frame not-content"&gt;
- &lt;figcaption class="header"&gt;
- &lt;span class="title"&gt;&lt;/span&gt;
- &lt;/figcaption&gt;
- &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-console" data-lang="console"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;Exception in thread &amp;#34;slow-fetch-15&amp;#34; java.lang.OutOfMemoryError: unable to create new native thread
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;428 at java.lang.Thread.start0(Native Method)
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;429 at java.lang.Thread.start(Thread.java:719)
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;430 at java.util.concurrent.ThreadPoolExecutor.addWorker(ThreadPoolExecutor.java:957)
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;431 at java.util.concurrent.ThreadPoolExecutor.processWorkerExit(ThreadPoolExecutor.java:1025)
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;432 at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;433 at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
- &lt;/figure&gt;
-&lt;/div&gt;
-&lt;p&gt;进入 Pod 内，尝试执行任何操作，又会出现 &lt;code&gt;unable to start container process&lt;/code&gt; 错误。&lt;/p&gt;
-&lt;p&gt;一开始怀疑是内存不足，调大了内存，同时也缩小了 Java 的 &lt;code&gt;xss&lt;/code&gt;，都不起作用。&lt;/p&gt;
-&lt;p&gt;真实原因： K8S 容器限制了 PID 数，无法创建新的线程。关于 K8S PID limit， 可参考此资料：&lt;a href="https://kubernetes.io/zh-cn/docs/concepts/policy/pid-limiting/" target="_blank" rel="noopener"&gt;https://kubernetes.io/zh-cn/docs/concepts/policy/pid-limiting/&lt;/a&gt;
-.&lt;/p&gt;
-&lt;p&gt;在 Pod 内查看当前 PID 限制方式：&lt;/p&gt;</description></item><item><title>备考 CKA 过程，CKA 真题分享</title><link>https://www.xlabs.club/blog/kubernetes-cka/</link><pubDate>Sat, 26 Feb 2022 23:42:48 +0800</pubDate><guid>https://www.xlabs.club/blog/kubernetes-cka/</guid><description>&lt;p&gt;备考 CKA （Certified Kubernetes Administrator）过程，心得，遇见问题，CKA 真题。&lt;/p&gt;
-&lt;p&gt;一句话总结：按照教程多练习，把控好时间就能通过，期望通过刷题通过考试的年代已经过去了，而且多练习对平时工作真的有用。&lt;/p&gt;
-&lt;h2 id="备考环境"&gt;备考环境&lt;/h2&gt;
-&lt;p&gt;备考使用的系统和软件版本如下。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Ubuntu：20.04 Focal Fossa&lt;/li&gt;
-&lt;li&gt;Kubernetes：1.20.7&lt;/li&gt;
-&lt;li&gt;kubeadm：1.20.7&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id="安装和使用问题记录"&gt;安装和使用问题记录&lt;/h2&gt;
-&lt;h3 id="kubeadm-安装问题"&gt;kubeadm 安装问题&lt;/h3&gt;
-&lt;p&gt;安装 kubeadm，国内安装使用阿里镜像源。&lt;/p&gt;
-
-
-
-&lt;div class="expressive-code"&gt;
- &lt;figure class="frame not-content"&gt;
- &lt;figcaption class="header"&gt;
- &lt;span class="title"&gt;&lt;/span&gt;
- &lt;/figcaption&gt;
- &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-console" data-lang="console"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gp"&gt;$&lt;/span&gt; cat /etc/apt/sources.list.d/kubernetes.list
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;deb https://mirrors.aliyun.com/kubernetes/apt kubernetes-xenial main
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
- &lt;/figure&gt;
-&lt;/div&gt;
-&lt;p&gt;踩坑：因为使用的是 ubuntu 20.04，代号 &lt;code&gt;focal&lt;/code&gt;，专门去各个代理镜像源找&lt;code&gt;kubernetes-focal&lt;/code&gt;都没有找到，后来发现 google 官方根本没发布对应的版本，只有&lt;code&gt;kubernetes-xenial&lt;/code&gt;， k8s 官方文档里 ubuntu 也是用的这一个版本。可以用，就用他吧。&lt;/p&gt;
-&lt;p&gt;kubeadm init 时指定使用阿里镜像源（解决国内连不上 k8s.gcr.io 的问题）、指定版本号（安装考试对应的版本，不一定是最新版本）。
-通过指定&lt;code&gt;--image-repository&lt;/code&gt;，不需要手动下载镜像重新打 tag，kubeadm 自动使用指定的 repository。&lt;/p&gt;
-
-
-
-&lt;div class="expressive-code"&gt;
- &lt;figure class="frame is-terminal not-content"&gt;
- &lt;figcaption class="header"&gt;
- &lt;span class="title"&gt;&lt;/span&gt;
- &lt;/figcaption&gt;
- &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;kubeadm init --image-repository&lt;span class="o"&gt;=&lt;/span&gt;registry.aliyuncs.com/google_containers &lt;span class="se"&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; --pod-network-cidr&lt;span class="o"&gt;=&lt;/span&gt;10.244.0.0/16 &lt;span class="se"&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; --kubernetes-version&lt;span class="o"&gt;=&lt;/span&gt;v1.20.7&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
- &lt;/figure&gt;
-&lt;/div&gt;
-&lt;h3 id="解决-scheduler-unhealthycontroller-manager-unhealthy"&gt;解决 scheduler Unhealthy，controller-manager Unhealthy&lt;/h3&gt;
-&lt;p&gt;第一次安装完成后通过 &lt;code&gt;kubectl get cs&lt;/code&gt;命令，发现 scheduler Unhealthy，controller-manager Unhealthy。&lt;/p&gt;
-
-
-
-&lt;div class="expressive-code"&gt;
- &lt;figure class="frame not-content"&gt;
- &lt;figcaption class="header"&gt;
- &lt;span class="title"&gt;&lt;/span&gt;
- &lt;/figcaption&gt;
- &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-console" data-lang="console"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gp"&gt;$&lt;/span&gt; kubectl get cs
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;NAME STATUS MESSAGE
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;scheduler Unhealthy Get &amp;#34;http://127.0.0.1:10251/healthz&amp;#34;: dial tcp 127.0.0.1:10
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;controller-manager Unhealthy Get &amp;#34;http://127.0.0.1:10252/healthz&amp;#34;: dial tcp 127.0.0.1:10
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
- &lt;/figure&gt;
-&lt;/div&gt;
-&lt;p&gt;查看本机端口，10251 和 10252 都没有启动。&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;查看 K8S 官方说明，果然当前版本 (1.29) 还不支持，参考链接如下。&lt;/p&gt;</description></item></channel></rss>
