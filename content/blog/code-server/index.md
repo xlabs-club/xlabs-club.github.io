@@ -70,6 +70,178 @@ seo:
 5. code-server 各个实例部署时，以免认证方式部署。
 6. 每个 code-server 实例挂载不同的存储，实现完全隔离。
 
+## 完整部署示例
+
+### Docker Compose 快速启动
+
+以下配置为单一用户的 code-server 实例，多用户场景需按上面的代理方案动态路由。
+
+```yaml
+# docker-compose.yml
+version: "3.8"
+services:
+  code-server:
+    image: lscr.io/linuxserver/code-server:latest
+    container_name: code-server
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Shanghai
+      - PASSWORD=  # 留空表示免认证（网关负责认证）
+      - SUDO_PASSWORD=password  # 可选，用于终端 sudo
+      - DEFAULT_WORKSPACE=/config/workspace
+    volumes:
+      - ./code-server-config:/config
+      - ./projects:/config/workspace
+    ports:
+      - "8443:8443"
+    restart: unless-stopped
+```
+
+### K8S 部署
+
+```yaml
+# code-server-user1.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: code-server-user1
+  labels:
+    app: code-server
+    user: user1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: code-server
+      user: user1
+  template:
+    metadata:
+      labels:
+        app: code-server
+        user: user1
+    spec:
+      containers:
+        - name: code-server
+          image: lscr.io/linuxserver/code-server:latest
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: PASSWORD
+              value: ""  # 免认证
+          ports:
+            - containerPort: 8443
+          volumeMounts:
+            - name: workspace
+              mountPath: /config/workspace
+      volumes:
+        - name: workspace
+          persistentVolumeClaim:
+            claimName: code-server-user1-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: code-server-user1-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: code-server-user1
+spec:
+  selector:
+    app: code-server
+    user: user1
+  ports:
+    - port: 8443
+      targetPort: 8443
+```
+
+### Traefik IngressRoute 替代 Nginx
+
+如果使用 Traefik 作为网关，可以用 Traefik 的 ForwardAuth 中间件代替 nginx `auth_request`：
+
+```yaml
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: oauth2-proxy-auth
+spec:
+  forwardAuth:
+    address: http://oauth2-proxy.oauth2-proxy.svc.cluster.local:4180/oauth2/auth
+    trustForwardHeader: true
+    authResponseHeaders:
+      - X-Forwarded-Preferred-Username
+      - X-Forwarded-User
+      - X-Forwarded-Email
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: code-server
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`code.example.com`)
+      middlewares:
+        - name: oauth2-proxy-auth
+      services:
+        - name: code-server-user1
+          port: 8443
+```
+
+### oauth2-proxy 配置
+
+```yaml
+# oauth2-proxy 的 Helm values
+config:
+  clientID: "code-server"
+  clientSecret: "<keycloak-client-secret>"
+  cookieSecret: "<random-32-byte-base64>"
+  configFile: |
+    provider = "keycloak-oidc"
+    oidc_issuer_url = "https://keycloak.example.com/realms/your-realm"
+    redirect_url = "https://code.example.com/oauth2/callback"
+    scope = "openid email profile"
+    email_domains = ["*"]
+    pass_authorization_header = true
+    pass_access_token = true
+    set_authorization_header = true
+    pass_user_headers = true
+    set_xauthrequest = true
+    upstreams = ["file:///dev/null"]
+    reverse_proxy = true
+    cookie_domains = [".example.com"]
+```
+
+核心参数说明：
+- `pass_user_headers = true` — 将用户信息通过 Header 传给 upstream，这是网关能获取用户名的前提
+- `pass_access_token = true` — 将 Access Token 传递到后端，code-server 可感知当前用户
+- `scope = "openid email profile"` — 获取用户基本信息和邮箱
+
+## 多用户动态路由的简化方案
+
+如果用户不多，可以手动为每个用户创建独立的 Deployment/Service。若用户增长到需要自动化，可通过 Operator 方式实现：监听用户创建事件，自动 Provision code-server 实例和 PVC。
+
+也可使用 [cdr/code-server](https://github.com/cdr/code-server) 官方支持的 Helm Chart，结合 Kubernetes Namespace 隔离用户。
+
+## 注意事项
+
+1. code-server 的 `--auth=none` 模式下，任何人能拿到 Pod IP 都可以直接访问。确保 Pod 网络策略仅允许网关访问。
+2. 建议为每个用户的 PVC 设置合理的存储上限，避免某个用户占满节点磁盘。
+3. code-server 默认以 root 运行容器的环境，`/var/run/docker.sock` 一旦挂载容器就有了 root 权限，小心使用。
+4. 定期备份用户的 `/config/workspace` 目录，尤其是用户的 Settings 和已安装插件信息。
+
 [code-server]: https://github.com/coder/code-server
 [keycloak]: https://github.com/keycloak/keycloak
 [oauth2-proxy]: https://github.com/oauth2-proxy/oauth2-proxy
