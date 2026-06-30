@@ -1,3 +1,5 @@
 User-agent: *
-Disallow: /admin/
+Allow: /
+
+# Sitemap discovery — speeds up indexing by major search engines and AI crawlers
 Sitemap: https://www.xlabs.club/sitemap.xml

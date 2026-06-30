@@ -1,15 +1,1 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>负载均衡 on XLabs</title><link>https://www.xlabs.club/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/</link><description>Recent content in 负载均衡 on XLabs</description><generator>Hugo</generator><language>zh-CN</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Sat, 27 Jun 2026 17:07:30 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/index.xml" rel="self" type="application/rss+xml"/><item><title>K8S Service 长连接导致负载不均衡问题分析和解决办法</title><link>https://www.xlabs.club/blog/tomcat-keepalive-load-balancer/</link><pubDate>Thu, 11 Apr 2024 21:05:46 +0800</pubDate><guid>https://www.xlabs.club/blog/tomcat-keepalive-load-balancer/</guid><description>&lt;p&gt;问题背景，我们有一个 Http 服务在 K8S 内部署了 3 个 Pod，客户端使用 Service NodePort 进行连接，发现流量几乎都集中到了一个 Pod 上，各 Pod 承载流量很不均衡。&lt;/p&gt;
-&lt;p&gt;已知的情况是：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;K8S Service 底层是 ipvs round-robin 负载均衡策略，按道理讲应该是均衡的。&lt;/li&gt;
-&lt;li&gt;客户端和服务端都启用了 Keep-Alive 长连接。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;经过抓包分析，负载较高的 Pod 保持着较多 KeepAlive 长连接。将 kube-proxy 的 ipvs 转发模式设置为 Least-Connection，即倾向转发给连接数少的 Pod，可能会有所缓解，但也不一定，因为 ipvs 的负载均衡状态是分散在各个节点的，并没有收敛到一个地方，也就无法在全局层面感知哪个 Pod 上的连接数少，并不能真正做到 Least-Connection。&lt;/p&gt;
-&lt;h2 id="为什么-round-robin-对长连接失效"&gt;为什么 Round-Robin 对长连接失效&lt;/h2&gt;
-&lt;p&gt;ipvs 的 round-robin 作用在连接（TCP Connection）层面，而非请求（Request）层面。流程如下：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;客户端与服务端建立 TCP 连接 1 → ipvs 调度到 Pod A。&lt;/li&gt;
-&lt;li&gt;客户端保持此连接（Keep-Alive），后续所有 HTTP 请求均复用连接 1 → 全部落在 Pod A。&lt;/li&gt;
-&lt;li&gt;即便有新的 Pod C 加入，只要连接 1 未断开，Pod C 收不到任何来自该客户端的请求。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;所以长连接场景下，连接的分布决定了流量的分布，而非请求数。&lt;/p&gt;</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>负载均衡 on XLabs</title><link>https://www.xlabs.club/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/</link><description>Recent content in 负载均衡 on XLabs</description><generator>Hugo</generator><language>zh-CN</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Tue, 30 Jun 2026 20:58:53 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/index.xml" rel="self" type="application/rss+xml"/><item><title>K8S Service 长连接导致负载不均衡问题分析和解决办法</title><link>https://www.xlabs.club/blog/tomcat-keepalive-load-balancer/</link><pubDate>Thu, 11 Apr 2024 21:05:46 +0800</pubDate><guid>https://www.xlabs.club/blog/tomcat-keepalive-load-balancer/</guid><description>K8S Service 长连接导致负载不均衡问题分析和解决办法，包含 Keep-Alive 连接管理和 ipvs 负载均衡策略调整</description></item></channel></rss>
