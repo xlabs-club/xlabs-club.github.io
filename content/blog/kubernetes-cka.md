@@ -1,7 +1,7 @@
 ---
 title: "备考 CKA 过程，CKA 真题分享"
 description: "备考 CKA（Certified Kubernetes Administrator）过程，心得，遇见问题，CKA 真题分享，包含备考环境、学习资源和实战经验"
-summary: ""
+summary: "备考 CKA（Certified Kubernetes Administrator）过程，心得，遇见问题，CKA 真题分享，包含备考环境、学习资源和实战经验"
 date: 2022-02-26T23:42:48+08:00
 lastmod: 2025-12-18T22:35:07+08:00
 draft: false

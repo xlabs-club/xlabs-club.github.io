@@ -1,7 +1,7 @@
 ---
 title: "K8S StatefulSet 应用 PV/PVC 平滑扩容"
 description: "K8S StatefulSet 应用 PV/PVC 平滑扩容方案，包含 Helm 部署场景下的扩容步骤和常见问题解决"
-summary: ""
+summary: "K8S StatefulSet 应用 PV/PVC 平滑扩容方案，包含 Helm 部署场景下的扩容步骤和常见问题解决"
 date: 2024-03-31T21:29:52+08:00
 lastmod: 2025-12-18T22:41:46+08:00
 draft: false

@@ -1,7 +1,7 @@
 ---
 title: "基于 Alibaba Sentinel 实现的分布式限流中间件服务以及遇到的坑和注意事项"
 description: "介绍 Alibaba Sentinel 的分布式限流、熔断降级与规则配置，并总结部署和使用中的常见注意事项。"
-summary: ""
+summary: "介绍 Alibaba Sentinel 的分布式限流、熔断降级与规则配置，并总结部署和使用中的常见注意事项"
 date: 2024-03-07T21:06:10+08:00
 lastmod: 2025-12-18T22:49:14+08:00
 draft: false

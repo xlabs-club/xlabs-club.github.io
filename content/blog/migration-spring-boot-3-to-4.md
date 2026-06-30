@@ -1,6 +1,7 @@
 ---
 title: "Spring Boot 3 到 4 迁移完全指南：新特性、废弃功能与实战踩坑经验"
 description: "梳理 Spring Boot 4 关键特性、迁移步骤与常见问题，帮助团队从 3.x 平稳升级到 4.0 并完成验证。"
+summary: "梳理 Spring Boot 4 关键特性、迁移步骤与常见问题，帮助团队从 3.x 平稳升级到 4.0 并完成验证"
 date: 2025-11-25T23:20:22+08:00
 lastmod: 2025-12-18T22:51:17+08:00
 draft: false

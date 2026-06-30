@@ -1,7 +1,7 @@
 ---
 title: "Spring Modulith 模块化试验报告：构建可演进的模块化单体架构"
 description: "使用 Spring Modulith 实现服务模块化，验证模块化单体架构在中小规模应用中的可行性、收益与限制。"
-summary: ""
+summary: "使用 Spring Modulith 实现服务模块化，验证模块化单体架构在中小规模应用中的可行性、收益与限制"
 date: 2024-03-08T19:21:26+08:00
 lastmod: 2024-03-08T19:21:26+08:00
 draft: false

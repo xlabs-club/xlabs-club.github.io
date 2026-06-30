@@ -1,7 +1,7 @@
 ---
 title: "MacOS 持久化配置，彻底解决 too many open files in system 的问题"
 description: "MacOS 持久化配置，彻底解决 too many open files in system 的问题，包含 launchctl limit 配置和系统级限制调整方法"
-summary: ""
+summary: "MacOS 持久化配置，彻底解决 too many open files in system 的问题，包含 launchctl limit 配置和系统级限制调整方法"
 date: 2024-03-19T23:05:07+08:00
 lastmod: 2025-12-18T22:46:38+08:00
 draft: false

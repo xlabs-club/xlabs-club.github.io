@@ -1,7 +1,7 @@
 ---
 title: "GraalVM 入门与实践：Native Image 编译和性能对比"
 description: "介绍 GraalVM 的核心特性、Native Image 编译实践、与 OpenJDK 的 GC 性能对比，以及 Spring Boot 集成方案。"
-summary: ""
+summary: "介绍 GraalVM 的核心特性、Native Image 编译实践、与 OpenJDK 的 GC 性能对比，以及 Spring Boot 集成方案"
 date: 2024-03-08T16:46:12+08:00
 lastmod: 2024-03-08T16:46:12+08:00
 draft: false

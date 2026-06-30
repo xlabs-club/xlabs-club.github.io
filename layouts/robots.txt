@@ -1,0 +1,14 @@
+{{/* Custom robots.txt — explicit crawl rules + sitemap discovery */ -}}
+User-agent: *
+{{ range where $.Site.RegularPages "Params.robotsdisallow" true -}}
+Disallow: {{ .RelPermalink }}
+{{ end -}}
+{{ range $.Site.Sections -}}
+{{   range where .Pages "Params.robotsdisallow" true -}}
+Disallow: {{ .RelPermalink }}
+{{   end -}}
+{{ end -}}
+Allow: /
+
+# Sitemap discovery — speeds up indexing by major search engines and AI crawlers
+Sitemap: {{ "sitemap.xml" | absURL -}}

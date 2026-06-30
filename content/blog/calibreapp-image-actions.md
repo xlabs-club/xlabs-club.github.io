@@ -1,7 +1,7 @@
 ---
 title: "使用 Calibre Image Actions 在 CI/CD 中自动压缩图片"
 description: "介绍如何使用 calibreapp/image-actions 在 GitHub Actions 中自动压缩和优化图片，减少网站加载体积。"
-summary: ""
+summary: "介绍如何使用 calibreapp/image-actions 在 GitHub Actions 中自动压缩和优化图片，减少网站加载体积"
 date: 2024-12-28T16:19:56+08:00
 lastmod: 2024-12-28T16:19:56+08:00
 draft: false

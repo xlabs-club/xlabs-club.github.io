@@ -1,7 +1,8 @@
 # Hugo
 title = "XLabs"
-description = "XLabs Club"
+description = "卫星实验室（XLabs Club）用开源探索边界，用分享传递价值。专注平台工程、云原生、DevOps、AIOps、DataOps、FinOps 与 Java 开发的工程实践与技术分享。"
 images = ["cover.png"]
+author = "卫星实验室"
 
 # mainSections
 mainSections = ["docs"]
@@ -79,7 +80,7 @@ footer = "Give Me a <a class=\"text-muted\" href=\"https://github.com/xlabs-club
   sectionFooter = true
 
   # Blog
-  relatedPosts = false
+  relatedPosts = true # enables "Related posts" — improves internal linking for SEO
   imageList = true # true (default) or false
   imageSingle = true # true (default) or false
 
@@ -147,7 +148,13 @@ footer = "Give Me a <a class=\"text-muted\" href=\"https://github.com/xlabs-club
     type = "Organization" # Organization (default) or Person
     logo = "favicon-512x512.png" # Logo of Organization — favicon-512x512.png (default)
     name = "XLabs Club 卫星实验室" # Name of Organization or Person
-    sameAs = ["https://github.com/xlabs-club/xlabs-club.github.io"]
+    sameAs = [
+      "https://github.com/xlabs-club/xlabs-club.github.io",
+      "https://github.com/xlabs-club",
+      "https://xlabs-club.medium.com",
+      "https://juejin.cn/user/169800120680251",
+      "https://www.xlabs.club"
+    ]
     images = ["cover.png"] # ["cover.png"] (default)
     article = [] # Article sections
     newsArticle = [] # NewsArticle sections

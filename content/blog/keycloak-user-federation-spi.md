@@ -1,7 +1,7 @@
 ---
 title: "Keycloak 自定义 User Federation SPI 实现：对接企业已有用户系统"
 description: "通过 Keycloak SPI 实现自定义用户联合，将企业已有的 LDAP、AD 或自有用户系统接入 Keycloak 统一认证。"
-summary: ""
+summary: "通过 Keycloak SPI 实现自定义用户联合，将企业已有的 LDAP、AD 或自有用户系统接入 Keycloak 统一认证"
 date: 2025-01-11T17:37:14+08:00
 lastmod: 2025-01-11T17:37:14+08:00
 draft: false

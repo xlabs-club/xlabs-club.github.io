@@ -1,7 +1,7 @@
 ---
 title: "Awesome Alternatives Bitnami：寻找 Bitnami Charts 的替代方案"
 description: "Bitnami 停止更新后，汇总常用的替代 Helm Charts 和容器镜像方案，帮助团队平滑迁移。"
-summary: ""
+summary: "Bitnami 停止更新后，汇总常用的替代 Helm Charts 和容器镜像方案，帮助团队平滑迁移"
 date: 2025-11-03T22:03:42+08:00
 lastmod: 2025-11-03T22:03:42+08:00
 draft: false

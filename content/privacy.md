@@ -1,7 +1,7 @@
 ---
 title: "Privacy Policy"
 description: "说明卫星实验室站点的隐私政策、信息收集范围、使用方式，以及访问本站时涉及的数据处理原则。"
-summary: ""
+summary: "卫星实验室站点的隐私政策：静态站点不主动收集个人信息，不使用 Cookie 或分析脚本，并说明 GitHub Pages 托管与第三方链接的数据处理原则。"
 date: 2023-09-07T17:19:07+02:00
 lastmod: 2023-09-07T17:19:07+02:00
 draft: false
