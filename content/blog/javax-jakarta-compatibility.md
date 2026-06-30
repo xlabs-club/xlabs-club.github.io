@@ -1,7 +1,7 @@
 ---
 title: "Javax 和 Jakarta 过渡期兼容方案"
 description: "详细介绍从 Javax 到 Jakarta EE 的迁移兼容方案，包括背景、工具选择和实施策略，帮助企业平滑完成迁移"
-summary: ""
+summary: "详细介绍从 Javax 到 Jakarta EE 的迁移兼容方案，包括背景、工具选择和实施策略，帮助企业平滑完成迁移"
 date: 2025-09-14T14:33:23+08:00
 lastmod: 2025-12-18T22:40:33+08:00
 draft: false

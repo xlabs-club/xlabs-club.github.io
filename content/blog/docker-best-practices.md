@@ -1,7 +1,7 @@
 ---
 title: "容器镜像制作最佳实践，多架构编译，Dockerfile 编写小技巧和踩坑记录，镜像维护辅助工具 ORAS、skopeo 等介绍"
 description: "聚焦容器镜像制作最佳实践，涵盖多架构编译、Dockerfile 编写技巧，以及 ORAS、skopeo 等工具用法。"
-summary: ""
+summary: "聚焦容器镜像制作最佳实践，涵盖多架构编译、Dockerfile 编写技巧，以及 ORAS、skopeo 等工具用法"
 date: 2024-05-24T20:56:08+08:00
 lastmod: 2025-12-18T22:39:12+08:00
 draft: false

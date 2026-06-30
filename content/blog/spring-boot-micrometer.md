@@ -1,7 +1,7 @@
 ---
 title: "Spring Boot 使用 Micrometer 集成 Prometheus 监控，5 分钟接入自定义监控指标"
 description: "介绍 Spring Boot 集成 Micrometer 与 Prometheus 的方式，并给出自定义监控指标的实现与规范。"
-summary: ""
+summary: "介绍 Spring Boot 集成 Micrometer 与 Prometheus 的方式，并给出自定义监控指标的实现与规范"
 date: 2023-08-07T10:54:37+08:00
 lastmod: 2025-12-18T22:44:19+08:00
 draft: false

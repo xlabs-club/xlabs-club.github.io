@@ -1,7 +1,7 @@
 ---
 title: "预防和消灭技术债：Maven CI 如何在编译时禁止调用某些特定 API"
 description: "介绍 Maven CI 中禁止调用特定 API 的实现方式，借助 Forbidden APIs 在编译期拦截技术债。"
-summary: ""
+summary: "介绍 Maven CI 中禁止调用特定 API 的实现方式，借助 Forbidden APIs 在编译期拦截技术债"
 date: 2025-09-09T22:18:59+08:00
 lastmod: 2025-12-18T22:54:15+08:00
 draft: false

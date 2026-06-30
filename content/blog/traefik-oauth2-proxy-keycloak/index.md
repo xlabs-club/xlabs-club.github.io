@@ -1,7 +1,7 @@
 ---
 title: "使用 oauth2-proxy 为任意程序增加认证鉴权，结合 K8S、traefik、keycloak 部署配置详解"
 description: "使用 oauth2-proxy 结合 Traefik、Keycloak 与 K8S，为应用接入统一登录认证、单点登录和 RBAC 鉴权。"
-summary: ""
+summary: "使用 oauth2-proxy 结合 Traefik、Keycloak 与 K8S，为应用接入统一登录认证、单点登录和 RBAC 鉴权"
 date: 2024-10-10T23:30:40+08:00
 lastmod: 2025-12-18T22:34:22+08:00
 draft: false

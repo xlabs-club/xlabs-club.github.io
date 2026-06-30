@@ -1,7 +1,7 @@
 ---
 title: "文件压缩解压缩快速参考"
 description: "文件压缩解压缩速查，汇总 tar、gz、bz2、zip 等常见格式的打包、解包与常用命令示例。"
-summary: ""
+summary: "文件压缩解压缩速查，汇总 tar、gz、bz2、zip 等常见格式的打包、解包与常用命令示例"
 date: 2024-03-10T15:22:20+08:00
 lastmod: 2025-12-18T22:58:27+08:00
 draft: false

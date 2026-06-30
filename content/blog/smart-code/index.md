@@ -1,6 +1,7 @@
 ---
 title: "企业级智能代码重构探索：大规模自动化迁移实践与工具选型"
 description: "介绍 OpenRewrite、Spring Boot Migrator 等工具在企业级自动化代码迁移与重构中的实践方法。"
+summary: "介绍 OpenRewrite、Spring Boot Migrator 等工具在企业级自动化代码迁移与重构中的实践方法"
 date: 2025-12-09T22:08:54+08:00
 lastmod: 2025-12-18T22:47:23+08:00
 draft: false

@@ -1,1 +1,28 @@
-<meta http-equiv ='content-language' content ='zh-cn'>
+<meta http-equiv='content-language' content='zh-cn'>
+
+{{/* Keywords — lightweight signal grouping the page's tags/categories.
+     The theme (@thulite/seo) emits Open Graph, Twitter Card, canonical and
+     JSON-LD (WebSite/Organization/BreadcrumbList/BlogPosting) already; here we
+     only add the keywords and author meta tags it does not provide. */}}
+{{- $keywords := slice -}}
+{{- $seen := dict -}}
+{{- range .GetTerms "tags" | first 10 -}}
+  {{- $k := .Page.Title | plainify -}}
+  {{- if not (index $seen (lower $k)) -}}
+    {{- $keywords = $keywords | append $k -}}
+    {{- $seen = merge $seen (dict (lower $k) true) -}}
+  {{- end -}}
+{{- end -}}
+{{- range .GetTerms "categories" | first 5 -}}
+  {{- $k := .Page.Title | plainify -}}
+  {{- if not (index $seen (lower $k)) -}}
+    {{- $keywords = $keywords | append $k -}}
+    {{- $seen = merge $seen (dict (lower $k) true) -}}
+  {{- end -}}
+{{- end -}}
+{{- with $keywords -}}
+  <meta name="keywords" content="{{ delimit . ", " | plainify }}">
+{{- end -}}
+{{- with or .Params.author site.Params.author -}}
+  <meta name="author" content="{{ . | plainify }}">
+{{- end -}}

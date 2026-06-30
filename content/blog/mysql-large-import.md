@@ -1,7 +1,7 @@
 ---
 title: "MySQL 大文件导入优化，提高速度，提升性能"
 description: "MySQL 大文件导入优化方案，提高导入速度，提升性能，包含 load data infile 语法和参数调优实战经验"
-summary: ""
+summary: "MySQL 大文件导入优化方案，提高导入速度，提升性能，包含 load data infile 语法和参数调优实战经验"
 date: 2024-03-10T15:18:22+08:00
 lastmod: 2025-12-18T22:38:24+08:00
 draft: false
