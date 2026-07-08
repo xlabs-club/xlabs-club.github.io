@@ -451,6 +451,107 @@ metadata:
 | `PostSync` | 同步成功后 | 触发集成测试、通知 |
 | `SyncFail` | 同步失败后 | 告警通知 |
 
+### 4.6 支持的应用定义格式
+
+ArgoCD 通过 `spec.source` 字段支持四种清单格式——同一套 ArgoCD 可以管理 Helm Chart、Kustomize、裸 YAML 混合部署：
+
+| 格式 | `spec.source` 关键配置 | 原理 | 适用 |
+|------|----------------------|------|------|
+| **裸 YAML / 目录** | `path: deploy/prod` | Repo Server 扫描目录下所有 `.yaml/.json`，直接渲染 | 最简单，适合固定清单 |
+| **Kustomize** | `path: overlays/prod` | 自动识别目录中 `kustomization.yaml`，执行 `kustomize build` | 多环境 Overlay，平台层配置 |
+| **Helm** | `chart: myapp` + `helm.values` | 执行 `helm template` 渲染（不是 `helm install`） | 标准应用，Chart 生态复用 |
+| **多源 (Multi-Source)** | `sources: [...]` | 一个 Application 引用多个仓库/Chart（如 Helm Chart 来自仓库 A，values 来自仓库 B） | 分离 Chart 定义和业务 values |
+| **Config Management Plugin** | `plugin: {name: xxx}` | 自定义渲染逻辑（sidecar 容器），支持 Jsonnet、Kustomize 老版本等 | 非标准模板引擎 |
+
+**裸 YAML / 目录**（最简单）：
+
+```yaml
+spec:
+  source:
+    repoURL: https://git.example.com/team/myapp.git
+    path: deploy/manifests           # 目录中的 .yaml 文件全部生效
+    targetRevision: main
+```
+
+**Kustomize**（推荐用于多环境差异化）：
+
+```yaml
+spec:
+  source:
+    repoURL: https://git.example.com/platform/apps.git
+    path: workloads/myapp/overlays/prod    # 自动识别 kustomization.yaml
+    targetRevision: main
+```
+
+ArgoCD 检测到目录下有 `kustomization.yaml` 时自动启用 Kustomize 模式，无需显式声明。
+
+**Helm**（推荐用于标准应用）：
+
+```yaml
+spec:
+  source:
+    repoURL: https://charts.bitnami.com/bitnami
+    chart: nginx
+    targetRevision: 15.0.0
+    helm:
+      values: |
+        replicaCount: 3
+        service:
+          type: ClusterIP
+      valueFiles:
+        - values-production.yaml       # Git 目录中的额外 values 文件
+```
+
+也可以同时引用本地 Helm Chart（`path` 模式）：
+
+```yaml
+spec:
+  source:
+    repoURL: https://git.example.com/team/myapp.git
+    path: charts/myapp                  # 本地 Helm Chart 目录
+    targetRevision: main
+    helm:
+      valueFiles:
+        - values-production.yaml
+```
+
+**多源 (Multi-Source)**（Chart 和 Values 分离）：
+
+```yaml
+spec:
+  sources:
+    - repoURL: https://charts.bitnami.com/bitnami
+      chart: nginx
+      targetRevision: 15.0.0
+    - repoURL: https://git.example.com/platform/values.git
+      ref: values                       # 定义一个引用名
+      targetRevision: main
+      path: myapp/production
+  helm:
+    valueFiles:
+      - $values/nginx-values.yaml       # 通过 $ref 引用第二个仓库的文件
+```
+
+> ⚠️ Multi-Source 增加复杂度——单个 Helm Chart + Git values 文件通常已够用，只在真需要分离 Chart 仓库和 Values 仓库时才启用。
+
+**格式选型决策**：
+
+```
+是否使用社区 Helm Chart（如 Nginx、Redis）？
+├── 是 → Helm Chart 模式
+└── 否 → 是否有多环境差异（dev/staging/prod）？
+    ├── 是 → Kustomize Overlay 模式（推荐）
+    └── 否 → 裸 YAML / 目录模式
+```
+
+**本方案中的使用分布**：
+
+| 场景 | 格式 | 理由 |
+|------|------|------|
+| 业务应用 | Kustomize Overlay | Base + 每个环境一个 Overlay |
+| 基础设施（Prometheus、Nginx、Cert-Manager） | Helm Chart | 社区维护的成熟 Chart |
+| CRD / RBAC / 一次性资源 | 裸 YAML | 不需要参数化 |
+
 ## 五、仓库组织与目录结构规范
 
 ### 5.1 双仓库模式
