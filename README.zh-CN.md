@@ -13,6 +13,8 @@
 
 欢迎提交 PR 进行开源共建。
 
+_如果这些笔记对你的工作有帮助，给仓库点个 ⭐，是我们持续产出的动力。_
+
 ## 主页内容
 
 - **平台工程** — DevOps、DataOps、FinOps、AIOps 的工程建设之路。
@@ -20,6 +22,14 @@
 - **技术博客** — 研发踩坑记录，翻一翻总有惊喜。
 - **awesome-x-ops** — AIOps/DataOps/DevOps/GitOps/FinOps 的优秀软件、博客与工具精选。
 - **xlabs-ops** — Argo Workflows 等 IaC 运维脚本与通用模板，官方 Examples 的组合与扩展。
+
+## 精选阅读
+
+- [Spring Boot 3 到 4 迁移完全指南](https://www.xlabs.club/blog/migration-spring-boot-3-to-4/) — 新特性、废弃功能与实战踩坑经验。
+- [GitOps 中的 Kubernetes Secret 管理](https://www.xlabs.club/blog/gitops-secrets-in-k8s/) — 方案对比与最佳实践。
+- [K8S StatefulSet 应用 PV/PVC 平滑扩容](https://www.xlabs.club/blog/statefulset-resize-pvc/) — 含 Helm 部署场景的扩容步骤。
+- [Backstage 集成 oauth2-proxy 和 Keycloak](https://www.xlabs.club/blog/backstage-keycloak-oauth2-proxy/) — 用户管理、登录认证与 RBAC/ABAC 授权。
+- [容器镜像制作最佳实践](https://www.xlabs.club/blog/docker-best-practices/) — 多架构编译、Dockerfile 技巧与 ORAS/skopeo 等工具。
 
 ## 贡献指南
 

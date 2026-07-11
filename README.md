@@ -13,6 +13,8 @@ This is the source of the [xlabs.club][] site. It collects our field notes on pl
 
 PRs are welcome.
 
+_If these notes help your work, a ⭐ on this repo tells us to keep writing._
+
 ## What's on the site
 
 - **Platform engineering** — our journey building a platform org around DevOps, DataOps, FinOps, and AIOps.
@@ -20,6 +22,14 @@ PRs are welcome.
 - **Blog** — engineering war stories; dig in and you'll find surprises.
 - **awesome-x-ops** — a curated list of software, blogs, and tools for AIOps, DataOps, DevOps, GitOps, and FinOps.
 - **xlabs-ops** — IaC ops scripts and reusable templates (e.g. Argo Workflows template repo) that compose and extend the official examples.
+
+## Featured reading
+
+- [Spring Boot 3 → 4 migration: the complete guide](https://www.xlabs.club/blog/migration-spring-boot-3-to-4/) — new features, deprecations, and real-world pitfalls.
+- [GitOps Kubernetes Secret management](https://www.xlabs.club/blog/gitops-secrets-in-k8s/) — scheme comparison and best practices.
+- [Resizing StatefulSet PV/PVC without downtime](https://www.xlabs.club/blog/statefulset-resize-pvc/) — smooth expansion, Helm included.
+- [Backstage + oauth2-proxy + Keycloak](https://www.xlabs.club/blog/backstage-keycloak-oauth2-proxy/) — user management, auth, and RBAC/ABAC.
+- [Container image best practices](https://www.xlabs.club/blog/docker-best-practices/) — multi-arch builds, Dockerfile tips, and ORAS/skopeo.
 
 ## Contributing
 
