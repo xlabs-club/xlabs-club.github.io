@@ -1,1 +1,36 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Kubernetes on XLabs</title><link>https://www.xlabs.club/tags/kubernetes/</link><description>Recent content in Kubernetes on XLabs</description><generator>Hugo</generator><language>zh-CN</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Sat, 11 Jul 2026 10:33:49 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/kubernetes/index.xml" rel="self" type="application/rss+xml"/><item><title>备考 CKA 过程，CKA 真题分享</title><link>https://www.xlabs.club/blog/kubernetes-cka/</link><pubDate>Sat, 26 Feb 2022 23:42:48 +0800</pubDate><guid>https://www.xlabs.club/blog/kubernetes-cka/</guid><description>备考 CKA（Certified Kubernetes Administrator）过程，心得，遇见问题，CKA 真题分享，包含备考环境、学习资源和实战经验</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Kubernetes on XLabs</title><link>https://www.xlabs.club/tags/kubernetes/</link><description>Recent content in Kubernetes on XLabs</description><generator>Hugo</generator><language>zh-CN</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Sat, 11 Jul 2026 15:39:40 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/kubernetes/index.xml" rel="self" type="application/rss+xml"/><item><title>备考 CKA 过程，CKA 真题分享</title><link>https://www.xlabs.club/blog/kubernetes-cka/</link><pubDate>Sat, 26 Feb 2022 23:42:48 +0800</pubDate><guid>https://www.xlabs.club/blog/kubernetes-cka/</guid><description>备考 CKA（Certified Kubernetes Administrator）过程，心得，遇见问题，CKA 真题分享，包含备考环境、学习资源和实战经验</description></item><item><title>Keycloak 生产环境避坑指南——从单实例到高可用集群</title><link>https://www.xlabs.club/blog/keycloak-production-pitfalls/</link><pubDate>Thu, 09 Jul 2026 21:00:00 +0800</pubDate><guid>https://www.xlabs.club/blog/keycloak-production-pitfalls/</guid><description>&lt;p&gt;Keycloak 的开发环境只需 &lt;code&gt;docker run&lt;/code&gt;，但生产环境远没有这么简单。本文整理了我们在多个项目中踩过的 7 个坑，每个都有可复制的配置。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;如果你还不熟悉 Keycloak 的基本概念（Realm、Client、Identity Provider），建议先阅读 &lt;a href="https://idaas.xlabs.club/docs/fundamentals/what-is-keycloak/" target="_blank" rel="noopener"&gt;Keycloak 完全指南&lt;/a&gt;
+。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="坑-1默认-h2-数据库"&gt;坑 1：默认 H2 数据库&lt;/h2&gt;
+&lt;p&gt;Keycloak 默认使用 H2 嵌入式数据库。开发环境没问题，&lt;strong&gt;生产环境绝对不能碰&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;症状&lt;/strong&gt;：重启后所有 Realm 配置消失、并发写入时数据损坏、无法做数据库级别备份。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;解决方案&lt;/strong&gt;：&lt;/p&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c"&gt;# docker-compose.yml&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;keycloak&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;image&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;quay.io/keycloak/keycloak:26.1&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;environment&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;KC_DB&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;postgres&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;KC_DB_URL&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;jdbc:postgresql://postgres:5432/keycloak&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;KC_DB_USERNAME&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;keycloak&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;KC_DB_PASSWORD&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;&amp;lt;secure-password&amp;gt;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;depends_on&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;postgres&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;condition&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;service_healthy&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;教训&lt;/strong&gt;：生产环境第一天就切到 PostgreSQL。H2 → PostgreSQL 的迁移比想象中痛苦（用户密码哈希格式不同、自定义 SPI 数据表结构不兼容）。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="坑-2会话不共享多实例的噩梦"&gt;坑 2：会话不共享——多实例的噩梦&lt;/h2&gt;
+&lt;p&gt;Keycloak 26.x 默认使用 Infinispan 做分布式缓存，但&lt;strong&gt;单播发现模式（&lt;code&gt;PING&lt;/code&gt;）在生产环境中不可靠&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;症状&lt;/strong&gt;：登录后刷新页面回到登录页、不同 Pod 之间 Session 不共享、偶尔出现 &lt;code&gt;user session not found&lt;/code&gt; 错误。&lt;/p&gt;</description></item></channel></rss>
