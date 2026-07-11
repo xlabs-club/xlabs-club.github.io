@@ -5,44 +5,69 @@
 [![GitHub contributors](https://img.shields.io/github/contributors/xlabs-club/xlabs-club.github.io)](https://github.com/xlabs-club/xlabs-club.github.io/graphs/contributors)
 [![Commit Activity](https://img.shields.io/github/commit-activity/m/xlabs-club/xlabs-club.github.io)](https://github.com/xlabs-club/xlabs-club.github.io)
 
-卫星实验室，用开源探索边界，用分享传递价值。
+English | [中文](README.zh-CN.md)
 
-此项目为卫星实验室主页 [xlabs.club][] 的源码，在这里将分享我们的平台工程实践经验，介绍如何以技术驱动业务长期发展和高速增长。
+**xlabs.club** — Exploring the edge with open source, delivering value through sharing.
 
-欢迎提交 PR 进行开源共建。
+This is the source of the [xlabs.club][] site. It collects our field notes on platform engineering and cloud-native work from the trenches: DevOps, DataOps, FinOps, and AIOps — the real pitfalls and lessons from driving long-term business growth with technology.
 
-## 主页内容
+PRs are welcome.
 
-- 平台工程：我们的平台工程建设之路，关于 DevOps, DataOps, FinOps 以及 AIOps 的工程实践。
-- 云原生：云原生技术探索，如何以云原生技术支撑起不断变化的复杂业务。
-- 技术博客：研发踩坑记录，翻一翻总有惊喜。
-- awesome-x-ops：一些关于 AIOps、DataOps、DevOps、GitOps、FinOps 的优秀软件、博客、配套工具。
-- xlabs-ops：一些 IaC 运维脚本和通用模板，如 Argo Workflows 模板仓库，是对官方 Examples 的组合、扩展。
-- xlabs-developer-platform：一个基于 Backstage 自建的开发者平台。
-- backstage-plugins：卫星实验室的开源 backstage plugins，欢迎提交 PR。
+## What's on the site
 
-## 贡献指南
+- **Platform engineering** — our journey building a platform org around DevOps, DataOps, FinOps, and AIOps.
+- **Cloud-native** — using cloud-native tech to support constantly shifting, complex business.
+- **Blog** — engineering war stories; dig in and you'll find surprises.
+- **awesome-x-ops** — a curated list of software, blogs, and tools for AIOps, DataOps, DevOps, GitOps, and FinOps.
+- **xlabs-ops** — IaC ops scripts and reusable templates (e.g. Argo Workflows template repo) that compose and extend the official examples.
 
-本项目使用 [Hugo][] 开发，使用 [Doks][] 作为 Hugo 主题，一切内容都是 Markdown，专心写文字即可。
+## Contributing
 
-本地开发时需要先安装 Nodejs 和 Hugo。
+This site is built with [Hugo][] using the [Doks][] theme. Content is plain Markdown — just write.
+
+Install Node.js and Hugo first, then:
 
 ```bash
-# 安装 npm 依赖包，注意此过程需要连接 github 下载 hugo
+# install npm deps (this pulls Hugo from GitHub)
 npm install
-# 启动 Web，然后浏览器访问 http://localhost:1313/即可浏览效果
+# start the dev server, then open http://localhost:1313/
 npm run dev
-# 创建新页面
+# create a new page
 npm run create docs/platform/backstage.md
 npm run create blog/k8s.md
-# 编译结果
+# build
 npm run build
+```
+
+Content layout:
 
 ```
+content/
+├── blog/      # engineering notes, war stories
+└── docs/
+    ├── cloud/     # cloud-native
+    ├── platform/  # platform engineering
+    ├── guides/    # how-tos
+    └── tldr/      # quick reference
+```
+
+Minimal front matter for a new post:
+
+```markdown
+---
+title: "Your Title"
+description: "One-line summary"
+date: 2024-03-31T21:29:52+08:00
+draft: false
+tags: [k8s]
+---
+```
+
+Create the file, preview with `npm run dev`, then open a PR.
 
 ## License
 
-本文档采用 [CC BY-NC 4.0][] 许可协议。
+Content is licensed under [CC BY-NC 4.0][].
 
 [xlabs.club]: https://www.xlabs.club
 [Hugo]: https://gohugo.io/
