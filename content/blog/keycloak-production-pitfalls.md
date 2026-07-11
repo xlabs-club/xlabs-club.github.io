@@ -1,10 +1,11 @@
 ---
 title: "Keycloak 生产环境避坑指南——从单实例到高可用集群"
-description: "Keycloak 生产部署的 7 个关键坑：会话复制、缓存策略、数据库选型、反向代理、Infinispan 集群、健康检查和优雅停机。每个坑都有实测配置和解决方案。"
+description: "Keycloak 生产环境避坑：H2 数据库、会话共享、反向代理、连接池、持久化、健康检查、优雅停机。实测配置和解决方案，从单实例到高可用集群。"
 date: 2026-07-09T21:00:00+08:00
 draft: false
 categories: [K8S, DevOps, Security]
 tags: [Keycloak, IAM, Kubernetes, High Availability, Production, Infinispan]
+contributors: []
 ---
 
 Keycloak 的开发环境只需 `docker run`，但生产环境远没有这么简单。本文整理了我们在多个项目中踩过的 7 个坑，每个都有可复制的配置。
