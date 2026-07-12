@@ -25,11 +25,11 @@ _If these notes help your work, a ⭐ on this repo tells us to keep writing._
 
 ## Featured reading
 
+- [AI Code Review 横评——CodeRabbit vs PR-Agent vs Copilot Review](https://www.xlabs.club/blog/ai-code-review-tools-comparison/) — 10-dimension comparison with real PR test, config examples, and cost analysis.
+- [AI Coding 工具横评——Aider vs Continue vs Cline](https://www.xlabs.club/blog/ai-coding-tools-comparison/) — 12-dimension comparison: workflow, editing, context, model support, and cost.
 - [Spring Boot 3 → 4 migration: the complete guide](https://www.xlabs.club/blog/migration-spring-boot-3-to-4/) — new features, deprecations, and real-world pitfalls.
 - [GitOps Kubernetes Secret management](https://www.xlabs.club/blog/gitops-secrets-in-k8s/) — scheme comparison and best practices.
-- [Resizing StatefulSet PV/PVC without downtime](https://www.xlabs.club/blog/statefulset-resize-pvc/) — smooth expansion, Helm included.
 - [Backstage + oauth2-proxy + Keycloak](https://www.xlabs.club/blog/backstage-keycloak-oauth2-proxy/) — user management, auth, and RBAC/ABAC.
-- [Container image best practices](https://www.xlabs.club/blog/docker-best-practices/) — multi-arch builds, Dockerfile tips, and ORAS/skopeo.
 
 ## Contributing
 
