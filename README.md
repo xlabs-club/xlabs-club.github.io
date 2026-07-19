@@ -5,79 +5,79 @@
 [![GitHub contributors](https://img.shields.io/github/contributors/xlabs-club/xlabs-club.github.io)](https://github.com/xlabs-club/xlabs-club.github.io/graphs/contributors)
 [![Commit Activity](https://img.shields.io/github/commit-activity/m/xlabs-club/xlabs-club.github.io)](https://github.com/xlabs-club/xlabs-club.github.io)
 
-English | [中文](README.zh-CN.md)
+中文 | [English](README.en.md)
 
-**xlabs.club** — Exploring the edge with open source, delivering value through sharing.
+卫星实验室，用开源探索边界，用分享传递价值。
 
-This is the source of the [xlabs.club][] site. It collects our field notes on platform engineering and cloud-native work from the trenches: DevOps, DataOps, FinOps, and AIOps — the real pitfalls and lessons from driving long-term business growth with technology.
+此项目为卫星实验室主页 [xlabs.club][] 的源码，在这里分享我们的平台工程实践经验，介绍如何以技术驱动业务长期发展和高速增长。
 
-PRs are welcome.
+欢迎提交 PR 进行开源共建。
 
-_If these notes help your work, a ⭐ on this repo tells us to keep writing._
+_如果这些笔记对你的工作有帮助，给仓库点个 ⭐，是我们持续产出的动力。_
 
-## What's on the site
+## 主页内容
 
-- **Platform engineering** — our journey building a platform org around DevOps, DataOps, FinOps, and AIOps.
-- **Cloud-native** — using cloud-native tech to support constantly shifting, complex business.
-- **Blog** — engineering war stories; dig in and you'll find surprises.
-- **awesome-x-ops** — a curated list of software, blogs, and tools for AIOps, DataOps, DevOps, GitOps, and FinOps.
-- **xlabs-ops** — IaC ops scripts and reusable templates (e.g. Argo Workflows template repo) that compose and extend the official examples.
+- **平台工程** — DevOps、DataOps、FinOps、AIOps 的工程建设之路。
+- **云原生** — 以云原生技术支撑不断变化的复杂业务。
+- **技术博客** — 研发踩坑记录，翻一翻总有惊喜。
+- **awesome-x-ops** — AIOps/DataOps/DevOps/GitOps/FinOps 的优秀软件、博客与工具精选。
+- **xlabs-ops** — Argo Workflows 等 IaC 运维脚本与通用模板，官方 Examples 的组合与扩展。
 
-## Featured reading
+## 精选阅读
 
-- [AI Code Review 横评——CodeRabbit vs PR-Agent vs Copilot Review](https://www.xlabs.club/blog/ai-code-review-tools-comparison/) — 10-dimension comparison with real PR test, config examples, and cost analysis.
-- [AI Coding 工具横评——Aider vs Continue vs Cline](https://www.xlabs.club/blog/ai-coding-tools-comparison/) — 12-dimension comparison: workflow, editing, context, model support, and cost.
-- [Spring Boot 3 → 4 migration: the complete guide](https://www.xlabs.club/blog/migration-spring-boot-3-to-4/) — new features, deprecations, and real-world pitfalls.
-- [GitOps Kubernetes Secret management](https://www.xlabs.club/blog/gitops-secrets-in-k8s/) — scheme comparison and best practices.
-- [Backstage + oauth2-proxy + Keycloak](https://www.xlabs.club/blog/backstage-keycloak-oauth2-proxy/) — user management, auth, and RBAC/ABAC.
+- [Spring Boot 3 到 4 迁移完全指南](https://www.xlabs.club/blog/migration-spring-boot-3-to-4/) — 新特性、废弃功能与实战踩坑经验。
+- [GitOps 中的 Kubernetes Secret 管理](https://www.xlabs.club/blog/gitops-secrets-in-k8s/) — 方案对比与最佳实践。
+- [K8S StatefulSet 应用 PV/PVC 平滑扩容](https://www.xlabs.club/blog/statefulset-resize-pvc/) — 含 Helm 部署场景的扩容步骤。
+- [Backstage 集成 oauth2-proxy 和 Keycloak](https://www.xlabs.club/blog/backstage-keycloak-oauth2-proxy/) — 用户管理、登录认证与 RBAC/ABAC 授权。
+- [容器镜像制作最佳实践](https://www.xlabs.club/blog/docker-best-practices/) — 多架构编译、Dockerfile 技巧与 ORAS/skopeo 等工具。
 
-## Contributing
+## 贡献指南
 
-This site is built with [Hugo][] using the [Doks][] theme. Content is plain Markdown — just write.
+本项目使用 [Hugo][] 开发，使用 [Doks][] 作为 Hugo 主题，一切内容都是 Markdown，专心写文字即可。
 
-Install Node.js and Hugo first, then:
+本地开发时需要先安装 Node.js 和 Hugo。
 
 ```bash
-# install npm deps (this pulls Hugo from GitHub)
+# 安装 npm 依赖包，注意此过程需要连接 github 下载 hugo
 npm install
-# start the dev server, then open http://localhost:1313/
+# 启动 Web，然后浏览器访问 http://localhost:1313/ 即可浏览效果
 npm run dev
-# create a new page
+# 创建新页面
 npm run create docs/platform/backstage.md
 npm run create blog/k8s.md
-# build
+# 编译结果
 npm run build
 ```
 
-Content layout:
+内容目录结构：
 
 ```
 content/
-├── blog/      # engineering notes, war stories
+├── blog/      # 踩坑记录、实践笔记
 └── docs/
-    ├── cloud/     # cloud-native
-    ├── platform/  # platform engineering
-    ├── guides/    # how-tos
-    └── tldr/      # quick reference
+    ├── cloud/     # 云原生
+    ├── platform/  # 平台工程
+    ├── guides/    # 操作指南
+    └── tldr/      # 简明速查
 ```
 
-Minimal front matter for a new post:
+新文章最小 front matter 示例：
 
 ```markdown
 ---
-title: "Your Title"
-description: "One-line summary"
+title: "文章标题"
+description: "一句话摘要"
 date: 2024-03-31T21:29:52+08:00
 draft: false
 tags: [k8s]
 ---
 ```
 
-Create the file, preview with `npm run dev`, then open a PR.
+创建文件 → `npm run dev` 预览 → 提 PR 即可。
 
 ## License
 
-Content is licensed under [CC BY-NC 4.0][].
+本文档采用 [CC BY-NC 4.0][] 许可协议。
 
 [xlabs.club]: https://www.xlabs.club
 [Hugo]: https://gohugo.io/

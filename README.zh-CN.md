@@ -5,7 +5,7 @@
 [![GitHub contributors](https://img.shields.io/github/contributors/xlabs-club/xlabs-club.github.io)](https://github.com/xlabs-club/xlabs-club.github.io/graphs/contributors)
 [![Commit Activity](https://img.shields.io/github/commit-activity/m/xlabs-club/xlabs-club.github.io)](https://github.com/xlabs-club/xlabs-club.github.io)
 
-[English](README.md) | 中文
+[English](README.en.md) | 中文
 
 卫星实验室，用开源探索边界，用分享传递价值。
 
