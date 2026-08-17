@@ -3,7 +3,7 @@ title: "Java 25 完整升级指南：从 Java 8 到 Java 25 新特性、性能�
 description: "全面解析 Java 25 新特性、性能优化与迁移实战，帮助团队从 Java 8 平滑升级到 Java 25。"
 summary: "全面解析 Java 25 新特性与升级实战，包含性能优化、迁移工具、避坑指南"
 date: 2024-05-23T21:03:11+08:00
-lastmod: 2026-07-10T10:00:00+08:00
+lastmod: 2026-08-17T10:00:00+08:00
 draft: false
 weight: 50
 categories: ["Java", "Spring Boot", "JVM"]
@@ -26,7 +26,7 @@ seo:
 
 ![java-report](java-report.jpeg "java-report")
 
-今天我们将介绍下，从 Java 8 到 Java 26，有哪些新特性，有什么工具可协助升级，以及在升级过程中遇到的问题和解决办法。
+今天我们将介绍下，从 Java 8 到 Java 27，有哪些新特性，有什么工具可协助升级，以及在升级过程中遇到的问题和解决办法。
 
 ## Java 25 核心特性速览
 
@@ -462,6 +462,25 @@ Java 26 于 **2026 年 3 月 17 日**正式 GA，是 Java 25 LTS 之后的**首�
     }
     ```
 
+- **基本类型模式匹配持续预览** - Java 26/27
+  - Java 26 第四次预览（JEP 530）、Java 27 第五次预览（JEP 532，无实质变更），扩展 `instanceof`/`switch` 支持所有基本类型，record 模式可解构基本类型组件而无需装箱，收紧 switch 支配性检查
+  - 连续两版无实质改动，表明特性已趋于稳定，正式化在即
+
+    ```java
+    // Java 26+ 预览：基本类型直接参与模式匹配
+    Object num = 42;
+    String result = switch (num) {
+        case int i when i > 0 -> "正整数：" + i;
+        case long l          -> "长整数：" + l;
+        case double d        -> "浮点：" + d;
+        default              -> "其他";
+    };
+    ```
+
+- **惰性常量 Lazy Constants** - Java 26/27 预览
+  - Java 26 第二次预览（JEP 526，原 Stable Values）、Java 27 第三次预览（JEP 531）
+  - 不可变值持有者，最多初始化一次，兼具 `final` 字段的性能优化与更灵活的初始化时机，JVM 将其视为常量做与 `final` 等价的优化
+
 ### 性能优化
 
 性能优化特性大幅提升了 Java 应用的运行效率，其中垃圾收集器的演进是最重要的改进之一。
@@ -489,6 +508,8 @@ Java 8 到 Java 25，**6 个专门针对 G1 的 JEP**， 主要改进：
 - Java 23：写入屏障优化，减少吞吐量损失
 - Java 24：并发标记周期优化，改进位图使用 + 后期屏障扩展（JEP 475）
 - Java 25：进一步优化写入屏障和并发性能
+- Java 26：减少应用线程与 GC 线程同步开销，记忆集改为线程本地缓冲（JEP 522），提升高分配率场景吞吐量
+- Java 27：在所有环境（含小堆/单核）默认使用 G1（JEP 523），此前小实例默认 Serial GC；并调整 G1 默认 `MinHeapFreeRatio`/`MaxHeapFreeRatio`、将 `-XX:InitiatingHeapOccupancyPercent` 重命名为 `-XX:G1IHOP`
 
 **G1 性能优化 JEP 详解**：
 
@@ -594,6 +615,16 @@ G1 能够主动归还未使用的堆内存给操作系统：
 - 实现记忆集候选集合的早期修剪
 - 减少 20% 的记忆集内存使用
 - 改进收集集候选对象的管理效率
+
+**G1 吞吐量优化（JEP 522）** - Java 26
+
+- 记忆集（remembered set）处理由细粒度锁改为线程本地缓冲，减少应用线程与 GC 线程的同步开销
+- 延续 JEP 475 后期屏障的优化方向，提升高分配率、深对象图应用的 G1 吞吐量
+
+**G1 全环境默认化（JEP 523）** - Java 27
+
+- G1 成为**所有环境**的默认垃圾收集器，小堆/单核实例此前默认 Serial GC，现统一为 G1
+- 调整 G1 默认 `MinHeapFreeRatio`/`MaxHeapFreeRatio`，并将 `-XX:InitiatingHeapOccupancyPercent` 重命名为 `-XX:G1IHOP`
 
 #### ZGC 垃圾收集器演进
 
@@ -751,13 +782,13 @@ String result = "Hello" + " " + "World" + "!";
 String result = "Hello" + " " + "World" + "!";
 ```
 
-**紧凑对象头（JEP 519）** - Java 24/25
+**紧凑对象头（JEP 519 / 534）** - Java 24/25/27
 
-作为 Java 24/25 **最具性价比**特性，仅需一个 JVM 启动参数，即可开启，应用无需改代码，无任何 API 变更。
+作为 Java 24/25 **最具性价比**特性，Java 24 起可作为实验特性开启，Java 25 转为生产就绪需显式 `-XX:+UseCompactObjectHeaders`，**Java 27（JEP 534）默认开启**，无需任何启动参数即生效，应用无需改代码，无任何 API 变更。
 
 减少对象头大小，降低每个对象的内存开销：
 
-- 将对象头从原来的 12 字节压缩成 8 字节
+- 将对象头从原来的 12 字节（96 位）压缩成 8 字节（64 位）
 - 将类指针从 32-bit 压缩为 22-bit
 - 整体内存使用可降低 **3-5%**，最多 22% 堆内存节省
 - 最高 30% CPU 减少（Amazon 线上实测）
@@ -920,6 +951,10 @@ public class BestPracticeExample {
 }
 ```
 
+**结构化并发（Structured Concurrency）** - Java 19 到 27
+
+与虚拟线程协同的并发编程模型，将一组相关并发任务视为单一工作单元，简化错误处理与取消、提升可观测性。历经多次孵化/预览：Java 25 完成“组合优于继承”的 API 重构，Java 26 第六次预览（JEP 525）微调，Java 27 第七次预览（JEP 533）继续打磨，通过 `StructuredTaskScope.open()` 驱动。虽仍在预览，但形态已趋于稳定。
+
 **内存管理革新：外部存储器访问 API（JEP 393, 412, 442, 454）** - Java 16/17/19/20
 
 外部存储器访问 API 是 Java 内存管理的重大变革：
@@ -965,6 +1000,31 @@ native-image --no-fallback \
 
 # 运行原生镜像（无需 JVM）
 ./myapp-native
+```
+
+**启动预热革命：AOT 对象缓存支持任意 GC（JEP 516）** - Java 26
+
+Project Leyden 持续推进 AOT，Java 24 已落地 AOT 类加载与链接（JEP 483），Java 26 进一步可缓存预初始化的对象图：
+
+- 改为 GC 无关的中性格式顺序加载，因此可与 **ZGC** 等低延迟 GC 配合（此前 AOT 仅支持 G1）
+- 显著缩短启动与预热时间，对 Serverless、函数计算、微服务冷启动友好
+- 无需改代码，仅需升级 JDK 版本即可获益
+
+**网络传输革命：HTTP/3（JEP 517）** - Java 26
+
+`java.net.http.HttpClient` 正式支持 HTTP/3（基于 QUIC/UDP），消除传输层队头阻塞：
+
+- 集成现有 `HttpRequest`/`HttpResponse` 接口，从 HTTP/2 迁移几乎零代码改动
+
+```java
+var client = HttpClient.newBuilder()
+        .version(HttpClient.Version.HTTP_3)  // 指定 HTTP/3
+        .build();
+var request = HttpRequest.newBuilder()
+        .uri(URI.create("https://example.com"))
+        .GET()
+        .build();
+var response = client.send(request, HttpResponse.BodyHandlers.ofString());
 ```
 
 **性能监控革命：Java Flight Recorder（JFR）** - Java 8 到 25
@@ -1050,6 +1110,8 @@ java -XX:+FlightRecorder \
 JEP 518 改进了采样机制，减少对应用性能的影响，支持与其他监控工具的协作，提供更准确的性能数据。
 
 JEP 520 添加了方法级别的执行时间跟踪，支持方法调用链分析，帮助识别性能热点方法。
+
+Java 27 的 JEP 536 引入 JFR 进程内数据脱敏：在 JFR 事件落盘前，对命令行参数、环境变量、系统属性中的敏感信息进行掩码，默认配置即可生效，避免密钥、令牌等随 JFR 文件泄露；可自定义脱敏规则或显式关闭。对生产环境长期采集 JFR 的团队尤其重要。
 
 ```java
 // Java 25 方法跟踪增强
@@ -1290,6 +1352,10 @@ Java 24 的抗量子密码学支持标志着 Java 安全体系的重大升级：
 **JEP 496：基于格的密钥封装机制**引入了抗量子攻击的密钥协商协议，确保在量子计算环境下密钥交换的安全性。该机制采用基于格的数学结构，即使在量子计算机面前也能保持强大的安全性。
 
 **JEP 497：基于格的数字签名算法**提供了抗量子攻击的数字签名方案，保障数据的完整性和身份验证。新的签名算法在保持高性能的同时，提供了面向未来的安全保障。
+
+**JEP 527：TLS 1.3 后量子混合密钥交换** - Java 27
+
+在 JEP 496（ML-KEM）基础上更进一步，为 TLS 1.3 引入“传统 + 后量子”混合密钥交换（X25519 + ML-KEM），默认开启、无需改代码，使用 `javax.net.ssl` 的应用即获得抗量子中间人攻击能力，是 Java 安全体系从“算法就绪”走向“协议默认启用”的关键一步。
 
 抗量子密码学的技术价值体现在多个方面：为 Java 应用提供面向未来的安全防护，确保在量子计算时代的数据安全，通过标准化算法降低安全风险，为关键基础设施提供长期安全保障。
 
@@ -1596,6 +1662,11 @@ Caused by: java.lang.reflect.InaccessibleObjectException: Unable to make field p
 - Java 25 → Java 26（非 LTS 增量升级）
   - JEP 504：Applet API 与 Java Web Start（`java.applet`、`javax.jnlp`）被彻底移除，仍引用的代码将编译失败
   - JEP 500：类初始化后通过反射/方法句柄/Unsafe 修改 `final` 字段会发出警告，未来将禁止，依赖该行为的库需提前适配
+
+- Java 26 → Java 27（非 LTS 增量升级，2026 年 9 月 GA）
+  - JEP 534：紧凑对象头**默认开启**，此前显式 `-XX:+UseCompactObjectHeaders` 可移除；如需回退传统头可用 `-XX:-UseCompactObjectHeaders`
+  - JEP 523：所有环境默认 G1，小堆/单核实例原先默认 Serial GC 现改为 G1，注意 `-XX:InitiatingHeapOccupancyPercent` 更名为 `-XX:G1IHOP`
+  - 其他多为预览/孵化特性的再次预览（惰性常量、基本类型模式匹配、结构化并发、PEM 编码、向量 API），无破坏性移除
 
 除了被移除的模块，部分 API 方法级别也有小范围的变更。
 
