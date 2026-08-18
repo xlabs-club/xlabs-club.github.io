@@ -1343,6 +1343,19 @@ class MyTest {
 }
 ```
 
+## 升级顺序与验收门禁
+
+不要把“依赖能解析”当成迁移完成。更稳妥的顺序是：先在 Spring Boot 3.x 升到当前维护线并清理废弃 API，再切换 Boot 4；这样能把问题拆成两批，回滚也更简单。具体版本以 [官方迁移指南](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-4.0-Migration-Guide) 和 [Spring Boot 4 发布说明](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-4.0-Release-Notes) 为准。
+
+建议把下面几项设为合并门禁：
+
+1. **依赖收敛**：检查 `spring-*`、`jakarta.*`、Servlet、Jackson、数据库驱动是否被第三方库拉入旧版本；Maven 使用 `dependency:tree`，Gradle 使用 `dependencies`/`dependencyInsight`。
+2. **先 dry run 再改代码**：OpenRewrite 只负责机械变更，运行后必须人工检查安全配置、序列化配置和自定义自动配置，不能把自动修复当成测试替代品。
+3. **测试分层执行**：先编译和单元测试，再跑 `@SpringBootTest`、MockMvc/WebTestClient、数据库迁移、消息消费和真实容器集成测试；重点覆盖鉴权、异常响应、Header、日期/数字序列化。
+4. **上线前可回滚**：保留 Boot 3 构建产物和数据库回滚方案，灰度期间同时观察启动失败率、5xx、P95 延迟、线程/连接池和 GC；不要在同一个发布窗口同时升级 JDK、数据库和中间件。
+
+> **判断标准**：构建通过只是起点；依赖树无冲突、关键链路测试通过、指标没有回归，并且能切回旧产物，才算迁移完成。
+
 ## 自动化迁移工具
 
 ### OpenRewrite
