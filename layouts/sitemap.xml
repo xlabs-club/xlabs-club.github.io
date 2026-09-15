@@ -1,7 +1,9 @@
 {{ printf "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" | safeHTML }}
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  {{ range where .Pages "Sitemap.Disable" "ne" true }}
+  {{/* 必须是 site.Pages：用 .Pages 只会拿到 home 下的一级 section（本站 4 条 URL），
+       导致 /sitemap.xml 里没有任何文章，与 robots.txt 声明的 sitemap 自相矛盾。 */ -}}
+  {{ range where site.Pages "Sitemap.Disable" "ne" true }}
     {{- if .Permalink -}}
   <url>
     <loc>{{ .Permalink }}</loc>{{ if not .Lastmod.IsZero }}
