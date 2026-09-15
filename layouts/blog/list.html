@@ -20,7 +20,9 @@
 </div>
 <div class="row justify-content-center">
   <div class="col-lg-10">
-    {{ $paginator := .Paginate (.Data.Pages) -}}
+    {{/* 显式按日期倒序：未设置 weight 的文章会被 Hugo 的默认排序排到列表末尾，
+         导致新文永远进不了 /blog/ 首页。 */ -}}
+    {{ $paginator := .Paginate (.Data.Pages.ByDate.Reverse) -}}
     {{ range $paginator.Pages -}}
       <div class="card">
         {{ if site.Params.doks.imageList -}}
