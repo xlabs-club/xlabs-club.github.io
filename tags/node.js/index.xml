@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Node.js on XLabs</title><link>https://www.xlabs.club/tags/node.js/</link><description>Recent content in Node.js on XLabs</description><generator>Hugo</generator><language>zh-CN</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Wed, 16 Sep 2026 00:03:24 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/node.js/index.xml" rel="self" type="application/rss+xml"/><item><title>MCP 2026-07-28 实测：initialize 握手没了，老客户端还能连吗</title><link>https://www.xlabs.club/blog/mcp-2026-07-28-version-negotiation/</link><pubDate>Tue, 15 Sep 2026 00:00:00 +0800</pubDate><guid>https://www.xlabs.club/blog/mcp-2026-07-28-version-negotiation/</guid><description>&lt;p&gt;2026-07-28 这一版 MCP 把 &lt;code&gt;initialize&lt;/code&gt; 握手删了。协议版本不再是&amp;quot;协商一次、存在连接里&amp;quot;的状态，而是每个请求自己在 &lt;code&gt;_meta&lt;/code&gt; 里声明；server 则必须实现 &lt;code&gt;server/discover&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;实测下来四件事：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;老客户端（官方 v1 SDK &lt;code&gt;@modelcontextprotocol/sdk@1.29.0&lt;/code&gt;，&lt;code&gt;LATEST_PROTOCOL_VERSION = '2025-11-25'&lt;/code&gt;）不做探测，首包永远是 &lt;code&gt;initialize&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;新客户端（&lt;code&gt;mcporter@0.13.10&lt;/code&gt;，依赖 v2 的 &lt;code&gt;@modelcontextprotocol/client@2.0.0&lt;/code&gt;）先发 &lt;code&gt;server/discover&lt;/code&gt;，拿到非 modern 错误就回退 &lt;code&gt;initialize&lt;/code&gt;。&lt;strong&gt;只认老协议的 server 不用改，照样能被新客户端用。&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;老客户端撞上只支持 2026-07-28 的 server 会直接失败。它没有&amp;quot;向前兼容&amp;quot;机制，只能人肉改。&lt;/li&gt;
+&lt;li&gt;最容易翻车的不是版本号，是缓存字段：&lt;code&gt;tools/list&lt;/code&gt; 漏 &lt;code&gt;ttlMs&lt;/code&gt; / &lt;code&gt;cacheScope&lt;/code&gt;，v2 客户端直接判定整个结果非法。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="先确认手上的包属于哪一代"&gt;先确认手上的包属于哪一代&lt;/h2&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame is-terminal not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# v1 线：还是 initialize 握手&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;node -p &lt;span class="s2"&gt;&amp;#34;require(&amp;#39;@modelcontextprotocol/sdk/package.json&amp;#39;).version&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;node -p &lt;span class="s2"&gt;&amp;#34;require(&amp;#39;@modelcontextprotocol/sdk/dist/cjs/types.js&amp;#39;).LATEST_PROTOCOL_VERSION&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# v2 线：实现 2026-07-28&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;node -p &lt;span class="s2"&gt;&amp;#34;require(&amp;#39;@modelcontextprotocol/server/package.json&amp;#39;).version&amp;#34;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;p&gt;本机实测值（Node 26.3.0）：&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;包&lt;/th&gt;
+					&lt;th&gt;版本&lt;/th&gt;
+					&lt;th&gt;协议&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;@modelcontextprotocol/sdk&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;1.29.0&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;LATEST_PROTOCOL_VERSION = '2025-11-25'&lt;/code&gt;，SUPPORTED 一路到 &lt;code&gt;2024-10-07&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;@modelcontextprotocol/core&lt;/code&gt; / &lt;code&gt;server&lt;/code&gt; / &lt;code&gt;client&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;2.0.0&lt;/td&gt;
+					&lt;td&gt;2026-07-28，v2 是官方 README 里写明的 stable release line&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;mcporter&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;0.13.10&lt;/td&gt;
+					&lt;td&gt;依赖 &lt;code&gt;@modelcontextprotocol/client@^2.0.0&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;同一台机器上两代 SDK 并存，这就是断层。&lt;/p&gt;</description></item></channel></rss>
