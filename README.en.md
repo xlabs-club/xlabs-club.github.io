@@ -25,6 +25,7 @@ _If these notes help your work, a ⭐ on this repo tells us to keep writing._
 
 ## Featured reading
 
+- [Prompt regression testing in practice: the same prompt fails differently on two models](https://www.xlabs.club/blog/prompt-regression-testing/) — 198 calls, 11 cases: JSON-valid but contract-compliant 0/33, verdicts still flip at temperature=0.
 - [MCP 2026-07-28: no more initialize handshake](https://www.xlabs.club/blog/mcp-2026-07-28-version-negotiation/) — wire-level capture of v1/v2 client negotiation, dual-era server implementation, cache-field pitfalls.
 - [AI Code Review 横评——CodeRabbit vs PR-Agent vs Copilot Review](https://www.xlabs.club/blog/ai-code-review-tools-comparison/) — 10-dimension comparison with real PR test, config examples, and cost analysis.
 - [AI Coding 工具横评——Aider vs Continue vs Cline](https://www.xlabs.club/blog/ai-coding-tools-comparison/) — 12-dimension comparison: workflow, editing, context, model support, and cost.

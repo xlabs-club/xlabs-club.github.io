@@ -25,11 +25,11 @@ _如果这些笔记对你的工作有帮助，给仓库点个 ⭐，是我们持
 
 ## 精选阅读
 
+- [Prompt 回归测试实测：同一份 prompt 在两个模型上错得不一样](https://www.xlabs.club/blog/prompt-regression-testing/) — 198 次调用实测，JSON 合法但契约合规 0/33、T=0 判决翻转、思维链吃光 max_tokens。
 - [MCP 2026-07-28 实测：initialize 握手没了，老客户端还能连吗](https://www.xlabs.club/blog/mcp-2026-07-28-version-negotiation/) — 抓包实测 v1/v2 客户端协商行为，dual-era Server 实现与缓存字段踩坑。
 - [Spring Boot 3 到 4 迁移完全指南](https://www.xlabs.club/blog/migration-spring-boot-3-to-4/) — 新特性、废弃功能与实战踩坑经验。
 - [GitOps 中的 Kubernetes Secret 管理](https://www.xlabs.club/blog/gitops-secrets-in-k8s/) — 方案对比与最佳实践。
 - [K8S StatefulSet 应用 PV/PVC 平滑扩容](https://www.xlabs.club/blog/statefulset-resize-pvc/) — 含 Helm 部署场景的扩容步骤。
-- [Backstage 集成 oauth2-proxy 和 Keycloak](https://www.xlabs.club/blog/backstage-keycloak-oauth2-proxy/) — 用户管理、登录认证与 RBAC/ABAC 授权。
 
 ## 贡献指南
 
