@@ -25,12 +25,11 @@ _If these notes help your work, a ⭐ on this repo tells us to keep writing._
 
 ## Featured reading
 
+- [LLM observability in practice: how far can you trust the usage from an OpenAI-compatible gateway](https://www.xlabs.club/blog/llm-observability-usage-fields/) — 5 models measured: `include_usage` is a no-op, MiniMax returns zero-filled usage, aborted streams lose tokens, prompt_tokens differs 6.8×.
 - [Prompt regression testing in practice: the same prompt fails differently on two models](https://www.xlabs.club/blog/prompt-regression-testing/) — 198 calls, 11 cases: JSON-valid but contract-compliant 0/33, verdicts still flip at temperature=0.
 - [MCP 2026-07-28: no more initialize handshake](https://www.xlabs.club/blog/mcp-2026-07-28-version-negotiation/) — wire-level capture of v1/v2 client negotiation, dual-era server implementation, cache-field pitfalls.
-- [AI Code Review 横评——CodeRabbit vs PR-Agent vs Copilot Review](https://www.xlabs.club/blog/ai-code-review-tools-comparison/) — 10-dimension comparison with real PR test, config examples, and cost analysis.
-- [AI Coding 工具横评——Aider vs Continue vs Cline](https://www.xlabs.club/blog/ai-coding-tools-comparison/) — 12-dimension comparison: workflow, editing, context, model support, and cost.
-- [Spring Boot 3 → 4 migration: the complete guide](https://www.xlabs.club/blog/migration-spring-boot-3-to-4/) — new features, deprecations, and real-world pitfalls.
-- [GitOps Kubernetes Secret management](https://www.xlabs.club/blog/gitops-secrets-in-k8s/) — scheme comparison and best practices.
+- [K8S cross-cluster migration: Service + manual EndpointSlice traffic shifting](https://www.xlabs.club/blog/k8s-cross-cluster-migration/) — migration steps, traffic cut-over order, and rollback plan.
+- [AI Code Review 横评——CodeRabbit vs PR-Agent vs Copilot Review](https://www.xlabs.club/blog/ai-code-review-tools-comparison/) — review depth, false positives, config cost, and integration options.
 
 ## Contributing
 

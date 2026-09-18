@@ -25,11 +25,11 @@ _如果这些笔记对你的工作有帮助，给仓库点个 ⭐，是我们持
 
 ## 精选阅读
 
+- [LLM 可观测性实测：OpenAI 兼容网关的 usage 靠不靠得住](https://www.xlabs.club/blog/llm-observability-usage-fields/) — 5 个模型实测：include_usage 空操作、MiniMax 回传全 0 usage、断连丢 token、prompt_tokens 差 6.8 倍。
 - [Prompt 回归测试实测：同一份 prompt 在两个模型上错得不一样](https://www.xlabs.club/blog/prompt-regression-testing/) — 198 次调用实测，JSON 合法但契约合规 0/33、T=0 判决翻转、思维链吃光 max_tokens。
 - [MCP 2026-07-28 实测：initialize 握手没了，老客户端还能连吗](https://www.xlabs.club/blog/mcp-2026-07-28-version-negotiation/) — 抓包实测 v1/v2 客户端协商行为，dual-era Server 实现与缓存字段踩坑。
-- [Spring Boot 3 到 4 迁移完全指南](https://www.xlabs.club/blog/migration-spring-boot-3-to-4/) — 新特性、废弃功能与实战踩坑经验。
-- [GitOps 中的 Kubernetes Secret 管理](https://www.xlabs.club/blog/gitops-secrets-in-k8s/) — 方案对比与最佳实践。
-- [K8S StatefulSet 应用 PV/PVC 平滑扩容](https://www.xlabs.club/blog/statefulset-resize-pvc/) — 含 Helm 部署场景的扩容步骤。
+- [K8S 集群平滑迁移：Service + 手工 EndpointSlice 跨集群引流](https://www.xlabs.club/blog/k8s-cross-cluster-migration/) — 跨集群引流的步骤、切流顺序与回滚预案。
+- [AI Code Review 横评——CodeRabbit vs PR-Agent vs Copilot Review](https://www.xlabs.club/blog/ai-code-review-tools-comparison/) — 审查质量、误报率、配置成本与集成方式对比。
 
 ## 贡献指南
 
