@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>E2E on XLabs</title><link>https://www.xlabs.club/tags/e2e/</link><description>Recent content in E2E on XLabs</description><generator>Hugo</generator><language>zh-CN</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Tue, 29 Sep 2026 00:06:47 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/e2e/index.xml" rel="self" type="application/rss+xml"/><item><title>Playwright Test Agents 拆包：init-agents 落到磁盘的 3 个 agent 定义文件</title><link>https://www.xlabs.club/blog/playwright-test-agents-init-unpacked/</link><pubDate>Tue, 29 Sep 2026 00:00:00 +0800</pubDate><guid>https://www.xlabs.club/blog/playwright-test-agents-init-unpacked/</guid><description>&lt;p&gt;Playwright 1.56 引入的 Planner / Generator / Healer 三个测试 agent，文档里只给了 &lt;code&gt;npx playwright init-agents --loop=&amp;lt;client&amp;gt;&lt;/code&gt; 一句话。这个命令到底往仓里写了什么、agent 的 prompt 里写了什么硬约束，没人拆开看过。&lt;/p&gt;
+&lt;p&gt;我把 1.63.0 在空目录里跑了一遍，四个 loop（claude / codex / vscode / opencode）和 &lt;code&gt;--prompts&lt;/code&gt; 参数各跑一次。下面是落盘产物对比和原文摘录。&lt;/p&gt;
+&lt;h2 id="四个-loop-落点不一样"&gt;四个 loop 落点不一样&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;--loop=claude&lt;/code&gt;：&lt;/p&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;pre tabindex="0"&gt;&lt;code&gt;.claude/agents/playwright-test-planner.md
+.claude/agents/playwright-test-generator.md
+.claude/agents/playwright-test-healer.md
+.mcp.json
+seed.spec.ts
+specs/README.md&lt;/code&gt;&lt;/pre&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;code&gt;--loop=codex&lt;/code&gt; 把同一批内容写成 TOML，路径换成 &lt;code&gt;.codex/agents/playwright_test_*.toml&lt;/code&gt;，且 &lt;code&gt;.mcp.json&lt;/code&gt; 里的 server 名变成带 &lt;code&gt;tools: [&amp;quot;*&amp;quot;]&lt;/code&gt; 显式白名单的写法。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;--loop=vscode&lt;/code&gt; 产物最多：&lt;code&gt;.github/agents/*.agent.md&lt;/code&gt; + &lt;code&gt;.vscode/mcp.json&lt;/code&gt; + 一个 &lt;code&gt;.github/workflows/copilot-setup-steps.yml&lt;/code&gt;（Copilot coding agent 在 CI 镜像里跑 &lt;code&gt;npm ci &amp;amp;&amp;amp; npx playwright install --with-deps&lt;/code&gt; 的引导）。&lt;/p&gt;</description></item></channel></rss>

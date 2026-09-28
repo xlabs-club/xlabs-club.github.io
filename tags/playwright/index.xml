@@ -1,4 +1,25 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Playwright on XLabs</title><link>https://www.xlabs.club/tags/playwright/</link><description>Recent content in Playwright on XLabs</description><generator>Hugo</generator><language>zh-CN</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Wed, 23 Sep 2026 00:10:25 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/playwright/index.xml" rel="self" type="application/rss+xml"/><item><title>AI 生成的 E2E 测试能抓到真 bug 吗：5 个模型 41 个用例的变异实测</title><link>https://www.xlabs.club/blog/ai-generated-e2e-tests-mutation-testing/</link><pubDate>Mon, 21 Sep 2026 00:00:00 +0800</pubDate><guid>https://www.xlabs.club/blog/ai-generated-e2e-tests-mutation-testing/</guid><description>&lt;p&gt;让模型写 E2E 用例，跑出来一片绿。问题在于「绿」本身不携带信息。我在一个真实的单页应用上注入了 8 个真缺陷，让 5 个模型各自生成 Playwright 用例，然后用变异检测的方式判断哪些用例真的在防回归。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Playwright on XLabs</title><link>https://www.xlabs.club/tags/playwright/</link><description>Recent content in Playwright on XLabs</description><generator>Hugo</generator><language>zh-CN</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Tue, 29 Sep 2026 00:06:47 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/playwright/index.xml" rel="self" type="application/rss+xml"/><item><title>Playwright Test Agents 拆包：init-agents 落到磁盘的 3 个 agent 定义文件</title><link>https://www.xlabs.club/blog/playwright-test-agents-init-unpacked/</link><pubDate>Tue, 29 Sep 2026 00:00:00 +0800</pubDate><guid>https://www.xlabs.club/blog/playwright-test-agents-init-unpacked/</guid><description>&lt;p&gt;Playwright 1.56 引入的 Planner / Generator / Healer 三个测试 agent，文档里只给了 &lt;code&gt;npx playwright init-agents --loop=&amp;lt;client&amp;gt;&lt;/code&gt; 一句话。这个命令到底往仓里写了什么、agent 的 prompt 里写了什么硬约束，没人拆开看过。&lt;/p&gt;
+&lt;p&gt;我把 1.63.0 在空目录里跑了一遍，四个 loop（claude / codex / vscode / opencode）和 &lt;code&gt;--prompts&lt;/code&gt; 参数各跑一次。下面是落盘产物对比和原文摘录。&lt;/p&gt;
+&lt;h2 id="四个-loop-落点不一样"&gt;四个 loop 落点不一样&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;--loop=claude&lt;/code&gt;：&lt;/p&gt;
+
+
+
+&lt;div class="expressive-code"&gt;
+ &lt;figure class="frame not-content"&gt;
+ &lt;figcaption class="header"&gt;
+ &lt;span class="title"&gt;&lt;/span&gt;
+ &lt;/figcaption&gt;
+ &lt;pre tabindex="0"&gt;&lt;code&gt;.claude/agents/playwright-test-planner.md
+.claude/agents/playwright-test-generator.md
+.claude/agents/playwright-test-healer.md
+.mcp.json
+seed.spec.ts
+specs/README.md&lt;/code&gt;&lt;/pre&gt;
+ &lt;/figure&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;code&gt;--loop=codex&lt;/code&gt; 把同一批内容写成 TOML，路径换成 &lt;code&gt;.codex/agents/playwright_test_*.toml&lt;/code&gt;，且 &lt;code&gt;.mcp.json&lt;/code&gt; 里的 server 名变成带 &lt;code&gt;tools: [&amp;quot;*&amp;quot;]&lt;/code&gt; 显式白名单的写法。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;--loop=vscode&lt;/code&gt; 产物最多：&lt;code&gt;.github/agents/*.agent.md&lt;/code&gt; + &lt;code&gt;.vscode/mcp.json&lt;/code&gt; + 一个 &lt;code&gt;.github/workflows/copilot-setup-steps.yml&lt;/code&gt;（Copilot coding agent 在 CI 镜像里跑 &lt;code&gt;npm ci &amp;amp;&amp;amp; npx playwright install --with-deps&lt;/code&gt; 的引导）。&lt;/p&gt;</description></item><item><title>AI 生成的 E2E 测试能抓到真 bug 吗：5 个模型 41 个用例的变异实测</title><link>https://www.xlabs.club/blog/ai-generated-e2e-tests-mutation-testing/</link><pubDate>Mon, 21 Sep 2026 00:00:00 +0800</pubDate><guid>https://www.xlabs.club/blog/ai-generated-e2e-tests-mutation-testing/</guid><description>&lt;p&gt;让模型写 E2E 用例，跑出来一片绿。问题在于「绿」本身不携带信息。我在一个真实的单页应用上注入了 8 个真缺陷，让 5 个模型各自生成 Playwright 用例，然后用变异检测的方式判断哪些用例真的在防回归。&lt;/p&gt;
 &lt;p&gt;结论先放这里：40 个在正确页面上能通过的用例里，&lt;strong&gt;5 个（12%）在整个实验里从未失败过一次&lt;/strong&gt;；8 个缺陷里有 1 个只有 1 家抓到，其余 4 家全漏；用例数最多的模型花了 1.5 倍的输出 token，只多抓到 1 个缺陷。&lt;/p&gt;
 &lt;h2 id="环境与实验设计"&gt;环境与实验设计&lt;/h2&gt;
 &lt;ul&gt;
