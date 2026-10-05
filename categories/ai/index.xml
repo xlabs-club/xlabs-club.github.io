@@ -1,4 +1,52 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>AI on XLabs</title><link>https://www.xlabs.club/categories/ai/</link><description>Recent content in AI on XLabs</description><generator>Hugo</generator><language>zh-CN</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Fri, 02 Oct 2026 00:05:05 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/categories/ai/index.xml" rel="self" type="application/rss+xml"/><item><title>AI 写 Playwright 选择器，5 个模型 5 种 DOM 变异实测：i18n 团灭</title><link>https://www.xlabs.club/blog/ai-selector-mutation-testing/</link><pubDate>Thu, 01 Oct 2026 00:00:00 +0800</pubDate><guid>https://www.xlabs.club/blog/ai-selector-mutation-testing/</guid><description>&lt;p&gt;让 AI 生成 Playwright 用例时，我关心的是它写的选择器在页面前端重构之后还能不能活。上一篇 &lt;a href="https://www.xlabs.club/blog/ai-generated-e2e-tests-mutation-testing/"&gt;AI 生成的 E2E 测试能抓到真 bug 吗&lt;/a&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>AI on XLabs</title><link>https://www.xlabs.club/categories/ai/</link><description>Recent content in AI on XLabs</description><generator>Hugo</generator><language>zh-CN</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Tue, 06 Oct 2026 00:05:07 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/categories/ai/index.xml" rel="self" type="application/rss+xml"/><item><title>MCP 工具挂了之后：empty_ok 比报错更危险，4 个模型实测</title><link>https://www.xlabs.club/blog/mcp-tool-failure-recovery/</link><pubDate>Tue, 06 Oct 2026 00:00:00 +0800</pubDate><guid>https://www.xlabs.club/blog/mcp-tool-failure-recovery/</guid><description>&lt;p&gt;MCP 工具调用失败之后，宿主把错误回灌给模型，模型会怎么反应？这个问题的答案决定你的 Agent 在生产环境里是「报错后重试」还是「编一段看似合理的话糊弄过去」。&lt;/p&gt;
+&lt;p&gt;我搭了一个 12 工具的 MCP server（桩实现），让 4 个模型在真实 MCP 循环里跑失败场景，最多 3 轮，记录每一次调用和最终结局。三种失败回灌方式：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;informative&lt;/strong&gt;：&lt;code&gt;isError=true&lt;/code&gt;，content 里带可行动线索（&lt;code&gt;Error: pods &amp;quot;payment-api-9f8e7d6c5-x9zzz&amp;quot; not found in namespace &amp;quot;prod&amp;quot;&lt;/code&gt;）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;generic&lt;/strong&gt;：&lt;code&gt;isError=true&lt;/code&gt;，但错误信息没线索（&lt;code&gt;Error: upstream request failed&lt;/code&gt;）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;empty_ok&lt;/strong&gt;：&lt;code&gt;isError=false&lt;/code&gt;，content 为空数组——协议层「成功」，语义层什么都没说&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="结局表"&gt;结局表&lt;/h2&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;模型&lt;/th&gt;
+					&lt;th&gt;informative&lt;/th&gt;
+					&lt;th&gt;generic&lt;/th&gt;
+					&lt;th&gt;empty_ok&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;deepseek-v4-flash&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;http_error_400&lt;/strong&gt;（1 轮就断）&lt;/td&gt;
+					&lt;td&gt;http_error_400&lt;/td&gt;
+					&lt;td&gt;http_error_400&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;qwen3.8-flash&lt;/td&gt;
+					&lt;td&gt;loop_exhausted&lt;/td&gt;
+					&lt;td&gt;loop_exhausted&lt;/td&gt;
+					&lt;td&gt;loop_exhausted&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;MiniMax-M3&lt;/td&gt;
+					&lt;td&gt;loop_exhausted&lt;/td&gt;
+					&lt;td&gt;loop_exhausted&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;text_only（编故事）&lt;/strong&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;gemini-3.8-flash&lt;/td&gt;
+					&lt;td&gt;loop_exhausted&lt;/td&gt;
+					&lt;td&gt;loop_exhausted&lt;/td&gt;
+					&lt;td&gt;loop_exhausted&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;code&gt;loop_exhausted&lt;/code&gt; 的意思是模型在 3 轮内不断换工具重试，没给出最终答案。&lt;code&gt;text_only&lt;/code&gt; 的意思是模型放弃调用工具，直接输出文本。&lt;/p&gt;
+&lt;h2 id="发现一empty_ok-是幻觉触发器"&gt;发现一：empty_ok 是幻觉触发器&lt;/h2&gt;
+&lt;p&gt;MiniMax-M3 在 empty_ok 场景下的输出：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;以下是 &lt;code&gt;prod&lt;/code&gt; 命名空间下 &lt;code&gt;payment-api-9f8e7d6c5-x9zzz&lt;/code&gt; 最近 200 行日志的拉取结果：&lt;/p&gt;</description></item><item><title>AI 写 Playwright 选择器，5 个模型 5 种 DOM 变异实测：i18n 团灭</title><link>https://www.xlabs.club/blog/ai-selector-mutation-testing/</link><pubDate>Thu, 01 Oct 2026 00:00:00 +0800</pubDate><guid>https://www.xlabs.club/blog/ai-selector-mutation-testing/</guid><description>&lt;p&gt;让 AI 生成 Playwright 用例时，我关心的是它写的选择器在页面前端重构之后还能不能活。上一篇 &lt;a href="https://www.xlabs.club/blog/ai-generated-e2e-tests-mutation-testing/"&gt;AI 生成的 E2E 测试能抓到真 bug 吗&lt;/a&gt;
  测的是「能不能抓到注入的功能缺陷」，这篇测另一个维度——&lt;strong&gt;选择器本身在 UI 不变语义、只变结构/文案时的存活率&lt;/strong&gt;。&lt;/p&gt;
 &lt;h2 id="实验设计"&gt;实验设计&lt;/h2&gt;
 &lt;p&gt;一个用户管理后台的静态 HTML，包含：新建按钮、搜索框、三行用户列表、行内编辑/删除按钮、分页器。把它喂给 5 个模型，让它们为 4 个操作各写一个 Playwright locator 表达式（&lt;code&gt;getByRole(...)&lt;/code&gt; 或 &lt;code&gt;page.locator(...)&lt;/code&gt;）。&lt;/p&gt;
@@ -360,59 +408,4 @@ specs/README.md&lt;/code&gt;&lt;/pre&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
  &lt;/figure&gt;
 &lt;/div&gt;
-&lt;p&gt;这个模式的三个致命缺陷：&lt;/p&gt;</description></item><item><title>AI Coding 工具横评——Aider vs Continue vs Cline 谁更适合你</title><link>https://www.xlabs.club/blog/ai-coding-tools-comparison/</link><pubDate>Thu, 09 Jul 2026 22:00:00 +0800</pubDate><guid>https://www.xlabs.club/blog/ai-coding-tools-comparison/</guid><description>&lt;p&gt;2026 年的 AI Coding 工具已经不再是「玩具」或「自动补全」那么简单。Aider、Continue、Cline 代表了三种不同的设计哲学：&lt;strong&gt;终端原生的结对编程&lt;/strong&gt;、&lt;strong&gt;IDE 内嵌的上下文感知&lt;/strong&gt;、&lt;strong&gt;VS Code 插件的 Agent 自动化&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;本文从 12 个维度对比这三款工具，帮你选型——不是看谁功能多，是看谁的设计哲学契合你的工作流。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;更多 AI 基础设施工具参见 &lt;a href="https://github.com/xlabs-club/awesome-x-ops#ai--inference" target="_blank" rel="noopener"&gt;awesome-x-ops AI 分类&lt;/a&gt;
-。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id="一句话定位"&gt;一句话定位&lt;/h2&gt;
-&lt;table&gt;
-	&lt;thead&gt;
-			&lt;tr&gt;
-					&lt;th&gt;工具&lt;/th&gt;
-					&lt;th&gt;定位&lt;/th&gt;
-					&lt;th&gt;核心哲学&lt;/th&gt;
-			&lt;/tr&gt;
-	&lt;/thead&gt;
-	&lt;tbody&gt;
-			&lt;tr&gt;
-					&lt;td&gt;&lt;strong&gt;Aider&lt;/strong&gt;&lt;/td&gt;
-					&lt;td&gt;终端原生 AI 结对编程&lt;/td&gt;
-					&lt;td&gt;&amp;ldquo;AI 是你的 Pair，Git 是真相来源&amp;rdquo;&lt;/td&gt;
-			&lt;/tr&gt;
-			&lt;tr&gt;
-					&lt;td&gt;&lt;strong&gt;Continue&lt;/strong&gt;&lt;/td&gt;
-					&lt;td&gt;IDE 内嵌 AI 助手&lt;/td&gt;
-					&lt;td&gt;&amp;ldquo;AI 应该像 Tab 补全一样自然，不打断心流&amp;rdquo;&lt;/td&gt;
-			&lt;/tr&gt;
-			&lt;tr&gt;
-					&lt;td&gt;&lt;strong&gt;Cline&lt;/strong&gt;&lt;/td&gt;
-					&lt;td&gt;VS Code AI Agent&lt;/td&gt;
-					&lt;td&gt;&amp;ldquo;AI 应该能自己读代码、写代码、执行命令&amp;rdquo;&lt;/td&gt;
-			&lt;/tr&gt;
-	&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h2 id="维度-1工作流适配"&gt;维度 1：工作流适配&lt;/h2&gt;
-&lt;h3 id="aider终端原生"&gt;Aider：终端原生&lt;/h3&gt;
-&lt;p&gt;Aider 在终端运行，和 Git 深度集成。你不需要离开终端——&lt;code&gt;aider&lt;/code&gt; 启动，AI 自动理解 Git 仓库的上下文。&lt;/p&gt;
-
-
-
-&lt;div class="expressive-code"&gt;
- &lt;figure class="frame not-content"&gt;
- &lt;figcaption class="header"&gt;
- &lt;span class="title"&gt;&lt;/span&gt;
- &lt;/figcaption&gt;
- &lt;pre tabindex="0"&gt;&lt;code&gt;$ aider
-Aider v0.75.0
-Models: claude-sonnet-4-5 with diff edit format
-Git repo: .git with 1,234 files
-Repo map: using 1024 tokens
-──────────────────────────────────────────
-&amp;gt; 把这个函数的错误处理改成 Result 类型
-
-# AI 直接在终端中输出 diff，你可以 /add、/drop、/undo&lt;/code&gt;&lt;/pre&gt;
- &lt;/figure&gt;
-&lt;/div&gt;
-&lt;p&gt;&lt;strong&gt;适合&lt;/strong&gt;：Vim/Neovim/终端重度用户、Git 工作流驱动的开发。&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;这个模式的三个致命缺陷：&lt;/p&gt;</description></item></channel></rss>
