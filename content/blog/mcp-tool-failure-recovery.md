@@ -60,7 +60,7 @@ deepseek-v4-flash 在三种失败场景下全部 `http_error_400`，第一轮就
 }
 ```
 
-deepseek 的 thinking 模式要求： assistant 消息里的 `reasoning_content` 必须在后续调用中原样回传。实验代码里 `assistant_msg()` 确实做了这个处理，但失败场景的 trace 里有 `reasoning_content` 为空的 assistant 消息——某些轮次 deepseek 返回了空 reasoning，导致下一轮请求缺了这个字段。
+deepseek 的 thinking 模式要求：assistant 消息里的 `reasoning_content` 必须在后续调用中原样回传。实验代码的 `assistant_msg()` 做了这个处理，但只在 `reasoning_content` 非空时才传键——如果某轮 deepseek 返回了空 reasoning（空字符串或 None），下一轮请求就缺了这个字段，直接 400。
 
 这不是 MCP 的问题，是 deepseek thinking 模式 + 工具调用 + 多轮对话的组合坑。如果你的 Agent 框架用 deepseek，遇到工具调用失败后的多轮恢复，**必须检查 reasoning_content 是否被正确透传**。
 
