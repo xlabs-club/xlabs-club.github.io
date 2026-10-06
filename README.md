@@ -25,11 +25,11 @@ _如果这些笔记对你的工作有帮助，给仓库点个 ⭐，是我们持
 
 ## 精选阅读
 
+- [MCP 2026-07-28 弃用 Roots/Sampling/Logging，SDK 还在裸奔（1.32.1 实测）](https://www.xlabs.club/blog/mcp-2026-07-28-deprecation-sdk-lag/) — spec 已弃用三 feature、新增 server/discover 和 Mcp-Method 头；实测 SDK 1.32.1 零警告零 @deprecated，再不主动 audit 就要在 2027-07-28 之前返工。
 - [MCP 工具挂了之后：empty_ok 比报错更危险，4 个模型实测](https://www.xlabs.club/blog/mcp-tool-failure-recovery/) — 3 种失败回灌 × 4 模型：MiniMax 在 empty_ok 下编出 4 个原因，deepseek 协议层 400，qwen/gemini 无效循环重试。
 - [AI 写 Playwright 选择器，5 个模型 5 种 DOM 变异实测：i18n 团灭](https://www.xlabs.club/blog/ai-selector-mutation-testing/) — 5 模型 × 4 选择器 × 6 页面共 120 个格子：换英文文案团灭 4 家，gpt-5.6-luna #id 派反而独活；exact: true 更严谨反而更脆。
 - [Playwright Test Agents 拆包：init-agents 落到磁盘的 3 个 agent 定义文件](https://www.xlabs.club/blog/playwright-test-agents-init-unpacked/) — 实测 1.63.0 四个 loop 落点差异、Healer 的「不问用户」与 fixme() 兜底条款原文、Generator 一文件一测试硬契约。
 - [MCP Streamable HTTP 实测：Accept 少一项就 406，第二次 initialize 会吃掉整个 Server](https://www.xlabs.club/blog/mcp-streamable-http-sdk-behavior/) — SDK 1.30.0 抓包：Accept 硬检查、单 transport 只服务一个客户端、无会话模式 GET/DELETE 全是 500。
-- [AI 生成的 E2E 测试能抓到真 bug 吗：5 个模型 41 个用例的变异实测](https://www.xlabs.club/blog/ai-generated-e2e-tests-mutation-testing/) — 注入 8 个真缺陷跑 40 个用例：12% 零击杀，「搜索大小写敏感」4 家全漏。
 
 ## 贡献指南
 
