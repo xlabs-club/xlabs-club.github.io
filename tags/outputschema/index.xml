@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>OutputSchema on XLabs</title><link>https://www.xlabs.club/tags/outputschema/</link><description>Recent content in OutputSchema on XLabs</description><generator>Hugo</generator><language>zh-CN</language><copyright>Copyright (c) 2020-2025 XLabs Club</copyright><lastBuildDate>Fri, 09 Oct 2026 00:06:47 +0800</lastBuildDate><atom:link href="https://www.xlabs.club/tags/outputschema/index.xml" rel="self" type="application/rss+xml"/><item><title>MCP 工具返回值的两道隐藏边界：10MB 帧上限、outputSchema 校验（1.32.1 实测）</title><link>https://www.xlabs.club/blog/mcp-tool-result-limits/</link><pubDate>Fri, 09 Oct 2026 00:00:00 +0800</pubDate><guid>https://www.xlabs.club/blog/mcp-tool-result-limits/</guid><description>&lt;p&gt;上一篇 &lt;a href="https://www.xlabs.club/blog/mcp-2026-07-28-deprecation-sdk-lag/"&gt;MCP 2026-07-28 弃用扫描&lt;/a&gt;
+ 我 grep 的是 SDK 有没有跟上 spec。这篇 grep 另一件事：&lt;strong&gt;我 server 返回的工具结果，在客户端那边会经历什么&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;四条结论都不在文档里，也不在类型定义里，跑出来才知道：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;stdio 下，结果帧超过 &lt;strong&gt;10,485,760 字节&lt;/strong&gt; 就断连，调用方只看到 &lt;code&gt;MCP error -32000: Connection closed&lt;/code&gt;，真实原因只在 &lt;code&gt;transport.onerror&lt;/code&gt; 里。&lt;/li&gt;
+&lt;li&gt;这个上限属于&lt;strong&gt;读的一方&lt;/strong&gt;（客户端）。服务端把 &lt;code&gt;maxBufferSize&lt;/code&gt; 调多大都没用。&lt;/li&gt;
+&lt;li&gt;服务端 &lt;code&gt;outputSchema&lt;/code&gt; 校验失败变成一个 &lt;code&gt;isError: true&lt;/code&gt; 的&lt;strong&gt;正常 result&lt;/strong&gt;，不是 JSON-RPC error，&lt;code&gt;try/catch&lt;/code&gt; 抓不到。&lt;/li&gt;
+&lt;li&gt;客户端只在调过 &lt;code&gt;tools/list&lt;/code&gt; 之后才校验 &lt;code&gt;structuredContent&lt;/code&gt;；而且 &lt;code&gt;isError: true&lt;/code&gt; 时它照校验不误，会把错误结果整个抛成异常。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="环境"&gt;环境&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;@modelcontextprotocol/sdk@1.32.1&lt;/code&gt;（npm 当前 latest）+ &lt;code&gt;zod&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Node v26.3.0，stdio transport，全部默认配置&lt;/li&gt;
+&lt;li&gt;每个用例开新客户端进程，避免上一轮的断连污染下一轮&lt;/li&gt;
+&lt;li&gt;单文件复现脚本在文末，&lt;code&gt;node mcp-result-limits.mjs&lt;/code&gt; 直接跑&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="一outputschema校验失败不是错误"&gt;一、outputSchema：校验失败不是错误&lt;/h2&gt;
+&lt;p&gt;工具声明 &lt;code&gt;outputSchema: { count: z.number() }&lt;/code&gt;，handler 返回 &lt;code&gt;{ count: 'one' }&lt;/code&gt;。服务端 &lt;code&gt;McpServer&lt;/code&gt; 确实拦了，但拦下来的处理方式是这样：&lt;/p&gt;</description></item></channel></rss>
