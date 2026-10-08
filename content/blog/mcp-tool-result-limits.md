@@ -1,6 +1,6 @@
 ---
 title: "MCP 工具返回值的两道隐藏边界：10MB 帧上限、outputSchema 校验（1.32.1 实测）"
-description: "MCP 工具返回值实测（@modelcontextprotocol/sdk 1.32.1）：结果帧超 10MiB 直接断连、只报 Connection closed；outputSchema 校验失败被包成 isError，客户端还会抛异常。"
+description: "MCP 工具返回值实测：结果帧超 10MiB 断连只报 Connection closed；outputSchema 校验失败被包成 isError，客户端还会抛异常。"
 date: 2026-10-09T00:00:00+08:00
 draft: false
 categories: [AI, MCP]
