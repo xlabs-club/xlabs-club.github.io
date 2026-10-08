@@ -86,7 +86,7 @@ MCP error -32602: Structured content does not match the tool's output schema: da
 
 ### isError 是双重标准
 
-服务端遇到 `isError: true` 就跳过 outputSchema 校验（`validateToolOutput` 第一行 `if (result.isError) return;`），好让错误结果不必满足成功时的 schema。客户端不是这样。它的注释写着 `// Only validate structured content if present (not when there's an error)`（`client/index.js:493`），但代码只跳过了「structuredContent 缺失」那一种情况——**只要 structuredContent 存在就照样校验**。
+服务端遇到 `isError: true` 就跳过 outputSchema 校验（`server/mcp.js:237` 的 `if (result.isError) return;`），好让错误结果不必满足成功时的 schema。客户端不是这样。它的注释写着 `// Only validate structured content if present (not when there's an error)`（`client/index.js:492`），但代码只跳过了「structuredContent 缺失」那一种情况——**只要 structuredContent 存在就照样校验**。
 
 于是：一个上报错误、顺手带了不合规 structuredContent 的工具，服务端放行，客户端抛异常。调用方拿到的是异常，不是那句错误文案。
 
